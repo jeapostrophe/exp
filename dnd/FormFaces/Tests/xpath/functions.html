@@ -1,0 +1,75 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for XPath Core Functions</title>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      var page;
+      
+      function setUpPage() {
+        page = xmlLoadDocument(
+          '<xfm:model schema="#mySchema" xsd:id="Available Controls"                           \n' +
+          '           xmlns:xfm="http://www.w3.org/2002/xforms"                                \n' +
+          '           xmlns:xsd="http://www.w3.org/2001/XMLSchema"                             \n' +
+          '           xmlns:instance="http://fake" xmlns="x">                                  \n' +
+          '  <xfm:submission action="somewhere.do" method="post" xsd:id="controlsSubmission"/> \n' +
+          '  <xfm:instance>                                                                    \n' +
+          '    <instance:tutorial>                                                             \n' +
+          '      <instance:controls>                                                           \n' +
+          '        <instance:input/>                                                           \n' +
+          '        <instance:secret/>                                                          \n' +
+          '        <instance:textarea/>                                                        \n' +
+          '        <instance:selectOne>                                                        \n' +
+          '          <instance:full/>                                                          \n' +
+          '          <instance:minimal/>                                                       \n' +
+          '          <instance:compact/>                                                       \n' +
+          '        </instance:selectOne>                                                       \n' +
+          '        <instance:selectMany>                                                       \n' +
+          '          <instance:full/>                                                          \n' +
+          '          <instance:minimal/>                                                       \n' +
+          '        </instance:selectMany>                                                      \n' +
+          '        <instance:upload/>                                                          \n' +
+          '        <instance:button/>                                                          \n' +
+          '      </instance:controls>                                                          \n' +
+          '    </instance:tutorial>                                                            \n' +
+          '  </xfm:instance>                                                                   \n' +
+          '</xfm:model>                                                                        \n'
+        );
+        
+        setUpPageStatus = "complete";
+      }
+      
+      function testName() {
+        assertEquals("xfm:instance", xpath("name(//xforms:instance)"));
+        assertEquals("xfm:model",    xpath("name()"));
+      }
+      
+      function testLocalName() {
+        assertEquals("instance",     xpath("local-name(//xforms:instance)"));
+        assertEquals("model",        xpath("local-name()"));
+      }
+      
+      function testSubstring() {
+        assertEquals("d",            xpath("substring('abcdefg', 4, 1)"));
+      }
+      
+      
+      function xpath(string) {
+        return new XPath(string).evaluate(page.documentElement);
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xfm="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en" xmlns:instance="http://fake">
+  <head>
+    <title>Zero Factored - FormFaces Tutorial:  Controls Example</title>
+    <link rel="StyleSheet" href="example.css" type="text/css"/>
+    <xfm:model schema="#mySchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="Available Controls">
+      <xfm:submission action="somewhere.do" method="post" id="controlsSubmission"/>
+      <xfm:instance>
+        <instance:tutorial>
+          <instance:controls>
+            <instance:input/>
+            <instance:secret/>
+            <instance:textarea/>
+            <instance:selectOne>
+              <instance:full/>
+              <instance:minimal/>
+              <instance:compact/>
+            </instance:selectOne>
+            <instance:selectMany>
+              <instance:full/>
+              <instance:minimal/>
+            </instance:selectMany>
+            <instance:upload/>
+            <instance:button/>
+          </instance:controls>
+        </instance:tutorial>
+      </xfm:instance>
+    </xfm:model>
+    
+    <script type="text/javascript" src="../../../formfaces.js"></script>
+  </head>
+  <body class="basictext">
+    <center class="pagetitle">Available Form Controls</center>
+    <p>The following controls are the XHTML equivalent of XForms controls.  They were converted from XForms to XHTML using formBuilder</p>
+    <form id="controlsSubmission"/>
+    <table border="0">
+      <tr>
+        <td align="left" colspan="2">
+          <xfm:input ref="/instance:tutorial/instance:controls/instance:input" id="inputControl" >
+            <xfm:label>Input Control: </xfm:label>
+          </xfm:input>
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          <font color="#000000" class="label">&nbsp;&nbsp;&nbsp;Purpose:</font>
+        </th>
+        <td align="left" class="basictext">To enter data</td>
+      </tr>
+    </table>
+    <hr/>
+    <table border="0">
+      <tr>
+        <td align="left" colspan="2">
+          <xfm:secret ref="/instance:tutorial/instance:controls/instance:secret" id="secretControl" >
+            <xfm:label>Secret Control:</xfm:label>
+          </xfm:secret>
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          <font color="#000000" class="label">&nbsp;&nbsp;&nbsp;Purpose:</font>
+        </th>
+        <td align="left" class="basictext">To enter data</td>
+      </tr>
+    </table>
+    <hr/>
+    <table border="0">
+      <tr>
+        <td align="left" colspan="2">
+          <xfm:textarea ref="/instance:tutorial/instance:controls/instance:textarea" id="textAreaControl" >
+            <xfm:label>Textarea Control: </xfm:label>
+          </xfm:textarea>
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          <font color="#000000" class="label">&nbsp;&nbsp;&nbsp;Purpose:</font>
+        </th>
+        <td align="left" class="basictext">To enter large Data</td>
+      </tr>
+    </table>
+    <hr/>
+    <table border="0">
+      <tr>
+        <td align="left" colspan="2">
+<!--      <xfm:upload ref="/instance:tutorial/instance:controls/instance:upload" id="uploadControl" >
+            <xfm:label>Upload</xfm:label>
+            <xfm:filename/>
+            <xfm:mediatype/>
+          </xfm:upload> -->
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          <font color="#000000" class="label">&nbsp;&nbsp;&nbsp;Purpose:</font>
+        </th>
+        <td align="left" class="basictext">To enter data</td>
+      </tr>
+    </table>
+    <hr/>
+    <table border="0">
+      <tr>
+        <th align="left">
+          <font class="labelBold">Button:</font>
+        </th>
+        <td>
+          <xfm:trigger appearance="full" ref="/instance:tutorial/instance:controls/instance:button" id="tutorialButton" >
+            <xfm:label>Trigger</xfm:label>
+          </xfm:trigger>
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          <font class="labelBold">&nbsp;&nbsp;&nbsp;Purpose:</font>
+        </th>
+        <td align="left" class="basictext">For activation of an action.</td>
+      </tr>
+    </table>
+    <hr/>
+    <table border="0" width="100%">
+      <tr>
+        <td align="left" class="labelBold">Select One:</td>
+        <td align="left" class="labelBold">Select:</td>
+      </tr>
+      <tr>
+        <td align="left" class="label">
+          <span class="labelBold">&nbsp;&nbsp;&nbsp;Purpose:</span> To select an option among several.</td>
+        <td align="left" class="label">
+          <span class="labelBold">&nbsp;&nbsp;&nbsp;Purpose:</span> To select many options among several.</td>
+      </tr>
+      <tr class="colorRow">
+        <td class="basictext">
+          <xfm:select1 appearance="full" ref="/instance:tutorial/instance:controls/instance:selectOne/instance:full" id="selectOneFull" >
+            <xfm:label>Select1 - Full </xfm:label>
+            <xfm:item>
+              <xfm:label>Red</xfm:label>
+              <xfm:value>Red</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>Blue</xfm:label>
+              <xfm:value>Blue</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>White</xfm:label>
+              <xfm:value>White</xfm:value>
+            </xfm:item>
+          </xfm:select1>
+        </td>
+        <td class="basictext">
+          <xfm:select appearance="full" ref="/instance:tutorial/instance:controls/instance:selectMany/instance:full" id="selectManyFull" >
+            <xfm:label>Select - Full</xfm:label>
+            <xfm:item>
+              <xfm:label>Red</xfm:label>
+              <xfm:value>Red</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>Blue</xfm:label>
+              <xfm:value>Blue</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>White</xfm:label>
+              <xfm:value>White</xfm:value>
+            </xfm:item>
+          </xfm:select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <xfm:select1 appearance="compact" ref="/instance:tutorial/instance:controls/instance:selectOne/instance:compact" id="selectOneCompact" >
+            <xfm:label>Select1 - Compact</xfm:label>
+            <xfm:item>
+              <xfm:label>Red</xfm:label>
+              <xfm:value>Red</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>Blue</xfm:label>
+              <xfm:value>Blue</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>White</xfm:label>
+              <xfm:value>White</xfm:value>
+            </xfm:item>
+          </xfm:select1>
+        </td>
+        <td>None
+        </td>
+      </tr>
+      <tr class="colorRow">
+        <td>
+          <xfm:select1 appearance="minimal" ref="/instance:tutorial/instance:controls/instance:selectOne/instance:minimal" id="selectOneMinimal" >
+            <xfm:label>Select1 - Minimal  </xfm:label>
+            <xfm:item>
+              <xfm:label>Red</xfm:label>
+              <xfm:value>Red</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>Blue</xfm:label>
+              <xfm:value>Blue</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>White</xfm:label>
+              <xfm:value>White</xfm:value>
+            </xfm:item>
+          </xfm:select1>
+        </td>
+        <td>
+          <xfm:select appearance="minimal" ref="/instance:tutorial/instance:controls/instance:selectMany/instance:minimal" id="selectManyMinimal" >
+            <xfm:label>SelectMany - Minimal:  </xfm:label>
+            <xfm:item>
+              <xfm:label>Red</xfm:label>
+              <xfm:value>Red</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>Blue</xfm:label>
+              <xfm:value>Blue</xfm:value>
+            </xfm:item>
+            <xfm:item>
+              <xfm:label>White</xfm:label>
+              <xfm:value>White</xfm:value>
+            </xfm:item>
+          </xfm:select>
+        </td>
+      </tr>
+    </table>
+    <!--page footer-->
+    <br/>
+    <center>
+      <span class="copyright">Copyright &#169; 2002-2004 Progeny Systems Corp. All Rights Reserved.</span>
+</center>
+  </body>
+</html>

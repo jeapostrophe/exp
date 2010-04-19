@@ -1,0 +1,61 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Inheritance of Relevance</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance>
+        <data xmlns="">
+          <is-relevant>true</is-relevant>
+          
+          <outer attribute="attribute">
+            <inner>inner</inner>
+          </outer>
+        </data>
+      </xf:instance>
+      
+      <xf:bind nodeset="outer" relevant="../is-relevant = 'true'"/>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>Choosing "Yes" will make two output controls appear with the values of "attribute" and "inner" respectively.</p>
+  
+    <p>
+      <xf:select1 ref="is-relevant">
+        <xf:label>Relevant?</xf:label>
+        
+        <xf:item><xf:label>Yes</xf:label><xf:value>true</xf:value> </xf:item>
+        <xf:item><xf:label>No</xf:label> <xf:value>false</xf:value></xf:item>
+      </xf:select1>
+    </p>
+    
+    <p>    
+      <xf:output ref="outer/@attribute">
+        <xf:label>Attribute:</xf:label>
+      </xf:output>
+      
+      <xf:output ref="outer/inner">
+        <xf:label>Inner:</xf:label>
+      </xf:output>
+      
+      <!-- Test that a control bound to an empty node-set is non-relevant. -->
+      <xf:output ref="non-existent">
+        <xf:label>ERROR!</xf:label>
+      </xf:output>
+    </p>
+    
+    <p id="status"></p>
+  </body>
+</html>

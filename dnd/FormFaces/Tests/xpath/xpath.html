@@ -1,0 +1,75 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for XPath Evaluation</title>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+      var xmlDocument;
+			
+      function setUpPage() {
+        xmlDocument = xmlLoadDocument(
+          '<xfm:model schema="#mySchema" xsd:id="Available Controls"                           \n' +
+          '           xmlns:xfm="http://www.w3.org/2002/xforms"                                \n' +
+          '           xmlns:xsd="http://www.w3.org/2001/XMLSchema"                             \n' +
+          '           xmlns:instance="http://fake" xmlns="x">                                  \n' +
+          '  <xfm:submission action="somewhere.do" method="post" xsd:id="controlsSubmission"/> \n' +
+          '  <xfm:instance>                                                                    \n' +
+          '    <instance:tutorial>                                                             \n' +
+          '      <instance:controls>                                                           \n' +
+          '        <instance:input/>                                                           \n' +
+          '        <instance:secret/>                                                          \n' +
+          '        <instance:textarea/>                                                        \n' +
+          '        <instance:selectOne>                                                        \n' +
+          '          <instance:full/>                                                          \n' +
+          '          <instance:minimal/>                                                       \n' +
+          '          <instance:compact/>                                                       \n' +
+          '        </instance:selectOne>                                                       \n' +
+          '        <instance:selectMany>                                                       \n' +
+          '          <instance:full/>                                                          \n' +
+          '          <instance:minimal/>                                                       \n' +
+          '        </instance:selectMany>                                                      \n' +
+          '        <instance:upload/>                                                          \n' +
+          '        <instance:button/>                                                          \n' +
+          '      </instance:controls>                                                          \n' +
+          '    </instance:tutorial>                                                            \n' +
+          '  </xfm:instance>                                                                   \n' +
+          '</xfm:model>                                                                        \n'
+        );
+        
+        setUpPageStatus = "complete";
+      }
+      
+      function testEvaluation() {
+        var xpath  = new XPath("//@method");
+        var result = xpath.evaluate(xmlDocument.documentElement);
+        
+        assertEquals(NodeSet,  result.constructor);
+        assertEquals(1,        result.length);
+        assertEquals("method", result[0].name);
+        assertEquals("post",   result[0].value);
+      }
+        
+      function testReferencedNodes() {
+        var xpath           = new XPath("//@method[//instance:input] = boolean('post')", xmlDocument.documentElement);
+        var referencedNodes = xpath.referencedNodes(xmlDocument.documentElement);
+        
+        assertEquals(NodeSet,  referencedNodes.constructor);
+        assertEquals(1,        referencedNodes.length);
+        assertEquals("method", referencedNodes[0].name);
+        assertEquals("post",   referencedNodes[0].value);
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>

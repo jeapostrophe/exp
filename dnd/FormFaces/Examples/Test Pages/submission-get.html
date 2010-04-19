@@ -1,0 +1,59 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>Submit</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance>
+        <data xmlns="">
+          <PersonName title="Mr">
+            <GivenName>Rene</GivenName>
+            <SurName>Smith</SurName>
+          </PersonName>
+        </data>
+      </xf:instance>
+      
+      <xf:submission id="html"
+                     action="index.html"
+                     method="get"
+                     omit-xml-declaration="true"
+      />
+      <xf:submission id="xforms"
+                     action="controls.html"
+                     method="get"
+                     omit-xml-declaration="true"
+      />
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>
+      <xf:output ref="/data/PersonName/@title"/>
+      <xf:output ref="/data/PersonName/GivenName"/>
+      <xf:output ref="/data/PersonName/SurName"/>
+    </p>
+    <p>
+      This submit returns an HTML page.
+    </p>
+    <xf:submit submission="html">
+      <xf:label>Submit</xf:label>
+    </xf:submit>
+    <p>
+      This submit returns an XForms page.
+    </p>
+    <xf:submit submission="xforms">
+      <xf:label>Submit</xf:label>
+    </xf:submit>
+  </body>
+</html>

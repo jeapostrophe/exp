@@ -1,0 +1,65 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Nested Repeats</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model>
+      <form:instance>
+        <numbers xmlns="">
+          <list of="Numbers">
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+            <item>4</item>
+            <item>5</item>
+            <item>6</item>
+            <item>7</item>
+            <item>8</item>
+            <item>9</item>
+            <item>10</item>
+          </list>
+          
+          <list of="Letters">
+            <item>A</item>
+            <item>B</item>
+            <item>C</item>
+            <item>D</item>
+            <item>E</item>
+            <item>F</item>
+            <item>G</item>
+            <item>H</item>
+            <item>I</item>
+            <item>J</item>
+          </list>
+        </numbers>
+      </form:instance>
+    </form:model>
+  </head>
+  
+  <body>
+    <p>You should see the numbers 1 through 10 below, then the letters A through J:</p>
+    
+    <form:repeat nodeset="list">
+      <h2>
+        <form:output ref="@of"/>:
+    
+        <form:repeat nodeset="item">
+          <form:output ref="."/>
+        </form:repeat>
+      </h2>
+    </form:repeat>
+      
+    <p id="status"></p>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:my="urn:my" xml:lang="en">
+  <head>
+    <title>Unit Tests for XFormSubmission</title>
+
+    <xf:model id='a'>
+      <xf:instance id='i'>
+        <favorite-things xmlns=''>
+          <number/>
+          <color/>
+
+          <my:food/>
+        </favorite-things>
+      </xf:instance>
+
+      <xf:bind id='bind' nodeset='number'/>
+
+      <xf:submission id='explicit-submission'
+          bind='bind'
+          ref='/favorite-things'
+          action='http://www.progeny.net/'
+          method='put'
+          version='1.0'
+          indent='true'
+          mediatype='application/xml'
+          encoding='UTF-8'
+          omit-xml-declaration='true'
+          standalone='true'
+          cdata-section-elements='x y  '
+          replace='instance'
+          separator='&amp;'
+          includenamespaceprefixes='#default'
+      />
+
+      <xf:submission id='ref-submission'
+          ref='/favorite-things'
+          action='http://www.progeny.net/'
+          method='post'
+      />
+
+      <xf:submission id='default-submission'
+          action='http://www.progeny.net/'
+          method='urlencoded-post'
+      />
+    </xf:model>
+              
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+      function setUpPage() {
+        XForm.waitForInitialization();
+      }
+
+      // Check that there's an XFormSubmission object for each submission element.
+      function testAllSubmissionsAreAccountedFor() {
+        assertEquals(3, xform.models[0].submissions.length);
+      }
+      
+      // Check that all of the submission element attributes are parsed.
+      function testSubmissionAttributes() {
+        var submission = xform.models[0].submissions[0];
+      
+        assertEquals(xform.models[0].binds[0],  submission.bind);
+        assertEquals("http://www.progeny.net/", submission.action);
+        assertEquals("put",                     submission.method);
+        assertEquals("1.0",                     submission.version);
+        assertEquals(true,                      submission.indent);
+        assertEquals("application/xml",         submission.mediaType);
+        assertEquals("UTF-8",                   submission.encoding);
+        assertEquals(true,                      submission.omitXmlDeclaration);
+        assertEquals(true,                      submission.standalone);
+        assertEquals(2,                         submission.cdataSectionElements.length);
+        assertEquals("x",                       submission.cdataSectionElements[0].toString());
+        assertEquals("y",                       submission.cdataSectionElements[1].toString());
+        assertEquals("instance",                submission.replace);
+        assertEquals("&",                       submission.separator);
+        assertEquals(1,                         submission.includeNamespacePrefixes.length);
+        assertEquals("",                        submission.includeNamespacePrefixes[0]);
+      }
+      
+      // Check that a submission element with a @ref attribute is assigned a binding.
+      function testRefSubmissionIsGivenABinding() {
+        var submission = xform.models[0].submissions[1];
+      
+        assertNotNull(                        submission.bind);
+        assertTrue   (new XPath("self::xforms:submission").evaluate(submission.bind.element).length == 1);
+        assertEquals ("/favorite-things",     submission.bind.xpath.toString());
+      }
+      
+      // Check that unspecified submission element attributes are given the correct
+      // default values.
+      function testDefaultSubmissionHasCorrectDefaultValues() {
+        var submission = xform.models[0].submissions[2];
+      
+        assertNotNull(                           submission.bind);
+        assertEquals ("/",                       submission.bind.xpath.toString());
+        assertEquals ("http://www.progeny.net/", submission.action);
+        assertEquals ("urlencoded-post",         submission.method);
+        assertNull   (                           submission.version);
+        assertEquals (false,                     submission.indent);
+        assertEquals ("application/xml",         submission.mediaType);
+        assertNull   (                           submission.encoding);
+        assertEquals (false,                     submission.omitXmlDeclaration);
+        assertEquals (false,                     submission.standalone);
+        assertEquals (0,                         submission.cdataSectionElements.length);
+        assertEquals ("all",                     submission.replace);
+        assertEquals (";",                       submission.separator);
+        assertNull   (                           submission.includeNamespacePrefixes);
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>

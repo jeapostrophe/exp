@@ -1,0 +1,201 @@
+<!DOCTYPE
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for XPath Tokenizer</title>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      var leftParenthesisToken       = new XPathToken(XPathTokenType.LEFT_PARENTHESIS,         "(");
+      var rightParenthesisToken      = new XPathToken(XPathTokenType.RIGHT_PARENTHESIS,        ")");
+      var leftBracketToken           = new XPathToken(XPathTokenType.LEFT_BRACKET,             "[");
+      var rightBracketToken          = new XPathToken(XPathTokenType.RIGHT_BRACKET,            "]");
+      var dotToken                   = new XPathToken(XPathTokenType.DOT,                      ".");
+      var dotDotToken                = new XPathToken(XPathTokenType.DOT_DOT,                  "..");
+      var attributeSignToken         = new XPathToken(XPathTokenType.ATTRIBUTE_SIGN,           "@");
+      var commaToken                 = new XPathToken(XPathTokenType.COMMA,                    ",");
+      var colonColonToken            = new XPathToken(XPathTokenType.COLON_COLON,              "::");
+                                                                                               
+      var starToken                  = new XPathToken(XPathTokenType.STAR,                     "*");
+      var namespaceTestToken         = new XPathToken(XPathTokenType.NAMESPACE_TEST,           "xml:*");
+      var qNameToken                 = new XPathToken(XPathTokenType.QNAME,                    "xml:lang");
+  
+      var commentToken               = new XPathToken(XPathTokenType.COMMENT,                  "comment");
+      var textToken                  = new XPathToken(XPathTokenType.TEXT,                     "text");
+      var processingInstructionToken = new XPathToken(XPathTokenType.PROCESSING_INSTRUCTION,   "processing-instruction");
+      var nodeToken                  = new XPathToken(XPathTokenType.NODE,                     "node");
+  
+      var andToken                   = new XPathToken(XPathTokenType.AND,                      "and");
+      var orToken                    = new XPathToken(XPathTokenType.OR,                       "or");
+      var modToken                   = new XPathToken(XPathTokenType.MOD,                      "mod");
+      var divToken                   = new XPathToken(XPathTokenType.DIV,                      "div");
+      var multiplyToken              = new XPathToken(XPathTokenType.MULTIPLY,                 "*");
+      var slashToken                 = new XPathToken(XPathTokenType.SLASH,                    "/");
+      var slashSlashToken            = new XPathToken(XPathTokenType.SLASH_SLASH,              "//");
+      var unionToken                 = new XPathToken(XPathTokenType.UNION,                    "|");
+      var plusToken                  = new XPathToken(XPathTokenType.PLUS,                     "+");
+      var minusToken                 = new XPathToken(XPathTokenType.MINUS,                    "-");
+      var equalsToken                = new XPathToken(XPathTokenType.EQUALS,                   "=");
+      var notEqualsToken             = new XPathToken(XPathTokenType.NOT_EQUALS,               "!=");
+      var lessThanToken              = new XPathToken(XPathTokenType.LESS_THAN,                "<");
+      var lessThanOrEqualToToken     = new XPathToken(XPathTokenType.LESS_THAN_OR_EQUAL_TO,    "<=");
+      var greaterThanToken           = new XPathToken(XPathTokenType.GREATER_THAN,             ">");
+      var greaterThanOrEqualToToken  = new XPathToken(XPathTokenType.GREATER_THAN_OR_EQUAL_TO, ">=");
+  
+      var functionNameToken          = new XPathToken(XPathTokenType.FUNCTION_NAME,            "boolean");
+  
+      var ancestorToken              = new XPathToken(XPathTokenType.ANCESTOR,                 "ancestor");
+      var ancestorOrSelfToken        = new XPathToken(XPathTokenType.ANCESTOR_OR_SELF,         "ancestor-or-self");
+      var attributeToken             = new XPathToken(XPathTokenType.ATTRIBUTE,                "attribute");
+      var childToken                 = new XPathToken(XPathTokenType.CHILD,                    "child");
+      var descendantToken            = new XPathToken(XPathTokenType.DESCENDANT,               "descendant");
+      var descendantOrSelfToken      = new XPathToken(XPathTokenType.DESCENDANT_OR_SELF,       "descendant-or-self");
+      var followingToken             = new XPathToken(XPathTokenType.FOLLOWING,                "following");
+      var followingSiblingToken      = new XPathToken(XPathTokenType.FOLLOWING_SIBLING,        "following-sibling");
+      var namespaceToken             = new XPathToken(XPathTokenType.NAMESPACE,                "namespace");
+      var parentToken                = new XPathToken(XPathTokenType.PARENT,                   "parent");
+      var precedingToken             = new XPathToken(XPathTokenType.PRECEDING,                "preceding");
+      var precedingSiblingToken      = new XPathToken(XPathTokenType.PRECEDING_SIBLING,        "preceding-sibling");
+      var selfToken                  = new XPathToken(XPathTokenType.SELF,                     "self");
+                                                                                               
+      var literalToken               = new XPathToken(XPathTokenType.LITERAL,                  "'hello'");
+      var numberToken                = new XPathToken(XPathTokenType.NUMBER,                   "1.0");
+      var variableReferenceToken     = new XPathToken(XPathTokenType.VARIABLE_REFERENCE,       "$foo");
+                                                                                               
+      var endToken                   = new XPathToken(XPathTokenType.END,                      "");
+      
+      
+      // Tests that various lexemes are correctly accepted or rejected for each token
+      // type.
+      function testSymbols() {
+        assertTrue (XPathTokenType.LEFT_PARENTHESIS        .isValidLexeme("("));
+        assertTrue (XPathTokenType.RIGHT_PARENTHESIS       .isValidLexeme(")"));
+        assertTrue (XPathTokenType.LEFT_BRACKET            .isValidLexeme("["));
+        assertTrue (XPathTokenType.RIGHT_BRACKET           .isValidLexeme("]"));
+        assertTrue (XPathTokenType.DOT                     .isValidLexeme("."));
+        assertTrue (XPathTokenType.DOT_DOT                 .isValidLexeme(".."));
+        assertTrue (XPathTokenType.ATTRIBUTE_SIGN          .isValidLexeme("@"));
+        assertTrue (XPathTokenType.COMMA                   .isValidLexeme(","));
+        assertTrue (XPathTokenType.COLON_COLON             .isValidLexeme("::"));
+      }
+      
+      function testNodeTests() {
+        assertTrue (XPathTokenType.STAR                    .isValidLexeme("*"));
+        assertTrue (XPathTokenType.NAMESPACE_TEST          .isValidLexeme("xml:*"));
+        assertFalse(XPathTokenType.NAMESPACE_TEST          .isValidLexeme("xml:"));
+        assertFalse(XPathTokenType.NAMESPACE_TEST          .isValidLexeme("xml:**"));
+        assertFalse(XPathTokenType.NAMESPACE_TEST          .isValidLexeme(":*"));
+        assertFalse(XPathTokenType.NAMESPACE_TEST          .isValidLexeme("!:*"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("xml:lang"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("lang"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("boolean-from-string"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("xml-ext:hi-how-are-you"));
+        assertFalse(XPathTokenType.QNAME                   .isValidLexeme(":lang"));
+        assertFalse(XPathTokenType.QNAME                   .isValidLexeme("xml:"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("xml.lang"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("xml_lang"));
+        assertTrue (XPathTokenType.QNAME                   .isValidLexeme("_name"));
+        assertFalse(XPathTokenType.QNAME                   .isValidLexeme("-name"));
+        assertFalse(XPathTokenType.QNAME                   .isValidLexeme(".name"));
+        assertFalse(XPathTokenType.QNAME                   .isValidLexeme("xml/lang"));
+        assertFalse(XPathTokenType.QNAME                   .isValidLexeme("a:b:c"));
+        
+        assertTrue (XPathTokenType.COMMENT                 .isValidLexeme("comment"));
+        assertTrue (XPathTokenType.TEXT                    .isValidLexeme("text"));
+        assertTrue (XPathTokenType.PROCESSING_INSTRUCTION  .isValidLexeme("processing-instruction"));
+        assertTrue (XPathTokenType.NODE                    .isValidLexeme("node"));
+      }
+      
+      function testOperators() {  
+        assertTrue (XPathTokenType.AND                     .isValidLexeme("and"));
+        assertTrue (XPathTokenType.OR                      .isValidLexeme("or"));
+        assertTrue (XPathTokenType.MOD                     .isValidLexeme("mod"));
+        assertTrue (XPathTokenType.DIV                     .isValidLexeme("div"));
+        assertTrue (XPathTokenType.MULTIPLY                .isValidLexeme("*"));
+        assertTrue (XPathTokenType.SLASH                   .isValidLexeme("/"));
+        assertTrue (XPathTokenType.SLASH_SLASH             .isValidLexeme("//"));
+        assertTrue (XPathTokenType.UNION                   .isValidLexeme("|"));
+        assertTrue (XPathTokenType.PLUS                    .isValidLexeme("+"));
+        assertTrue (XPathTokenType.MINUS                   .isValidLexeme("-"));
+        assertTrue (XPathTokenType.EQUALS                  .isValidLexeme("="));
+        assertTrue (XPathTokenType.NOT_EQUALS              .isValidLexeme("!="));
+        assertTrue (XPathTokenType.LESS_THAN               .isValidLexeme("<"));
+        assertTrue (XPathTokenType.LESS_THAN_OR_EQUAL_TO   .isValidLexeme("<="));
+        assertTrue (XPathTokenType.GREATER_THAN            .isValidLexeme(">"));
+        assertTrue (XPathTokenType.GREATER_THAN_OR_EQUAL_TO.isValidLexeme(">="));
+      }
+      
+      function testFunctionName() {
+        assertTrue (XPathTokenType.FUNCTION_NAME           .isValidLexeme("boolean"));
+      }
+      
+      function testAxisNames() {
+        assertTrue (XPathTokenType.ANCESTOR                .isValidLexeme("ancestor"));
+        assertTrue (XPathTokenType.ANCESTOR_OR_SELF        .isValidLexeme("ancestor-or-self"));
+        assertTrue (XPathTokenType.ATTRIBUTE               .isValidLexeme("attribute"));
+        assertTrue (XPathTokenType.CHILD                   .isValidLexeme("child"));
+        assertTrue (XPathTokenType.DESCENDANT              .isValidLexeme("descendant"));
+        assertTrue (XPathTokenType.DESCENDANT_OR_SELF      .isValidLexeme("descendant-or-self"));
+        assertTrue (XPathTokenType.FOLLOWING               .isValidLexeme("following"));
+        assertTrue (XPathTokenType.FOLLOWING_SIBLING       .isValidLexeme("following-sibling"));
+        assertTrue (XPathTokenType.NAMESPACE               .isValidLexeme("namespace"));
+        assertTrue (XPathTokenType.PARENT                  .isValidLexeme("parent"));
+        assertTrue (XPathTokenType.PRECEDING               .isValidLexeme("preceding"));
+        assertTrue (XPathTokenType.PRECEDING_SIBLING       .isValidLexeme("preceding-sibling"));
+        assertTrue (XPathTokenType.SELF                    .isValidLexeme("self"));
+      }
+      
+      function testLiterals() {  
+        assertTrue (XPathTokenType.LITERAL                 .isValidLexeme("\"hello\""));
+        assertTrue (XPathTokenType.LITERAL                 .isValidLexeme("'hello'"));
+        assertTrue (XPathTokenType.LITERAL                 .isValidLexeme("\"\""));
+        assertTrue (XPathTokenType.LITERAL                 .isValidLexeme("''"));
+        assertFalse(XPathTokenType.LITERAL                 .isValidLexeme("\"hello"));
+        assertFalse(XPathTokenType.LITERAL                 .isValidLexeme("'hello"));
+        assertFalse(XPathTokenType.LITERAL                 .isValidLexeme("hello\""));
+        assertFalse(XPathTokenType.LITERAL                 .isValidLexeme("hello'"));
+        assertTrue (XPathTokenType.NUMBER                  .isValidLexeme("1"));
+        assertTrue (XPathTokenType.NUMBER                  .isValidLexeme("1."));
+        assertTrue (XPathTokenType.NUMBER                  .isValidLexeme("1.0"));
+        assertTrue (XPathTokenType.NUMBER                  .isValidLexeme(".0"));
+        assertFalse(XPathTokenType.NUMBER                  .isValidLexeme("."));
+        assertFalse(XPathTokenType.NUMBER                  .isValidLexeme(""));
+        assertFalse(XPathTokenType.NUMBER                  .isValidLexeme("-1"));
+        assertTrue (XPathTokenType.VARIABLE_REFERENCE      .isValidLexeme("$foo"));
+        assertFalse(XPathTokenType.VARIABLE_REFERENCE      .isValidLexeme("foo"));
+        assertFalse(XPathTokenType.VARIABLE_REFERENCE      .isValidLexeme("$"));
+        assertFalse(XPathTokenType.VARIABLE_REFERENCE      .isValidLexeme("$1"));
+      }
+        
+      function testEnd() {
+        assertTrue (XPathTokenType.END                     .isValidLexeme(""));
+        assertFalse(XPathTokenType.END                     .isValidLexeme("1"));
+        assertFalse(XPathTokenType.END                     .isValidLexeme("x"));
+        assertFalse(XPathTokenType.END                     .isValidLexeme(" "));
+      }
+  
+      /// Tests the type property.
+      function testRemembersType() {
+        assertEquals(XPathTokenType.LITERAL, literalToken.type);
+        assertEquals(XPathTokenType.QNAME,   qNameToken  .type);
+      }
+  
+      /// Tests the lexeme property.
+      function testRemembersLexeme() {
+        assertEquals("'hello'",  literalToken.lexeme);
+        assertEquals("xml:lang", qNameToken  .lexeme);
+      }
+  
+    //]]>
+    </script>
+  </head>
+</html>

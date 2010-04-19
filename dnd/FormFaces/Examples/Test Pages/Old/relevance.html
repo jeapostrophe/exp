@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xfm="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en" xmlns:myData="http://fake.com">
+  <head>
+    <title>FormFaces Tutorial:  Relevance Example</title>
+    <link rel="StyleSheet" href="example.css" type="text/css" />
+    <xfm:model schema="#mySchema" id="Relevance">
+      <xfm:instance>
+        <myData:tutorial>
+          <myData:relevance>
+            <myData:car_type />
+            <myData:luxury_cars />
+            <myData:sports_cars />
+            <myData:suv />
+            <myData:acura_luxury />
+            <myData:bmw_luxury />
+            <myData:cadillac />
+            <myData:jaguar />
+            <myData:acura_sports />
+            <myData:bmw_sports />
+            <myData:mercedes />
+            <myData:ford />
+            <myData:honda />
+            <myData:chev_suv />
+            <myData:chev_sports />
+            <myData:mitsubishi />
+            <myData:isuzu />
+            <myData:porsche />
+          </myData:relevance>
+        </myData:tutorial>
+      </xfm:instance>
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:car_type" relevant="true()"/>
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:luxury_cars" relevant="/myData:tutorial/myData:relevance/myData:car_type='Luxury Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:sports_cars" relevant="/myData:tutorial/myData:relevance/myData:car_type='Sports Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:suv" relevant="/myData:tutorial/myData:relevance/myData:car_type='SUV'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:acura_luxury" relevant="/myData:tutorial/myData:relevance/myData:luxury_cars='Acura'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:bmw_luxury" relevant="/myData:tutorial/myData:relevance/myData:luxury_cars='BMW' and /myData:tutorial/myData:relevance/myData:car_type='Luxury Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:cadillac" relevant="/myData:tutorial/myData:relevance/myData:luxury_cars='Cadillac' and /myData:tutorial/myData:relevance/myData:car_type='Luxury Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:jaguar" relevant="/myData:tutorial/myData:relevance/myData:luxury_cars='Jaguar' and /myData:tutorial/myData:relevance/myData:car_type='Luxury Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:acura_sports" relevant="/myData:tutorial/myData:relevance/myData:sports_cars='Acura' and /myData:tutorial/myData:relevance/myData:car_type='Sports Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:bmw_sports" relevant="/myData:tutorial/myData:relevance/myData:sports_cars='BMW' and /myData:tutorial/myData:relevance/myData:car_type='Sports Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:porsche" relevant="/myData:tutorial/myData:relevance/myData:sports_cars='Porsche' and /myData:tutorial/myData:relevance/myData:car_type='Sports Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:chev_sports" relevant="/myData:tutorial/myData:relevance/myData:sports_cars='Chevrolet' and /myData:tutorial/myData:relevance/myData:car_type='Sports Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:mercedes" relevant="/myData:tutorial/myData:relevance/myData:sports_cars='Mercedes-Benz' and /myData:tutorial/myData:relevance/myData:car_type='Sports Cars'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:chev_suv" relevant="/myData:tutorial/myData:relevance/myData:suv='Chevrolet' and /myData:tutorial/myData:relevance/myData:car_type='SUV'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:ford" relevant="/myData:tutorial/myData:relevance/myData:suv='Ford' and /myData:tutorial/myData:relevance/myData:car_type='SUV'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:honda" relevant="/myData:tutorial/myData:relevance/myData:suv='Honda' and /myData:tutorial/myData:relevance/myData:car_type='SUV'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:mitsubishi" relevant="/myData:tutorial/myData:relevance/myData:suv='Mitsubishi' and /myData:tutorial/myData:relevance/myData:car_type='SUV'" />
+      <xfm:bind nodeset="/myData:tutorial/myData:relevance/myData:isuzu" relevant="/myData:tutorial/myData:relevance/myData:suv='Isuzu' and /myData:tutorial/myData:relevance/myData:car_type='SUV'" />
+    </xfm:model>
+    
+    <script type="text/javascript" src="../../../formfaces.js"></script>
+  </head>
+  <body class="basictext">
+    <center class="pagetitle">Relevance</center>
+    
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:car_type" id="vehicleType" model="Relevance">
+      <xfm:label>Vehicle Type:</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank1</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Luxury Cars</xfm:label>
+        <xfm:value>Luxury Cars</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Sports Cars</xfm:label>
+        <xfm:value>Sports Cars</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>SUV</xfm:label>
+        <xfm:value>SUV</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+    
+    <xfm:select1 model="Relevance" appearance="compact" ref="/myData:tutorial/myData:relevance/myData:luxury_cars" id="luxury_cars">
+      <xfm:label>Luxury Cars</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank2</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Acura</xfm:label>
+        <xfm:value>Acura</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Jaguar</xfm:label>
+        <xfm:value>Jaguar</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Cadillac</xfm:label>
+        <xfm:value>Cadillac</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>BMW</xfm:label>
+        <xfm:value>BMW</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+    
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:sports_cars" model="Relevance" id="sports_cars">
+      <xfm:label>Sports Cars</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank3</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>BMW</xfm:label>
+        <xfm:value>BMW</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Porsche</xfm:label>
+        <xfm:value>Porsche</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Acura</xfm:label>
+        <xfm:value>Acura</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Chevrolet</xfm:label>
+        <xfm:value>Chevrolet</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Mercedes-Benz</xfm:label>
+        <xfm:value>Mercedes-Benz</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:suv" model="Relevance" id="suv">
+      <xfm:label>SUV</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank4</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Ford</xfm:label>
+        <xfm:value>Ford</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Honda</xfm:label>
+        <xfm:value>Honda</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Isuzu</xfm:label>
+        <xfm:value>Isuzu</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Mitsubishi</xfm:label>
+        <xfm:value>Mitsubishi</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Chevrolet</xfm:label>
+        <xfm:value>Chevrolet</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:acura_luxury" model="Relevance" id="acura_luxury">
+      <xfm:label>Acura</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank5</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Legend</xfm:label>
+        <xfm:value>Legend</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>RL</xfm:label>
+        <xfm:value>RL</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:bmw_luxury" model="Relevance" id="bmw_luxury">
+      <xfm:label>BMW</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank6</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>325</xfm:label>
+        <xfm:value>325</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>528</xfm:label>
+        <xfm:value>528</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>750</xfm:label>
+        <xfm:value>750</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>M5</xfm:label>
+        <xfm:value>M5</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:cadillac" model="Relevance" id="cadillac">
+      <xfm:label>Cadillac</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank7</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>DeVille</xfm:label>
+        <xfm:value>DeVille</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Eldorado</xfm:label>
+        <xfm:value>Eldorado</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Seville</xfm:label>
+        <xfm:value>Seville</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Sixty Special</xfm:label>
+        <xfm:value>Sixty Special</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:jaguar" model="Relevance" id="jaguar">
+      <xfm:label>Jaguar</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank8</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>XJR</xfm:label>
+        <xfm:value>XJR</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>XJS</xfm:label>
+        <xfm:value>XJS</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>XK8</xfm:label>
+        <xfm:value>XK8</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:acura_sports" model="Relevance" id="acura_sports">
+      <xfm:label>Acura</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank9</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>NSX</xfm:label>
+        <xfm:value>NSX</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>RSX</xfm:label>
+        <xfm:value>RSX</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:bmw_sports" model="Relevance" id="bmw_sports">
+      <xfm:label>BMW</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank10</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>M3</xfm:label>
+        <xfm:value>M3</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>M5</xfm:label>
+        <xfm:value>M5</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Z3</xfm:label>
+        <xfm:value>Z3</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:porsche" model="Relevance" id="porsche">
+      <xfm:label>Porsche</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank11</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>911</xfm:label>
+        <xfm:value>911</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Boxster</xfm:label>
+        <xfm:value>Boxster</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:mercedes" model="Relevance" id="mercedes">
+      <xfm:label>Mercedes</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank12</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>SLK</xfm:label>
+        <xfm:value>SLK</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:ford" model="Relevance" id="ford">
+      <xfm:label>Ford</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank13</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Escape</xfm:label>
+        <xfm:value>Escape</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Excursion</xfm:label>
+        <xfm:value>Excursion</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Expedition</xfm:label>
+        <xfm:value>Expedition</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Explorer</xfm:label>
+        <xfm:value>Explorer</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:honda" model="Relevance" id="honda">
+      <xfm:label>Honda</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank14</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>CR-V</xfm:label>
+        <xfm:value>CR-V</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Passport</xfm:label>
+        <xfm:value>Passport</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Pilot</xfm:label>
+        <xfm:value>Pilot</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:chev_sports" model="Relevance" id="chev_sports">
+      <xfm:label>Chevrolet</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank16</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Camaro</xfm:label>
+        <xfm:value>Camaro</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Corvette</xfm:label>
+        <xfm:value>Corvette</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:chev_suv" model="Relevance" id="chev_suv">
+      <xfm:label>Chevrolet</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank15</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Suburban</xfm:label>
+        <xfm:value>Suburban</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Tahoe</xfm:label>
+        <xfm:value>Tahoe</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>TrailBlazer</xfm:label>
+        <xfm:value>TrailBlazer</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:mitsubishi" model="Relevance" id="mitsubishi">
+      <xfm:label>Mitsubshi</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank18</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Montero</xfm:label>
+        <xfm:value>Montero</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Montero Sport</xfm:label>
+        <xfm:value>Montero Sport</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+
+    <xfm:select1 appearance="compact" ref="/myData:tutorial/myData:relevance/myData:isuzu" model="Relevance" id="isuzu">
+      <xfm:label>Isuzu</xfm:label>
+      <xfm:item>
+        <xfm:label />
+        <xfm:value>blank19</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Amigo</xfm:label>
+        <xfm:value>Amigo</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Rodeo</xfm:label>
+        <xfm:value>Rodeo</xfm:value>
+      </xfm:item>
+      <xfm:item>
+        <xfm:label>Trooper</xfm:label>
+        <xfm:value>Trooper</xfm:value>
+      </xfm:item>
+    </xfm:select1>
+          
+    <!--page footer-->
+    <br />
+        <center>
+          <span class="copyright">Copyright &#169; 2002-2004 Progeny Systems Corp. All Rights Reserved.</span>
+</center>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for XPath Tokenizer</title>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      // Tests that an END token is returned immediately for an empty XPath.
+      function testEmptyXPath() {
+        var tokenizer = new XPathTokenizer("");
+      
+        assertEquals(XPathTokenType.END, tokenizer.currentToken.type);
+      }
+      
+      // Tests that the tokenizer gets the first token right.
+      function testSingleToken() {
+        assertEquals(XPathTokenType.DOT,    firstTokenFrom(".")   .type);
+        assertEquals(XPathTokenType.DOT,    firstTokenFrom("  .") .type);
+        assertEquals(XPathTokenType.QNAME,  firstTokenFrom("name").type);
+        assertEquals(XPathTokenType.NUMBER, firstTokenFrom("1")   .type);
+      }                                            
+      
+      // Test that the parser grabs the longest possible token.
+      function testLongestTokenPreferred() {                 
+        assertEquals(XPathTokenType.SLASH_SLASH, firstTokenFrom("//").type);
+        assertEquals(XPathTokenType.DOT_DOT,     nthTokenFrom(".....", 0).type);
+        assertEquals(XPathTokenType.DOT_DOT,     nthTokenFrom(".....", 1).type);
+        assertEquals(XPathTokenType.DOT,         nthTokenFrom(".....", 2).type);
+        assertEquals(XPathTokenType.END,         nthTokenFrom(".....", 3).type);
+      }
+      
+      // Test that it can read multiple tokens.
+      function testMultipleTokens() {
+        assertEquals(XPathTokenType.SLASH,          nthTokenFrom("/input/@id", 0).type);
+        assertEquals(XPathTokenType.QNAME,          nthTokenFrom("/input/@id", 1).type);
+        assertEquals(XPathTokenType.SLASH,          nthTokenFrom("/input/@id", 2).type);
+        assertEquals(XPathTokenType.ATTRIBUTE_SIGN, nthTokenFrom("/input/@id", 3).type);
+        assertEquals(XPathTokenType.QNAME,          nthTokenFrom("/input/@id", 4).type);
+      }
+      
+      // Test that it correctly parses ambiguous operators.
+      function testAmbiguousOperators() {
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("  and", 0).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("@ and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("::and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("( and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("[ and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom(", and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("/ and", 1).type);
+        assertEquals(XPathTokenType.AND,      nthTokenFrom("1 and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("  or",  0).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("@ or",  1).type);
+        assertEquals(XPathTokenType.OR,       nthTokenFrom("1 or",  1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("  mod", 0).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("@ mod", 1).type);
+        assertEquals(XPathTokenType.MOD,      nthTokenFrom("1 mod", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("  div", 0).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("@ div", 1).type);
+        assertEquals(XPathTokenType.DIV,      nthTokenFrom("1 div", 1).type);
+        assertEquals(XPathTokenType.STAR,     nthTokenFrom("  *",   0).type);
+        assertEquals(XPathTokenType.STAR,     nthTokenFrom("@ *",   1).type);
+        assertEquals(XPathTokenType.MULTIPLY, nthTokenFrom("1 *",   1).type);
+      
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("and and and", 0).type);
+        assertEquals(XPathTokenType.AND,      nthTokenFrom("and and and", 1).type);
+        assertEquals(XPathTokenType.QNAME,    nthTokenFrom("and and and", 2).type);
+        assertEquals(XPathTokenType.STAR,     nthTokenFrom("***",         0).type);
+        assertEquals(XPathTokenType.MULTIPLY, nthTokenFrom("***",         1).type);
+        assertEquals(XPathTokenType.STAR,     nthTokenFrom("***",         2).type);
+      }
+      
+      // Test that it correctly parses ambiguous names.
+      function testAmbiguousNames() {
+        assertEquals(XPathTokenType.QNAME,                  firstTokenFrom("count")                  .type);
+        assertEquals(XPathTokenType.FUNCTION_NAME,          firstTokenFrom("count(")                 .type);
+        assertEquals(XPathTokenType.QNAME,                  firstTokenFrom("comment")                .type);
+        assertEquals(XPathTokenType.COMMENT,                firstTokenFrom("comment(")               .type);
+        assertEquals(XPathTokenType.QNAME,                  firstTokenFrom("text")                   .type);
+        assertEquals(XPathTokenType.TEXT,                   firstTokenFrom("text(")                  .type);
+        assertEquals(XPathTokenType.QNAME,                  firstTokenFrom("processing-instruction") .type);
+        assertEquals(XPathTokenType.PROCESSING_INSTRUCTION, firstTokenFrom("processing-instruction(").type);
+        assertEquals(XPathTokenType.QNAME,                  firstTokenFrom("node")                   .type);
+        assertEquals(XPathTokenType.NODE,                   firstTokenFrom("node(")                  .type);
+      }
+      
+      // Test that it handles ambiguous axis names.
+      function testAmbiguousAxes() {
+        assertEquals(XPathTokenType.QNAME,     firstTokenFrom("attribute")  .type);
+        assertEquals(XPathTokenType.QNAME,     firstTokenFrom("attribute +").type);
+        assertEquals(XPathTokenType.ATTRIBUTE, firstTokenFrom("attribute::").type);
+      }
+      
+      
+      function firstTokenFrom(xpath) {
+        return nthTokenFrom(xpath, 0);
+      }
+      
+      function nthTokenFrom(xpath, n) {
+        var tokenizer = new XPathTokenizer(xpath);
+       
+        for (var i = 0; i < n; ++i) {
+          tokenizer.next();
+        }
+        
+        return tokenizer.currentToken;
+      }
+
+    //]]>
+    </script>
+  </head>
+</html>

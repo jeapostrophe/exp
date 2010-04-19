@@ -1,0 +1,571 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>FormFaces Bookstore</title>
+    
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <style type="text/css">
+    /* <![CDATA[ */
+    
+      #logo {
+        float: left;
+      }
+      
+      #cart {
+        text-align: right;
+      }
+      
+      #name {
+        clear: both;
+      }
+      
+      #books {
+        border: 1px solid black;
+      }
+    
+      #books thead {
+        background: #FC9;
+      }
+      
+      #books th,
+      #books td {
+        padding-right: 1em;
+      }
+      
+      #books th {
+        text-align: left;
+      }
+      
+      #books input {
+        width: 2em;
+      }
+      
+      #categories {
+        float: left;
+        margin-right: 1em;
+        vertical-align: top;
+      }
+      
+      #categories input {
+        display: block;
+      }
+      
+      .xforms-invalid input {
+        background: #F99;
+      }
+      
+      .xforms-repeat-index {
+        background: #FED;
+      }
+      
+      .xforms-disabled {
+        display: none;
+      }
+      
+    /* ]]> */
+    </style>
+
+    <xf:model id="model">
+      <xf:instance>
+        <bookstore xmlns="">
+          <customer>
+            <name>
+              <first>John</first>
+              <last>Kugelman</last>
+            </name>
+            
+            <credit-card>
+              <name>
+                <first/>
+                <last/>
+              </name>
+              
+              <type>visa</type>
+              <number/>
+              <verification-code/>
+              
+              <expiration>
+                <month/>
+                <year/>
+              </expiration>
+            </credit-card>
+          </customer>
+        
+          <books>
+            <category name="Sci-Fi">
+              <book>
+                <name>Enterprise: Surak's Soul</name>
+                <author>
+                  <first>J.M.</first>
+                  <last>Dillard</last>
+                </author>
+
+                <price>6.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Star Wars: Tatooine Ghost</name>
+                <author>
+                  <first>Troy</first>
+                  <last>Denning</last>
+                </author>
+
+                <price>12.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>The Two Towers</name>
+                <author>
+                  <first>J.R.R.</first>
+                  <last>Tolkien</last>
+                </author>
+
+                <price>11.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Star Trek: Nemesis</name>
+                <author>
+                  <first>J.M.</first>
+                  <last>Dillard</last>
+                </author>
+
+                <price>7.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Star Trek: Vulcan's Heart</name>
+                <author>
+                  <first>Josepha</first>
+                  <last>Sherman</last>
+                </author>
+
+                <price>5.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>The Fellowship of the Ring</name>
+                <author>
+                  <first>J.R.R.</first>
+                  <last>Tolkien</last>
+                </author>
+
+                <price>11.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>The Hobbit</name>
+                <author>
+                  <first>J.R.R.</first>
+                  <last>Tolkien</last>
+                </author>
+
+                <price>12.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+            </category>
+
+            <category name="Horror">
+              <book>
+                <name>Interview With a Vampire</name>
+                <author>
+                  <first>Anne</first>
+                  <last>Rice</last>
+                </author>
+
+                <price>11.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Frankenstein</name>
+                <author>
+                  <first>Mary</first>
+                  <last>Shelley</last>
+                </author>
+
+                <price>3.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>The Haunting of Hill House</name>
+                <author>
+                  <first>Shirley</first>
+                  <last>Jackson</last>
+                </author>
+
+                <price>6.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Dracula</name>
+                <author>
+                  <first>Bram</first>
+                  <last>Stoker</last>
+                </author>
+
+                <price>5.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+            </category>
+            
+            <category name="Computer">
+              <book>
+                <name>Computer Science: An Overview</name>
+                <author>
+                  <first>J. Glenn</first>
+                  <last>Brookshear</last>
+                </author>
+
+                <price>25.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Creating Web Pages For Dummies</name>
+                <author>
+                  <first>Bud E.</first>
+                  <last>Smith</last>
+                </author>
+
+                <price>10.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Red Hat Linux 8 Bible</name>
+                <author>
+                  <first>Christopher</first>
+                  <last>Negus</last>
+                </author>
+
+                <price>18.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>Java How to Program, Fifth Edition</name>
+                <author>
+                  <first>Harvey M.</first>
+                  <last>Deitel</last>
+                </author>
+
+                <price>21.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+
+              <book>
+                <name>VB and VBA in a Nutshell</name>
+                <author>
+                  <first>Paul</first>
+                  <last>Lomax</last>
+                </author>
+                
+                <price>16.99</price>
+                <quantity>0</quantity>
+                <total/>
+              </book>
+            </category>
+          </books>
+        </bookstore>
+      </xf:instance>
+      
+      <xf:bind nodeset="books/category/book/quantity" constraint="string(number(.)) != 'NaN'"/>
+      
+      <xf:bind nodeset="books/category/book/total" calculate="../price * ../quantity"/>
+      
+      <xf:bind nodeset="customer">
+        <xf:bind nodeset="name/first|name/last" constraint=". != ''"/>
+        
+        <xf:bind nodeset="credit-card">
+          <xf:bind nodeset="number"
+                     constraint="(../type = 'visa'
+                                 
+                                     and 
+                 
+                                   (string-length() = 13 or
+                                    string-length() = 16)
+                                 
+                                     and
+                 
+                                   starts-with(., '4')
+                                 )
+                                 
+                                   or
+                 
+                                 (../type = 'mastercard'
+                                   
+                                     and
+                                   
+                                   string-length() = 16
+                 
+                                     and
+                                   
+                                   (starts-with(., '51') or
+                                    starts-with(., '52') or
+                                    starts-with(., '53') or
+                                    starts-with(., '54') or
+                                    starts-with(., '55'))
+                                 )
+                                 
+                                   or
+                 
+                                 (../type = 'amex'
+                                   
+                                     and
+                                   
+                                   string-length() = 15
+                 
+                                     and
+                                   
+                                   (starts-with(., '34') or
+                                    starts-with(., '37'))
+                                 )" />
+                                 
+          <xf:bind nodeset="expiration/month"  constraint="../../number = '' or (. >= 1 and 12 >= .)"/>
+          <xf:bind nodeset="expiration/year"   constraint="../../number = '' or string-length() = 4"/>
+          <xf:bind nodeset="verification-code" relevant="../type = 'visa' or ../type = 'mastercard'"/>
+        </xf:bind>
+      </xf:bind>
+      
+      <xf:submission id="submission"
+                     action="index.html"
+                     method="post" />
+
+      <xf:instance id="variables">
+        <variables xmlns="">
+          <category>Sci-Fi</category>
+        </variables>
+      </xf:instance>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p id="logo"><img src="logo.jpg" alt="The Book Boutique"/></p>
+  
+    <div id="cart">
+      <img src="cart.jpg"/>
+    
+      <xf:output value="if(string(sum(books/category/book/quantity)) = 'NaN', 'N/A', sum(books/category/book/quantity))">
+        <xf:label>Items:</xf:label>
+      </xf:output>  
+      
+      <xf:output value="if(string(sum(books/category/book/total)) = 'NaN', 'N/A', concat('$', sum(books/category/book/total)))">
+        <xf:label>Total:</xf:label>
+      </xf:output>
+    </div>
+    
+    <div id="name">
+      <xf:switch ref="customer">
+        <xf:case id="welcome">
+          <p>
+            Welcome back, <xf:output ref="name/first"/>!
+            
+            <xf:trigger appearance="minimal">
+              <xf:label>(If you are not <xf:output ref="name/first"/>, click here.)</xf:label>
+              
+              <xf:toggle case="change-name" ev:event="DOMActivate"/>
+            </xf:trigger>
+          </p>
+        </xf:case>
+        
+        <xf:case id="change-name">
+          <p>What is your name?</p>
+          
+          <p>
+            <xf:input ref="name/first">
+              <xf:label>First:</xf:label>
+              
+              <xf:message level="modal" ev:event="xforms-invalid">
+                Please enter your first name.
+              </xf:message>
+            </xf:input>
+            
+            <xf:input ref="name/last">
+              <xf:label>Last:</xf:label>
+              
+              <xf:message level="modal" ev:event="xforms-invalid">
+                Please enter your last name.
+              </xf:message>
+            </xf:input>
+          </p>
+      
+          <p>
+            <xf:trigger>
+              <xf:label>Update</xf:label>
+              <xf:toggle case="welcome" ev:event="DOMActivate"/>
+            </xf:trigger>   
+          </p>
+        </xf:case>
+      </xf:switch>
+    </div>
+    
+    <hr />
+
+    <p id="categories">
+      Category:
+    
+      <xf:trigger>
+        <xf:label>Sci-Fi</xf:label>
+        
+        <xf:action ev:event="DOMActivate">
+          <xf:setvalue ref="instance('variables')/category">Sci-Fi</xf:setvalue>
+          <xf:rebuild model="model"/>
+        </xf:action>
+      </xf:trigger>
+
+      <xf:trigger>
+        <xf:label>Horror</xf:label>
+        
+        <xf:action ev:event="DOMActivate">
+          <xf:setvalue ref="instance('variables')/category">Horror</xf:setvalue>
+          <xf:rebuild model="model"/>
+        </xf:action>
+      </xf:trigger>
+
+      <xf:trigger>
+        <xf:label>Computer</xf:label>
+        
+        <xf:action ev:event="DOMActivate">
+          <xf:setvalue ref="instance('variables')/category">Computer</xf:setvalue>
+          <xf:rebuild model="model"/>
+        </xf:action>
+      </xf:trigger>
+    </p>
+  
+    <table id="books" cellspacing="0">
+      <xf:message level="modal" ev:event="xforms-invalid">
+        Please enter a valid number for the quantity.
+      </xf:message>
+      
+      <thead>
+        <tr>
+          <td>&nbsp;</td>
+          <th>Book</th>
+          <th>Author</th>
+          <th>Price</th>
+          <th>Qty</th>
+        </tr>
+      </thead>
+      
+      <tbody xf:repeat-nodeset="books/category[@name=instance('variables')/category]/book">
+        <tr>
+          <td><xf:output value="position()"/>.</td>
+          <td><xf:output ref="name"/></td>
+          
+          <td>
+            <xf:group ref="author">
+              <xf:output ref="first"/>
+              <xf:output ref="last"/>
+            </xf:group>
+          </td>
+
+          <td>$<xf:output ref="price"/></td>
+          <td><xf:input ref="quantity"><xf:label/></xf:input></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <hr />
+      
+    <xf:switch>
+      <xf:case id="ready">
+        <p>
+          <xf:trigger appearance="minimal">
+            <xf:label>Are you ready to checkout?</xf:label>
+            
+            <xf:toggle case="checkout" ev:event="DOMActivate"/>
+          </xf:trigger>
+        </p>
+      </xf:case>
+      
+      <xf:case id="checkout">
+        <xf:group ref="customer/credit-card">
+          <p>
+            <xf:group ref="name">
+              <xf:input ref="first"><xf:label>First name:</xf:label></xf:input>
+              <xf:input ref="last"> <xf:label>Last name:</xf:label> </xf:input>
+            </xf:group>
+          </p>
+          
+          <p>
+            <xf:select1 ref="type">
+              <xf:label>Card type:</xf:label>
+              
+              <xf:item><xf:label>Visa</xf:label>            <xf:value>visa</xf:value>      </xf:item>
+              <xf:item><xf:label>Mastercard</xf:label>      <xf:value>mastercard</xf:value></xf:item>
+              <xf:item><xf:label>American Express</xf:label><xf:value>amex</xf:value>      </xf:item>
+            </xf:select1>
+            
+            <xf:input ref="number">
+              <xf:label>Number:</xf:label>
+            </xf:input>
+            
+            <xf:group ref="expiration">
+              <xf:input ref="month">
+                <xf:label>Expiration month:</xf:label>
+              </xf:input>
+              
+              <xf:input ref="year">
+                <xf:label>Expiration year:</xf:label>
+              </xf:input>
+            </xf:group>
+            
+            <xf:input ref="verification-code">
+              <xf:label>Verification code:</xf:label>
+            </xf:input>
+          </p>
+          
+          <p>
+            <xf:submit submission="submission">
+              <xf:label>Submit</xf:label>
+            </xf:submit>
+            
+            <xf:trigger>
+              <xf:label>Cancel</xf:label>
+              <xf:toggle case="ready" ev:event="DOMActivate"/>
+            </xf:trigger>
+          </p>
+        </xf:group>
+      </xf:case>
+    </xf:switch>
+    
+
+    <a href="explanation.html">(Explain this page)</a>
+
+    <!-- <p id="status"></p> -->
+  </body>
+</html>

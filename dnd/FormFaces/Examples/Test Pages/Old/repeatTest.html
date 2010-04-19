@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xfm="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en" xmlns:instance="http//fake.com">
+  <head>
+    <title>FormFaces Tutorial:  ZERO Repeat Example</title>
+    <link rel="StyleSheet" href="example.css" type="text/css" />
+    <xfm:model schema="#mySchema" id="RepTest">
+      <xfm:submission action="somewhere.do" indent="false" method="post" id="submitRep" />
+      <xfm:instance>
+        <instance:test>
+          <instance:repeat>
+            <instance:a />
+            <instance:b />
+            <instance:c />
+            <instance:d />
+          </instance:repeat>
+          <instance:repeat>
+            <instance:a />
+            <instance:b />
+            <instance:c />
+            <instance:d />
+          </instance:repeat>
+        </instance:test>
+      </xfm:instance>
+    </xfm:model>
+
+    <script type="text/javascript" src="../../../formfaces.js"></script>
+  </head>
+  <body class="basictext">
+    <center>
+      <span class="label"> This page shows the ability to insert and delete an element or group of
+    elements dynamically.<br />
+      </span>
+    </center>
+    <form id="submitRep"/>
+    <center>
+      <xfm:trigger id="triggerInsert" model="RepTest">
+        <xfm:label>Insert</xfm:label>
+        <xfm:insert nodeset="/instance:test/instance:repeat" at="index('repeatTest1')" position="after" id="rptInsert" ev:event="DOMActivate" model="RepTest" />
+      </xfm:trigger>
+    </center>
+    <br />
+    <center>
+      <xfm:repeat nodeset="/instance:test/instance:repeat" number="4" startindex="1" id="repeatTest1" height="400px" width="300px" model="RepTest"  xmlns:ev="http://www.w3.org/2001/xml-events">
+        <xfm:input ref="instance:a" id="bookTitle" model="RepTest">
+          <xfm:label>Book Title:</xfm:label>
+        </xfm:input>
+        <xfm:select1 appearance="full" ref="instance:b" id="coverType" model="RepTest">
+          <xfm:label>Cover Type:</xfm:label>
+          <xfm:item>
+            <xfm:label>Hard Back</xfm:label>
+            <xfm:value>hardback</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Soft Back</xfm:label>
+            <xfm:value>softback</xfm:value>
+          </xfm:item>
+        </xfm:select1>
+        <xfm:input ref="instance:c" id="author" model="RepTest">
+          <xfm:label>Author:</xfm:label>
+        </xfm:input>
+        <xfm:select1 ref="instance:d" id="genreType" appearance="compact" model="RepTest">
+          <xfm:label>Genre:</xfm:label>
+          <xfm:item>
+            <xfm:label>History</xfm:label>
+            <xfm:value>history</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Mystery</xfm:label>
+            <xfm:value>mystery</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Romance</xfm:label>
+            <xfm:value>romance</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Biography's</xfm:label>
+            <xfm:value>biography</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Espionage</xfm:label>
+            <xfm:value>espionage</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Police</xfm:label>
+            <xfm:value>police</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Medical</xfm:label>
+            <xfm:value>medical</xfm:value>
+          </xfm:item>
+          <xfm:item>
+            <xfm:label>Humor</xfm:label>
+            <xfm:value>humor</xfm:value>
+          </xfm:item>
+        </xfm:select1>
+      </xfm:repeat>
+    </center>
+	  <center>
+		  <xfm:trigger id="deleteButton" model="RepTest" xmlns:ev="http://www.w3.org/2001/xml-events">
+        <xfm:label>Delete</xfm:label>
+        <xfm:delete nodeset="/instance:test/instance:repeat" at="index('repeatTest1')" id="rptDelete" ev:event="DOMActivate" />
+      </xfm:trigger>
+		</center>
+    <!--page footer-->
+    <br />
+    <center>
+      <span class="copyright">Copyright &#169; 2002-2004 Progeny Systems Corp. All Rights Reserved.</span>
+    </center>
+  </body>
+</html>

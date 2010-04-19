@@ -1,0 +1,67 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Unit Tests for XFormBinding</title>
+
+    <form:model id='a'>
+      <form:instance id='i'>
+        <favorite-things xmlns=''>
+          <number/>
+          <color/>
+          <read/>
+          <requirement/>
+          <relevance/>
+          <constraints/>
+          <calcuation/>
+          <type/>
+        </favorite-things>
+      </form:instance>
+
+      <form:bind id="bind"     nodeset="number"                                  />
+      <form:bind id="read"     nodeset="read"        readonly  ="true()"         />
+      <form:bind id="req"      nodeset="requirement" required  ="false()"        />
+      <form:bind id="rel"      nodeset="relevance"   relevant  ="./number &gt; 0"/>
+      <form:bind id="calc"     nodeset="calculation" calculate ="./number * 2"   />
+      <form:bind id="restrict" nodeset="constraints" constraint="./number &gt; 0"/>
+    </form:model>
+              
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+      function setUpPage() {
+        XForm.waitForInitialization();
+      }
+
+      // Check that all of the XFormBinding objects have been created.
+      function testAllBindingsAreAccountedFor() {
+        assertEquals(6, xform.models[0].binds.length);
+      }
+      
+      // Check that the binding MIP XPaths are read.
+      function testBindingAttributes() {
+        assertEquals("number",       xform.models[0].binds[0].xpath                .source);
+        assertEquals("read",         xform.models[0].binds[1].xpath                .source);
+        assertEquals("true()",       xform.models[0].binds[1].properties.readOnly  .source);
+        assertEquals("requirement",  xform.models[0].binds[2].xpath                .source);
+        assertEquals("false()",      xform.models[0].binds[2].properties.required  .source);
+        assertEquals("relevance",    xform.models[0].binds[3].xpath                .source);
+        assertEquals("./number > 0", xform.models[0].binds[3].properties.relevant  .source);
+        assertEquals("calculation",  xform.models[0].binds[4].xpath                .source);
+        assertEquals("./number * 2", xform.models[0].binds[4].properties.calculate .source);
+        assertEquals("constraints",  xform.models[0].binds[5].xpath                .source);
+        assertEquals("./number > 0", xform.models[0].binds[5].properties.constraint.source);
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Kugo Zale</title>
+<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+<style type="text/css" media="screen">@import "iui/iui.css";</style>
+<script type="application/x-javascript" src="iui/iui.js"></script>
+<script type="application/x-javascript" src="flapjax-source-20070514/lib/flapjax.js"></script>
+<!--
+<script type="application/x-javascript" src="http://10.0.1.2:1840/ibug.js"></script>
+-->
+
+<script type="text/javascript">
+
+function spend(name) {
+ var n = $(name);
+ if ( n.className == 'spent' ) {
+  // Code dupe!
+  $('doublespend').setAttribute("selected", "true");
+  $('doublespend').onclick = 
+   function (event) { $('doublespend').removeAttribute("selected"); };
+  return true;
+ } else {
+  n.className = 'spent';
+  return false;
+ }
+}
+
+var sets = [];
+sets['Encounter'] = ['Elven-Accuracy-a', 'Steel-Serpent-Strike-a'];
+sets['Daily'] = ['Comeback-Strike-a'];
+
+function reset_powers(set) {
+ var ns = sets[set];
+ for ( var i = 0; i < ns.length; i++) {
+  $(ns[i]).className = '';
+ }
+ return false;
+}
+
+function shortrest() {
+ // Reset encounters
+ reset_powers('Encounter');
+ return false;
+}
+
+var HP_b;
+
+function extendedrest() {
+ // Reset encounters
+ reset_powers('Encounter');
+ // Reset dailies
+ reset_powers('Daily');
+ // Reset AP
+ $('FJ_stat_ap').value = 1;
+ // Reset HP
+ $('FJ_stat_hp').value = $('FJ_stat_maxhp').value;
+ sendBehaviour(HP_b, $('FJ_stat_maxhp').value);
+ // Reset surges
+ $('FJ_stat_surges').value = $('FJ_stat_dsurges').value;
+ return false;
+}
+
+function loader() {
+  flapjaxInit();
+
+  var MAX_HP_b = extractValue_b('FJ_stat_maxhp');
+  HP_b = extractValue_b('FJ_stat_hp');
+
+  insertDomB(HP_b, 'FJ_tool_hp');
+  insertDomB(MAX_HP_b, 'FJ_tool_maxhp');
+
+  lift_e(function (ch) { 
+         $('hpButton').className = ch / MAX_HP_b.valueNow() > 0.5 ? 'button blueButton' : 'button redButton';
+         return true; },
+        changes(HP_b));
+           
+}
+
+</script>
+
+<link rel="apple-touch-icon" href="eSudoku-iphone-icon.png" />
+</head>
+
+<body onload="loader()">
+    <div id="toolbar" class="toolbar">
+        <h1 id="pageTitle"></h1>
+        <a id="backButton" class="button" href="#"></a>
+        <a id="hpButton" class="button blueButton" href="#status">HP: <span id="FJ_tool_hp">_</span> / <span id="FJ_tool_maxhp">_</span></a>
+    </div>
+    
+    <ul id="home" title="Kugo Zale" selected="true">
+        <li><a href="#stats">Stats</a></li>
+	<li><a href="#features">Features</a></li>
+	<li><a href="#skills">Skills</a></li>
+	<li><a href="#feats">Feats</a></li>
+	<li><a href="#powers">Powers</a></li>
+	<li><a href="#inventory">Inventory</a></li>
+    </ul>
+
+    <div id="doublespend" class="dialog">
+      <fieldset>
+	<h1>You cannot spend a power twice!</h1>
+      </fieldset>
+    </div>
+
+    <div id="stats" class="panel" title="Stats">
+      <table class="tarea"><tr>
+	  <td style="width: 50%"><table>
+	      <tr><td><strong>Str</strong></td>
+		<td>18</td><td>(+4)</td></tr>
+	      <tr><td><strong>Con</strong></td>
+		<td>10</td><td>(+0)</td></tr>
+	      <tr><td><strong>Dex</strong></td>
+		<td>16</td><td>(+3)</td></tr>
+	      <tr><td><strong>Int</strong></td>
+		<td>8</td><td>(-1)</td></tr>
+	      <tr><td><strong>Wis</strong></td>
+		<td>15</td><td>(+2)</td></tr>
+	      <tr><td><strong>Cha</strong></td>
+		<td>10</td><td>(+0)</td></tr>
+	    </table></td>
+	  <td style="width: 50%"><table>
+	      <tr><td><strong>Race</strong></td>
+		<td>Elf</td></tr>
+	      <tr><td><strong>Size</strong></td>
+		<td>Medium</td></tr>
+	      <tr><td><strong>Vision</strong></td>
+		<td>Low-light</td></tr>
+	      <tr><td><strong>Class</strong></td>
+		<td>Fighter</td></tr>
+	      <tr><td><strong>Init</strong></td>
+		<td>+3</td></tr>
+	      <tr><td><strong>Speed</strong></td>
+		<td>6</td></tr>
+	      <tr><td><strong>Level</strong></td>
+		<td>1</td></tr>
+	      <tr><td><strong>XP</strong></td>
+		<td>0</td></tr>
+	  </table></td>
+	</tr>
+	<tr><td><strong>Alignment</strong></td>
+	  <td>Good</td></tr>
+	<tr><td><strong>Deity</strong></td>
+	  <td>Avandra</td></tr>
+	<tr><td><strong>Languages</strong></td>
+	  <td>Common, Elven</td></tr>
+      </table> 
+    </div>
+
+    <div id="features" class="panel" title="Features">
+      <h2>Racial Traits</h2>
+      <div class="tarea">	
+	<p>Fey origin</p>
+	<p>Non-elves with 5 sqs get +1 racial bonus to Perception</p>
+	<p>Ignore difficult terrain when shifting</p>
+      </div>
+
+      <h2>Class Features</h2>
+      <div class="tarea">
+	<p>Combat challenge: mark on attack, -2 atk for marked vs not me,
+	imm interrupt basic melee on shift / attack</p>
+	<p>+Wis mod to opp atk & stops movement</p>
+	<p>+1 to atk w/ one-handed</p>
+      </div>
+
+      <h2>Armor Proficiencies</h2>
+      <div class="tarea">
+	<p>Cloth, Leather, Hide, Chain, Scale, Heavy Shield, Light Shield</p>
+      </div>
+
+      <h2>Weapon Proficiencies</h2>
+      <div class="tarea">
+	<p>Simple Melee, Military Melee, Simple Ranged, Military Ranged</p>
+      </div>
+    </div>
+
+    <div id="skills" class="panel" title="Skills">
+      <table style="width:100%;" class="tarea">
+	<tr><th></th><th>Stat</th><th>Mod</th></tr>
+	<tr><td><strong>Acrobatics</strong></td><td>Dex</td><td>+1</td></tr>
+	<tr class="hi"><td><strong>Arcana</strong></td><td>Int</td><td>-1</td></tr>
+	<tr><td><strong>Athletics</strong></td><td>Str</td><td>+2</td></tr>
+	<tr class="hi"><td><strong>Bluff</strong></td><td>Cha</td><td>+0</td></tr>
+	<tr><td><strong>Diplomacy</strong></td><td>Cha</td><td>+0</td></tr>
+	<tr class="hi"><td><strong>Dungeoneering</strong></td><td>Wis</td><td>+2</td></tr>
+	<tr><td><strong>Endurance</strong></td><td>Con</td><td>+3</td></tr>
+	<tr class="hi"><td><strong>Heal</strong></td><td>Wis</td><td>+2</td></tr>
+	<tr><td><strong>History</strong></td><td>Int</td><td>-1</td></tr>
+	<tr class="hi"><td><strong>Insight</strong></td><td>Wis</td><td>+2</td></tr>
+	<tr><td><strong>Intimidate</strong></td><td>Cha</td><td>+5</td></tr>
+	<tr class="hi"><td><strong>Nature</strong></td><td>Wis</td><td>+4</td></tr>
+	<tr><td><strong>Perception</strong></td><td>Wis</td><td>+4</td></tr>
+	<tr class="hi"><td><strong>Religion</strong></td><td>Int</td><td>-1</td></tr>
+	<tr><td><strong>Stealth</strong></td><td>Dex</td><td>+1</td></tr>
+	<tr class="hi"><td><strong>Streetwise</strong></td><td>Cha</td><td>+5</td></tr>
+	<tr><td><strong>Thievery</strong></td><td>Dex</td><td>+1</td></tr>
+      </table>
+    </div>
+
+    <ul id="feats" title="Feats">
+      <li><a href="#Toughness">Toughness</a></li>
+    </ul>
+
+    <div id="Toughness" class="panel" title="Toughness">
+      <p class="tarea">
+	<strong>Benefit:</strong> When you take this feat, you gain
+	additional hit points. You gain an additional 5 hit points at
+	each tier of play (at 1st, 11st, and 21st level).
+      </p>
+    </div>
+
+    <ul id="powers" title="Powers">
+      <li class="group">At-will</li>
+      <div id="At-will">
+	<li><a id="Sure-Strike-a" href="#Sure-Strike">Sure Strike</a></li>
+	<li><a id="Tide-of-Iron-a" href="#Tide-of-Iron">Tide of Iron</a></li>
+      </div>
+      <li class="group">Encounter</li>
+      <div id="Encounter">
+	<li><a id="Elven-Accuracy-a" href="#Elven-Accuracy">Elven Accuracy</a></li>
+	<li><a id="Steel-Serpent-Strike-a" href="#Steel-Serpent-Strike">Steel Serpent Strike</a></li>
+      </div>
+      <li class="group">Daily</li>
+      <div id="Daily">
+	<li><a id="Comeback-Strike-a" href="#Comeback-Strike">Comeback Strike</a></li>
+      </div>
+    </ul>
+
+    <div id="Sure-Strike" class="panel" title="Sure Strike">
+      <table class="tarea">
+	<tr class="at-will"><td colspan="2"><strong>Fighter Attack
+	1</strong> (p77)</td></tr>
+	<tr class="hi"><td colspan="2"><em>You trade power for
+	precision.</em></td></tr>
+	<tr><td colspan="2">
+	    <strong>At-Will &diams; Martial, Weapon</strong></td></tr>
+	<tr><td><strong>Standard Action</strong></td>
+	  <td><strong>Melee</strong> weapon</td></tr>
+	<tr><td colspan="2"><strong>Target:</strong> One creature</td></tr>
+	<tr><td colspan="2"><strong>Attack:</strong> Strength + 2
+	vs. AC</td></tr>
+	<tr class="hi"><td colspan="2"><strong>Hit:</strong>1[W]
+	damage.</td></tr>
+	<tr><td colspan="2">Increase damage to 2[W] at 21st level.</td></tr>
+      </table>
+    </div>
+
+    <div id="Tide-of-Iron" class="panel" title="Tide of Iron">
+      <table class="tarea">
+	<tr class="at-will"><td colspan="2"><strong>Fighter Attack
+	1</strong> (p77)</td></tr>
+	<tr class="hi"><td colspan="2"><em>After each might swing, you
+	bring your shield to bear and use it to push your enemy
+	back.</em></td></tr>
+	<tr><td colspan="2">
+	    <strong>At-Will &diams; Martial, Weapon</strong></td></tr>
+	<tr><td><strong>Standard Action</strong></td>
+	  <td><strong>Melee</strong> weapon</td></tr>
+	<tr><td colspan="2"><strong>Requirement:</strong> You must be
+	using a shield.</td></tr>
+	<tr><td colspan="2"><strong>Target:</strong> One creature</td></tr>
+	<tr><td colspan="2"><strong>Attack:</strong> Strength vs. AC</td></tr>
+	<tr class="hi"><td colspan="2"><strong>Hit:</strong>1[W] +
+	Strength modifier damage, and you push the target 1 square if
+	it is your size, smaller than you, or one size category
+	larger. You can shift into the space that the target
+	occupied.</td></tr>
+	<tr><td colspan="2">Increase damage to 2[W] at 21st level.</td></tr>
+      </table>
+    </div>
+
+    <div id="Elven-Accuracy" class="panel" title="Elven Accuracy">
+      <table class="tarea">
+	<tr class="encounter"><td colspan="2"><strong>Elf Racial
+	Power</strong> (p40)</td></tr>
+	<tr class="hi"><td colspan="2"><em>With an instant of focus,
+	you take careful aim at your foe and strike with the legendary
+	accuracy of the elves.</em></td></tr>
+	<tr><td colspan="2">
+	    <strong>Encounter</strong></td></tr>
+	<tr><td><strong>Free Action</strong></td>
+	  <td><strong>Personal</strong></td></tr>
+	<tr class="hi"><td colspan="2"><strong>Effect:</strong>Reroll
+	an attack roll. Use the second roll, even if it it's
+	lower.</td></tr>
+      </table>
+
+      <div style="padding: 5px; text-align:center; width: 100%;" class="row">
+	<a onclick="spend('Elven-Accuracy-a');" class="inbutton"
+	type="submit">Spend</a>
+      </div>
+    </div>
+
+    <div id="Steel-Serpent-Strike" class="panel" title="Steel Serpent Strike">
+      <table class="tarea">
+	<tr class="encounter"><td colspan="2"><strong>Fighter Attack
+	1</strong> (p78)</td></tr>
+	<tr class="hi"><td colspan="2"><em>You stab viciously at your
+	foe's knee or foot to slow him down. No matter how tough he
+	is, he's going to favor that leg for a time.</em></td></tr>
+	<tr><td colspan="2">
+	    <strong>Encounter &diams; Martial, Weapon</strong></td></tr>
+	<tr><td><strong>Standard Action</strong></td>
+	  <td><strong>Melee</strong> weapon</td></tr>
+	<tr><td colspan="2"><strong>Target:</strong> One creature</td></tr>
+	<tr><td colspan="2"><strong>Attack:</strong> Strength vs. AC</td></tr>
+	<tr class="hi"><td colspan="2"><strong>Hit:</strong>2[W] +
+	Strength modifier damage, and the target is slowed and cannot
+	shift until end of your next turn.</td></tr>
+      </table>
+
+      <div style="padding: 5px; text-align:center; width: 100%;" class="row">
+	<a onclick="spend('Steel-Serpent-Strike-a');" class="inbutton"
+	type="submit">Spend</a>
+      </div>
+    </div>
+
+    <div id="Comeback-Strike" class="panel" title="Comeback Strike">
+      <table class="tarea">
+	<tr class="daily"><td colspan="2"><strong>Fighter Attack
+	1</strong> (p78)</td></tr>
+	<tr class="hi"><td colspan="2"><em>A timely strike against a
+	hated foe invigorates you, giving you the strength and resolve
+	to fight on.</em></td></tr>
+	<tr><td colspan="2">
+	    <strong>Daily &diams; Healing, Martial, Reliable,
+	    Weapon</strong></td></tr>
+	<tr><td><strong>Standard Action</strong></td>
+	  <td><strong>Melee</strong> weapon</td></tr>
+	<tr><td colspan="2"><strong>Target:</strong> One creature</td></tr>
+	<tr><td colspan="2"><strong>Attack:</strong> Strength vs. AC</td></tr>
+	<tr class="hi"><td colspan="2"><strong>Hit:</strong>2[W] +
+	Strength modifier damage, and you can spend a healing
+	surge.</td></tr>
+      </table>
+
+      <div style="padding: 5px; text-align:center; width: 100%;" class="row">
+	<a onclick="spend('Comeback-Strike-a');" class="inbutton"
+	type="submit">Spend</a>
+      </div>
+    </div>
+    
+    <div id="inventory" title="Inventory" class="panel">
+      <div class="tarea">
+	<p>Wealth: 35 gp</p>
+	<p>Load: 68 / 180</p>
+	<p>Scale armor (heavy): +7 AC, -1 speed, 45 lb</p>
+	<p>Heavy shield: +2 Shield, -2 check, 15 lb</p>
+
+	<p>Spear: +2 prof, 1d8, 6lb, spear, versatile<br />
+	Javelin: +2 prof, 1d6, 10/20 rng, 2 lb, spear, heavy thrown<br />
+		 Hit: +2 (Prof) +1 (1-hnded) +4 (Str) = +6<br />
+		 Opp: +6 (Hit) +2 (Wis) = +8</p>
+      </div>
+    </div>
+
+    <div id="status" title="Status" class="panel">
+      <h2>Defenses</h2>
+      <fieldset>
+	<div class="row">
+	  <label>AC</label>
+	  <input type="text" disabled value="+19" />
+	</div>
+	<div class="row">
+	  <label>Fortitude</label>
+	  <input type="text" disabled value="+16" />
+	</div>
+	<div class="row">
+	  <label>Reflex</label>
+	  <input type="text" disabled value="+15" />
+	</div>
+	<div class="row">
+	  <label>Will</label>
+	  <input type="text" disabled value="+12" />
+	</div>
+      </fieldset>
+
+      <h2>Health</h2>
+      <fieldset>
+        <div class="row">
+          <label>HP</label>
+	  <input id="FJ_stat_hp" type="text" name="zip_hp" value="30" />
+        </div>
+        <div class="row">
+          <label>Max</label>
+	  <input id="FJ_stat_maxhp" type="text" disabled value="30" />
+        </div>
+	<div class="row">
+	  <label>Surges</label>
+	  <input id="FJ_stat_surges" type="text" name="zip_surges" value="9" />
+	</div>
+	<div class="row">
+	  <label>Daily</label>
+	  <input id="FJ_stat_dsurges" type="text" disabled value="9" />
+	</div>
+	<div class="row">
+	  <label>Amount</label>
+	  <input type="text" disabled value="7" />
+	</div>
+      </fieldset>
+      
+      <h2>Action</h2>
+      <fieldset>
+        <div class="row">
+          <label>Points</label>
+	  <input id="FJ_stat_ap" type="text" name="zip_ap" value="1" />
+        </div>
+	<div class="row">
+	  <table width="100%">
+	    <tr><td style="text-align:center">
+		<a onclick="shortrest();" class="inbutton" type="submit">Short Rest</a></td>
+	      <td style="text-align:center">
+		<a onclick="extendedrest();" class="inbutton" type="submit">Extended Rest</a></td></tr>
+	  </table>
+	</div>
+      </fieldset>
+    </div>
+    
+</body>
+</html>

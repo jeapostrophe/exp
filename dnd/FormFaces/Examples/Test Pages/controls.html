@@ -1,0 +1,75 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>All Controls</title>
+
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+
+    <script type="text/javascript" src="../../formfaces.js"></script>
+
+    <form:model>
+      <form:instance>
+        <data xmlns="">
+          <value>green</value>
+        </data>
+      </form:instance>
+    </form:model>
+  </head>
+
+  <body>
+    <p>Simple Input, Secret, Textarea, Output, Select1, Select, and Trigger controls are on this page.</p>
+
+    <p>
+      <form:input ref="value">
+        <form:label>Input:</form:label>
+      </form:input>
+
+      <form:secret ref="value">
+        <form:label>Secret:</form:label>
+      </form:secret>
+
+      <form:output ref="value">
+        <form:label>Output:</form:label>
+      </form:output>
+    </p>
+
+    <p>
+      <form:textarea ref="value">
+        <form:label>Text area:</form:label>
+      </form:textarea>
+    </p>
+
+    <p>
+      <form:select1 ref="value">
+        <form:label>Select1:</form:label>
+
+        <form:item><form:label>Red</form:label>  <form:value>red</form:value>  </form:item>
+        <form:item><form:label>Blue</form:label> <form:value>blue</form:value> </form:item>
+        <form:item><form:label>Green</form:label><form:value>green</form:value></form:item>
+      </form:select1>
+      
+      <form:select ref="value">
+        <form:label>Select:</form:label>
+
+        <form:item><form:label>Red</form:label>  <form:value>red</form:value>  </form:item>
+        <form:item><form:label>Blue</form:label> <form:value>blue</form:value> </form:item>
+        <form:item><form:label>Green</form:label><form:value>green</form:value></form:item>
+      </form:select>
+    </p>
+
+    <p>
+      <form:trigger>
+        <form:label>Trigger</form:label>
+      </form:trigger>
+    </p>
+
+    <p id="status"></p>
+  </body>
+</html>

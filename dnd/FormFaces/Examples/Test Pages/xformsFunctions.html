@@ -1,0 +1,77 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>XForms-specific XPath Functions</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model id="model">
+      <form:instance>
+        <data xmlns="">
+          <date>2005-05-25T12:00:00Z</date>
+          <duration>P1Y5M30DT12H30M24S</duration>
+          
+          <now/>
+          <days-from-date/>
+          <seconds-from-dateTime/>
+          <seconds/>
+          <months/>
+        </data>
+      </form:instance>
+      
+      <form:bind nodeset="now"                   calculate="now()"/>
+      <form:bind nodeset="days-from-date"        calculate="days-from-date(../date)"/>
+      <form:bind nodeset="seconds-from-dateTime" calculate="seconds-from-dateTime(../date)"/>
+      <form:bind nodeset="seconds"               calculate="seconds(../duration)"/>
+      <form:bind nodeset="months"                calculate="months(../duration)"/>
+    </form:model>
+  </head>
+  
+  <body>
+    <p>The values for "Days-from-date" and "Seconds-from-dateTime" should be "12928"
+       and "1117022400" respectively.  The values for "Seconds" and "Months" should be
+       "2637024" and "17" respectively. "Now" should display the current date and time
+       in GMT.</p>
+      
+    <p>      
+      <form:output ref="now">
+        <form:label>Now:</form:label>
+      </form:output>
+      
+      <form:output ref="days-from-date">
+        <form:label>Days-from-date:</form:label>
+      </form:output>
+      
+      <form:output ref="seconds-from-dateTime">
+        <form:label>Seconds-from-dateTime:</form:label>
+      </form:output>
+      
+      <form:output ref="seconds">
+        <form:label>Seconds:</form:label>
+      </form:output>
+      
+      <form:output ref="months">
+        <form:label>Months:</form:label>
+      </form:output>
+    </p>
+    
+    <p>
+      <form:trigger>
+        <form:label>Refresh</form:label>
+        
+        <form:rebuild model="model" ev:event="DOMActivate"/>
+      </form:trigger>
+    </p>
+    
+    <p id="status"></p>
+  </body>
+</html>

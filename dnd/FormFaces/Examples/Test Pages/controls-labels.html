@@ -1,0 +1,198 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+	<head>
+		<title>All Controls</title>
+		
+		<link rel="stylesheet" type="text/css" href="xforms.css"/>
+		
+		<script type="text/javascript" src="../../Source/xforms.js"></script>
+		
+		<form:model>
+			<form:instance>
+				<data xmlns="">
+					<value>green</value>
+					<labels>
+						<in>Input:</in>
+						<secret>Secret:</secret>
+						<out>Output:</out>
+						<text>TextArea:</text>
+						<select>Select:</select>
+						<trigger>Trigger</trigger>
+						<submit>Submit</submit>
+						<case>Case 2:</case>
+						<group>Group:</group>
+            <repeat>Repeat:</repeat>
+					</labels>
+          <numbers>
+            <number>
+              <value>1</value>
+              <label>One</label>
+            </number>
+            <number>
+              <value>2</value>
+              <label>Two</label>
+            </number>
+            <number>
+              <value>3</value>
+              <label>Three</label>
+            </number>
+            <number>
+              <value>4</value>
+              <label>Four</label>
+            </number>
+            <number>
+              <value>5</value>
+              <label>Five</label>
+            </number>
+            <number>
+              <value>6</value>
+              <label>Six</label>
+            </number>
+            <number>
+              <value>7</value>
+              <label>Seven</label>
+            </number>
+            <number>
+              <value>8</value>
+              <label>Eight</label>
+            </number>
+            <number>
+              <value>9</value>
+              <label>Nine</label>
+            </number>
+            <number>
+              <value>10</value>
+              <label>Ten</label>
+            </number>
+          </numbers>
+				</data>
+			</form:instance>
+			<form:submission id="submission" method="get" action="controls.html"/>
+		</form:model>
+	</head>
+	
+	<body>
+		<p>This page tests labels with refs on different controls.</p>
+		
+		<form:group>
+      <form:label ref="labels/group" />
+			<p>
+				<form:input ref="value">
+					<form:label ref="../labels/in" />
+				</form:input>
+				
+				<form:secret ref="value">
+					<form:label ref="../labels/secret" />
+				</form:secret>
+				
+				<form:output ref="value">
+					<form:label ref="../labels/out" />
+				</form:output>
+			</p>
+			
+			<p>
+				<form:textarea ref="value">
+					<form:label ref="../labels/text" />
+				</form:textarea>
+
+				<form:select1 ref="value">
+					<form:label ref="../labels/select" />
+					
+					<form:item>
+						<form:label>Red</form:label>
+						<form:value>red</form:value>
+					</form:item>
+					<form:item>
+						<form:label>Blue</form:label>
+						<form:value>blue</form:value>
+					</form:item>
+					<form:item>
+						<form:label>Green</form:label>
+						<form:value>green</form:value>
+					</form:item>
+				</form:select1>
+				
+				<form:select ref="value">
+					<form:label ref="../labels/select" />
+					
+					<form:item>
+						<form:label>Red</form:label>
+						<form:value>red</form:value>
+					</form:item>
+					<form:item>
+						<form:label>Blue</form:label>
+						<form:value>blue</form:value>
+					</form:item>
+					<form:item>
+						<form:label>Green</form:label>
+						<form:value>green</form:value>
+					</form:item>
+				</form:select>
+			</p>
+			
+			<p>
+				<form:trigger>
+					<form:label ref="labels/trigger" />
+				</form:trigger>
+
+				<form:submit submission="submission">
+					<form:label ref="labels/submit" />
+				</form:submit>
+			</p>
+		</form:group>
+		
+		<br/>
+		
+		<p>Group Test, Input and Output should both have labels and a value.</p>
+		<form:group ref="/data">
+		  <form:label>Group Test:</form:label>
+			<form:input ref="value">
+			  <form:label ref="../labels/in" />
+			</form:input>
+			<form:output value="value">
+			  <form:label ref="labels/out" />
+			</form:output>
+		</form:group>
+		
+		<br/>
+		
+		<p>Switch with different cases, in the second case the label is by ref.</p>
+		<form:switch>
+		  <form:case id="one" selected="true">
+			  <form:label>Case 1:</form:label>
+				<form:trigger ref="/data">
+				  <form:label>Next</form:label>
+					<form:toggle ev:event="DOMActivate" case="two"/>
+				</form:trigger>
+        <form:output value="value"/>
+			</form:case>
+			<form:case id="two" selected="false">
+			  <form:label ref="labels/case" />
+				<form:trigger ref="/data/value">
+				  <form:label ref="../labels/trigger" />
+					<form:toggle ev:event="DOMActivate" case="one"/>
+				</form:trigger>
+			</form:case>
+		</form:switch>
+    
+    <br/>
+    <br/>
+    
+    <p>Repeats where in the second row all the labels are by ref.</p>
+    <form:repeat nodeset="numbers/number">
+      <form:input ref="./value">
+				<form:label>Input:</form:label>
+			</form:input>
+      <form:input ref="./value">
+			  <form:label ref="../label" />
+			</form:input>
+      <br/>
+    </form:repeat>
+    
+		<p id="status"></p>
+	</body>
+</html>

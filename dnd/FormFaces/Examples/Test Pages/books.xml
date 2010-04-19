@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<books>
+  <book name="The Gunslinger">
+    <price>16.50</price>
+    <author>
+      <first>Stephen</first>
+      <last>King</last>
+    </author>
+  </book>
+  <book name="The Drawing of the Three">
+    <price>24.50</price>
+    <author>
+      <first>Stephen</first>
+      <last>King</last>
+    </author>
+  </book>
+  <book name="The Waste Lands">
+    <price>23.10</price>
+    <author>
+      <first>Stephen</first>
+      <last>King</last>
+    </author>
+  </book>
+  <book name="The Sandman: Endless Nights">
+    <price>16.47</price>
+    <author>
+      <first>Neil</first>
+      <last>Gaiman</last>
+    </author>
+  </book>
+  <book name="The Unbearable Lightness of Being">
+    <price>13.95</price>
+    <author>
+      <first>Milan</first>
+      <last>Kundera</last>
+    </author>
+  </book>
+  <book name="One Hundred Years of Solitude">
+    <price>14.00</price>
+    <author>
+      <first>Gabriel</first>
+      <last>Garc&#237;a M&#225;rquez</last>
+    </author>
+  </book>
+</books>

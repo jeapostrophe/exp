@@ -1,0 +1,71 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for XPath Parser</title>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      // Tests that various valid XPaths are accepted.
+      function testValidXPaths() {
+        checkIsValid("x");
+        checkIsValid("1");
+        checkIsValid(".//xml:model");
+        checkIsValid("//xml:*");
+      }
+      
+      function checkIsValid(xpath) {
+        assertNotNull(new XPathParser().parse(xpath));
+      }
+  
+      // Checks the type of expression returned for different XPaths.
+      function testExpressionType() {
+        checkType("'id'", XPathLiteralExpression);
+        checkType("1.0",  XPathNumberExpression);
+        checkType("id",   XPathLocationPath);
+        checkType("1-1",  XPathBinaryExpression);
+        checkType("x-y",  XPathLocationPath);
+      }
+  
+      function checkType(xpath, type) {
+        assertEquals(type, new XPathParser().parse(xpath).constructor);
+      }
+  
+      // Verifies that an exception is thrown for each invalid XPath.
+      function testInvalidXPaths() {
+        checkIsInvalid("!");
+        checkIsInvalid("//x/y/atribute::id");
+        checkIsInvalid("1 + 1::");
+        checkIsInvalid("parent:xml:lang");
+      }
+  
+      function checkIsInvalid(xpath) {
+        try {
+          var expression = new XPathParser().parse(xpath);
+          
+          fail(xpath + " is valid but should not be: " + new XPath(expression).toString(false));
+        }
+        catch (xpathException) {
+        }
+      }
+  
+      // Verifies that a path expression's location path is marked relative, not
+      // absolute.
+      function testPathExpressionLocationPathIsRelative() {
+        var pathExpression = new XPathParser().parse("1/x");
+  
+        assertFalse(pathExpression.locationPath.isAbsolute);
+      }
+    //]]>
+    </script>
+  </head>
+</html>

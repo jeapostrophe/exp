@@ -1,0 +1,39 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>Trigger</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance>
+        <data xmlns=""/>
+      </xf:instance>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>Clicking the button should load Yahoo! in a new window.</p>
+    
+    <xf:trigger>
+      <xf:label>Load</xf:label>
+      
+      <xf:load ev:event="DOMActivate" resource="http://www.yahoo.com/" show="new"/>
+      
+      <xf:message ev:event="DOMActivate" level="modal">
+        You clicked the button!
+      </xf:message>
+    </xf:trigger>
+    
+    <p id="status"></p>
+  </body>
+</html>

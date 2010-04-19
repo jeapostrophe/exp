@@ -1,0 +1,59 @@
+body, table {
+  font: 10pt black "Tahoma", sans-serif;
+}
+
+body {
+  padding-top: 95px;
+  background: url(logo.jpg) no-repeat;
+}
+
+h1, h2, h3 {
+  color: #05A;
+}
+
+#status {
+  margin-top: 1in;
+  border-top: 1px solid #999;
+  padding-top: 1em;
+  color: #999;
+  font-size: xx-small;
+}
+
+.xforms-label {
+  display: block;
+  font-size: smaller;
+}
+
+.xforms-disabled {
+  display: none;
+}
+
+.xforms-read-only input {
+  background: #AAA;
+}
+
+.xforms-invalid .xforms-label {
+  color: red;
+}
+
+.xforms-required label {
+  font-weight: bold;
+}                          
+
+.xforms-repeat-index {
+  background: #EEF;
+}
+
+.xforms-repeat-index .xforms-repeat-index {
+  background: #DDE;
+}
+
+* html .xforms-input,
+* html .xforms-output,
+* html .xforms-secret,
+* html .xforms-textarea,
+* html .xforms-select1,
+* html .xforms-select
+{
+  vertical-align: top;
+}

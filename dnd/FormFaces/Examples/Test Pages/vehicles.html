@@ -1,0 +1,181 @@
+﻿<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title></title>
+
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+
+    <script type="text/javascript" src="../../formfaces.js"></script>
+
+    <form:model id="model">
+      <form:instance id="choices">
+        <choices xmlns="">
+          <choice>
+            <type/>
+            <make/>
+            <model/>
+          </choice>
+        </choices>
+      </form:instance>
+
+      <form:instance id="vehicles">
+        <vehicles xmlns="">
+          <type name="Luxury Car">
+            <make name="Acura">
+              <model name="Legend"/>
+              <model name="RL"/>
+            </make>
+
+            <make name="Jaguar">
+              <model name="325"/>
+              <model name="528"/>
+              <model name="750"/>
+              <model name="M5"/>
+            </make>
+
+            <make name="Cadillac">
+              <model name="DeVille"/>
+              <model name="El Dorado"/>
+              <model name="Seville"/>
+              <model name="Sixty Special"/>
+            </make>
+
+            <make name="BMW">
+              <model name="XJR"/>
+              <model name="XJS"/>
+              <model name="XK8"/>
+            </make>
+          </type>
+
+          <type name="Sports Car">
+            <make name="Acura">
+              <model name="NSX"/>
+              <model name="RSX"/>
+            </make>
+
+            <make name="BMW">
+              <model name="M3"/>
+              <model name="M5"/>
+              <model name="Z3"/>
+            </make>
+
+            <make name="Porsche">
+              <model name="911"/>
+              <model name="Boxster"/>
+            </make>
+
+            <make name="Chevrolet">
+              <model name="Camaro"/>
+              <model name="Corvette"/>
+            </make>
+
+            <make name="Mercedes-Benz">
+              <model name="SLK"/>
+            </make>
+          </type>
+
+          <type name="SUV">
+            <make name="Ford">
+              <model name="Escape"/>
+              <model name="Excursion"/>
+              <model name="Expedition"/>
+              <model name="Explorer"/>
+            </make>
+
+            <make name="Honda">
+              <model name="CR-V"/>
+              <model name="Passport"/>
+              <model name="Pilot"/>
+            </make>
+
+            <make name="Isuzu">
+              <model name="Amigo"/>
+              <model name="Rodeo"/>
+              <model name="Trooper"/>
+            </make>
+
+            <make name="Mitsubishi">
+              <model name="Montero"/>
+              <model name="Montero Sport"/>
+            </make>
+
+            <make name="Chevrolet">
+              <model name="Suburban"/>
+              <model name="Tahoe"/>
+              <model name="Trailblazer"/>
+            </make>
+          </type>
+        </vehicles>
+      </form:instance>
+      
+      <form:bind nodeset="choice/make"  relevant="../type != ''"/>
+      <form:bind nodeset="choice/model" relevant="../make != ''"/>
+    </form:model>
+  </head>
+
+  <body>
+    <form:repeat nodeset="choice">
+      <p>
+        <form:select1 ref="type">
+          <form:label>Vehicle Type:</form:label>
+        
+          <form:itemset nodeset="instance('vehicles')/type">
+            <form:label ref="@name"/>
+            <form:value ref="@name"/>
+          </form:itemset>
+          
+          <form:action ev:event="xforms-value-changed">
+            <form:setvalue ref="../make"/>
+            <form:setvalue ref="../model"/>
+            
+            <form:rebuild model="model"/>
+          </form:action>
+        </form:select1>
+        
+        <br />
+        
+        <form:select1 ref="make">
+          <form:label>Make:</form:label>
+          
+          <form:itemset nodeset="instance('vehicles')/type[@name = current()/../type]/make">
+            <form:label ref="@name"/>
+            <form:value ref="@name"/>
+          </form:itemset>
+        
+          <form:action ev:event="xforms-value-changed">
+            <form:setvalue ref="../model"/>
+            <form:rebuild  model="model"/>
+          </form:action>
+        </form:select1>
+        
+        <br />
+        
+        <form:select1 ref="model">
+          <form:label>Model:</form:label>
+          
+          <form:itemset nodeset="instance('vehicles')/type[@name = current()/../type]/make[@name = current()/../make]/model">
+            <form:label ref="@name"/>
+            <form:value ref="@name"/>
+          </form:itemset>
+        </form:select1>
+      </p>
+      
+      <hr />
+    </form:repeat>
+    
+    <form:trigger>
+      <form:label>Add</form:label>
+      
+      <form:insert nodeset="choice" position="after" at="last()" ev:event="DOMActivate"/>
+    </form:trigger>
+  
+    <p id="status"></p>
+  </body>
+</html>

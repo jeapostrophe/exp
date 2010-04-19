@@ -1,0 +1,82 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>Insert and Delete</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance id="numbers">
+        <numbers xmlns="">
+          <number>2</number>
+        </numbers>
+      </xf:instance>
+      
+      <xf:instance id="state">
+        <state xmlns="">
+          <delete/>
+        </state>
+      </xf:instance>
+      
+      <xf:bind nodeset="instance('state')//delete" relevant="count(instance('numbers')//number) &gt; 1"/>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>You should be able to insert and delete text boxes. When a new text box is
+       inserted, its value will be the square of the previous text box. The Insert and
+       Delete buttons operate on the "current" row (using <code>index()</code>), while
+       Append and Remove operate on the last row.</p>
+  
+    <p>
+      <xf:repeat id="repeat" nodeset="number">
+        <xf:label>Numbers:</xf:label>
+      
+        <xf:input ref="."><xf:label>Number:</xf:label></xf:input>
+      </xf:repeat>
+    </p>
+    
+    <p>
+      <xf:trigger>
+        <xf:label>Insert</xf:label>
+        
+        <xf:action ev:event="DOMActivate">
+          <xf:insert   nodeset="number" at="index('repeat')" position="after"/>
+          <xf:setvalue ref="number[index('repeat') + 1]" value="preceding-sibling::* * preceding-sibling::*"/>
+        </xf:action>
+      </xf:trigger>
+      
+      <xf:trigger ref="instance('state')//delete">
+        <xf:label>Delete</xf:label>
+        <xf:delete ev:event="DOMActivate" nodeset="instance('numbers')//number" at="index('repeat')"/>
+      </xf:trigger>
+      
+      |
+      
+      <xf:trigger>
+        <xf:label>Append</xf:label>
+        
+        <xf:action ev:event="DOMActivate">
+          <xf:insert   nodeset="number" at="last()" position="after"/>
+          <xf:setvalue ref="number[last()]" value=". * ."/>
+        </xf:action>
+      </xf:trigger>
+      
+      <xf:trigger ref="instance('state')//delete">
+        <xf:label>Remove</xf:label>
+        <xf:delete ev:event="DOMActivate" nodeset="instance('numbers')//number" at="last()"/>
+      </xf:trigger>
+    </p>
+      
+    <p id="status"></p>
+  </body>
+</html>

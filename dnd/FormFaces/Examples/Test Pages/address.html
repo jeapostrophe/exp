@@ -1,0 +1,526 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Dynamic Select Choices (itemset)</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model>
+      <form:instance id="address">
+        <address xmlns="">
+          <country/>
+          <zone/>
+        </address>
+      </form:instance>
+    
+      <form:instance id="countries">
+        <countries xmlns="">
+          <country><name>Afghanistan</name>                                  <code length="2">AF</code><code length="3">AFG</code><zones/></country>
+          <country><name>Albania</name>                                      <code length="2">AL</code><code length="3">ALB</code><zones/></country>
+          <country><name>Algeria</name>                                      <code length="2">DZ</code><code length="3">DZA</code><zones/></country>
+          <country><name>American Samoa</name>                               <code length="2">AS</code><code length="3">ASM</code><zones/></country>
+          <country><name>Andorra</name>                                      <code length="2">AD</code><code length="3">AND</code><zones/></country>
+          <country><name>Angola</name>                                       <code length="2">AO</code><code length="3">AGO</code><zones/></country>
+          <country><name>Anguilla</name>                                     <code length="2">AI</code><code length="3">AIA</code><zones/></country>
+          <country><name>Antarctica</name>                                   <code length="2">AQ</code><code length="3">ATA</code><zones/></country>
+          <country><name>Antigua and Barbuda</name>                          <code length="2">AG</code><code length="3">ATG</code><zones/></country>
+          <country><name>Argentina</name>                                    <code length="2">AR</code><code length="3">ARG</code><zones/></country>
+          <country><name>Armenia</name>                                      <code length="2">AM</code><code length="3">ARM</code><zones/></country>
+          <country><name>Aruba</name>                                        <code length="2">AW</code><code length="3">ABW</code><zones/></country>
+          <country><name>Australia</name>                                    <code length="2">AU</code><code length="3">AUS</code><zones/></country>
+          
+          <country>
+            <name>Austria</name>
+            
+            <code length="2">AT</code>
+            <code length="3">AUT</code>
+            
+            <zones>
+              <zone><code>WI</code><name>Wien</name></zone>
+              <zone><code>NO</code><name>Nieder&#xF6;sterreich</name></zone>
+              <zone><code>OO</code><name>Ober&#xF6;sterreich</name></zone>
+              <zone><code>SB</code><name>Salzburg</name></zone>
+              <zone><code>KN</code><name>K&#xE4;rnten</name></zone>
+              <zone><code>ST</code><name>Steiermark</name></zone>
+              <zone><code>TI</code><name>Tirol</name></zone>
+              <zone><code>BL</code><name>Burgenland</name></zone>
+              <zone><code>VB</code><name>Voralberg</name></zone>
+            </zones>
+          </country>
+          
+          <country><name>Azerbaijan</name>                                   <code length="2">AZ</code><code length="3">AZE</code><zones/></country>
+          <country><name>Bahamas</name>                                      <code length="2">BS</code><code length="3">BHS</code><zones/></country>
+          <country><name>Bahrain</name>                                      <code length="2">BH</code><code length="3">BHR</code><zones/></country>
+          <country><name>Bangladesh</name>                                   <code length="2">BD</code><code length="3">BGD</code><zones/></country>
+          <country><name>Barbados</name>                                     <code length="2">BB</code><code length="3">BRB</code><zones/></country>
+          <country><name>Belarus</name>                                      <code length="2">BY</code><code length="3">BLR</code><zones/></country>
+          <country><name>Belgium</name>                                      <code length="2">BE</code><code length="3">BEL</code><zones/></country>
+          <country><name>Belize</name>                                       <code length="2">BZ</code><code length="3">BLZ</code><zones/></country>
+          <country><name>Benin</name>                                        <code length="2">BJ</code><code length="3">BEN</code><zones/></country>
+          <country><name>Bermuda</name>                                      <code length="2">BM</code><code length="3">BMU</code><zones/></country>
+          <country><name>Bhutan</name>                                       <code length="2">BT</code><code length="3">BTN</code><zones/></country>
+          <country><name>Bolivia</name>                                      <code length="2">BO</code><code length="3">BOL</code><zones/></country>
+          <country><name>Bosnia and Herzegowina</name>                       <code length="2">BA</code><code length="3">BIH</code><zones/></country>
+          <country><name>Botswana</name>                                     <code length="2">BW</code><code length="3">BWA</code><zones/></country>
+          <country><name>Bouvet Island</name>                                <code length="2">BV</code><code length="3">BVT</code><zones/></country>
+          <country><name>Brazil</name>                                       <code length="2">BR</code><code length="3">BRA</code><zones/></country>
+          <country><name>British Indian Ocean Territory</name>               <code length="2">IO</code><code length="3">IOT</code><zones/></country>
+          <country><name>Brunei Darussalam</name>                            <code length="2">BN</code><code length="3">BRN</code><zones/></country>
+          <country><name>Bulgaria</name>                                     <code length="2">BG</code><code length="3">BGR</code><zones/></country>
+          <country><name>Burkina Faso</name>                                 <code length="2">BF</code><code length="3">BFA</code><zones/></country>
+          <country><name>Burundi</name>                                      <code length="2">BI</code><code length="3">BDI</code><zones/></country>
+          <country><name>Cambodia</name>                                     <code length="2">KH</code><code length="3">KHM</code><zones/></country>
+          <country><name>Cameroon</name>                                     <code length="2">CM</code><code length="3">CMR</code><zones/></country>
+          
+          <country>
+            <name>Canada</name>
+            
+            <code length="2">CA</code>
+            <code length="3">CAN</code>
+            
+            <zones>
+              <zone><code>AB</code><name>Alberta</name></zone>
+              <zone><code>BC</code><name>British Columbia</name></zone>
+              <zone><code>MB</code><name>Manitoba</name></zone>
+              <zone><code>NF</code><name>Newfoundland</name></zone>
+              <zone><code>NB</code><name>New Brunswick</name></zone>
+              <zone><code>NS</code><name>Nova Scotia</name></zone>
+              <zone><code>NT</code><name>Northwest Territories</name></zone>
+              <zone><code>NU</code><name>Nunavut</name></zone>
+              <zone><code>ON</code><name>Ontario</name></zone>
+              <zone><code>PE</code><name>Prince Edward Island</name></zone>
+              <zone><code>QC</code><name>Quebec</name></zone>
+              <zone><code>SK</code><name>Saskatchewan</name></zone>
+              <zone><code>YT</code><name>Yukon Territory</name></zone>
+            </zones>
+          </country>
+          
+          <country><name>Cape Verde</name>                                   <code length="2">CV</code><code length="3">CPV</code><zones/></country>
+          <country><name>Cayman Islands</name>                               <code length="2">KY</code><code length="3">CYM</code><zones/></country>
+          <country><name>Central African Republic</name>                     <code length="2">CF</code><code length="3">CAF</code><zones/></country>
+          <country><name>Chad</name>                                         <code length="2">TD</code><code length="3">TCD</code><zones/></country>
+          <country><name>Chile</name>                                        <code length="2">CL</code><code length="3">CHL</code><zones/></country>
+          <country><name>China</name>                                        <code length="2">CN</code><code length="3">CHN</code><zones/></country>
+          <country><name>Christmas Island</name>                             <code length="2">CX</code><code length="3">CXR</code><zones/></country>
+          <country><name>Cocos (Keeling) Islands</name>                      <code length="2">CC</code><code length="3">CCK</code><zones/></country>
+          <country><name>Colombia</name>                                     <code length="2">CO</code><code length="3">COL</code><zones/></country>
+          <country><name>Comoros</name>                                      <code length="2">KM</code><code length="3">COM</code><zones/></country>
+          <country><name>Congo</name>                                        <code length="2">CG</code><code length="3">COG</code><zones/></country>
+          <country><name>Cook Islands</name>                                 <code length="2">CK</code><code length="3">COK</code><zones/></country>
+          <country><name>Costa Rica</name>                                   <code length="2">CR</code><code length="3">CRI</code><zones/></country>
+          <country><name>Cote D'Ivoire</name>                                <code length="2">CI</code><code length="3">CIV</code><zones/></country>
+          <country><name>Croatia</name>                                      <code length="2">HR</code><code length="3">HRV</code><zones/></country>
+          <country><name>Cuba</name>                                         <code length="2">CU</code><code length="3">CUB</code><zones/></country>
+          <country><name>Cyprus</name>                                       <code length="2">CY</code><code length="3">CYP</code><zones/></country>
+          <country><name>Czech Republic</name>                               <code length="2">CZ</code><code length="3">CZE</code><zones/></country>
+          <country><name>Denmark</name>                                      <code length="2">DK</code><code length="3">DNK</code><zones/></country>
+          <country><name>Djibouti</name>                                     <code length="2">DJ</code><code length="3">DJI</code><zones/></country>
+          <country><name>Dominica</name>                                     <code length="2">DM</code><code length="3">DMA</code><zones/></country>
+          <country><name>Dominican Republic</name>                           <code length="2">DO</code><code length="3">DOM</code><zones/></country>
+          <country><name>East Timor</name>                                   <code length="2">TP</code><code length="3">TMP</code><zones/></country>
+          <country><name>Ecuador</name>                                      <code length="2">EC</code><code length="3">ECU</code><zones/></country>
+          <country><name>Egypt</name>                                        <code length="2">EG</code><code length="3">EGY</code><zones/></country>
+          <country><name>El Salvador</name>                                  <code length="2">SV</code><code length="3">SLV</code><zones/></country>
+          <country><name>Equatorial Guinea</name>                            <code length="2">GQ</code><code length="3">GNQ</code><zones/></country>
+          <country><name>Eritrea</name>                                      <code length="2">ER</code><code length="3">ERI</code><zones/></country>
+          <country><name>Estonia</name>                                      <code length="2">EE</code><code length="3">EST</code><zones/></country>
+          <country><name>Ethiopia</name>                                     <code length="2">ET</code><code length="3">ETH</code><zones/></country>
+          <country><name>Falkland Islands (Malvinas)</name>                  <code length="2">FK</code><code length="3">FLK</code><zones/></country>
+          <country><name>Faroe Islands</name>                                <code length="2">FO</code><code length="3">FRO</code><zones/></country>
+          <country><name>Fiji</name>                                         <code length="2">FJ</code><code length="3">FJI</code><zones/></country>
+          <country><name>Finland</name>                                      <code length="2">FI</code><code length="3">FIN</code><zones/></country>
+          <country><name>France</name>                                       <code length="2">FR</code><code length="3">FRA</code><zones/></country>
+          <country><name>France, Metropolitan</name>                         <code length="2">FX</code><code length="3">FXX</code><zones/></country>
+          <country><name>French Guiana</name>                                <code length="2">GF</code><code length="3">GUF</code><zones/></country>
+          <country><name>French Polynesia</name>                             <code length="2">PF</code><code length="3">PYF</code><zones/></country>
+          <country><name>French Southern Territories</name>                  <code length="2">TF</code><code length="3">ATF</code><zones/></country>
+          <country><name>Gabon</name>                                        <code length="2">GA</code><code length="3">GAB</code><zones/></country>
+          <country><name>Gambia</name>                                       <code length="2">GM</code><code length="3">GMB</code><zones/></country>
+          <country><name>Georgia</name>                                      <code length="2">GE</code><code length="3">GEO</code><zones/></country>
+          
+          <country>
+            <name>Germany</name>
+            
+            <code length="2">DE</code>
+            <code length="3">DEU</code>
+            
+            <zones>
+              <zone><code>NDS</code><name>Niedersachsen</name></zone>
+              <zone><code>BAW</code><name>Baden-W&#xFC;rttemberg</name></zone>
+              <zone><code>BAY</code><name>Bayern</name></zone>
+              <zone><code>BER</code><name>Berlin</name></zone>
+              <zone><code>BRG</code><name>Brandenburg</name></zone>
+              <zone><code>BRE</code><name>Bremen</name></zone>
+              <zone><code>HAM</code><name>Hamburg</name></zone>
+              <zone><code>HES</code><name>Hessen</name></zone>
+              <zone><code>MEC</code><name>Mecklenburg-Vorpommern</name></zone>
+              <zone><code>NRW</code><name>Nordrhein-Westfalen</name></zone>
+              <zone><code>RHE</code><name>Rheinland-Pfalz</name></zone>
+              <zone><code>SAR</code><name>Saarland</name></zone>
+              <zone><code>SAS</code><name>Sachsen</name></zone>
+              <zone><code>SAC</code><name>Sachsen-Anhalt</name></zone>
+              <zone><code>SCN</code><name>Schleswig-Holstein</name></zone>
+              <zone><code>THE</code><name>Th&#xFC;ringen</name></zone>
+            </zones>
+          </country>
+          
+          <country><name>Ghana</name>                                        <code length="2">GH</code><code length="3">GHA</code><zones/></country>
+          <country><name>Gibraltar</name>                                    <code length="2">GI</code><code length="3">GIB</code><zones/></country>
+          <country><name>Greece</name>                                       <code length="2">GR</code><code length="3">GRC</code><zones/></country>
+          <country><name>Greenland</name>                                    <code length="2">GL</code><code length="3">GRL</code><zones/></country>
+          <country><name>Grenada</name>                                      <code length="2">GD</code><code length="3">GRD</code><zones/></country>
+          <country><name>Guadeloupe</name>                                   <code length="2">GP</code><code length="3">GLP</code><zones/></country>
+          <country><name>Guam</name>                                         <code length="2">GU</code><code length="3">GUM</code><zones/></country>
+          <country><name>Guatemala</name>                                    <code length="2">GT</code><code length="3">GTM</code><zones/></country>
+          <country><name>Guinea</name>                                       <code length="2">GN</code><code length="3">GIN</code><zones/></country>
+          <country><name>Guinea-bissau</name>                                <code length="2">GW</code><code length="3">GNB</code><zones/></country>
+          <country><name>Guyana</name>                                       <code length="2">GY</code><code length="3">GUY</code><zones/></country>
+          <country><name>Haiti</name>                                        <code length="2">HT</code><code length="3">HTI</code><zones/></country>
+          <country><name>Heard and Mc Donald Islands</name>                  <code length="2">HM</code><code length="3">HMD</code><zones/></country>
+          <country><name>Honduras</name>                                     <code length="2">HN</code><code length="3">HND</code><zones/></country>
+          <country><name>Hong Kong</name>                                    <code length="2">HK</code><code length="3">HKG</code><zones/></country>
+          <country><name>Hungary</name>                                      <code length="2">HU</code><code length="3">HUN</code><zones/></country>
+          <country><name>Iceland</name>                                      <code length="2">IS</code><code length="3">ISL</code><zones/></country>
+          <country><name>India</name>                                        <code length="2">IN</code><code length="3">IND</code><zones/></country>
+          <country><name>Indonesia</name>                                    <code length="2">ID</code><code length="3">IDN</code><zones/></country>
+          <country><name>Iran (Islamic Republic of)</name>                   <code length="2">IR</code><code length="3">IRN</code><zones/></country>
+          <country><name>Iraq</name>                                         <code length="2">IQ</code><code length="3">IRQ</code><zones/></country>
+          <country><name>Ireland</name>                                      <code length="2">IE</code><code length="3">IRL</code><zones/></country>
+          <country><name>Israel</name>                                       <code length="2">IL</code><code length="3">ISR</code><zones/></country>
+          <country><name>Italy</name>                                        <code length="2">IT</code><code length="3">ITA</code><zones/></country>
+          <country><name>Jamaica</name>                                      <code length="2">JM</code><code length="3">JAM</code><zones/></country>
+          <country><name>Japan</name>                                        <code length="2">JP</code><code length="3">JPN</code><zones/></country>
+          <country><name>Jordan</name>                                       <code length="2">JO</code><code length="3">JOR</code><zones/></country>
+          <country><name>Kazakhstan</name>                                   <code length="2">KZ</code><code length="3">KAZ</code><zones/></country>
+          <country><name>Kenya</name>                                        <code length="2">KE</code><code length="3">KEN</code><zones/></country>
+          <country><name>Kiribati</name>                                     <code length="2">KI</code><code length="3">KIR</code><zones/></country>
+          <country><name>Korea, Democratic People's Republic of</name>       <code length="2">KP</code><code length="3">PRK</code><zones/></country>
+          <country><name>Korea, Republic of</name>                           <code length="2">KR</code><code length="3">KOR</code><zones/></country>
+          <country><name>Kuwait</name>                                       <code length="2">KW</code><code length="3">KWT</code><zones/></country>
+          <country><name>Kyrgyzstan</name>                                   <code length="2">KG</code><code length="3">KGZ</code><zones/></country>
+          <country><name>Lao People's Democratic Republic</name>             <code length="2">LA</code><code length="3">LAO</code><zones/></country>
+          <country><name>Latvia</name>                                       <code length="2">LV</code><code length="3">LVA</code><zones/></country>
+          <country><name>Lebanon</name>                                      <code length="2">LB</code><code length="3">LBN</code><zones/></country>
+          <country><name>Lesotho</name>                                      <code length="2">LS</code><code length="3">LSO</code><zones/></country>
+          <country><name>Liberia</name>                                      <code length="2">LR</code><code length="3">LBR</code><zones/></country>
+          <country><name>Libyan Arab Jamahiriya</name>                       <code length="2">LY</code><code length="3">LBY</code><zones/></country>
+          <country><name>Liechtenstein</name>                                <code length="2">LI</code><code length="3">LIE</code><zones/></country>
+          <country><name>Lithuania</name>                                    <code length="2">LT</code><code length="3">LTU</code><zones/></country>
+          <country><name>Luxembourg</name>                                   <code length="2">LU</code><code length="3">LUX</code><zones/></country>
+          <country><name>Macau</name>                                        <code length="2">MO</code><code length="3">MAC</code><zones/></country>
+          <country><name>Macedonia, The Former Yugoslav Republic of</name>   <code length="2">MK</code><code length="3">MKD</code><zones/></country>
+          <country><name>Madagascar</name>                                   <code length="2">MG</code><code length="3">MDG</code><zones/></country>
+          <country><name>Malawi</name>                                       <code length="2">MW</code><code length="3">MWI</code><zones/></country>
+          <country><name>Malaysia</name>                                     <code length="2">MY</code><code length="3">MYS</code><zones/></country>
+          <country><name>Maldives</name>                                     <code length="2">MV</code><code length="3">MDV</code><zones/></country>
+          <country><name>Mali</name>                                         <code length="2">ML</code><code length="3">MLI</code><zones/></country>
+          <country><name>Malta</name>                                        <code length="2">MT</code><code length="3">MLT</code><zones/></country>
+          <country><name>Marshall Islands</name>                             <code length="2">MH</code><code length="3">MHL</code><zones/></country>
+          <country><name>Martinique</name>                                   <code length="2">MQ</code><code length="3">MTQ</code><zones/></country>
+          <country><name>Mauritania</name>                                   <code length="2">MR</code><code length="3">MRT</code><zones/></country>
+          <country><name>Mauritius</name>                                    <code length="2">MU</code><code length="3">MUS</code><zones/></country>
+          <country><name>Mayotte</name>                                      <code length="2">YT</code><code length="3">MYT</code><zones/></country>
+          <country><name>Mexico</name>                                       <code length="2">MX</code><code length="3">MEX</code><zones/></country>
+          <country><name>Micronesia, Federated States of</name>              <code length="2">FM</code><code length="3">FSM</code><zones/></country>
+          <country><name>Moldova, Republic of</name>                         <code length="2">MD</code><code length="3">MDA</code><zones/></country>
+          <country><name>Monaco</name>                                       <code length="2">MC</code><code length="3">MCO</code><zones/></country>
+          <country><name>Mongolia</name>                                     <code length="2">MN</code><code length="3">MNG</code><zones/></country>
+          <country><name>Montserrat</name>                                   <code length="2">MS</code><code length="3">MSR</code><zones/></country>
+          <country><name>Morocco</name>                                      <code length="2">MA</code><code length="3">MAR</code><zones/></country>
+          <country><name>Mozambique</name>                                   <code length="2">MZ</code><code length="3">MOZ</code><zones/></country>
+          <country><name>Myanmar</name>                                      <code length="2">MM</code><code length="3">MMR</code><zones/></country>
+          <country><name>Namibia</name>                                      <code length="2">NA</code><code length="3">NAM</code><zones/></country>
+          <country><name>Nauru</name>                                        <code length="2">NR</code><code length="3">NRU</code><zones/></country>
+          <country><name>Nepal</name>                                        <code length="2">NP</code><code length="3">NPL</code><zones/></country>
+          <country><name>Netherlands</name>                                  <code length="2">NL</code><code length="3">NLD</code><zones/></country>
+          <country><name>Netherlands Antilles</name>                         <code length="2">AN</code><code length="3">ANT</code><zones/></country>
+          <country><name>New Caledonia</name>                                <code length="2">NC</code><code length="3">NCL</code><zones/></country>
+          <country><name>New Zealand</name>                                  <code length="2">NZ</code><code length="3">NZL</code><zones/></country>
+          <country><name>Nicaragua</name>                                    <code length="2">NI</code><code length="3">NIC</code><zones/></country>
+          <country><name>Niger</name>                                        <code length="2">NE</code><code length="3">NER</code><zones/></country>
+          <country><name>Nigeria</name>                                      <code length="2">NG</code><code length="3">NGA</code><zones/></country>
+          <country><name>Niue</name>                                         <code length="2">NU</code><code length="3">NIU</code><zones/></country>
+          <country><name>Norfolk Island</name>                               <code length="2">NF</code><code length="3">NFK</code><zones/></country>
+          <country><name>Northern Mariana Islands</name>                     <code length="2">MP</code><code length="3">MNP</code><zones/></country>
+          <country><name>Norway</name>                                       <code length="2">NO</code><code length="3">NOR</code><zones/></country>
+          <country><name>Oman</name>                                         <code length="2">OM</code><code length="3">OMN</code><zones/></country>
+          <country><name>Pakistan</name>                                     <code length="2">PK</code><code length="3">PAK</code><zones/></country>
+          <country><name>Palau</name>                                        <code length="2">PW</code><code length="3">PLW</code><zones/></country>
+          <country><name>Panama</name>                                       <code length="2">PA</code><code length="3">PAN</code><zones/></country>
+          <country><name>Papua New Guinea</name>                             <code length="2">PG</code><code length="3">PNG</code><zones/></country>
+          <country><name>Paraguay</name>                                     <code length="2">PY</code><code length="3">PRY</code><zones/></country>
+          <country><name>Peru</name>                                         <code length="2">PE</code><code length="3">PER</code><zones/></country>
+          <country><name>Philippines</name>                                  <code length="2">PH</code><code length="3">PHL</code><zones/></country>
+          <country><name>Pitcairn</name>                                     <code length="2">PN</code><code length="3">PCN</code><zones/></country>
+          <country><name>Poland</name>                                       <code length="2">PL</code><code length="3">POL</code><zones/></country>
+          <country><name>Portugal</name>                                     <code length="2">PT</code><code length="3">PRT</code><zones/></country>
+          <country><name>Puerto Rico</name>                                  <code length="2">PR</code><code length="3">PRI</code><zones/></country>
+          <country><name>Qatar</name>                                        <code length="2">QA</code><code length="3">QAT</code><zones/></country>
+          <country><name>Reunion</name>                                      <code length="2">RE</code><code length="3">REU</code><zones/></country>
+          <country><name>Romania</name>                                      <code length="2">RO</code><code length="3">ROM</code><zones/></country>
+          <country><name>Russian Federation</name>                           <code length="2">RU</code><code length="3">RUS</code><zones/></country>
+          <country><name>Rwanda</name>                                       <code length="2">RW</code><code length="3">RWA</code><zones/></country>
+          <country><name>Saint Kitts and Nevis</name>                        <code length="2">KN</code><code length="3">KNA</code><zones/></country>
+          <country><name>Saint Lucia</name>                                  <code length="2">LC</code><code length="3">LCA</code><zones/></country>
+          <country><name>Saint Vincent and the Grenadines</name>             <code length="2">VC</code><code length="3">VCT</code><zones/></country>
+          <country><name>Samoa</name>                                        <code length="2">WS</code><code length="3">WSM</code><zones/></country>
+          <country><name>San Marino</name>                                   <code length="2">SM</code><code length="3">SMR</code><zones/></country>
+          <country><name>Sao Tome and Principe</name>                        <code length="2">ST</code><code length="3">STP</code><zones/></country>
+          <country><name>Saudi Arabia</name>                                 <code length="2">SA</code><code length="3">SAU</code><zones/></country>
+          <country><name>Senegal</name>                                      <code length="2">SN</code><code length="3">SEN</code><zones/></country>
+          <country><name>Seychelles</name>                                   <code length="2">SC</code><code length="3">SYC</code><zones/></country>
+          <country><name>Sierra Leone</name>                                 <code length="2">SL</code><code length="3">SLE</code><zones/></country>
+          <country><name>Singapore</name>                                    <code length="2">SG</code><code length="3">SGP</code><zones/></country>
+          <country><name>Slovakia (Slovak Republic)</name>                   <code length="2">SK</code><code length="3">SVK</code><zones/></country>
+          <country><name>Slovenia</name>                                     <code length="2">SI</code><code length="3">SVN</code><zones/></country>
+          <country><name>Solomon Islands</name>                              <code length="2">SB</code><code length="3">SLB</code><zones/></country>
+          <country><name>Somalia</name>                                      <code length="2">SO</code><code length="3">SOM</code><zones/></country>
+          <country><name>South Africa</name>                                 <code length="2">ZA</code><code length="3">ZAF</code><zones/></country>
+          <country><name>South Georgia and the South Sandwich Islands</name> <code length="2">GS</code><code length="3">SGS</code><zones/></country>
+          
+          <country>
+            <name>Spain</name>
+            
+            <code length="2">ES</code>
+            <code length="3">ESP</code>
+            
+            <zones>
+              <zone><code>A Coru&#xF1;a</code>         <name>A Coru&#xF1;a</name></zone>
+              <zone><code>Alava</code>                 <name>Alava</name></zone>
+              <zone><code>Albacete</code>              <name>Albacete</name></zone>
+              <zone><code>Alicante</code>              <name>Alicante</name></zone>
+              <zone><code>Almeria</code>               <name>Almeria</name></zone>
+              <zone><code>Asturias</code>              <name>Asturias</name></zone>
+              <zone><code>Avila</code>                 <name>Avila</name></zone>
+              <zone><code>Badajoz</code>               <name>Badajoz</name></zone>
+              <zone><code>Baleares</code>              <name>Baleares</name></zone>
+              <zone><code>Barcelona</code>             <name>Barcelona</name></zone>
+              <zone><code>Burgos</code>                <name>Burgos</name></zone>
+              <zone><code>Caceres</code>               <name>Caceres</name></zone>
+              <zone><code>Cadiz</code>                 <name>Cadiz</name></zone>
+              <zone><code>Cantabria</code>             <name>Cantabria</name></zone>
+              <zone><code>Castellon</code>             <name>Castellon</name></zone>
+              <zone><code>Ceuta</code>                 <name>Ceuta</name></zone>
+              <zone><code>Ciudad Real</code>           <name>Ciudad Real</name></zone>
+              <zone><code>Cordoba</code>               <name>Cordoba</name></zone>
+              <zone><code>Cuenca</code>                <name>Cuenca</name></zone>
+              <zone><code>Girona</code>                <name>Girona</name></zone>
+              <zone><code>Granada</code>               <name>Granada</name></zone>
+              <zone><code>Guadalajara</code>           <name>Guadalajara</name></zone>
+              <zone><code>Guipuzcoa</code>             <name>Guipuzcoa</name></zone>
+              <zone><code>Huelva</code>                <name>Huelva</name></zone>
+              <zone><code>Huesca</code>                <name>Huesca</name></zone>
+              <zone><code>Jaen</code>                  <name>Jaen</name></zone>
+              <zone><code>La Rioja</code>              <name>La Rioja</name></zone>
+              <zone><code>Las Palmas</code>            <name>Las Palmas</name></zone>
+              <zone><code>Leon</code>                  <name>Leon</name></zone>
+              <zone><code>Lleida</code>                <name>Lleida</name></zone>
+              <zone><code>Lugo</code>                  <name>Lugo</name></zone>
+              <zone><code>Madrid</code>                <name>Madrid</name></zone>
+              <zone><code>Malaga</code>                <name>Malaga</name></zone>
+              <zone><code>Melilla</code>               <name>Melilla</name></zone>
+              <zone><code>Murcia</code>                <name>Murcia</name></zone>
+              <zone><code>Navarra</code>               <name>Navarra</name></zone>
+              <zone><code>Ourense</code>               <name>Ourense</name></zone>
+              <zone><code>Palencia</code>              <name>Palencia</name></zone>
+              <zone><code>Pontevedra</code>            <name>Pontevedra</name></zone>
+              <zone><code>Salamanca</code>             <name>Salamanca</name></zone>
+              <zone><code>Santa Cruz de Tenerife</code><name>Santa Cruz de Tenerife</name></zone>
+              <zone><code>Segovia</code>               <name>Segovia</name></zone>
+              <zone><code>Sevilla</code>               <name>Sevilla</name></zone>
+              <zone><code>Soria</code>                 <name>Soria</name></zone>
+              <zone><code>Tarragona</code>             <name>Tarragona</name></zone>
+              <zone><code>Teruel</code>                <name>Teruel</name></zone>
+              <zone><code>Toledo</code>                <name>Toledo</name></zone>
+              <zone><code>Valencia</code>              <name>Valencia</name></zone>
+              <zone><code>Valladolid</code>            <name>Valladolid</name></zone>
+              <zone><code>Vizcaya</code>               <name>Vizcaya</name></zone>
+              <zone><code>Zamora</code>                <name>Zamora</name></zone>
+              <zone><code>Zaragoza</code>              <name>Zaragoza</name></zone>
+            </zones>
+          </country>
+          
+          <country><name>Sri Lanka</name>                                    <code length="2">LK</code><code length="3">LKA</code><zones/></country>
+          <country><name>St. Helena</name>                                   <code length="2">SH</code><code length="3">SHN</code><zones/></country>
+          <country><name>St. Pierre and Miquelon</name>                      <code length="2">PM</code><code length="3">SPM</code><zones/></country>
+          <country><name>Sudan</name>                                        <code length="2">SD</code><code length="3">SDN</code><zones/></country>
+          <country><name>Suriname</name>                                     <code length="2">SR</code><code length="3">SUR</code><zones/></country>
+          <country><name>Svalbard and Jan Mayen Islands</name>               <code length="2">SJ</code><code length="3">SJM</code><zones/></country>
+          <country><name>Swaziland</name>                                    <code length="2">SZ</code><code length="3">SWZ</code><zones/></country>
+          <country><name>Sweden</name>                                       <code length="2">SE</code><code length="3">SWE</code><zones/></country>
+          
+          <country>
+            <name>Switzerland</name>
+            
+            <code length="2">CH</code>
+            <code length="3">CHE</code>
+            
+            <zones>
+              <zone><code>AG</code><name>Aargau</name></zone>
+              <zone><code>AI</code><name>Appenzell Innerrhoden</name></zone>
+              <zone><code>AR</code><name>Appenzell Ausserrhoden</name></zone>
+              <zone><code>BE</code><name>Bern</name></zone>
+              <zone><code>BL</code><name>Basel-Landschaft</name></zone>
+              <zone><code>BS</code><name>Basel-Stadt</name></zone>
+              <zone><code>FR</code><name>Freiburg</name></zone>
+              <zone><code>GE</code><name>Genf</name></zone>
+              <zone><code>GL</code><name>Glarus</name></zone>
+              <zone><code>JU</code><name>Graub&#xFC;nden</name></zone>
+              <zone><code>JU</code><name>Jura</name></zone>
+              <zone><code>LU</code><name>Luzern</name></zone>
+              <zone><code>NE</code><name>Neuenburg</name></zone>
+              <zone><code>NW</code><name>Nidwalden</name></zone>
+              <zone><code>OW</code><name>Obwalden</name></zone>
+              <zone><code>SG</code><name>St. Gallen</name></zone>
+              <zone><code>SH</code><name>Schaffhausen</name></zone>
+              <zone><code>SO</code><name>Solothurn</name></zone>
+              <zone><code>SZ</code><name>Schwyz</name></zone>
+              <zone><code>TG</code><name>Thurgau</name></zone>
+              <zone><code>TI</code><name>Tessin</name></zone>
+              <zone><code>UR</code><name>Uri</name></zone>
+              <zone><code>VD</code><name>Waadt</name></zone>
+              <zone><code>VS</code><name>Wallis</name></zone>
+              <zone><code>ZG</code><name>Zug</name></zone>
+              <zone><code>ZH</code><name>Z&#xFC;rich</name></zone>
+            </zones>
+          </country>
+          
+          <country><name>Syrian Arab Republic</name>                         <code length="2">SY</code><code length="3">SYR</code><zones/></country>
+          <country><name>Taiwan</name>                                       <code length="2">TW</code><code length="3">TWN</code><zones/></country>
+          <country><name>Tajikistan</name>                                   <code length="2">TJ</code><code length="3">TJK</code><zones/></country>
+          <country><name>Tanzania, United Republic of</name>                 <code length="2">TZ</code><code length="3">TZA</code><zones/></country>
+          <country><name>Thailand</name>                                     <code length="2">TH</code><code length="3">THA</code><zones/></country>
+          <country><name>Togo</name>                                         <code length="2">TG</code><code length="3">TGO</code><zones/></country>
+          <country><name>Tokelau</name>                                      <code length="2">TK</code><code length="3">TKL</code><zones/></country>
+          <country><name>Tonga</name>                                        <code length="2">TO</code><code length="3">TON</code><zones/></country>
+          <country><name>Trinidad and Tobago</name>                          <code length="2">TT</code><code length="3">TTO</code><zones/></country>
+          <country><name>Tunisia</name>                                      <code length="2">TN</code><code length="3">TUN</code><zones/></country>
+          <country><name>Turkey</name>                                       <code length="2">TR</code><code length="3">TUR</code><zones/></country>
+          <country><name>Turkmenistan</name>                                 <code length="2">TM</code><code length="3">TKM</code><zones/></country>
+          <country><name>Turks and Caicos Islands</name>                     <code length="2">TC</code><code length="3">TCA</code><zones/></country>
+          <country><name>Tuvalu</name>                                       <code length="2">TV</code><code length="3">TUV</code><zones/></country>
+          <country><name>Uganda</name>                                       <code length="2">UG</code><code length="3">UGA</code><zones/></country>
+          <country><name>Ukraine</name>                                      <code length="2">UA</code><code length="3">UKR</code><zones/></country>
+          <country><name>United Arab Emirates</name>                         <code length="2">AE</code><code length="3">ARE</code><zones/></country>
+          <country><name>United Kingdom</name>                               <code length="2">GB</code><code length="3">GBR</code><zones/></country>
+          
+          <country>
+            <name>United States</name>
+            
+            <code length="2">US</code>
+            <code length="3">USA</code>
+            
+            <zones>
+              <zone><code>AL</code><name>Alabama</name></zone>
+              <zone><code>AK</code><name>Alaska</name></zone>
+              <zone><code>AS</code><name>American Samoa</name></zone>
+              <zone><code>AZ</code><name>Arizona</name></zone>
+              <zone><code>AR</code><name>Arkansas</name></zone>
+              <zone><code>AF</code><name>Armed Forces Africa</name></zone>
+              <zone><code>AA</code><name>Armed Forces Americas</name></zone>
+              <zone><code>AC</code><name>Armed Forces Canada</name></zone>
+              <zone><code>AE</code><name>Armed Forces Europe</name></zone>
+              <zone><code>AM</code><name>Armed Forces Middle East</name></zone>
+              <zone><code>AP</code><name>Armed Forces Pacific</name></zone>
+              <zone><code>CA</code><name>California</name></zone>
+              <zone><code>CO</code><name>Colorado</name></zone>
+              <zone><code>CT</code><name>Connecticut</name></zone>
+              <zone><code>DE</code><name>Delaware</name></zone>
+              <zone><code>DC</code><name>District of Columbia</name></zone>
+              <zone><code>FM</code><name>Federated States Of Micronesia</name></zone>
+              <zone><code>FL</code><name>Florida</name></zone>
+              <zone><code>GA</code><name>Georgia</name></zone>
+              <zone><code>GU</code><name>Guam</name></zone>
+              <zone><code>HI</code><name>Hawaii</name></zone>
+              <zone><code>ID</code><name>Idaho</name></zone>
+              <zone><code>IL</code><name>Illinois</name></zone>
+              <zone><code>IN</code><name>Indiana</name></zone>
+              <zone><code>IA</code><name>Iowa</name></zone>
+              <zone><code>KS</code><name>Kansas</name></zone>
+              <zone><code>KY</code><name>Kentucky</name></zone>
+              <zone><code>LA</code><name>Louisiana</name></zone>
+              <zone><code>ME</code><name>Maine</name></zone>
+              <zone><code>MH</code><name>Marshall Islands</name></zone>
+              <zone><code>MD</code><name>Maryland</name></zone>
+              <zone><code>MA</code><name>Massachusetts</name></zone>
+              <zone><code>MI</code><name>Michigan</name></zone>
+              <zone><code>MN</code><name>Minnesota</name></zone>
+              <zone><code>MS</code><name>Mississippi</name></zone>
+              <zone><code>MO</code><name>Missouri</name></zone>
+              <zone><code>MT</code><name>Montana</name></zone>
+              <zone><code>NE</code><name>Nebraska</name></zone>
+              <zone><code>NV</code><name>Nevada</name></zone>
+              <zone><code>NH</code><name>New Hampshire</name></zone>
+              <zone><code>NJ</code><name>New Jersey</name></zone>
+              <zone><code>NM</code><name>New Mexico</name></zone>
+              <zone><code>NY</code><name>New York</name></zone>
+              <zone><code>NC</code><name>North Carolina</name></zone>
+              <zone><code>ND</code><name>North Dakota</name></zone>
+              <zone><code>MP</code><name>Northern Mariana Islands</name></zone>
+              <zone><code>OH</code><name>Ohio</name></zone>
+              <zone><code>OK</code><name>Oklahoma</name></zone>
+              <zone><code>OR</code><name>Oregon</name></zone>
+              <zone><code>PW</code><name>Palau</name></zone>
+              <zone><code>PA</code><name>Pennsylvania</name></zone>
+              <zone><code>PR</code><name>Puerto Rico</name></zone>
+              <zone><code>RI</code><name>Rhode Island</name></zone>
+              <zone><code>SC</code><name>South Carolina</name></zone>
+              <zone><code>SD</code><name>South Dakota</name></zone>
+              <zone><code>TN</code><name>Tennessee</name></zone>
+              <zone><code>TX</code><name>Texas</name></zone>
+              <zone><code>UT</code><name>Utah</name></zone>
+              <zone><code>VT</code><name>Vermont</name></zone>
+              <zone><code>VI</code><name>Virgin Islands</name></zone>
+              <zone><code>VA</code><name>Virginia</name></zone>
+              <zone><code>WA</code><name>Washington</name></zone>
+              <zone><code>WV</code><name>West Virginia</name></zone>
+              <zone><code>WI</code><name>Wisconsin</name></zone>
+              <zone><code>WY</code><name>Wyoming</name></zone>
+            </zones>
+          </country>
+          
+          <country><name>United States Minor Outlying Islands</name>         <code length="2">UM</code><code length="3">UMI</code><zones/></country>
+          <country><name>Uruguay</name>                                      <code length="2">UY</code><code length="3">URY</code><zones/></country>
+          <country><name>Uzbekistan</name>                                   <code length="2">UZ</code><code length="3">UZB</code><zones/></country>
+          <country><name>Vanuatu</name>                                      <code length="2">VU</code><code length="3">VUT</code><zones/></country>
+          <country><name>Vatican City State (Holy See)</name>                <code length="2">VA</code><code length="3">VAT</code><zones/></country>
+          <country><name>Venezuela</name>                                    <code length="2">VE</code><code length="3">VEN</code><zones/></country>
+          <country><name>Viet Nam</name>                                     <code length="2">VN</code><code length="3">VNM</code><zones/></country>
+          <country><name>Virgin Islands (British)</name>                     <code length="2">VG</code><code length="3">VGB</code><zones/></country>
+          <country><name>Virgin Islands (U.S.)</name>                        <code length="2">VI</code><code length="3">VIR</code><zones/></country>
+          <country><name>Wallis and Futuna Islands</name>                    <code length="2">WF</code><code length="3">WLF</code><zones/></country>
+          <country><name>Western Sahara</name>                               <code length="2">EH</code><code length="3">ESH</code><zones/></country>
+          <country><name>Yemen</name>                                        <code length="2">YE</code><code length="3">YEM</code><zones/></country>
+          <country><name>Yugoslavia</name>                                   <code length="2">YU</code><code length="3">YUG</code><zones/></country>
+          <country><name>Zaire</name>                                        <code length="2">ZR</code><code length="3">ZAR</code><zones/></country>
+          <country><name>Zambia</name>                                       <code length="2">ZM</code><code length="3">ZMB</code><zones/></country>
+          <country><name>Zimbabwe</name>                                     <code length="2">ZW</code><code length="3">ZWE</code><zones/></country>
+        </countries>
+      </form:instance>
+    </form:model>
+  </head>
+  
+  <body>
+    <p>
+      <form:select1 ref="country">
+        <form:label>Country:</form:label>
+      
+        <form:itemset nodeset="instance('countries')/country">
+          <form:label ref="name"/>
+          <form:value ref="code[@length=3]"/>
+        </form:itemset>
+      </form:select1>
+    </p>
+    
+    <p id="status"></p>
+  </body>
+</html>

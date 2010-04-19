@@ -1,0 +1,92 @@
+body {
+  padding-top: 95px;
+  background: url(../logo.jpg) no-repeat;
+  
+  font: 9pt black "Tahoma", "Arial", "Helvetica", sans-serif;
+  color: black;
+}
+
+/* Default Text Appearance */
+
+.title {
+  color: #6484E5;
+  font-weight: bold;
+}
+
+.label {
+  font-size: 9pt; 
+  color: black;
+}
+
+.labelBold {
+  font-size: 9pt; 
+  color: #0052A0;
+  font-weight: bold;
+}
+
+.whitehead {
+  font-size: 9pt; 
+  color: white;
+}
+
+
+
+.blockstyle {
+  font-size: 8pt; 
+  color: black;
+}
+
+.greenlabel {
+  font-size: 9pt; 
+  color: green;
+}
+
+.linkButtons {
+  color: black; 
+  text-decoration: none; 
+  font-size: 8pt; 
+  font-weight: bold;
+}
+
+.previewDiv {
+  border-width:10px;
+  border-type:solid;
+  background: #C0E7F5;
+}
+
+.welcome {
+  font-size: 22pt; 
+  color: black;
+  font-weight: bold;
+}
+
+.pagetitle {
+  font-size: 14pt; 
+  color: #0052A0;
+  font-weight: bold;
+}
+
+.basictext {
+  font-size: 10pt; 
+  color: black;
+}
+
+.errorTitle {
+  font-size: 12pt; 
+  font-weight: bold;
+  color: red;
+}
+
+.errorText {
+  font-size: 10pt; 
+  color: red;
+}
+
+.copyright {
+  font-size: 8pt; 
+  color: black;
+}
+
+.colorRow {
+background: #C0E7F5;
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for XPath Parser</title>
+    
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      function methodValue(method, attributeValue) {
+        if (attributeValue == null) {
+          return new XFormParser()[method](document.documentElement, "does-not-exist", null);
+        }
+        else {
+          var element = document.createElement("element");
+          element.setAttribute("attribute", attributeValue);
+         
+          return new XFormParser()[method](element, "attribute");
+        }
+      }
+    
+      function stringValue (value) { return methodValue("stringValue",  value); }
+      function booleanValue(value) { return methodValue("booleanValue", value); }
+      function listValue   (value) { return methodValue("listValue",    value); }
+      function xpathValue  (value) { return methodValue("xpathValue",   value); }
+    
+      // Tests the stringValue function.
+      function testStringValue() {
+        assertEquals("",  stringValue(""));
+        assertEquals("x", stringValue("x"));
+        assertNull  (     stringValue(null));
+      }
+      
+      // Tests the booleanValue function.
+      function testBooleanValue() {
+        assertEquals(true,  booleanValue("true"));
+        assertEquals(true,  booleanValue("1"));
+        assertEquals(false, booleanValue("false"));
+        assertEquals(false, booleanValue("0"));
+        assertEquals(null,  booleanValue(null));
+      }
+      
+      // Tests the listValue function.
+      function testListValue() {
+        assertEquals(0,     listValue("")        .length);
+        assertEquals(0,     listValue("   ")     .length);
+        assertEquals(1,     listValue("x")       .length);
+        assertEquals(2,     listValue("x y")     .length);
+        assertEquals(2,     listValue("x   y")   .length);
+        assertEquals(2,     listValue(" x y ")   .length);
+        assertEquals(2,     listValue("  x  y  ").length);
+        assertNull  (       listValue(null));
+      }
+      
+      // Tests the xpathValue function.
+      function testXPathValue() {
+        assertEquals("x", xpathValue("x").source);
+        assertNull  (     xpathValue(null));
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>MIPs</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model>
+      <form:instance>
+        <data xmlns="">
+          <value>green</value>
+          <trigger>true</trigger>
+          <readonly></readonly>
+          <required></required>
+        </data>
+      </form:instance>
+      <form:bind nodeset="value" constraint=". = 'blue'"/>
+      <form:bind nodeset="trigger" relevant="./../readonly != ''"/>
+      <form:bind nodeset="readonly" readonly="./../required != ''"/>
+      <form:bind nodeset="required" required="./../readonly != ''"/>
+    </form:model>
+  </head>
+  
+  <body>
+    <p>Filling in Secret will make the trigger appear and Name required, filling in Name will make Secret readonly, Selecting "blue" will make the controls valid.</p>
+    
+    <p>
+      <form:input ref="required">
+        <form:label>Name:</form:label>
+      </form:input>
+      
+      <form:input ref="value">
+        <form:label>Input:</form:label>
+      </form:input>
+      
+      <form:output ref="value">
+        <form:label>Output:</form:label>
+      </form:output>
+      
+      <form:secret ref="readonly">
+        <form:label>Secret:</form:label>
+      </form:secret>
+      
+      <br />
+     
+      <form:textarea ref="value">
+        <form:label>Text area:</form:label>
+      </form:textarea>
+      
+      <br />
+      
+      <form:select1 ref="value">
+        <form:label>Select1:</form:label>
+        
+        <form:item><form:label>Red</form:label>  <form:value>red</form:value>  </form:item>
+        <form:item><form:label>Blue</form:label> <form:value>blue</form:value> </form:item>
+        <form:item><form:label>Green</form:label><form:value>green</form:value></form:item>
+      </form:select1>
+      
+      <form:select ref="value">
+        <form:label>Select:</form:label>
+        
+        <form:item><form:label>Red</form:label>  <form:value>red</form:value>  </form:item>
+        <form:item><form:label>Blue</form:label> <form:value>blue</form:value> </form:item>
+        <form:item><form:label>Green</form:label><form:value>green</form:value></form:item>
+      </form:select>
+      
+      <br />
+      
+      <form:trigger ref="trigger">
+        <form:label>Trigger</form:label>
+      </form:trigger>
+      
+    </p>
+    
+    <p id="status"></p>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:my="urn:my" xml:lang="en">
+  <head>
+    <title>Unit Tests for XFormInstance</title>
+
+    <xf:model id='a'>
+      <xf:instance id='i'>
+        <favorite-things xmlns=''>
+          <number/>
+          <color/>
+
+          <my:food/>
+        </favorite-things>
+      </xf:instance>
+
+      <xf:instance id='j' src='http://www.yahoo.com/'>
+        <inline-instance-data xmlns=''/>
+      </xf:instance>
+    </xf:model>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      function setUpPage() {
+        XForm.waitForInitialization();
+      }
+
+      // Check that there's an XFormInstance object for each instance element.
+      function testAllInstancesAreAccountedFor() {
+        var instanceElements = new XPath("//xforms:instance").evaluate(xform.xmlDocument);
+  
+        assertEquals(2,                   xform.models[0].instances   .length);
+        assertEquals(instanceElements[0], xform.models[0].instances[0].element);
+        assertEquals(instanceElements[1], xform.models[0].instances[1].element);
+        assertEquals(xform.models[0],     xform.models[0].instances[0].model);
+        assertEquals(xform.models[0],     xform.models[0].instances[1].model);
+      }
+  
+      // Check that the namespace nodes are copied to the detached instance documents.
+      function testNamespacesAreCopiedToInstanceDocument() {
+        var instanceDocument = xform.models[0].instances[0].document;
+  
+        assertEquals(1,   new XPath("//my:food", instanceDocument.documentElement).evaluate(instanceDocument).length);
+        assertTrue  (2 <= new XPath("*/namespace::*").evaluate(instanceDocument).length);
+      }
+  
+      // Check that inline instance data is handled.
+      function testInlineInstanceData() {
+        var instanceData = xform.models[0].instances[0].document;
+        var rootNodes    = instanceData.getElementsByTagName("favorite-things");
+  
+        assertEquals(1,            rootNodes.length);
+        assertEquals(instanceData, rootNodes[0].parentNode);
+        assertNull  (              xform.models[0].instances[0].source);
+      }
+  
+      // Check that external instance data is handled.
+      function testExternalInstanceData() {
+        var instance = xform.models[0].instances[1];
+  
+        assertEquals ("http://www.yahoo.com/", instance.source);
+        assertNotNull(instance.xmlDocument);
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Group</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model>
+      <form:instance>
+        <data xmlns="">
+          <john>
+            <first-name>John</first-name>
+            <last-name>Kugelman</last-name>
+          </john>
+          
+          <susan>
+            <first-name>Susan</first-name>
+            <last-name>Borgrink</last-name>
+          </susan>
+        </data>
+      </form:instance>
+    </form:model>
+  </head>
+  
+  <body>
+    <p>Grouped controls should get their context from the containing group. If
+       working, "John Kugelman" and "Susan Borgrink" should be visible in the fields
+       below.</p>
+    
+    <form:group ref="john">
+      <form:input ref="first-name">
+        <form:label>First:</form:label>
+      </form:input>
+    
+      <form:input ref="last-name">
+        <form:label>Last:</form:label>
+      </form:input>
+    </form:group>
+      
+    <form:group ref="susan">
+      <form:input ref="first-name">
+        <form:label>First:</form:label>
+      </form:input>
+    
+      <form:input ref="last-name">
+        <form:label>Last:</form:label>
+      </form:input>
+    </form:group>
+    
+    <p id="status"></p>
+  </body>
+</html>

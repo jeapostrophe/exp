@@ -1,0 +1,90 @@
+﻿<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" 
+xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" 
+xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:m="http://schemas.microsoft.com/sharepoint/soap/"
+xml:lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>Named &lt;bind/&gt;</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    <!--script type="text/javascript" src="../Source/sarissa/sarissa.js"></script-->
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    <!--script type="text/javascript" src="../Source/FormFaces.js">// use packed version</script-->
+
+    <xf:model id="model1">
+      <xf:instance>
+        <data xmlns=""><number>]]&gt;</number></data>
+      </xf:instance>
+      
+      <xf:instance id="iGetAttachmentCollection">
+        <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+          <SOAP-ENV:Body>
+            <m:GetAttachmentCollection xmlns:m="http://schemas.microsoft.com/sharepoint/soap/">
+              <m:listName>Workflow4</m:listName>
+              <m:listItemID>4</m:listItemID>
+            </m:GetAttachmentCollection>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </xf:instance>
+
+      <!--xf:submission id="submission"
+                     action="http://www.dependencymodel.com/_vti_bin/Lists.asmx"
+                     method="post"
+                     replace="none"
+                     omit-xml-declaration="true" 
+                     ref="instance('iGetAttachmentCollection')" mediatype="text/xml; charset=utf-8"
+      /-->
+      <!--xf:action ev:event="xforms-ready">
+      <xf:send submission="submission" />
+      </xf:action-->
+      <xforms:bind nodeset="instance('iGetAttachmentCollection')" id="Top">
+        <xf:bind id="ItemID" nodeset="instance('iGetAttachmentCollection')//m:GetAttachmentCollection/m:listItemID" />
+        
+        <xforms:bind nodeset="SOAP-ENV:Body" id="SoapBody">
+          <xforms:bind nodeset="m:GetAttachmentCollection" id="SoapAttachments">
+            <xforms:bind id="listName" nodeset="m:listName"  calculate="concat('Workflow',../m:listItemID)"  />
+          </xforms:bind>
+        </xforms:bind>
+      </xforms:bind>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>A more complex test page. This is a serious test of nested binds and nested
+       controls. You should see the number 4 in the first two input boxes, and
+       "Workflow4" in the second two.</p>
+  
+    <xforms:group bind="Top">
+      <xf:input ref="instance('iGetAttachmentCollection')//m:GetAttachmentCollection/m:listItemID">
+        <xf:label>List Item (ref): </xf:label>
+      </xf:input>
+      
+      <xf:input bind="ItemID">
+        <xf:label>List Item (bind): </xf:label>
+      </xf:input>
+      
+      <xforms:group bind="SoapBody">
+        <xforms:group bind="SoapAttachments">
+          <xf:input ref="instance('iGetAttachmentCollection')//m:GetAttachmentCollection/m:listName">
+            <xf:label>List name (ref): </xf:label>
+          </xf:input>
+          
+          <xf:input bind="listName">
+            <xf:label>List name (bind): </xf:label>
+          </xf:input>
+        </xforms:group>
+      </xforms:group>
+    </xforms:group>
+    
+    <p id="status"></p>
+  </body>
+</html>

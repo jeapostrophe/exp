@@ -1,0 +1,245 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>Submit Validation</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <style type="text/css">
+      .xforms-invalid {
+        color: red;
+      }
+      .xforms-invalid input {
+        color: red;
+      }
+    </style>
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model> 
+      <xf:instance id="list" xmlns="">
+        <books>
+          <book name="The Gunslinger">
+            <price>16.50</price>
+            <author>
+              <first>Stephen</first>
+              <last>King</last>
+            </author>
+          </book>
+          <book name="The Drawing of the Three">
+            <price>24.50</price>
+            <author>
+              <first>Stephen</first>
+              <last>King</last>
+            </author>
+          </book>
+          <book name="The Waste Lands">
+            <price>23.10</price>
+            <author>
+              <first>Stephen</first>
+              <last>King</last>
+            </author>
+          </book>
+          <book name="The Sandman: Endless Nights">
+            <price>16.47</price>
+            <author>
+              <first>Neil</first>
+              <last>Gaiman</last>
+            </author>
+          </book>
+          <book name="The Unbearable Lightness of Being">
+            <price>13.95</price>
+            <author>
+              <first>Milan</first>
+              <last>Kundera</last>
+            </author>
+          </book>
+          <book name="One Hundred Years of Solitude">
+            <price>14.00</price>
+            <author>
+              <first>Gabriel</first>
+              <last>Garc&#237;a M&#225;rquez</last>
+            </author>
+          </book>
+        </books>
+      </xf:instance>
+      
+      <xf:instance id="temp" xmlns="">
+        <template>
+          <set>
+            <name/>
+            <first/>
+            <last/>
+            <price/>
+          </set>
+        </template>
+      </xf:instance>
+      
+      <xf:bind nodeset="instance('list')/book">
+        <xf:bind nodeset="price" constraint=". &lt; 25"/>
+      </xf:bind>
+      
+      <xf:submission id="submission" action="books.xml" method="post" replace="none">
+        <xf:setvalue ref="submit-done" ev:event="xforms-submit-done">true</xf:setvalue>
+      </xf:submission>
+      <xf:message level="modal" ev:event="xforms-submit-error">Submission had an error!  Data was not submitted!</xf:message>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>You should see a list of books, including their price and author.  Clicking "Edit List" will make the entire list editable
+    make a "Add to List" and "Send" button appear.  Clicking "Send" will attempt to submit the data.  If any of the prices are
+    over $25.00 the submit will fail.  Invalid data will appear in red.</p>
+       
+    <xf:switch>
+      <xf:case id="out">
+        <h3>
+          <table border="1">
+            <thead>
+              <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="books" xf:repeat-nodeset="instance('list')/book">
+              <tr>
+                <td>
+                  <xf:output ref="@name"/>
+                </td>
+                <td>
+                  <xf:group ref="author">
+                    <xf:output ref="first"/>
+                    <xf:output ref="last"/>
+                  </xf:group>
+                </td>
+                <td>
+                  $<xf:output ref="price"/>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </h3>
+      </xf:case>
+      <xf:case id="in">
+        <h3>
+          <table border="1">
+            <thead>
+              <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="books" xf:repeat-nodeset="instance('list')/book">
+              <tr>
+                <td>
+                  <xf:input ref="@name">
+                    <xf:label></xf:label>
+                  </xf:input>
+                </td>
+                <td>
+                  <xf:group ref="author">
+                    <xf:input ref="first">
+                      <xf:label></xf:label>
+                    </xf:input>
+                    <xf:input ref="last">
+                      <xf:label></xf:label>
+                    </xf:input>
+                  </xf:group>
+                </td>
+                <td>
+                  <xf:input ref="price">
+                    <xf:label></xf:label>
+                  </xf:input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </h3>
+      </xf:case>
+    </xf:switch>
+    
+    
+    <xf:switch>
+      <xf:case id="read">
+        <xf:trigger>
+          <xf:label>Edit List</xf:label>
+          
+          <xf:action ev:event="DOMActivate">
+            <xf:toggle case="in"/>
+            <xf:toggle case="edit"/>
+          </xf:action>
+        </xf:trigger>
+      </xf:case>
+      <xf:case id="edit">
+        <xf:switch>
+          <xf:case id="clear">
+            <xf:trigger>
+              <xf:label>Add to List</xf:label>
+              
+              <xf:toggle case="add" ev:event="DOMActivate"/>
+            </xf:trigger>
+            <br/>
+            <br/>
+            
+            <xf:trigger>
+              <xf:label>Send</xf:label>
+              <xf:action ev:event="DOMActivate">
+                <xf:send submission="submission"/>
+                <xf:toggle case="read"/>
+                <xf:toggle case="out"/>
+              </xf:action>
+            </xf:trigger>
+          </xf:case>
+          <xf:case id="add">
+            <xf:group ref="instance('temp')/set">
+              <xf:input ref="name">
+                <xf:label>Title:</xf:label>
+              </xf:input>
+              <br/>
+              <xf:group>
+                <xf:label>Author</xf:label>
+                <xf:input ref="first">
+                  <xf:label>First:</xf:label>
+                </xf:input>
+                <xf:input ref="last">
+                  <xf:label>Last:</xf:label>
+                </xf:input>
+              </xf:group>
+              <br/>
+              <xf:input ref="price">
+                <xf:label>Price:</xf:label>
+              </xf:input>
+            </xf:group>
+            
+            <br/>
+            <br/>
+            
+            <xf:trigger>
+              <xf:label>Add Book</xf:label>
+              
+              <xf:action ev:event="DOMActivate">
+                <xf:insert nodeset="instance('list')/book" position="before" at="1"/>
+                <xf:setvalue nodeset="instance('list')/book[index('books')]/@name" value="instance('temp')/set/name"/>
+                <xf:setvalue nodeset="instance('list')/book[index('books')]/author/first" value="instance('temp')/set/first"/>
+                <xf:setvalue nodeset="instance('list')/book[index('books')]/author/last" value="instance('temp')/set/last"/>
+                <xf:setvalue nodeset="instance('list')/book[index('books')]/price" value="instance('temp')/set/price"/>
+                <xf:toggle case="clear"/>
+              </xf:action>
+            </xf:trigger>
+          </xf:case>
+        </xf:switch>
+      </xf:case>
+    </xf:switch>
+    
+    <p id="status"></p>
+  </body>
+</html>

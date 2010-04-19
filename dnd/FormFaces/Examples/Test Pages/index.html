@@ -1,0 +1,151 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>FormFaces Test Pages</title>
+
+    <link rel="stylesheet" type="text/css" href="xforms.css"/>
+  </head>
+
+  <body>
+    <h1>FormFaces Test Pages</h1>
+    
+    <p>Small test pages are provided to demonstrate how FormFaces processes and
+       renders XForms functionality. These are ordered from most basic to most complex.
+       </p>
+
+    <p>Keep in mind that these pages were created for testing
+       purposes&#x2014;meaning, they're not the most visually impressive pages, nor are
+       they intended to look like a real tax form or online shopping cart.</p>
+
+    <dl>
+      <dt><a href="output.html">output.html</a></dt>
+      <dd>The simplest page; demonstrates an output control bound to an instance data node.</dd>
+
+      <dt><a href="io.html">io.html</a></dt>
+      <dd>A simple page demonstrating that two controls bound to the same instance
+          data node are linked.</dd>
+
+      <dt><a href="controls.html">controls.html</a></dt>
+      <dd>Demonstrates controls.</dd>
+      
+      <dt><a href="group.html">group.html</a></dt>
+      <dd>Demonstrates the <code>group</code> element, particularly nested
+          <code>ref</code> attributes.</dd>
+
+      <dt><a href="switch.html">switch.html</a></dt>
+      <dd>A simple page demonstrating a <code>switch</code> with three
+          <code>case</code>s, and a button to <code>toggle</code> between them.</dd>
+
+      <dt><a href="outputValue.html">outputValue.html</a></dt>
+      <dd>Verifies that <code>&lt;output value="..."/&gt;</code> works.</dd>
+
+      <dt><a href="namedBind.html">namedBind.html</a></dt>
+      <dd>Demonstrates that named and anonymous <code>bind</code>s work the same.</dd>
+
+      <dt><a href="namedBind2.html">namedBind2.html</a></dt>
+      <dd>A more complicated page demonstrating named/anonymous <code>bind</code>s
+          nested within each other.</dd>
+          
+      <dt><a href="itemset.html">itemset.html</a></dt>
+      <dd>Demonstrates the <code>&lt;itemset/&gt;</code> element, determining a list
+          of selection choices based on the instance data.</dd>
+
+      <dt><a href="relevance.html">relevance.html</a></dt>
+      <dd>A page demonstrating the <code>relevant</code> model item property and how
+          relevance is inherited from ancestor nodes.</dd>
+
+      <dt><a href="MIPs.html">MIPs.html</a></dt>
+      <dd>Demonstrates Model Item Property events.</dd>
+
+      <dt><a href="repeat.html">repeat.html</a></dt>
+      <dd>A simple demonstration of the <code>repeat</code> control.</dd>
+
+      <dt><a href="nestedRepeats.html">nestedRepeats.html</a></dt>
+      <dd>An demonstration of nested <code>repeat</code>s.</dd>
+
+      <dt><a href="totals.html">totals.html</a></dt>
+      <dd>A "customer database" page demonstrating nested repeats. Includes
+          calculations and tests the XPath context of nested XPaths.</dd>
+          
+      <dt><a href="insert-delete.html">insert-delete.html</a></dt>
+      <dd>Demonstrates the <code>insert</code> and <code>delete</code> actions of
+          repeats, as well as the <code>index()</code> XPath function.</dd>
+          
+      <dt><a href="vehicles.html">vehicles.html</a></dt>
+      <dd>Demonstrates <code>itemset</code>, which allows a select control's choices
+          to be drawn from the instance data.</dd>
+      
+      <dt><a href="trigger.html">trigger.html</a></dt>
+      <dd>Very simple demonstration of a <code>trigger</code>; opens Yahoo! in a new
+          window.</dd>
+
+      <dt><a href="increment.html">increment.html</a></dt>
+      <dd>Demonstrates the <code>DOMActivate</code> event and the
+          <code>setvalue</code> action with a button you can click to increment a number
+          on the page.</dd>
+
+      <dt><a href="dispatch.html">dispatch.html</a></dt>
+      <dd>Demonstrates event dispatching.</dd>
+      
+      <dt><a href="xforms-ready.html">xforms-ready.html</a></dt>
+      <dd>Demonstrates that the <code>xforms-ready</code> event is fired when the
+          processor has loaded the page.</dd>
+
+      <dt><a href="events.html">events.html</a></dt>
+      <dd>Demonstrates the firing of events, in particular DOMFocusIn and DOMFocusOut.
+          </dd>
+
+      <dt><a href="event-handler.html">event-handler.html</a></dt>
+      <dd>Demonstrates usage of the <code>ev:handler</code> attribute.</dd>
+
+      <dt><a href="submit.html">submit.html</a></dt>
+      <dd>Demonstrates the submission process by loading data from an external XML
+          file.</dd>
+          
+      <dt><a href="replace-all.html">replace-all.html</a></dt>
+      <dd>Demonstrates the replace="all" option for submission, replacing the current
+          page with the page returned from the server.</dd>
+
+      <dt><a href="xformsFunctions.html">xformsFunctions.html</a></dt>
+      <dd>Demonstrating XForms Date/Time/Duration calculation functions.</dd>
+      
+      <dt><a href="submit-validation.html">submit-validation.html</a></dt>
+      <dd>Demonstrates checking if the data is valid before submission, an error will be
+      thrown if it is invalid.</dd>
+
+      <dt><a href="controls-labels.html">controls-labels.html</a></dt>
+      <dd>Demonstrating all controls working with labels that have refs.</dd>
+    </dl>
+
+
+    <h1>Migrated Test Pages</h1>
+
+    <p>These are test pages from previous releases that have been modified to point
+       to the new release. This shows how easy it is to migrate previously created
+       examples to the new release.</p>
+
+    <dl>
+      <dt><a href="Old/controls.html">controls.html</a></dt>
+      <dd></dd>
+
+      <dt><a href="Old/NestedRepeatTest.html">NestedRepeatTest.html</a></dt>
+      <dd></dd>
+
+      <dt><a href="Old/relevance.html">relevance.html</a></dt>
+      <dd></dd>
+
+      <dt><a href="Old/repeat.html">repeat.html</a></dt>
+      <dd></dd>
+
+      <dt><a href="Old/repeatTest.html">repeatTest.html</a></dt>
+      <dd></dd>
+    </dl>
+  </body>
+</html>

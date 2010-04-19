@@ -1,0 +1,52 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Unit Tests for Elements With Binding Attributes</title>
+
+    <xf:model id='a'><xf:instance><x xmlns=""/></xf:instance></xf:model>
+    <xf:model id='b'><xf:instance><x xmlns=""/></xf:instance></xf:model>
+              
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+      function setUpPage() {
+        XForm.waitForInitialization();
+      }
+
+      function testAllBoundElementsFound() {
+        assertEquals(3, xform.models[0].binds.length);
+        assertEquals(0, xform.models[0].binds[0].innerBinds.length);
+        assertEquals(0, xform.models[0].binds[1].innerBinds.length);
+        assertEquals(1, xform.models[0].binds[2].innerBinds.length);
+        assertEquals(2, xform.models[1].binds.length);
+        assertEquals(0, xform.models[1].binds[0].innerBinds.length);
+        assertEquals(1, xform.models[1].binds[1].innerBinds.length);
+      }
+      
+    //]]>
+    </script>
+  </head>
+  
+  <body>
+    <xf:output ref="a" model="a"/>
+    <xf:output ref="a" model="b"/>
+    <xf:output ref="a"/>
+    
+    <xf:repeat nodeset="a">
+      <xf:output ref="a"/>
+    </xf:repeat>
+    
+    <xf:repeat nodeset="a" model="b">
+      <xf:output ref="a"/>
+    </xf:repeat>
+  </body>
+</html>

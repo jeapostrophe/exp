@@ -1,0 +1,158 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>FormFaces Patch Notes</title>
+
+    <link rel="stylesheet" type="text/css" href="formfaces.css" />
+    
+    <style type="text/css">
+      h2 {
+        margin-bottom: 4px;
+      }
+      
+      h3 {
+        margin-top: 0;
+        color: black;
+        font-weight: bold;
+        font-size: 1em;
+      }
+      
+    </style>
+  </head>
+
+  <body>
+    <h1>Patch Notes</h1>
+    
+    
+    <h2>Release (2007-01-19)</h2>
+    <h3>Released: January 19, 2007</h3>
+    
+    <ul>
+      <li>Performance Improvements.</li>
+      <li>A bug fix for: Submitting only relevant nodes.</li>
+    </ul>
+    
+    
+    <h2>Release (2006-11-02)</h2>
+    <h3>Released: November 02, 2006</h3>
+    
+    <ul>
+      <li>Updated labels to handle label text being determined by a ref.</li>
+      <li>Added support for submit validation for constraint and required.</li>
+      <li>Added "Loading" image, while page is loading, initializing, and rendering.</li>
+      <li>Updated input and select to trigger a DOMActivate event when the enter key
+      is pressed within either the input or select controls.</li>
+      <li>Several bug fixes for: "xforms-insert" is actually dispatched on insert rather than
+      "xforms-delete", I.E. 7 XML HTTP Request Object, select options in I.E., controls bound to
+      non-existent nodes are treated as non-relevant.</li>
+    </ul>
+    
+    
+    <h2>Release (2006-03-03)</h2>
+    <h3>Released: March 3, 2006</h3>
+    
+    <ul>
+      <li>Added back dropdown-style select controls, which is now the default style.
+          You can get radio buttons or check boxes with the <code>appearance="full"</code>
+          option.</li>
+      <li>Added support for XML documents styled with an XSLT stylesheet that
+          generates an XForms page.</li>
+      <li>Removed default styling for relevance (hidden) and control labels (small and
+          above the control). Styling is now up to the page author. Note: relevance has no
+          visual effect by default; form authors might want to add a CSS rule like
+          <code>.xforms-disabled { display: none; }</code> to their pages.</li>
+      <li>Added element classes for each pseudo-class: xforms-invalid for :invalid,
+          xforms-optional for :optional, etc.</li>
+      <li>Added workaround for Opera bug/quirk that was causing FormFaces to fail.</li>
+      <li>Several bug fixes for: deleting last focused row of a repeat, quotes in
+          serialized attributes, bound labels inside triggers inside a repeat.</li>
+    </ul>
+    
+    
+    <h2>Release (2006-02-16)</h2>
+    <h3>Released: February 16, 2006</h3>
+    
+    <ul>
+      <li>Fixed several bugs with submission.</li>
+      <li>Added debugging statements for figuring out why submissions fail.</li>
+      <li>Beefed up the code for handling a non-XHTML response.</li>
+    </ul>
+    
+    
+    <h2>Release (2006-01-31)</h2>
+    <h3>Released: January 31, 2006</h3>
+    
+    <ul>
+      <li>Added <code>replace="all"</code> for submission</li>
+      <li>Fixed bug when running in Firefox 1.5 causing all the functions to stop working.</li>
+      <li>Fixed bug causing errors to not return properly.</li>
+    </ul>
+    
+    
+    <h2>Alpha (2005-11-21)</h2>
+    <h3>Released: November 21, 2005</h3>
+    
+    <ul>
+      <li>Added the XPath function <code>current()</code> from the XSLT function
+          library.</li>
+      <li>Fixed the <code>index()</code> function for repeats.</li>
+      <li>Added the dynamic <code>xforms-repeat-index</code> CSS class which is added
+          to the current row of a repeat. See the test pages using repeats for examples of
+          its use.</li>
+    </ul>
+    
+
+    <h2>Alpha (2005-10-07)</h2>
+    <h3>Released: October 7, 2005</h3>
+    
+    <ul>
+      <li>Added support for the <code>itemset</code> element, which allows you to
+          dynamically populate select controls with choices taken from the instance data.
+          This allows for AJAX-like on-the-fly loading of data.</li>
+      <li>The <code>ev:handler</code> attribute can now give the name of a JavaScript
+          function to call when an event is caught.</li>
+      <li>Fixed bug causing enormous slowdown on pages with large, inline instance
+          data.</li>
+    </ul>
+    
+
+    <h2>Alpha (2005-08-29)</h2>
+    <h3>Released: August 29, 2005</h3>
+    
+    <ul>
+      <li>Large rewrite of the XForms&rarr;HTML rendering algorithm, resulting in
+          significant speed-ups for model rebuilds, and opening up many avenues for future
+          optimization.</li>
+      <li>Added support for the XML events <code>&lt;ev:listener/&gt;</code> element
+          and the <code>ev:handler</code> attribute.</li>
+    </ul>
+    
+
+    <h2>Alpha (2005-08-01)</h2>
+    <h3>Released: August 1, 2005</h3>
+    
+    <ul>
+      <li>External instance data supported.</li>
+      <li>Full submission process implemented, and debugging messages removed.
+          <code>replace="none"</code> and <code>replace="instance"</code> are supported.
+          </li>
+      <li>More actions and events implemented.</li>
+    </ul>
+    
+    
+    <h2>Alpha (2005-07-05)</h2>
+    <h3>Released: July 5, 2005</h3>
+    
+    <ul>
+      <li><code>index()</code> function for repeats.</li>
+      <li>Many more actions and events implemented.</li>
+      <li>Serialization as <code>application/x-www-form-urlencoded</code>;
+          <code>get</code> and <code>urlencoded-post</code> submission methods.
+      <li>Revamped example pages.</li>
+      <li>Compressed JavaScript to one file (size 77K), files uncompressed (size 280K)
+          still available.</li>
+    </ul>
+    
+
+    <p>Last updated $Date: 2007/01/19 20:18:25 $.</p>
+  </body>
+</html>

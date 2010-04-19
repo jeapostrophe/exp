@@ -1,0 +1,61 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Dynamic Select Choices (itemset)</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model>
+      <form:instance id="instance">
+        <data xmlns="">
+          <colors>
+            <color code="r">Red</color>
+            <color code="g">Green</color>
+            <color code="b">Blue</color>
+          </colors>
+          
+          <favorite/>
+        </data>
+      </form:instance>
+      
+      <form:submission
+        id="update-colors"
+        ref="colors"
+        replace="instance"
+        action="colors.xml"
+        method="get"
+      />
+    </form:model>
+  </head>
+  
+  <body>
+    <p>When "Update Colors" is clicked, White and Yellow are added to the list of colors.</p>
+    <p>
+      <form:select ref="favorite">
+        <form:label>Favorite colors:</form:label>
+      
+        <form:itemset nodeset="../colors/color">
+          <form:label ref="."/>
+          <form:value ref="@code"/>
+        </form:itemset>
+      </form:select>
+    </p>
+    
+    <p>
+      <form:submit submission="update-colors">
+        <form:label>Update Colors</form:label>
+      </form:submit>
+    </p>
+    
+    <p id="status"></p>
+  </body>
+</html>

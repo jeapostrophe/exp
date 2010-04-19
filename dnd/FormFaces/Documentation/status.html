@@ -1,0 +1,316 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>FormFaces Implementation Status</title>
+
+    <link rel="stylesheet" type="text/css" href="river.css" />
+
+    <style type="text/css">
+    /* <![CDATA[ */
+      body, table {
+         font: 10pt black "Tahoma", sans-serif;
+      }
+
+      body {
+        padding-top: 95px;
+        background: url(FormFacesLogo.jpg) no-repeat;
+      }
+
+      h1, h2, h3 {
+         color: #05A;
+      }
+      
+      #status {
+        border: 2px solid black;
+        margin-left: 2em;
+        margin-right: 2em;
+      }
+      
+      #status th {
+        background: black;
+        color: white;
+        font-weight: bold;
+        text-align: left;
+        border-bottom: 1px solid white;
+      }
+
+      #status th, #status td {
+        padding: 2px;
+        vertical-align: top;
+      }
+
+      #status .section {
+        background: black;
+        color: white;
+        font-weight: bold;
+      }
+      
+      #status .subsection {
+        background: #07C;
+        color: white;
+      }
+
+      #status .full {
+        background: white;
+      }
+
+      #status .partial {
+        background: #DDD;
+      }
+
+      #status .future {
+        background: #FE8;
+      }
+
+    /* ]]> */
+    </style>
+  </head>
+
+  <body>
+    <h1>FormFaces Implementation Status</h1>
+
+    <p>The implementation status table contains a full list of all the sections
+       in the XForms specification, XForms 1.0 W3C Recommendation 14 October 2003,
+       indicating which FormFaces has or has not implemented.  Items listed as "in
+       progress" will not prohibit a web developer from modeling forms with the XForms
+       standard.
+       </p>
+       
+
+    <h2>Summary</h2>
+
+    <ul>
+      <li><p>The fundamental part of the engine, the part that processes the model and
+             binds, is complete. The dependency graph algorithm from the XForms specification
+             has been implemented, which guarantees that model item properties like
+             "relevant", "required", and "calculate" are always up-to-date.</p></li>
+
+      <li><p>Instance data can be included inline, inside the <code>&lt;instance/&gt;</code>
+             element, or be drawn from an external file, via the <code>src</code> attribute.
+             </p></li>
+
+      <li><p>FormFaces includes a full XPath implementation, including all of the
+             functions from the XForms core function library.</p></li>
+
+      <li><p>Every control except <code>upload</code> and <code>range</code> has been
+             implemented. This includes <code>input</code>, <code>secret</code>,
+             <code>textarea</code>, <code>output</code>, <code>trigger</code>,
+             <code>submit</code>, <code>select</code>, and <code>select1</code>.</p></li>
+
+      <li><p><code>group</code>, <code>switch</code>, and <code>repeat</code> are all
+             fully implemented. This includes nested repeats and the <code>insert</code> and
+             <code>delete</code> actions.</p></li>
+
+      <li><p>The XML events framework is supported, and full W3C compliant events
+             capability has been implemented in Internet Explorer (Mozilla, Opera, et al. are
+             already W3C compliant). Most of the built-in XForms events are implemented.</p>
+             </li>
+
+      <li><p>The actions framework is in place, with about half of the actions
+             implemented.</p></li>
+
+      <li><p>Four of the submission methods have been implemented: <code>get</code>,
+             <code>put</code>, <code>post</code>, and <code>urlencoded-post</code>.</p></li>
+
+      <li><p>Schema validation and CSS3 are slated for a future release.</p></li>
+    </ul>
+
+
+    <h3>Compliance Table</h3>
+    
+    <table id="status" cellspacing="0">
+      <tr>                   <th>Section</th>  <th>Feature</th>                                                     <th>Support</th>         <th>Notes</th></tr>
+      <tr class="section">   <td>3</td>        <td colspan="3">Document Structure</td></tr>
+      <tr class="full">      <td>3.1</td>      <td>The XForms namespace</td>                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>3.2</td>      <td colspan="3">XForms Core Attribute Collections</td></tr>
+      <tr class="full">      <td>3.2.1</td>    <td>Common Attributes (any)</td>                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>3.2.2</td>    <td>Linking Attributes (src)</td>                                    <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>3.2.3</td>    <td>Single node binding attributes (ref, model, bind)</td>           <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>3.2.4</td>    <td>Nodeset binding attributes (nodeset, model, bind)</td>           <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>3.3</td>      <td colspan="3">XForms Core Module</td></tr>
+      <tr class="full">      <td>3.3.1</td>    <td>model element</td>                                               <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>3.3.2</td>    <td>instance element</td>                                            <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="partial">   <td>3.3.3</td>    <td>submission element</td>                                          <td>partial</td>         <td>See section 11.</td></tr>
+      <tr class="full">      <td>3.3.4</td>    <td>bind element</td>                                                <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>3.5</td>      <td colspan="3">XForms extension module</td></tr>
+      <tr class="future">    <td>3.5.1</td>    <td>Extension element</td>                                           <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="subsection"><td>3.4</td>      <td colspan="3">XForms MustUnderstand module</td></tr>
+      <tr class="future">    <td>3.4</td>      <td>xforms:mustUnderstand attribute</td>                             <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="section">   <td>4</td>        <td colspan="3">Processing model</td></tr>
+      <tr class="subsection"><td>4.1</td>      <td colspan="3">Events overview</td></tr>
+      <tr class="subsection"><td>4.2</td>      <td colspan="3">Initialization events</td></tr>
+      <tr class="full">      <td>4.2.1</td>    <td>xforms-model-construct</td>                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.2.2</td>    <td>xforms-model-construct-done</td>                                 <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.2.3</td>    <td>xforms-ready</td>                                                <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.2.4</td>    <td>xforms-model-destruct</td>                                       <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="subsection"><td>4.3</td>      <td colspan="3">Interaction events</td></tr>
+      <tr class="future">    <td>4.3.1</td>    <td>xforms-next and xforms-previous</td>                             <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.3.2</td>    <td>xforms-focus</td>                                                <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.3.3</td>    <td>xforms-help and xforms-hint</td>                                 <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.3.4</td>    <td>xforms-refresh</td>                                              <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.3.5</td>    <td>xforms-revalidate</td>                                           <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.3.6</td>    <td>xforms-recalculate</td>                                          <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.3.7</td>    <td>xforms-rebuild</td>                                              <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.3.8</td>    <td>xforms-reset</td>                                                <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">    <td>4.3.9</td>    <td>xforms-submit</td>                                               <td>full</td><td>&nbsp;</td></tr>
+      <tr class="subsection"><td>4.4</td>      <td colspan="3">Notification events</td></tr>
+      <tr class="full">      <td>4.4.1</td>    <td>DOMActivate</td>                                                 <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.2</td>    <td>xforms-value-changed</td>                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.3</td>    <td>xforms-select and xforms-deselect</td>                           <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.4.4</td>    <td>xforms-scroll-first and xforms-scroll-last</td>                  <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.5</td>    <td>xforms-insert and xforms-delete</td>                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.6</td>    <td>xforms-valid</td>                                                <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.7</td>    <td>xforms-invalid</td>                                              <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.8</td>    <td>DOMFocusIn</td>                                                  <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.9</td>    <td>DOMFocusOut</td>                                                 <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.10</td>   <td>xforms-readonly</td>                                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.11</td>   <td>xforms-readwrite</td>                                            <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.12</td>   <td>xforms-required</td>                                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.13</td>   <td>xforms-optional</td>                                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.14</td>   <td>xforms-enabled</td>                                              <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>4.4.15</td>   <td>xforms-disabled</td>                                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.4.16</td>   <td>xforms-in-range</td>                                             <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.4.17</td>   <td>xforms-out-of-range</td>                                         <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">    <td>4.4.18</td>   <td>xforms-submit-done</td>                                          <td>full</td><td>&nbsp;</td></tr>
+      <tr class="full">    <td>4.4.19</td>   <td>xforms-submit-error</td>                                         <td>full</td><td>&nbsp;</td></tr>
+      <tr class="subsection"><td>4.5</td>      <td colspan="3">Error Indications</td></tr>
+      <tr class="partial">   <td>4.5.1</td>    <td>xforms-binding-exception</td>                                    <td>partial</td>         <td>Binding errors are caught by the XForms processor, but the
+                                                                                                                                                 <code>xforms-binding-exception</code> notification event is not fired.</td></tr>
+      <tr class="future">    <td>4.5.2</td>    <td>xforms-link-exception</td>                                       <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>4.5.3</td>    <td>xforms-link-error</td>                                           <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="partial">   <td>4.5.4</td>    <td>xforms-compute-exception</td>                                    <td>partial</td>         <td>Computational errors are caught by the XForms processor, but the
+                                                                                                                                                 <code>xforms-compute-exception</code> notification event is not fired.</td></tr>
+      <tr class="section">   <td>5</td>        <td colspan="3">Datatypes</td></tr>
+      <tr class="partial">   <td>5.1</td>      <td>XML Schema built-in datatypes</td>                               <td>partial</td>         <td>The code for validating all of the built-in data types has been written and
+                                                                                                                                                 debugged, but cannot be used until the XML Schema parsing code is written.</td></tr>
+      <tr class="subsection"><td>5.2</td>      <td colspan="3">XForms Datatypes</td></tr>
+      <tr class="future">    <td>5.2.1</td>    <td>xforms:listItem</td>                                             <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>5.2.2</td>    <td>xforms:listItems</td>                                            <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>5.2.3</td>    <td>xforms:dayTimeDuration</td>                                      <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>5.2.4</td>    <td>xforms:yearMonthDuration</td>                                    <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="section">   <td>6</td>        <td colspan="3">Model item properties</td></tr>
+      <tr class="full">      <td>6.1</td>      <td>Model Item Property Definitions</td>                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>6.1.1</td>    <td>type</td>                                                        <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>6.1.2</td>    <td>readonly</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>6.1.3</td>    <td>required</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>6.1.4</td>    <td>relevant</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>6.1.5</td>    <td>calculate</td>                                                   <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>6.1.6</td>    <td>constraint</td>                                                  <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>6.1.7</td>    <td>p3ptype</td>                                                     <td>in&nbsp;progress</td><td>This is an emerging technology for future use.</td></tr>
+      <tr class="subsection"><td>6.2</td>      <td colspan="3">Schema Constraints</td></tr>
+      <tr class="partial">   <td>6.2.1</td>    <td>Atomic datatype</td>                                             <td>partial</td>         <td>The code for validating all of the built-in data types has been written and
+                                                                                                                                                 debugged, but cannot be used until the XML Schema parsing code is written.</td></tr>
+      <tr class="future">    <td>6.2.1 (1)</td><td>Datatypes in schema document.</td>                               <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>6.2.1 (2)</td><td>Datatypes using xsi:type</td>                                    <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="section">   <td>7</td>        <td colspan="3">XPath expressions</td></tr>
+      <tr class="full">      <td>7.1</td>      <td>XPath datatypes</td>                                             <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>7.2</td>      <td>hasFeature method call</td>                                      <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.3</td>      <td colspan="3">Instance Data</td></tr>
+      <tr class="full">      <td>7.3.1</td>    <td>The getInstanceDocument() Method</td>                            <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.3.2</td>    <td>The rebuild() Method</td>                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.3.3</td>    <td>The recalculate() Method</td>                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.3.4</td>    <td>The revalidate() Method</td>                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.3.5</td>    <td>The refresh() Method</td>                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.4</td>      <td>Evaluation context</td>                                          <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.5</td>      <td>Binding expressions</td>                                         <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.5.2</td>    <td>Model Binding Expressions</td>                                   <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.5.3</td>    <td>UI Binding Expressions</td>                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>7.5.4</td>    <td>UI Binding in other XML vocabularies</td>                        <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.6</td>      <td colspan="3">XForms Core Function Library</td></tr>
+      <tr class="full">      <td>7.6 (1)</td>  <td>XPath core functions</td>                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.7</td>      <td colspan="3">Boolean Methods</td></tr>
+      <tr class="full">      <td>7.7.1</td>    <td>The boolean-from-string()</td>                                   <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.7.2</td>    <td>if()</td>                                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.8</td>      <td colspan="3">Number Methods</td></tr>
+      <tr class="full">      <td>7.8.1</td>    <td>avg</td>                                                         <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.8.2</td>    <td>min()</td>                                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.8.3</td>    <td>max()</td>                                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.8.4</td>    <td>count-non-empty()</td>                                           <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.8.5</td>    <td>index()</td>                                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.9</td>      <td colspan="3">String Functions</td></tr>
+      <tr class="full">      <td>7.9.1</td>    <td>property()</td>                                                  <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.9</td>      <td colspan="3">Date and Time Functions</td></tr>
+      <tr class="full">      <td>7.10.1</td>   <td>now()</td>                                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.10.2</td>   <td>The days-from-date()</td>                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.10.3</td>   <td>seconds-from-dateTime()</td>                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.10.4</td>   <td>seconds()</td>                                                   <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>7.10.5</td>   <td>months()</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.11</td>     <td colspan="3">Node-set Functions</td></tr>
+      <tr class="full">      <td>7.11.1</td>   <td>instance()</td>                                                  <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>7.12</td>     <td colspan="3">Extension Functions</td></tr>
+      <tr class="future">    <td>7.12</td>     <td>Extension Functions</td>                                         <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="section">   <td>8</td>        <td colspan="3">Form controls</td></tr>
+      <tr class="subsection"><td>8.1</td>      <td colspan="3">The XForms Form Controls Module</td></tr>
+      <tr class="partial">   <td>8.1.1</td>    <td>Implementation Requirements Common to All Form Controls</td>     <td>partial</td>         <td>accesskey, and navindex have not yet been implemented.</td></tr>
+      <tr class="full">      <td>8.1.2</td>    <td>input</td>                                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>8.1.3</td>    <td>secret</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>8.1.4</td>    <td>textarea</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>8.1.5</td>    <td>output</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>8.1.6</td>    <td>upload</td>                                                      <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>8.1.7</td>    <td>range</td>                                                       <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>8.1.8</td>    <td>trigger</td>                                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>8.1.9</td>    <td>submit</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="partial">   <td>8.1.10</td>   <td>select</td>                                                      <td>partial</td>         <td>choices has not yet been implemented.</td></tr>
+      <tr class="partial">   <td>8.1.11</td>   <td>select1</td>                                                     <td>partial</td>         <td>choices has not yet been implemented.</td></tr>
+      <tr class="subsection"><td>8.2</td>      <td colspan="3">Common Markup for Selection Controls</td></tr>
+      <tr class="future">    <td>8.2.1</td>    <td>choices</td>                                                     <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="partial">   <td>8.2.2</td>    <td>item</td>                                                        <td>partial</td>         <td>Dynamic <code>&lt;output/&gt;</code> controls inside an item label not yet
+                                                                                                                                                 supported.</td></tr>
+      <tr class="full">      <td>8.2.3</td>    <td>value</td>                                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>8.3</td>      <td colspan="3">Additional Elements</td></tr>
+      <tr class="future">    <td>8.3.1</td>    <td>filename</td>                                                    <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>8.3.2</td>    <td>mediatype</td>                                                   <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="partial">   <td>8.3.3</td>    <td>label</td>                                                       <td>partial</td>         <td>Dynamic <code>&lt;output/&gt;</code> controls in labels not yet supported
+                                                                                                                                                 fully.</td></tr>
+      <tr class="future">    <td>8.3.4</td>    <td>help</td>                                                        <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>8.3.5</td>    <td>hint</td>                                                        <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>8.3.6</td>    <td>alert</td>                                                       <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="section">   <td>9</td>        <td colspan="3">XForms User Interface</td></tr>
+      <tr class="subsection"><td>9.1</td>      <td colspan="3">XForms Group Module</td></tr>
+      <tr class="full">      <td>9.1.1</td>    <td>group</td>                                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>9.2</td>      <td colspan="3">XForms Switch Module</td></tr>
+      <tr class="full">      <td>9.2.1</td>    <td>switch</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.2.2</td>    <td>case</td>                                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.2.3</td>    <td>toggle</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="subsection"><td>9.3</td>      <td colspan="3">XForms Repeat Module</td></tr>
+      <tr class="full">      <td>9.3.1</td>    <td>repeat</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.3.2</td>    <td>Creating Repeating Structures Via Attributes</td>                <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="partial">   <td>9.3.3</td>    <td>itemset</td>                                                     <td>partial</td>         <td>value is implemented, but not copy.</td></tr>
+      <tr class="future">    <td>9.3.4</td>    <td>copy</td>                                                        <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.3.5</td>    <td>insert</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.3.6</td>    <td>delete</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>9.3.7</td>    <td>setindex</td>                                                    <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.3.8</td>    <td>Repeat Processing</td>                                           <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.3.9</td>    <td>Nested Repeats</td>                                              <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>9.3.10</td>   <td>User Interface Interaction</td>                                  <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="section">   <td>10</td>       <td colspan="3">XForms Actions</td></tr>
+      <tr class="subsection"><td>10.1</td>     <td colspan="3">XForms Action Module</td></tr>
+      <tr class="full">      <td>10.1.1</td>   <td>action</td>                                                      <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.2</td>   <td>dispatch</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.3</td>   <td>rebuild</td>                                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.4</td>   <td>recalculate</td>                                                 <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.5</td>   <td>revalidate</td>                                                  <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.6</td>   <td>refresh</td>                                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>10.1.7</td>   <td>setfocus</td>                                                    <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.8</td>   <td>load</td>                                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.9</td>   <td>setvalue</td>                                                    <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>10.1.10</td>  <td>send</td>                                                        <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>10.1.11</td>  <td>reset</td>                                                       <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="partial">   <td>10.1.12</td>  <td>message</td>                                                     <td>partial</td>         <td>Only modal messages are available at present.</td></tr>
+      <tr class="section">   <td>11</td>       <td colspan="3">Submit</td></tr>
+      <tr class="full">      <td>11.1</td>     <td>The xforms-submit Event</td>                                     <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>11.2</td>     <td>Submission Options</td>                                          <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>11.3</td>     <td>Serialization as application/xml</td>                            <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="future">    <td>11.4</td>     <td>Serialization as multipart/related</td>                          <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>11.5</td>     <td>Serialization as multipart/form-data</td>                        <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="full">      <td>11.6</td>     <td>Serialization as application/x-www-form-urlencoded</td>          <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="partial">   <td>11.7</td>     <td>The post, form-data-post, and urlencoded-post Submit Methods</td><td>partial</td>         <td><code>post</code> and <code>urlencoded-post</code> work.</td></tr>
+      <tr class="full">      <td>11.8</td>     <td>The put Submit Method</td>                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="full">      <td>11.9</td>     <td>The get Submit Method</td>                                       <td>full</td>            <td>&nbsp;</td></tr>
+      <tr class="section">   <td>F</td>        <td colspan="3">CSS styling (Non normative)</td></tr>
+      <tr class="future">    <td>F.1</td>      <td>pseudo-classes</td>                                              <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+      <tr class="future">    <td>F.2</td>      <td>pseudo-elements</td>                                             <td>in&nbsp;progress</td><td>&nbsp;</td></tr>
+    </table>
+
+    <p>Last updated $Date: 2006/11/01 20:41:50 $.</p>
+  </body>
+</html>

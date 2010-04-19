@@ -1,0 +1,24 @@
+body, table {
+  font: 10pt black "Tahoma", sans-serif;
+}
+
+body {
+  padding-top: 95px;
+  background: url(logo.jpg) no-repeat;
+}
+
+h1, h2, h3 {
+  color: #05A;
+}
+
+#preamble, #no-warranty {
+  text-transform: uppercase;
+}
+
+ol {
+  list-style: decimal;
+}
+
+ol ol {
+  list-style: lower-alpha;
+}

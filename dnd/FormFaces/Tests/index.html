@@ -1,0 +1,124 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>FormFaces JavaScript Test Suite</title>
+    
+    <script type="text/javascript" src="jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+			
+      function suite() {
+        var suite = new top.jsUnitTestSuite();
+        
+        suite.addTestPage("../js/inheritance.html");
+        
+        suite.addTestPage("../xpath/token.html");
+        suite.addTestPage("../xpath/tokenizer.html");
+        suite.addTestPage("../xpath/parser.html");
+        suite.addTestPage("../xpath/xpath.html");
+        suite.addTestPage("../xpath/functions.html");
+        
+        suite.addTestPage("../xforms/object.html");
+        suite.addTestPage("../xforms/instance.html");
+        suite.addTestPage("../xforms/binding.html");
+        suite.addTestPage("../xforms/submission.html");
+        suite.addTestPage("../xforms/boundElements.html");
+				suite.addTestPage("../xforms/xpathFunctions.html");
+        
+        return suite;
+      }
+    //]]>
+    </script>
+    
+    <style type="text/css">
+      body, table {
+        font: 10pt black "Tahoma", sans-serif;
+      }
+      
+      body {
+        padding-top: 95px;
+        background: url(../Documentation/logo.jpg) no-repeat;
+      }
+      
+      h1, h2, h3 {
+        color: #05A;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>FormFaces JavaScript Test Suite</h1>
+    
+    <p>This file lists unit tests written for use in development. If you're looking
+       for examples pages that demonstrate FormFaces' capabilities, view the <a href=
+       "../Examples/">example pages</a> we've included instead.</p>
+       
+    <p>Unit tests are small tests that we can run during development to verify that
+       our code is still working and that we haven't accidentally introduced any new
+       bugs. Unless you're a developer working on or modifying FormFaces, you probably
+       won't find these unit tests very interesting!</p>
+       
+    <p>To run these tests, open the <a href="jsUnit/testRunner.html">JsUnit
+       TestRunner</a>. On that page you must enter the full path to this file
+       (<kbd>index.html</kbd>). Most of FormFaces is interactive in nature and so
+       cannot be covered by unit tests. The test suite only tests a small subset of
+       FormFaces.</p>
+    
+    
+    <h2>JavaScript</h2>
+    
+    <dl>
+      <dt><a href="js/inheritance.html">inheritance.html</a></dt>
+      <dd>Tests Inheritance</dd>
+    </dl>
+    
+    <h2>XPath</h2>
+    
+    <dl>
+      <dt><a href="xpath/token.html">token.html</a></dt>
+      <dd>Tests the XPathToken class.</dd>
+
+      <dt><a href="xpath/tokenizer.html">tokenizer.html</a></dt>
+      <dd>Tests the XPath tokenizer.</dd>
+      
+      <dt><a href="xpath/parser.html">parser.html</a></dt>
+      <dd>Tests the XPath parser.</dd>
+      
+      <dt><a href="xpath/xpath.html">xpath.html</a></dt>
+      <dd>Tests XPath evaluation and performance.</dd>
+
+      <dt><a href="xpath/functions.html">functions.html</a></dt>
+      <dd>Tests the XPath core function library.</dd>
+      
+      <dt><a href="xforms/xpathFunctions.html">xpathFunctions.html</a></dt>
+      <dd>Tests the XForms function library.</dd>
+    </dl>
+    
+
+    <h2>XForms</h2>
+    
+    <dl>
+      <dt><a href="xforms/object.html">object.html</a></dt>
+      <dd>Tests the XFormObject class.</dd>
+      
+      <dt><a href="xforms/instance.html">instance.html</a></dt>
+      <dd>Tests the XFormInstance class.</dd>
+      
+      <dt><a href="xforms/binding.html">binding.html</a></dt>
+      <dd>Tests the XFormBinding class.</dd>
+
+      <dt><a href="xforms/submission.html">submission.html</a></dt>
+      <dd>Tests the XFormSubmission class.</dd>
+
+      <dt><a href="xforms/boundElements.html">boundElements.html</a></dt>
+      <dd>Tests elements with binding attributes.</dd>
+    </dl>
+  </body>
+</html>

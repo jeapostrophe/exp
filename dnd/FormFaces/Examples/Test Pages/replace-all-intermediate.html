@@ -1,0 +1,35 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>Submit with replace="all"</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance><data xmlns=""/></xf:instance>
+      
+      <xf:submission id="submission" action="replace-all-success.html" method="get"/>
+      
+      <xf:send submission="submission" ev:event="xforms-ready" />
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>If this test has passed, you should see "Success!"</p>
+    
+    <h1>Failed!</h1>
+    
+    <p>(Halfway there...)</p>
+    
+    <p id="status"></p>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>FormFaces Bookstore: Explanation</title>
+    
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet"    href="../../Documentation/formfaces.css" />
+    
+    <style type="text/css">
+    /* <![CDATA[ */
+    
+      #screenshot {
+        float: right;
+        margin-left: 1em;
+      }
+      
+    /* ]]> */
+    </style>
+  </head>
+  
+  <body>
+    <p id="screenshot"><img src="screenshot.gif" /></p>
+    
+    <p>The key item on the page&#x2014;the list of books&#x2014;is generated
+       dynamically by using <strong>repeat</strong>. Each row of the table contains
+       <strong>output</strong> controls to display the books' name, author, and price,
+       and an <strong>input</strong> control to change the quantity of books to buy.
+       </p>
+       
+    <p>The shopping cart at the top of the page uses <strong>dynamic
+       calculations</strong> to display how many books you have ordered, and the total
+       price.</p>
+       
+    <p>The category buttons demonstrate both <strong>actions</strong> and
+       <strong>events</strong>. The buttons are set up to change the category whenever
+       a <code>DOMActivate</code> event is fired, which means whenever the button is
+       clicked. A <code>rebuild</code> action then causes the list of books to be
+       redisplayed.</p>
+       
+    <p>At the top, the "If you are not John, click here" link shows off
+       <strong>switch</strong>, which is used to dynamically show and hide sections of
+       a web page. In this case, clicking on the link hides the "Welcome back!" message
+       and displays input boxes to change your name. Clicking on the "Update" button
+       then reverts back to the original "Welcome back!" message, but with the new name
+       that you've entered. This works because the input control to enter your first
+       name is tied to the output control embedded in the "Welcome back!" message.</p> 
+       
+    <p>A similar thing happens when you click on the "Are you ready to checkout?"
+       link at the bottom of the page, popping up a form to enter your credit card
+       information. This form shows off the select control, as well as
+       <strong>relevance</strong> for the verification code field. This field is
+       defined to be relevant only for Visa and Mastercard credit cards, so it is
+       dynamically shown/hidden based on the card type.</p>
+       
+    <p>Finally, the submit button completes the process. Clicking on this button
+       submits the form. For the bookstore demonstration, it simply displays the
+       instance data that would be submitted, since there is no server-side process to
+       submit to.</p>
+  </body>
+</html>

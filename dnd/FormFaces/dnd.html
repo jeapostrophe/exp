@@ -1,0 +1,183 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>D&amp;D Character Sheet</title>
+    
+    <script type="text/javascript" src="formfaces.js"></script>
+    
+    <xf:model id="model">
+      <xf:instance>
+	<dnd xmlns="">
+	  <char>
+	    <level />
+
+	    <abs>
+	      <str>16</str>
+	      <str-mod />
+	      <con>10</con>
+	      <con-mod />
+	      <dex>10</dex>
+	      <dex-mod />
+	      <int>10</int>
+	      <int-mod />
+	      <wis>10</wis>
+	      <wis-mod />
+	      <cha>10</cha>
+	      <cha-mod />
+	    </abs>
+
+	    <defs>
+	      <base />
+	      <ac>
+		<val /> <armor /> <abil /> <race /> <feat /> <class /> <item /> <misc />
+	      </ac>
+	      <fort>
+		<val /> <abil /> <race /> <feat /> <class /> <item /> <misc />
+	      </fort>
+	      <ref>
+		<val /> <abil /> <race /> <feat /> <class /> <item /> <misc />
+	      </ref>
+	      <will>
+		<val /> <abil /> <race /> <feat /> <class /> <item /> <misc />
+	      </will>
+	    </defs>
+
+	  </char>
+	</dnd>
+      </xf:instance>
+
+      <xf:bind nodeset="char/defs/base"
+	       calculate="10 + floor(../../level div 2)"
+	       type="xs:decimal" />
+
+      <xf:bind nodeset="char/defs/ac/val"
+	       calculate="../../base + max(../armor | ../abil) + ../race + ../feat + ../class + ../item + ../misc"
+	       type="xs:decimal" />
+      <xf:bind nodeset="char/defs/fort/val"
+	       calculate="../../base + ../abil + ../race + ../feat + ../class + ../item + ../misc"
+	       type="xs:decimal" />
+      <xf:bind nodeset="char/defs/ref/val"
+	       calculate="../../base + ../abil + ../race + ../feat + ../class + ../item + ../misc"
+	       type="xs:decimal" />
+      <xf:bind nodeset="char/defs/will/val"
+	       calculate="../../base + ../abil + ../race + ../feat + ../class + ../item + ../misc"
+	       type="xs:decimal" />
+
+      <xf:bind nodeset="char/defs/ac/abil"
+	       calculate="max(../../../abs/dex-mod | ../../../abs/int-mod)"
+	       type="xs:decimal" />
+
+      <xf:bind nodeset="char/defs/fort/abil"
+	       calculate="max(../../../abs/str-mod | ../../../abs/con-mod)"
+	       type="xs:decimal" />
+      <xf:bind nodeset="char/defs/ref/abil"
+	       calculate="max(../../../abs/dex-mod | ../../../abs/int-mod)"
+	       type="xs:decimal" />
+      <xf:bind nodeset="char/defs/will/abil"
+	       calculate="max(../../../abs/wis-mod | ../../../abs/cha-mod)"
+	       type="xs:decimal" />
+
+      <xf:bind nodeset="char/abs/str-mod" calculate="floor((../str - 10) div 2)" type="xs:decimal" />
+      <xf:bind nodeset="char/abs/con-mod" calculate="floor((../con - 10) div 2)" type="xs:decimal" />
+      <xf:bind nodeset="char/abs/dex-mod" calculate="floor((../dex - 10) div 2)" type="xs:decimal" />
+      <xf:bind nodeset="char/abs/int-mod" calculate="floor((../int - 10) div 2)" type="xs:decimal" />
+      <xf:bind nodeset="char/abs/wis-mod" calculate="floor((../wis - 10) div 2)" type="xs:decimal" />
+      <xf:bind nodeset="char/abs/cha-mod" calculate="floor((../cha - 10) div 2)" type="xs:decimal" />
+      
+    </xf:model>
+  </head>
+
+  <body>
+    <xf:group ref="char">
+      <xf:input ref="level"><xf:label>Level</xf:label></xf:input>
+
+      <xf:group ref="abs">
+      <table>
+	<tr>
+	  <td><xf:input ref="str"><xf:label>Str</xf:label></xf:input></td>
+	  <td><xf:output ref="str-mod" /></td>
+	</tr>
+	<tr>
+	  <td><xf:input ref="con"><xf:label>Con</xf:label></xf:input></td>
+	  <td><xf:output ref="con-mod" /></td>
+	</tr>
+	<tr>
+	  <td><xf:input ref="dex"><xf:label>Dex</xf:label></xf:input></td>
+	  <td><xf:output ref="dex-mod" /></td>
+	</tr>
+	<tr>
+	  <td><xf:input ref="int"><xf:label>Int</xf:label></xf:input></td>
+	  <td><xf:output ref="int-mod" /></td>
+	</tr>
+	<tr>
+	  <td><xf:input ref="wis"><xf:label>Wis</xf:label></xf:input></td>
+	  <td><xf:output ref="wis-mod" /></td>
+	</tr>
+	<tr>
+	  <td><xf:input ref="cha"><xf:label>Cha</xf:label></xf:input></td>
+	  <td><xf:output ref="cha-mod" /></td>
+	</tr>
+      </table>
+      </xf:group>
+
+      <xf:group ref="defs">
+	<table>
+	  <tr><th /><th /><th>Base</th><th>Ability</th><th>Armor</th>
+	    <th>Race</th><th>Feat</th><th>Class</th>
+	    <th>Item</th><th>Misc</th>
+	  </tr>
+	  <tr>
+	      <td><xf:output ref="ac/val" /></td>
+	      <th>AC</th>
+	      <td><xf:output ref="base" /></td>
+	      <td><xf:output ref="ac/abil" /></td>
+	      <td><xf:input ref="ac/armor"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ac/race"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ac/feat"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ac/class"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ac/item"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ac/misc"><xf:label></xf:label></xf:input></td>
+	  </tr>
+	  <tr>
+	      <td><xf:output ref="fort/val" /></td>
+	      <th>Fort</th>
+	      <td><xf:output ref="base" /></td>
+	      <td><xf:output ref="fort/abil" /></td>
+	      <td />
+	      <td><xf:input ref="fort/race"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="fort/feat"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="fort/class"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="fort/item"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="fort/misc"><xf:label></xf:label></xf:input></td>
+	  </tr>
+	  <tr>
+	      <td><xf:output ref="ref/val" /></td>
+	      <th>Ref</th>
+	      <td><xf:output ref="base" /></td>
+	      <td><xf:output ref="ref/abil" /></td>
+	      <td />
+	      <td><xf:input ref="ref/race"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ref/feat"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ref/class"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ref/item"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="ref/misc"><xf:label></xf:label></xf:input></td>
+	  </tr>
+	  <tr>
+	      <td><xf:output ref="will/val" /></td>
+	      <th>Will</th>
+	      <td><xf:output ref="base" /></td>
+	      <td><xf:output ref="will/abil" /></td>
+	      <td />
+	      <td><xf:input ref="will/race"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="will/feat"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="will/class"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="will/item"><xf:label></xf:label></xf:input></td>
+	      <td><xf:input ref="will/misc"><xf:label></xf:label></xf:input></td>
+	  </tr>
+      </xf:group>
+    </xf:group>
+  </body>
+</html>

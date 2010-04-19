@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xfm="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en" xmlns:rep="http://fake.com">
+	<head>
+		<title>FormFaces Tutorial:  ZERO Repeat Example</title>
+		<link rel="StyleSheet" href="example.css" type="text/css"/>
+		<xfm:model schema="#mySchema" id="NestedRepTest">
+			<xfm:submission action="somewhere.do" indent="false" method="post" id="submitNestedRep"/>
+			<xfm:instance>
+				<rep:test>
+					<rep:basic>
+						<rep:addy id="one">
+							<rep:street/>
+							<rep:city/>
+							<rep:state/>
+							<rep:zip/>
+						</rep:addy>
+						<rep:alias>
+							<rep:first/>
+							<rep:middle/>
+							<rep:last/>
+						</rep:alias>
+						<rep:name>
+							<rep:first/>
+							<rep:middle/>
+							<rep:last/>
+						</rep:name>
+						<rep:phone/>
+						<rep:social/>
+					</rep:basic>
+					<rep:basic>
+						<rep:addy id="two">
+							<rep:street/>
+							<rep:city/>
+							<rep:state/>
+							<rep:zip/>
+						</rep:addy>
+						<rep:alias>
+							<rep:first/>
+							<rep:middle/>
+							<rep:last/>
+						</rep:alias>
+						<rep:name>
+							<rep:first/>
+							<rep:middle/>
+							<rep:last/>
+						</rep:name>
+						<rep:phone/>
+						<rep:social/>
+					</rep:basic>
+				</rep:test>
+			</xfm:instance>
+		</xfm:model>
+
+    <script type="text/javascript" src="../../../formfaces.js"></script>
+	</head>
+	<body class="basictext">
+		<center>
+			<span class="label"> This page shows the ability to insert and delete an element or group of
+    elements dynamically.<br/>
+			</span>
+		</center>
+		<form id="submitNestedRep"/>
+		<center>
+			<xfm:trigger id="triggerInsert" model="NestedRepTest">
+				<xfm:label>Insert</xfm:label>
+				<xfm:insert nodeset="/rep:test/rep:basic" at="index('repeatTest1')" position="after" id="rptInsert" ev:event="DOMActivate" model="NestedRepTest"/>
+			</xfm:trigger>
+			<xfm:trigger id="rptfirstInsert" model="NestedRepTest">
+			  <xfm:label>Insert Alias</xfm:label>
+				<xfm:insert nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:alias" at="index('repeatTest5')" position="after" id="firstInsert" ev:event="DOMActivate" model="NestedRepTest"/>
+			</xfm:trigger>
+			<xfm:trigger id="rptsecInsert" model="NestedRepTest">
+				<xfm:label>Insert Address</xfm:label>
+				<xfm:insert nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:addy" at="index('repeatTest2')" position="after" id="secondInsert" ev:event="DOMActivate" model="NestedRepTest"/>
+			</xfm:trigger>
+			<xfm:trigger id="rpttrdInsert" model="NestedRepTest">
+				<xfm:label>Insert Street</xfm:label>
+				<xfm:insert nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:addy[index('repeatTest2')]/rep:street" at="index('repeatTest3')" position="after" id="thirdInsert" ev:event="DOMActivate" model="NestedRepTest"/>
+			</xfm:trigger>
+			<xfm:trigger id="rptfourInsert" model="NestedRepTest">
+			  <xfm:label>Insert Phone</xfm:label>
+				<xfm:insert nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:phone" at="index('repeatTest5')" position="after" id="fourthInsert" ev:event="DOMActivate" model="NestedRepTest"/>
+			</xfm:trigger>
+		</center>
+		<br/>
+		<center>
+			<xfm:repeat nodeset="/rep:test/rep:basic" number="2" startindex="1" id="repeatTest1" height="400px" width="300px" model="NestedRepTest">
+				<xfm:input ref="rep:name/rep:first" id="firstName" model="NestedRepTest">
+					<xfm:label>FirstName:</xfm:label>
+				</xfm:input>
+				<xfm:input ref="rep:name/rep:middle" id="middleInitial" model="NestedRepTest">
+					<xfm:label>middleInitial:</xfm:label>
+				</xfm:input>
+				<xfm:input ref="rep:name/rep:last" id="lastName" model="NestedRepTest">
+					<xfm:label>LastName:</xfm:label>
+				</xfm:input>
+				<xfm:input ref="rep:social" id="social" model="NestedRepTest">
+					<xfm:label>SocialSecurityNumber:</xfm:label>
+				</xfm:input>
+				
+				<xfm:repeat nodeset="rep:alias" number="1" startindex="1" id="repeatTest5" height="100px" width="300px" model="NestedRepTest">
+					<xfm:input ref="rep:first" id="aliasFirstName" model="NestedRepTest">
+						<xfm:label>FirstName:</xfm:label>
+					</xfm:input>
+					<xfm:input ref="rep:middle" id="aliasMiddleInitial" model="NestedRepTest">
+						<xfm:label>middleInitial:</xfm:label>
+					</xfm:input>
+					<xfm:input ref="rep:last" id="aliasLastName" model="NestedRepTest">
+						<xfm:label>LastName:</xfm:label>
+					</xfm:input>
+				</xfm:repeat>
+				
+				<xfm:repeat nodeset="rep:addy" number="1" startindex="1" id="repeatTest2" height="200px" width="300px" model="NestedRepTest">
+					
+					<xfm:repeat nodeset="rep:street" number="1" startindex="1" id="repeatTest3" height="100px" width="300px" model="NestedRepTest">
+						<xfm:input ref="." id="street" model="NestedRepTest">
+							<xfm:label>Street:</xfm:label>
+						</xfm:input>
+					</xfm:repeat>
+					<xfm:input ref="rep:city" id="city" model="NestedRepTest">
+						<xfm:label>City:</xfm:label>
+					</xfm:input>
+					<xfm:select1 ref="rep:state" id="state" appearance="compact" model="NestedRepTest">
+						<xfm:label>State:</xfm:label>
+						<xfm:item>
+							<xfm:label>VA</xfm:label>
+							<xfm:value>virginia</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>MD</xfm:label>
+							<xfm:value>maryland</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>NC</xfm:label>
+							<xfm:value>north carolina</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>WV</xfm:label>
+							<xfm:value>west virginia</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>PA</xfm:label>
+							<xfm:value>pennsylvania</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>TN</xfm:label>
+							<xfm:value>tennesse</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>KY</xfm:label>
+							<xfm:value>kentucky</xfm:value>
+						</xfm:item>
+						<xfm:item>
+							<xfm:label>DE</xfm:label>
+							<xfm:value>delaware</xfm:value>
+						</xfm:item>
+					</xfm:select1>
+					<xfm:input ref="rep:zip" id="zip" model="NestedRepTest">
+						<xfm:label>ZipCode:</xfm:label>
+					</xfm:input>
+				</xfm:repeat>
+				
+				<xfm:repeat nodeset="rep:phone" number="1" startindex="1" id="repeatTest4" height="100px" width="300px" model="NestedRepTest">
+					<xfm:input ref="." id="phone" model="NestedRepTest">
+						<xfm:label>Phone Number:</xfm:label>
+					</xfm:input>
+				</xfm:repeat>
+			</xfm:repeat>
+		</center>
+		<center>
+		  <xfm:trigger id="firstDelete" model="NestedRepTest">
+				<xfm:label>Delete Alias</xfm:label>
+				<xfm:delete nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:alias" at="index('repeatTest5')" id="rptoneDelete" ev:event="DOMActivate"/>
+			</xfm:trigger>
+			<xfm:trigger id="rpttrdDelete" model="NestedRepTest">
+				<xfm:label>Delete Street</xfm:label>
+				<xfm:delete nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:addy[index('repeatTest2')]/rep:street" at="index('repeatTest3')" id="trdDelete" ev:event="DOMActivate"/>
+			</xfm:trigger>
+			<xfm:trigger id="rptsecDelete" model="NestedRepTest">
+				<xfm:label>Delete Address</xfm:label>
+				<xfm:delete nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:addy" at="index('repeatTest2')" id="secondDelete" ev:event="DOMActivate"/>
+			</xfm:trigger>
+			<xfm:trigger id="fourthDelete" model="NestedRepTest">
+				<xfm:label>Delete Phone Number</xfm:label>
+				<xfm:delete nodeset="/rep:test/rep:basic[index('repeatTest1')]/rep:phone" at="index('repeatTest5')" id="rptfourDelete" ev:event="DOMActivate"/>
+			</xfm:trigger>
+			<xfm:trigger id="deleteButton" model="NestedRepTest">
+				<xfm:label>Delete</xfm:label>
+				<xfm:delete nodeset="/rep:test/rep:basic" at="index('repeatTest1')" id="rptDelete" ev:event="DOMActivate"/>
+			</xfm:trigger>
+		</center>
+    <!--page footer-->
+		<br/>
+		<center>
+			<span class="copyright">Copyright &#169; 2002-2004 Progeny Systems Corp. All Rights Reserved.</span>
+		</center>
+	</body>
+</html>

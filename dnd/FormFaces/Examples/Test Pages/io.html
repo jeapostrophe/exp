@@ -1,0 +1,37 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Linked Input/Output Controls</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <form:model>
+      <form:instance>
+        <data xmlns="">
+          <greeting>Hello, world!</greeting>
+        </data>
+      </form:instance>
+    </form:model>
+  </head>
+  
+  <body>
+    <p>You should see and be able to edit the words "Hello, world!" below.</p>
+    
+    <h2><form:output ref="greeting"/></h2>
+    
+    <form:input ref="greeting" incremental="true">
+      <form:label>Greeting:</form:label>
+    </form:input>
+    
+    <p id="status"></p>
+  </body>
+</html>

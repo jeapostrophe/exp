@@ -1,0 +1,37 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>setvalue</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance>
+        <number xmlns="">1</number>
+      </xf:instance>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>Clicking the button should add one to the number below.</p>
+    
+    <h1><xf:output ref="/number"/></h1>
+    
+    <p>
+      <xf:trigger>
+        <xf:label>+1</xf:label>
+        
+        <xf:setvalue ev:event="DOMActivate" ref="/number" value="/number + 1"/>
+      </xf:trigger>
+    </p>
+  </body>
+</html>

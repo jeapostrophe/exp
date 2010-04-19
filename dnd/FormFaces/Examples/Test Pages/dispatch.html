@@ -1,0 +1,40 @@
+<!DOCTYPE
+  html PUBLIC "-//W3C//DTD XHTML 1.0//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xml:lang="en">
+  <head>
+    <title>Dispatch</title>
+    
+    <link rel="stylesheet" type="text/css" href="xforms.css" />
+    
+    <script type="text/javascript" src="../../formfaces.js"></script>
+    
+    <xf:model>
+      <xf:instance>
+        <data xmlns=""/>
+      </xf:instance>
+    </xf:model>
+  </head>
+  
+  <body>
+    <p>Moving the mouse cursor over the button should produce the message, "I see
+       you!".</p>
+    
+    <xf:trigger id="trigger">
+      <xf:label>Load</xf:label>
+      
+      <xf:dispatch ev:event="mouseover" name="DOMActivate" target="trigger"/>
+      
+      <xf:message ev:event="DOMActivate" level="modal">
+        I see you!
+      </xf:message>
+    </xf:trigger>
+    
+    <p id="status"></p>
+  </body>
+</html>

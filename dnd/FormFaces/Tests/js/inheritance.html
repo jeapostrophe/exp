@@ -1,0 +1,38 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Unit Tests for Inheritance</title>
+
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+      function A() { };
+      function B() { }; B.inherits(A);
+      function C() { }; C.inherits(B);
+      
+      function testInheritance() {
+        var a = new A();
+        var b = new B();
+        var c = new C();
+      
+        assertTrue(instanceOf(a, A));
+        assertTrue(instanceOf(b, A));
+        assertTrue(instanceOf(b, B));
+        assertTrue(instanceOf(c, A));
+        assertTrue(instanceOf(c, B));
+        assertTrue(instanceOf(c, C));
+      }    
+
+    //]]>
+    </script>
+  </head>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE                                              
+ html PUBLIC "-//W3C//DTD XHTML 1.1//EN"               
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">       
+
+<!-- Progeny Proprietary Information
+     Copyright 2000-2005 Progeny Systems Corporation. All Rights Reserved.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
+  <head>
+    <title>Unit Tests for XForms XPath Functions</title>
+    
+    <xf:model>
+      <xf:instance id="a"><a xmlns=""/></xf:instance>
+      <xf:instance id="b"><b xmlns=""/></xf:instance>
+    </xf:model>
+    
+    <script type="text/javascript" src="../jsUnit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../formfaces.js">     </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+      function setUpPage() {
+        XForm.waitForInitialization();
+      }
+
+      function testInstance() {
+        assertEquals("a", new XPath("name(instance('a')/a)").evaluate(document));
+        assertEquals("b", new XPath("name(instance('b')/b)").evaluate(document));
+      }
+      
+    //]]>
+    </script>
+  </head>
+</html>
