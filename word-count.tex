@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage{fp}
+
+% Find a random stopping time:
+\FPrandom \n
+\FPmul \n \n {1000000000}
+\FPround \n \n 0
+
+% Find a particular stopping time:
+% \FPset \n {13}
+\newcommand{\collatz}
+{
+ \FPclip \n \n
+ \FPprint \n
+ \FPifeq \n 1
+ \else
+\ifodd \FPprint \n
+    \FPmul \n 3 \n
+     \FPadd \n \n 1
+     \collatz 
+ \else
+    \FPdiv \n \n 2
+     \collatz 
+ \fi
+ \fi
+}
+
+\begin{document}
+
+\collatz
+
+\end{document}
