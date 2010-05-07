@@ -57,19 +57,7 @@
 ; n channel get
 
 (define (channels-get . chs)
-  (define waiting (list->vector chs)) 
-  (define answers (make-vector (vector-length waiting) #f))
-  (while (vector-ormap (λ (x) x) waiting)
-         (apply sync
-                (for/list ([ch (in-vector waiting)]
-                           [i (in-naturals)])
-                  (if ch
-                      (handle-evt ch
-                                  (λ (v)
-                                    (vector-set! answers i v)
-                                    (vector-set! waiting i #f)))
-                      never-evt))))
-  (vector->values answers))
+  (apply values (map channel-get chs)))
 
 ; Reactors
 
