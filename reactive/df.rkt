@@ -124,6 +124,7 @@
 
 (define (lift f . args)
   (reactor
+   ; XXX optimize constants
    (define chs (map ->channel (list* f args)))
    (while #t
           (call-with-values (λ () (apply channels-get chs))
