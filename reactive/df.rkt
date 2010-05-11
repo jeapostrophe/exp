@@ -2,6 +2,8 @@
 (require (for-syntax racket/function)
          racket/stxparam)
 
+(provide (all-defined-out))
+
 ; general
 (define-syntax-rule (while cond e ...)
   (let loop () (when cond (let () e ... (loop)))))
@@ -49,7 +51,7 @@
   (channel-put service-ch (tee:listen reply-ch))
   (channel-get reply-ch))
 
-(define (tee-channel-disconnect tc l)
+(define (tee-channel-disconnect! tc l)
   (match-define (a-tee-channel manager-t put-ch service-ch) tc)
   (thread-resume manager-t)
   (channel-put service-ch (tee:disconnect l)))
@@ -65,32 +67,52 @@
   (curry raise-syntax-error 'emit "Only allowed inside reactor"))
 
 (define-syntax-rule (reactor e ...)
-  (reactor* (λ (to-emit) 
+  (reactor* undefined-const
+            (λ (to-emit) 
               (syntax-parameterize ([emit (make-rename-transformer #'to-emit)])
                                    e ...))))
 
-(struct a-reactor (thread tee-channel))
+(define-syntax-rule (reactor/init init e ...)
+  (reactor* init
+            (λ (to-emit) 
+              (syntax-parameterize ([emit (make-rename-transformer #'to-emit)])
+                                   e ...))))
+
+(struct a-reactor ([last-value #:mutable] thread tee-channel))
+
+(define undefined-const
+  (local [(define x x)] x))
 
 (require racket/gui)
-(define (reactor* emitter)
+(define (reactor* init emitter)
   (define ch (tee-channel))
   
   ; XXX
-  (define f (new frame% [label "Reactor"]))
-  (define m (new message% [parent f] [label "undefined"] [auto-resize #t]))
+  #;(define f (new frame% [label "Reactor"]))
+  #;(define m (new message% [parent f] [label "undefined"] [auto-resize #t]))
+  
+  (define r
+    (a-reactor
+     init
+     (thread (λ () (emitter to-emit)))
+     ch))
   
   (define (to-emit v)
     ; XXX
-    (send m set-label (format "~S" v))
-    
+    #;(send m set-label (format "~S" v))
+    (set-a-reactor-last-value! r v)
     (tee-channel-put ch v))
   
   ; XXX
-  (send f show #t)
+  #;(send f show #t)
   
-  (a-reactor
-   (thread (λ () (emitter to-emit)))
-   ch))
+  r)
+
+(define value-now
+  (match-lambda
+    [(? a-reactor? r)
+     (a-reactor-last-value r)]
+    [v v]))
 
 (define (emit->idempotent-emit emit)
   (define last (gensym 'uniq))
@@ -116,11 +138,19 @@
 
 (define ->channel
   (match-lambda
-    [(a-reactor t tc)
+    [(a-reactor lv t tc)
      (thread-resume t)
      (tee-channel-listen tc)]
     [v
      (always-channel v)]))
+
+(define *-disconnect!
+  (match-lambda*
+    [(list (a-reactor lv t tc) l)
+     (thread-resume t)
+     (tee-channel-disconnect! tc l)]
+    [(list _ _)
+     (void)]))
 
 (define (lift f . args)
   (reactor
@@ -146,6 +176,33 @@
 (define event-send! 
   (match-lambda*
     [(list (an-event _ q) v) (channel-put q v)]))
+
+; Cells
+(struct a-cell ([src-sig #:mutable]
+                [src-ch #:mutable]
+                sig))
+                
+(define (cell init)
+  (define ready? (make-semaphore))
+  (define this
+    (a-cell init (->channel init)
+            (reactor/init
+             (value-now init)
+             (semaphore-wait ready?)
+             (while #t
+                    (emit (channel-get (a-cell-src-ch this)))))))
+  (semaphore-post ready?)
+  this)
+
+(define cell-behavior a-cell-sig)
+
+(define (set-cell! c v)
+  (define v-ch (->channel v))
+  (match-define (a-cell src-sig src-ch _) c)
+  (*-disconnect! src-sig src-ch)
+  ; XXX Race
+  (set-a-cell-src-sig! c v)
+  (set-a-cell-src-ch! c v-ch))
 
 ; Examples
 (define inexact-milliseconds clock)
