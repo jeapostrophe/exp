@@ -67,10 +67,7 @@
   (curry raise-syntax-error 'emit "Only allowed inside reactor"))
 
 (define-syntax-rule (reactor e ...)
-  (reactor* undefined-const
-            (λ (to-emit) 
-              (syntax-parameterize ([emit (make-rename-transformer #'to-emit)])
-                                   e ...))))
+  (reactor/init undefined-const e ...))
 
 (define-syntax-rule (reactor/init init e ...)
   (reactor* init
@@ -83,14 +80,8 @@
 (define undefined-const
   (local [(define x x)] x))
 
-(require racket/gui)
 (define (reactor* init emitter)
   (define ch (tee-channel))
-  
-  ; XXX
-  #;(define f (new frame% [label "Reactor"]))
-  #;(define m (new message% [parent f] [label "undefined"] [auto-resize #t]))
-  
   (define r
     (a-reactor
      init
@@ -98,13 +89,8 @@
      ch))
   
   (define (to-emit v)
-    ; XXX
-    #;(send m set-label (format "~S" v))
     (set-a-reactor-last-value! r v)
     (tee-channel-put ch v))
-  
-  ; XXX
-  #;(send f show #t)
   
   r)
 
@@ -121,14 +107,13 @@
       (set! last new)
       (emit new))))
 
-(define 
-  (make-clock time-now)
+(define clock-res current-inexact-milliseconds)
+
+(define clock
   (reactor
    (define real-emit (emit->idempotent-emit emit))
    (while #t
-          (real-emit (time-now)))))
-
-(define clock (make-clock current-inexact-milliseconds))
+          (real-emit (clock-res)))))
 
 ; Lifting
 (define (always-channel v)
@@ -165,17 +150,21 @@
 (struct an-event (reactor q))
 
 (define (event)
-  (define q (make-channel))
-  (an-event (reactor 
+  (define q (make-async-channel))
+  (an-event (reactor
              (define clock-ch (->channel clock))
              (while #t 
-                    ; Synchronize with the clock
-                    (channel-get clock-ch)
-                    (emit (channel-get q))))
+                    (match-define (cons v-time v) (async-channel-get q))
+                    (let loop ()
+                      (define n-time (channel-get clock-ch))
+                      (if (v-time . <= . n-time)
+                          (emit v)
+                          (loop)))))
             q))
 (define event-send! 
   (match-lambda*
-    [(list (an-event _ q) v) (channel-put q v)]))
+    [(list (an-event _ q) v)
+     (async-channel-put q (cons (clock-res) v))]))
 
 ; Cells
 (struct a-cell ([src-sig #:mutable]

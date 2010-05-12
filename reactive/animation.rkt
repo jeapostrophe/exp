@@ -13,12 +13,29 @@
 (define the-animation-graphic-behavior
   (cell-behavior the-animation-graphic))
 
+(define key-event (event))
+(define mouse-event (event))
+
+(define animation-canvas%
+  (class canvas%
+    
+    (define/override (on-char ke)
+      (event-send! key-event ke)
+      (super on-char ke))
+    (define/override (on-event me)
+      (event-send! mouse-event me)
+      (super on-event me))
+    
+    (super-new)))
+
 (define the-animation-frame
   (local
     [(define f 
-       (new frame% [label "Reactive Racket Animation"]))
+       (new frame% 
+            [label "Reactive Racket Animation"]
+            [style '(no-resize-border metal)]))
      (define c
-       (new canvas% 
+       (new animation-canvas% 
             [parent f]
             [min-width MIN-WIDTH]
             [min-height MIN-HEIGHT]
