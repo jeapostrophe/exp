@@ -18,7 +18,7 @@ export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/collects/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
-alias opene='open -a ~/Applications/Aquamacs\ Emacs.app'
+alias opene='open -a ~/Applications/Aquamacs.app'
 
 function teamtmp() {
     NAME=$(date +%Y%m%d%H%M-)$(basename $1)
