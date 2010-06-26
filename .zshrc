@@ -7,6 +7,7 @@ hash -d drdr=~plt/collects/meta/drdr
 hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
+hash -d fin=~scm/github.jeapostrophe/home/finance
 
 setopt autopushd pushdminus pushdsilent pushdtohome
 
