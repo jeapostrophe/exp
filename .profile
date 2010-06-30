@@ -19,6 +19,8 @@ export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
 alias opene='open -a ~/Applications/Aquamacs.app'
+alias r=racket
+alias rc=raco
 
 function teamtmp() {
     NAME=$(date +%Y%m%d%H%M-)$(basename $1)
