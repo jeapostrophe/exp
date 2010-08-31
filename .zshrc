@@ -15,7 +15,8 @@ autoload -U zmv
 autoload -U compinit
 compinit 
 
-export PS1="%S%~%s %# "
+export PS1="%S%~%s
+%# "
 TPS1="%~ %# "
 RECENTFILES=8
 
