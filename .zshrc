@@ -10,6 +10,8 @@ hash -d planet=~scm/github.jeapostrophe.planet
 hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
 
+export PATH=~work/papers/etc/bin:$PATH
+
 setopt autopushd pushdminus pushdsilent pushdtohome
 
 autoload -U zmv
