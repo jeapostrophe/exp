@@ -8,6 +8,7 @@ hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
 hash -d fin=~scm/github.jeapostrophe/home/finance
+hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
 
 setopt autopushd pushdminus pushdsilent pushdtohome
 
