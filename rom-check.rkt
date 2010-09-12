@@ -17,7 +17,7 @@
           (list* (first fi) (loop ls))))))
 
 (define dirs
-  (list "Box" "Cart" "Snaps" "Titles"))
+  (list "Box" "Cart" "Titles"))
 
 (define dir->list
   (for/hash ([d (in-list dirs)])
@@ -52,9 +52,38 @@
         (match
           (filter (curry regexp-match similar-rx) in-d)
           [(list)
-           (eprintf "~a (and nothing similar) exist in ~a\n" r.ext d)]
-          [(list one)
-           (swap! one)]
+           (define words (regexp-split #rx" +" r.ext))
+           (define (suffixes w)
+             (list* w (cond [(empty? w) empty]
+                            [(cons? w) (suffixes (rest w))])))
+           (define prefixes
+             (filter-map (λ (ws)
+                           (and (not (empty? ws))
+                                (apply string-append (add-between (reverse ws) " "))))
+                         (suffixes (reverse words))))
+           (define in-d*match
+             (filter-map (λ (f)
+                           (define f-len (string-length f))
+                           (for/or ([p (in-list prefixes)]
+                                    [i (in-naturals)])
+                             (define p-len (string-length p))
+                             (and (p-len . <= . f-len)
+                                  (string=? p (substring f 0 p-len))
+                                  (cons i f))))
+                         in-d))
+           (define matches
+             (sort in-d*match <= 
+                   #:key car))
+           (define N 10)
+           (define N-matches
+             (for/list ([m (in-list matches)]
+                              [i (in-range N)])
+                     m))
+           (if (empty? N-matches)
+               (eprintf "~a (and nothing similar) exist in ~a\n" r.ext d)
+               (begin
+                 (printf "First N matches: ~S\n" N-matches)
+                 (exit 0)))]
           [similar
            (printf "~a does not exist in ~a\n" r.ext d)
            (for ([i (in-naturals)]
