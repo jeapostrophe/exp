@@ -1,4 +1,5 @@
 #lang racket
+
 ;; Configuration
 (define
   wahcade-list
@@ -14,6 +15,11 @@
     (if (empty? ls)
         empty
         (let-values ([(fi ls) (split-at ls 13)])
+          (match fi
+            [(list (? string?) (? string?) "" "" "" "" "" "" "" "" "" "" "")
+             (void)]
+            [_
+             (error 'bad-rom "~S" fi)])
           (list* (first fi) (loop ls))))))
 
 (define dirs
