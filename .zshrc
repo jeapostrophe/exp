@@ -7,6 +7,8 @@ hash -d drdr=~plt/collects/meta/drdr
 hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
+hash -d github=~scm/github.jeapostrophe
+hash -d exp=~scm/github.jeapostrophe/exp
 hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
 
@@ -54,23 +56,23 @@ read_zdirs
 # Completions
 compctl -g '*(/)' rmdir dircmp
 compctl -g '*(-/)' cd chdir dirs pushd
-compctl -z -P '%' bg
-compctl -j -P '%' fg jobs disown
-compctl -j -P '%' + -s '`ps -x | tail +2 | cut -c1-5`' wait
+#compctl -z -P '%' bg
+#compctl -j -P '%' fg jobs disown
+#compctl -j -P '%' + -s '`ps -x | tail +2 | cut -c1-5`' wait
 
 # Caching
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
+#zstyle ':completion:*' use-cache on
+#zstyle ':completion:*' cache-path ~/.zsh/cache
 
 # Adding known hosts
-local _myhosts
-if [[ -f "$HOME/.ssh/known_hosts" ]]; then
-  _myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
-  zstyle ':completion:*' hosts $_myhosts
-fi
+#local _myhosts
+#if [[ -f "$HOME/.ssh/known_hosts" ]]; then
+#  _myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
+#  zstyle ':completion:*' hosts $_myhosts
+#fi
 
 # Ignore what's in the line
-zstyle ':completion:*:(rm|kill|diff):*' ignore-line yes
+#zstyle ':completion:*:(rm|kill|diff):*' ignore-line yes
 
 # Nice chdir
 cdirs () {
