@@ -11,6 +11,8 @@ hash -d github=~scm/github.jeapostrophe
 hash -d exp=~scm/github.jeapostrophe/exp
 hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
+hash -d courses=~work/courses
+hash -d 330=~courses/2010/fall/330
 
 export PATH=~work/papers/etc/bin:$PATH
 
