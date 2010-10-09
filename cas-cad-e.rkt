@@ -3,14 +3,18 @@
 (define-syntax-parameter break
   (λ (stx) (raise-syntax-error 'break "Used outside cas-cad-e" stx)))
 (define-syntax-rule (cas-cad-e e [(n ...) code ...] ...)
-  (let ([tmp e] [earlier? #f])
-    (let/ec esc
-      (syntax-parameterize 
-       ([break (make-rename-transformer #'esc)])
-       (when (or earlier? (equal? tmp n) ...)
-         (set! earlier? #t)
-         code ...)
-       ...))))
+  (let/ec esc
+    (syntax-parameterize 
+     ([break (make-rename-transformer #'esc)])
+     (let*-values 
+         ([(tmp) e]
+          [(earlier? ret) (values #f (void))]
+          [(earlier? ret) 
+           (if (or earlier? (equal? tmp n) ...)
+               (values #t (begin code ...))
+               (values earlier? ret))]
+          ...)
+       ret))))
 
 (require tests/eli-tester)
 
@@ -32,10 +36,10 @@
       printed => "")
 
 (define (cas3 v)
- (let ([w true])
-   (cas-cad-e v
-              [(0) (set! w false)]
-              [(1) (if w (break 1) (break 0))])))
+  (let ([w true])
+    (cas-cad-e v
+               [(0) (set! w false)]
+               [(1) (if w (break 1) (break 0))])))
 
 (test (cas3 0) => 0
       (cas3 1) => 1)
