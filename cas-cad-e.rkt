@@ -35,6 +35,12 @@
 (require tests/eli-tester)
 
 (test
+ (break 3) =error> "Used outside cas-cad-e"
+ 
+ (cas-cad-e 1 [(1)]) =error> "bad syntax"
+ 
+ (cas-cad-e 1 [() 1]) => (void)
+ 
  (local [(define printed "")
          (define (cas1 v)
            (set! printed "")
