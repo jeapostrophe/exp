@@ -2,15 +2,13 @@
 (require (for-syntax syntax/parse unstable/syntax) racket/stxparam)
 (define-syntax-parameter break
   (λ (stx) (raise-syntax-error 'break "Used outside cas-cad-e" stx)))
-(define-for-syntax (syntax-reverse l)
-  (datum->syntax l (reverse (syntax->list l))))
 (define-syntax cas-cad-e
   (syntax-parser
    [(_ e:expr [opt body:expr ...+] ...)
     (with-syntax* ([(id ...) (generate-temporaries #'(opt ...))]
-                   [(f ...) (syntax-reverse #'(start id ...))]
-                   [(action ...) (syntax-reverse #'((begin) (begin body ...) ...))]
-                   [((next ...) ...) (syntax-reverse #'(((id)) ... ()))])
+                   [(f ...) (reverse (syntax->list #'(id ...)))]
+                   [(action ...) (reverse (syntax->list #'((begin body ...) ...)))]
+                   [((next ...) ...) (reverse (cdr (syntax->list #'(((id)) ... ()))))])
       #'(let/ec escape
           (syntax-parameterize 
            ([break (make-rename-transformer #'escape)])
