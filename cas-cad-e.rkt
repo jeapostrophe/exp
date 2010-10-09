@@ -1,20 +1,37 @@
 #lang racket
-(require racket/stxparam)
+(require (for-syntax syntax/parse unstable/syntax) racket/stxparam)
 (define-syntax-parameter break
   (λ (stx) (raise-syntax-error 'break "Used outside cas-cad-e" stx)))
-(define-syntax-rule (cas-cad-e e [(n ...) code ...] ...)
-  (let/ec esc
-    (syntax-parameterize 
-     ([break (make-rename-transformer #'esc)])
-     (let*-values 
-         ([(tmp) e]
-          [(earlier? ret) (values #f (void))]
-          [(earlier? ret) 
-           (if (or earlier? (equal? tmp n) ...)
-               (values #t (begin code ...))
-               (values earlier? ret))]
-          ...)
-       ret))))
+(define-for-syntax (syntax-reverse l)
+  (datum->syntax l (reverse (syntax->list l))))
+(define-syntax cas-cad-e
+  (syntax-parser
+   [(_ e:expr [opt body:expr ...+] ...)
+    (with-syntax* ([(id ...) (generate-temporaries #'(opt ...))]
+                   [(f ...) (syntax-reverse #'(start id ...))]
+                   [(action ...) (syntax-reverse #'((begin) (begin body ...) ...))]
+                   [((next ...) ...) (syntax-reverse #'(((id)) ... ()))])
+      #'(let/ec escape
+          (syntax-parameterize 
+           ([break (make-rename-transformer #'escape)])
+           (let* ([f (lambda () (void) action next ...)] ...)
+             (case e [opt (id)] ...)))))]))
+#;(define-syntax cas-cad-e
+    (syntax-rules ()
+      [(_ e) (begin e (void))]
+      [(_ e [(n ...) code ...] ... [(n_l ...) code_l ...])
+       (let/ec esc
+         (syntax-parameterize 
+          ([break (make-rename-transformer #'esc)])
+          (let* ([tmp e]
+                 [earlier? #f]
+                 [earlier? 
+                  (if (or earlier? (eqv? tmp 'n) ...)
+                      (begin code ... #t)
+                      earlier?)]
+                 ...)
+            (when (or earlier? (eqv? tmp 'n_l) ...)
+              code_l ...))))]))
 
 (require tests/eli-tester)
 
@@ -43,3 +60,7 @@
 
 (test (cas3 0) => 0
       (cas3 1) => 1)
+
+(test (cas-cad-e 1 [(1) (values 1 2)]) => (values 1 2)
+      (cas-cad-e 1) => (void)
+      (cas-cad-e 1 [(2) 3] [else 4]) => 4)
