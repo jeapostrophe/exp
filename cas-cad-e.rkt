@@ -14,22 +14,6 @@
            ([break (make-rename-transformer #'escape)])
            (let* ([f (lambda () (void) action next ...)] ...)
              (case e [opt (id)] ...)))))]))
-#;(define-syntax cas-cad-e
-    (syntax-rules ()
-      [(_ e) (begin e (void))]
-      [(_ e [(n ...) code ...] ... [(n_l ...) code_l ...])
-       (let/ec esc
-         (syntax-parameterize 
-          ([break (make-rename-transformer #'esc)])
-          (let* ([tmp e]
-                 [earlier? #f]
-                 [earlier? 
-                  (if (or earlier? (eqv? tmp 'n) ...)
-                      (begin code ... #t)
-                      earlier?)]
-                 ...)
-            (when (or earlier? (eqv? tmp 'n_l) ...)
-              code_l ...))))]))
 
 (require tests/eli-tester)
 
