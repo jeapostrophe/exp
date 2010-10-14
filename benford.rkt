@@ -23,7 +23,7 @@
    ([x : Real (in-list l)])
    (define z (if (x . < . 0) (- x) x))
    (- (char->integer
-       (string-ref (number->string z) 0))
+       (string-ref (real->decimal-string z) 0))
       (char->integer #\0))))
 
 (: benford (Inputs -> Frequencies))
@@ -32,7 +32,7 @@
 
 (equal?
  (benford 
-  (list 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 0.10
+  (list 1/10 0.2 0.3 0.4 5/10 0.6 0.7 0.8 0.9 0.10
         11 12 13 -14 15 16 17 18 19
         21 -22 23 24 25 26 27 28
         31 32 -33 34 35 36 37
