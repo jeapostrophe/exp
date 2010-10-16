@@ -19,7 +19,8 @@ do_dir () {
 }
 
 cvs_up () { cvs up }
-svn_up () { svn up }
+svn_up () { #svn up
+echo }
 git_up () { git up && git push }
 
 for i in cvs.* ; do
