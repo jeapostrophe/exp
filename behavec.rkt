@@ -58,14 +58,14 @@
            current-monitors))
 
 (module sort/c racket
-  (require 'behavec racket/pretty unstable/match)
+  (require 'behavec unstable/match)
   (define (make-sort-monitor)
     (define event-ch (make-channel))
     (thread 
      (λ ()
        (let loop ([evts empty])
          (match-define (vector reply-ch evt) (channel-get event-ch))
-         (define okay?
+         (define okay-to-call-order?
            (match evt
              ; Order should not return after sort
              [(list (list application proj 'order) 'return _ _)
@@ -92,8 +92,8 @@
               (not found-a-bad-thing?)]
              [else
               #t]))
-         #;(unless okay?
-           (pretty-print evts))
+         (define okay?
+           okay-to-call-order?)
          (channel-put reply-ch okay?)
          (loop (list* evt evts)))))
     event-ch)
@@ -134,12 +134,12 @@
   (define last-<= #f)
   (define (sort <= l)
     (define actual-<=
-      (if last-<=
-          (begin (printf "Using old <=\n")
-                 last-<=)
+      (if (not last-<=)
           (begin (printf "Saving <= for later\n")
                  (set! last-<= <=)
-                 <=)))
+                 <=)
+          (begin (printf "Using old <=\n")
+                 last-<=)))
     (raw:sort actual-<= l))
   (provide/contract
    [sort sort/c]))
@@ -150,17 +150,13 @@
            (prefix-in good: 'sort)
            (prefix-in bad: 'bad-sort))
   (define good:<= <=)
-  (define bad:<= >=)
   (define l (build-list 2 (λ (i) (random 10))))
   (define sorted-l (racket:sort l <=))
   (test
    (good:sort good:<= l) => sorted-l
    (good:sort good:<= l) => sorted-l
-   ;(good:sort bad:<= l) =error> "disallowed"
    
    (bad:sort good:<= l) => sorted-l
-   (bad:sort good:<= l) =error> "disallowed"
-   ;(bad:sort bad:<= l) =error> "disallowed"
-   ))
+   (bad:sort good:<= l) =error> "disallowed"))
 
 (require 'sort-client)
