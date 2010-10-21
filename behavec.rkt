@@ -53,8 +53,7 @@
               b f
               "expected a function of ~a argument(s), got: ~e"
               how-many-doms f))))))
-  (provide b->
-           current-monitors))
+  (provide b->))
 
 (module sort/c racket
   (require 'behavec unstable/match)
