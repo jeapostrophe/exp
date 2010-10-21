@@ -2,7 +2,6 @@
 
 (module behavec racket
   (require (for-syntax syntax/parse))
-  (define current-monitors (make-parameter empty))
   (define (monitor-allows? monitor evt)
     (define reply-ch (make-channel))
     (channel-put monitor (vector reply-ch evt))
