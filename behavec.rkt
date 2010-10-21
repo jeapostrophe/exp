@@ -90,8 +90,34 @@
               (not found-a-bad-thing?)]
              [else
               #t]))
+         (define observed-to-not-be-transitive?
+           (match evt
+             ; We've just compared c and b, and found that b < c
+             [(list (list application proj 'order) 'return (list c b) #f)
+              ; Look for b <= a...
+              (let ba-loop ([evts evts])
+                (match evts
+                  [(list) #f]
+                  [(list-rest evt evts)
+                   (match evt
+                     [(list (list _ (== proj) 'order) 'return (list (== b) a) #t)
+                      ; Look for a < c...
+                      (let ac-loop ([evts evts])
+                        (match evts
+                          [(list) #f]
+                          [(list-rest evt evts)
+                           (match evt
+                             [(list (list _ (== proj) 'order) 'return (list (== c) (== a)) #f)
+                              #t]
+                             [_
+                              (ac-loop evts)])]))]
+                     [_
+                      (ba-loop evts)])]))]
+             [_
+              #f]))
          (define okay?
-           okay-to-call-order?)
+           (and okay-to-call-order?
+                (not observed-to-not-be-transitive?)))
          (channel-put reply-ch okay?)
          (loop (list* evt evts)))))
     event-ch)
@@ -111,6 +137,9 @@
       [(empty? l)
        (list e)]
       [(<= e (first l))
+       ; We would normally assume this...
+       (unless (andmap (λ (x) (<= x e)) (rest l))
+         (error 'sort "<= is not transitive"))
        (list* e l)]
       [else
        (list* (first l)
@@ -148,6 +177,16 @@
            (prefix-in good: 'sort)
            (prefix-in bad: 'bad-sort))
   (define good:<= <=)
+  (define (bad:<= a b)
+    (match* 
+     (a b)
+           ; We should have...
+           ; 0 <= 1 <= 2 | b <= a <= c
+           ; But by...
+     [(1 0) #f] ; 0 <= 1 | a <= b
+     [(2 0) #t] ; 2 <= 0 | c <= a
+     [(1 2) #f] ; 2 <= 1 | c <= b
+     ))
   (define l (build-list 2 (λ (i) (random 10))))
   (define sorted-l (racket:sort l <=))
   (test
@@ -155,6 +194,8 @@
    (good:sort good:<= l) => sorted-l
    
    (bad:sort good:<= l) => sorted-l
-   (bad:sort good:<= l) =error> "disallowed"))
+   (bad:sort good:<= l) =error> "disallowed"
+   
+   (good:sort bad:<= (list 2 1 0)) =error> "disallowed"))
 
 (require 'sort-client)
