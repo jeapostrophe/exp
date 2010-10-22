@@ -15,12 +15,8 @@
     (match evts [(list pat ...) #t] [_ #f]))
   (provide evt-regexp)
   
-  (define (monitor-allows? monitor evt)
-    (monitor evt))
-  ; XXX This should be a form of ->d, but we can't pass information
-  ;     from the pre to the post condition
-  ;     and we can't generate information at projection time.
-  (define (b-> the-monitor the-base-label . ctcs)
+  (define (monitor-allows? monitor evt) (monitor evt))
+  (define (b-> monitor label . ctcs)
     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
     (define rng-ctc (first rng-l))
     (define how-many-doms (length dom-ctcs))
@@ -39,20 +35,20 @@
        (define rng-proj
          ((contract-projection rng-ctc) b))
        (λ (f)
-         (define proj-label (gensym the-base-label))
+         (define proj-label (gensym label))
          (if (first-order? f)
-             (if (monitor-allows? the-monitor (evt:proj the-base-label proj-label f))
+             (if (monitor-allows? monitor (evt:proj label proj-label f))
                  (λ args 
-                   (define app-label (gensym the-base-label))         
+                   (define app-label (gensym label))         
                    (define args-ctc
                      (map (λ (dom x) (dom x))
                           dom-projs args))
-                   (if (monitor-allows? the-monitor (evt:call the-base-label proj-label f app-label args-ctc))
+                   (if (monitor-allows? monitor (evt:call label proj-label f app-label args-ctc))
                        (local [(define ans-ctc
                                  (rng-proj 
                                   (apply f args-ctc)))]
-                         (if (monitor-allows? the-monitor 
-                                              (evt:return the-base-label proj-label f app-label args-ctc ans-ctc))
+                         (if (monitor-allows? monitor 
+                                              (evt:return label proj-label f app-label args-ctc ans-ctc))
                              ans-ctc
                              (raise-blame-error
                               (blame-swap b) f
@@ -89,11 +85,11 @@
                     (evt:return 'order _ f _ (list c b) #f) _ ...
                     (evt:return 'order _ f _ (list b a) #t) _ ...
                     (evt:return 'order _ f _ (list c a) #f) _ ...)))))
-  (define the-monitor
+  (define sort-monitor
     (make-sort-monitor))
   (define sort/c
-    (b-> the-monitor 'sort
-         (b-> the-monitor 'order
+    (b-> sort-monitor 'sort
+         (b-> sort-monitor 'order
               any/c any/c boolean?)
          (listof any/c)
          (listof any/c)))
