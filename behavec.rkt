@@ -6,6 +6,9 @@
     (define reply-ch (make-channel))
     (channel-put monitor (vector reply-ch evt))
     (channel-get reply-ch))
+  ; XXX This should be a form of ->d, but we can't pass information
+  ;     from the pre to the post condition
+  ;     and we can't generate information at projection time.
   (define (b-> the-monitor the-base-label . ctcs)
     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
     (define rng-ctc (first rng-l))
@@ -65,8 +68,8 @@
          (match-define (vector reply-ch evt) (channel-get event-ch))
          (define okay-to-call-order?
            (match evt
-             ; Order should not return after sort
-             [(list (list application proj 'order) 'return _ _)
+             ; Order should not be called after sort returns
+             [(list (list application proj 'order) 'call _)
               ; Look for a return from sort...
               (define found-a-bad-thing?
                 (let sort-loop ([evts evts])
@@ -75,13 +78,13 @@
                     [(list-rest evt evts)
                      (match evt
                        [(list (list _ _ 'sort) 'return _ _)
-                        ; Look for a previous return from this projection of order
+                        ; Look for a previous projection from this projection of order
                         (let order-loop ([evts evts])
                           (match evts
                             [(list) #f]
                             [(list-rest evt evts)
                              (match evt
-                               [(list (list _ (== proj) 'order) 'return _ _)
+                               [(list (list (== proj) 'order) 'proj _)
                                 #t]
                                [_
                                 (order-loop evts)])]))]
