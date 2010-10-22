@@ -36,11 +36,11 @@
                    (define args-ctc
                      (map (λ (dom x) (dom x))
                           dom-projs args))
-                   (if (monitor-allows? the-monitor (list this-label 'call args-ctc))
+                   (if (monitor-allows? the-monitor (list this-label 'call f args-ctc))
                        (local [(define ans-ctc
                                  (rng-proj 
                                   (apply f args-ctc)))]
-                         (if (monitor-allows? the-monitor (list this-label 'return args-ctc ans-ctc))
+                         (if (monitor-allows? the-monitor (list this-label 'return f args-ctc ans-ctc))
                              ans-ctc
                              (raise-blame-error
                               (blame-swap b) f
@@ -69,7 +69,7 @@
          (define okay-to-call-order?
            (match evt
              ; Order should not be called after sort returns
-             [(list (list application proj 'order) 'call _)
+             [(list (list application proj 'order) 'call _ _)
               ; Look for a return from sort...
               (define found-a-bad-thing?
                 (let sort-loop ([evts evts])
@@ -77,7 +77,7 @@
                     [(list) #f]
                     [(list-rest evt evts)
                      (match evt
-                       [(list (list _ _ 'sort) 'return _ _)
+                       [(list (list _ _ 'sort) 'return _ _ _)
                         ; Look for a previous projection from this projection of order
                         (let order-loop ([evts evts])
                           (match evts
@@ -96,21 +96,21 @@
          (define observed-to-not-be-transitive?
            (match evt
              ; We've just compared c and b, and found that b < c
-             [(list (list application proj 'order) 'return (list c b) #f)
+             [(list (list application proj 'order) 'return f (list c b) #f)
               ; Look for b <= a...
               (let ba-loop ([evts evts])
                 (match evts
                   [(list) #f]
                   [(list-rest evt evts)
                    (match evt
-                     [(list (list _ (== proj) 'order) 'return (list (== b) a) #t)
+                     [(list (list _ _ 'order) 'return (== f) (list (== b) a) #t)
                       ; Look for a < c...
                       (let ac-loop ([evts evts])
                         (match evts
                           [(list) #f]
                           [(list-rest evt evts)
                            (match evt
-                             [(list (list _ (== proj) 'order) 'return (list (== c) (== a)) #f)
+                             [(list (list _ _ 'order) 'return (== f) (list (== c) (== a)) #f)
                               #t]
                              [_
                               (ac-loop evts)])]))]
@@ -140,9 +140,6 @@
       [(empty? l)
        (list e)]
       [(<= e (first l))
-       ; We would normally assume this...
-       (unless (andmap (λ (x) (<= x e)) (rest l))
-         (error 'sort "<= is not transitive"))
        (list* e l)]
       [else
        (list* (first l)
@@ -199,6 +196,9 @@
    (bad:sort good:<= l) => sorted-l
    (bad:sort good:<= l) =error> "disallowed"
    
-   (good:sort bad:<= (list 2 1 0)) =error> "disallowed"))
+   (good:sort bad:<= (list 1 0)) => (list 0 1)
+   (good:sort bad:<= (list 2 0)) => (list 2 0) ; Remember the sort is broken
+   (good:sort bad:<= (list 1 2)) =error> "disallowed" ; But now we know
+   ))
 
 (require 'sort-client)
