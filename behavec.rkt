@@ -3,9 +3,7 @@
 (module behavec racket
   (require (for-syntax syntax/parse))
   (define (monitor-allows? monitor evt)
-    (define reply-ch (make-channel))
-    (channel-put monitor (vector reply-ch evt))
-    (channel-get reply-ch))
+    (monitor evt))
   ; XXX This should be a form of ->d, but we can't pass information
   ;     from the pre to the post condition
   ;     and we can't generate information at projection time.
@@ -67,31 +65,15 @@
        (let loop ([evts empty])
          (match-define (vector reply-ch evt) (channel-get event-ch))
          (define okay-to-call-order?
-           (match evt
-             ; Order should not be called after sort returns
-             [(list (list application proj 'order) 'call _ _)
-              ; Look for a return from sort...
-              (define found-a-bad-thing?
-                (let sort-loop ([evts evts])
-                  (match evts
-                    [(list) #f]
-                    [(list-rest evt evts)
-                     (match evt
-                       [(list (list _ _ 'sort) 'return _ _ _)
-                        ; Look for a previous projection from this projection of order
-                        (let order-loop ([evts evts])
-                          (match evts
-                            [(list) #f]
-                            [(list-rest evt evts)
-                             (match evt
-                               [(list (list (== proj) 'order) 'proj _)
-                                #t]
-                               [_
-                                (order-loop evts)])]))]
-                       [_
-                        (sort-loop evts)])])))
-              (not found-a-bad-thing?)]
-             [else
+           (match evts
+             [(list (list (list application proj 'order) 'call _ _)
+                    _ ...
+                    (list (list _ _ 'sort) 'return _ _ _)
+                    _ ...
+                    (list (list proj 'order) 'proj _)
+                    _ ...)
+              #f]
+             [_
               #t]))
          (define observed-to-not-be-transitive?
            (match evt
@@ -124,8 +106,12 @@
          (channel-put reply-ch okay?)
          (loop (list* evt evts)))))
     event-ch)
-  (define the-monitor
+  (define the-monitor-ch
     (make-sort-monitor))
+  (define (the-monitor evt)
+    (define reply-ch (make-channel))
+    (channel-put the-monitor-ch (vector reply-ch evt))
+    (channel-get reply-ch))
   (define sort/c
     (b-> the-monitor 'sort
          (b-> the-monitor 'order
