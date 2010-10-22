@@ -15,6 +15,31 @@
     (match evts [(list pat ...) #t] [_ #f]))
   (provide evt-regexp)
   
+  (define (b->* monitor-interpose label)
+    (make-contract
+     #:name 'b->
+     #:first-order procedure?
+     #:projection
+     (λ (b)
+       ; XXX Add a monitor setup here?
+       (λ (f)
+         (define proj-label (gensym label))
+         (define f/proj (monitor-interpose b (evt:proj label proj-label f)))
+         (if f/proj
+             (λ args 
+               (define app-label (gensym label))
+               (define args/proj (monitor-interpose b (evt:call label proj-label f app-label args)))
+               (if args/proj
+                   (call-with-values
+                    (λ () (apply f/proj args/proj))
+                    (λ rets
+                      (define rets/proj (monitor-interpose b (evt:return label proj-label f app-label args/proj rets)))
+                      (if rets/proj
+                          (apply values rets/proj)
+                          (raise-blame-error (blame-swap b) f "monitor disallowed return with ans ~e" rets))))
+                   (raise-blame-error b f "monitor disallowed called with args ~e" args)))
+             (raise-blame-error b f "monitor disallowed projection of ~e" f))))))
+    
   (define (b-> monitor-allows? label . ctcs)
     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
     (define rng-ctc (first rng-l))
@@ -68,21 +93,23 @@
   (require 'behavec unstable/match)
   (define (make-sort-monitor)
     (define evts empty)
-    (λ (evt)
-      (set! evts (list* evt evts))
-      (not
-       (or 
-        ; Are we returning from order after a return from sort, where we previously projected this
-        ; order?
-        (evt-regexp evts
-                    (evt:call 'order proj _ _ _) _ ...
-                    (evt:return 'sort _ _ _ _ _) _ ...
-                    (evt:proj 'order proj _) _ ...)
-        ; Is there a witness that the order is not transitive?
-        (evt-regexp evts
-                    (evt:return 'order _ f _ (list c b) #f) _ ...
-                    (evt:return 'order _ f _ (list b a) #t) _ ...
-                    (evt:return 'order _ f _ (list c a) #f) _ ...)))))
+    (define this-monitor
+      (λ (evt)
+        (set! evts (list* evt evts))
+        (not
+         (or 
+          ; Are we returning from order after a return from sort, where we previously projected this
+          ; order?
+          (evt-regexp evts
+                      (evt:call 'order proj _ _ _) _ ...
+                      (evt:return 'sort _ _ _ _ _) _ ...
+                      (evt:proj 'order proj _) _ ...)
+          ; Is there a witness that the order is not transitive?
+          (evt-regexp evts
+                      (evt:return 'order _ f _ (list c b) #f) _ ...
+                      (evt:return 'order _ f _ (list b a) #t) _ ...
+                      (evt:return 'order _ f _ (list c a) #f) _ ...)))))
+    this-monitor)
   (define sort-monitor
     (make-sort-monitor))
   (define sort/c
