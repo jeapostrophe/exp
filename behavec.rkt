@@ -70,30 +70,31 @@
     (define evts empty)
     (λ (evt)
       (set! evts (list* evt evts))
-      (and 
-       ; Are we returning from order after a return from sort, where we previously projected this
-       ; order?
-       (match evts
-         [(list (evt:call 'order proj _ _ _)
-                _ ...
-                (evt:return 'sort _ _ _ _ _)
-                _ ...
-                (evt:proj 'order proj _)
-                _ ...)
-          #f]
-         [_
-          #t])
-       ; Is there a witness that the order is not transitive?
-       (match evts
-         [(list (evt:return 'order _ f _ (list c b) #f)
-                _ ...
-                (evt:return 'order _ f _ (list b a) #t)
-                _ ...
-                (evt:return 'order _ f _ (list c a) #f)
-                _ ...)
-          #f]
-         [_
-          #t]))))
+      (not
+       (or 
+        ; Are we returning from order after a return from sort, where we previously projected this
+        ; order?
+        (match evts
+          [(list (evt:call 'order proj _ _ _)
+                 _ ...
+                 (evt:return 'sort _ _ _ _ _)
+                 _ ...
+                 (evt:proj 'order proj _)
+                 _ ...)
+           #t]
+          [_
+           #f])
+        ; Is there a witness that the order is not transitive?
+        (match evts
+          [(list (evt:return 'order _ f _ (list c b) #f)
+                 _ ...
+                 (evt:return 'order _ f _ (list b a) #t)
+                 _ ...
+                 (evt:return 'order _ f _ (list c a) #f)
+                 _ ...)
+           #t]
+          [_
+           #f])))))
   (define the-monitor
     (make-sort-monitor))
   (define sort/c
