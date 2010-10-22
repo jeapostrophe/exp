@@ -15,9 +15,9 @@
     (match evts [(list pat ...) #t] [_ #f]))
   (provide evt-regexp)
   
-  (define (b->* monitor-interpose label)
+  (define (->t* monitor-interpose label)
     (make-contract
-     #:name 'b->
+     #:name '->t
      #:first-order procedure?
      #:projection
      (λ (b)
@@ -40,7 +40,7 @@
                    (raise-blame-error b f "monitor disallowed called with args ~e" args)))
              (raise-blame-error b f "monitor disallowed projection of ~e" f))))))
     
-  (define (b-> monitor-allows? label . ctcs)
+  (define (->t monitor-allows? label . ctcs)
     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
     (define rng-ctc (first rng-l))
     (define how-many-doms (length dom-ctcs))
@@ -61,8 +61,9 @@
          (define rng-proj ((contract-projection rng-ctc) b))
          (and (monitor-allows? evt)
               (list (rng-proj ret)))]))
-    (b->* monitor-interpose label))
-  (provide b->))
+    (->t* monitor-interpose label))
+  (provide ->t*
+           ->t))
 
 (module sort/c racket
   (require 'behavec unstable/match)
@@ -88,8 +89,8 @@
   (define sort-monitor
     (make-sort-monitor))
   (define sort/c
-    (b-> sort-monitor 'sort
-         (b-> sort-monitor 'order
+    (->t sort-monitor 'sort
+         (->t sort-monitor 'order
               any/c any/c boolean?)
          (listof any/c)
          (listof any/c)))
