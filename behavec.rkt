@@ -2,6 +2,13 @@
 
 (module behavec racket
   (require (for-syntax syntax/parse))
+  (struct evt (label))
+  (struct evt:proj evt (proj-label f))
+  (struct evt:call evt:proj (app-label args))
+  (struct evt:return evt:call (val))
+  (provide (struct-out evt) (struct-out evt:proj)
+           (struct-out evt:call) (struct-out evt:return))
+  
   (define (monitor-allows? monitor evt)
     (monitor evt))
   ; XXX This should be a form of ->d, but we can't pass information
@@ -26,19 +33,20 @@
        (define rng-proj
          ((contract-projection rng-ctc) b))
        (λ (f)
-         (define proj-label (list (gensym the-base-label) the-base-label))
+         (define proj-label (gensym the-base-label))
          (if (first-order? f)
-             (if (monitor-allows? the-monitor (list proj-label 'proj f))
+             (if (monitor-allows? the-monitor (evt:proj the-base-label proj-label f))
                  (λ args 
-                   (define this-label (cons (gensym the-base-label) proj-label))         
+                   (define app-label (gensym the-base-label))         
                    (define args-ctc
                      (map (λ (dom x) (dom x))
                           dom-projs args))
-                   (if (monitor-allows? the-monitor (list this-label 'call f args-ctc))
+                   (if (monitor-allows? the-monitor (evt:call the-base-label proj-label f app-label args-ctc))
                        (local [(define ans-ctc
                                  (rng-proj 
                                   (apply f args-ctc)))]
-                         (if (monitor-allows? the-monitor (list this-label 'return f args-ctc ans-ctc))
+                         (if (monitor-allows? the-monitor 
+                                              (evt:return the-base-label proj-label f app-label args-ctc ans-ctc))
                              ans-ctc
                              (raise-blame-error
                               (blame-swap b) f
@@ -64,24 +72,25 @@
      (λ ()
        (let loop ([evts empty])
          (match-define (vector reply-ch evt) (channel-get event-ch))
+         (define new-evts (list* evt evts))
          (define okay-to-call-order?
-           (match evts
-             [(list (list (list application proj 'order) 'call _ _)
+           (match new-evts
+             [(list (evt:call 'order proj _ _ _)
                     _ ...
-                    (list (list _ _ 'sort) 'return _ _ _)
+                    (evt:return 'sort _ _ _ _ _)
                     _ ...
-                    (list (list proj 'order) 'proj _)
+                    (evt:proj 'order proj _)
                     _ ...)
               #f]
              [_
               #t]))
          (define observed-to-not-be-transitive?
-           (match evts
-             [(list (list (list application proj 'order) 'return f (list c b) #f)
+           (match new-evts
+             [(list (evt:return 'order _ f _ (list c b) #f)
                     _ ...
-                    (list (list _ _ 'order) 'return f (list b a) #t)
+                    (evt:return 'order _ f _ (list b a) #t)
                     _ ...
-                    (list (list _ _ 'order) 'return f (list c a) #f)
+                    (evt:return 'order _ f _ (list c a) #f)
                     _ ...)
               #t]
              [_
@@ -90,7 +99,7 @@
            (and okay-to-call-order?
                 (not observed-to-not-be-transitive?)))
          (channel-put reply-ch okay?)
-         (loop (list* evt evts)))))
+         (loop new-evts))))
     event-ch)
   (define the-monitor-ch
     (make-sort-monitor))
