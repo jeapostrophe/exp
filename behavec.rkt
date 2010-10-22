@@ -76,28 +76,14 @@
              [_
               #t]))
          (define observed-to-not-be-transitive?
-           (match evt
-             ; We've just compared c and b, and found that b < c
-             [(list (list application proj 'order) 'return f (list c b) #f)
-              ; Look for b <= a...
-              (let ba-loop ([evts evts])
-                (match evts
-                  [(list) #f]
-                  [(list-rest evt evts)
-                   (match evt
-                     [(list (list _ _ 'order) 'return (== f) (list (== b) a) #t)
-                      ; Look for a < c...
-                      (let ac-loop ([evts evts])
-                        (match evts
-                          [(list) #f]
-                          [(list-rest evt evts)
-                           (match evt
-                             [(list (list _ _ 'order) 'return (== f) (list (== c) (== a)) #f)
-                              #t]
-                             [_
-                              (ac-loop evts)])]))]
-                     [_
-                      (ba-loop evts)])]))]
+           (match evts
+             [(list (list (list application proj 'order) 'return f (list c b) #f)
+                    _ ...
+                    (list (list _ _ 'order) 'return f (list b a) #t)
+                    _ ...
+                    (list (list _ _ 'order) 'return f (list c a) #f)
+                    _ ...)
+              #t]
              [_
               #f]))
          (define okay?
