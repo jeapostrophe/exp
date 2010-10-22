@@ -2,12 +2,18 @@
 
 (module behavec racket
   (require (for-syntax syntax/parse))
+  ;; Structs
   (struct evt (label))
   (struct evt:proj evt (proj-label f))
   (struct evt:call evt:proj (app-label args))
   (struct evt:return evt:call (val))
   (provide (struct-out evt) (struct-out evt:proj)
            (struct-out evt:call) (struct-out evt:return))
+  
+  ;; Event stream regexp
+  (define-syntax-rule (evt-regexp evts pat ...)
+    (match evts [(list pat ...) #t] [_ #f]))
+  (provide evt-regexp)
   
   (define (monitor-allows? monitor evt)
     (monitor evt))
@@ -74,27 +80,15 @@
        (or 
         ; Are we returning from order after a return from sort, where we previously projected this
         ; order?
-        (match evts
-          [(list (evt:call 'order proj _ _ _)
-                 _ ...
-                 (evt:return 'sort _ _ _ _ _)
-                 _ ...
-                 (evt:proj 'order proj _)
-                 _ ...)
-           #t]
-          [_
-           #f])
+        (evt-regexp evts
+                    (evt:call 'order proj _ _ _) _ ...
+                    (evt:return 'sort _ _ _ _ _) _ ...
+                    (evt:proj 'order proj _) _ ...)
         ; Is there a witness that the order is not transitive?
-        (match evts
-          [(list (evt:return 'order _ f _ (list c b) #f)
-                 _ ...
-                 (evt:return 'order _ f _ (list b a) #t)
-                 _ ...
-                 (evt:return 'order _ f _ (list c a) #f)
-                 _ ...)
-           #t]
-          [_
-           #f])))))
+        (evt-regexp evts
+                    (evt:return 'order _ f _ (list c b) #f) _ ...
+                    (evt:return 'order _ f _ (list b a) #t) _ ...
+                    (evt:return 'order _ f _ (list c a) #f) _ ...)))))
   (define the-monitor
     (make-sort-monitor))
   (define sort/c
