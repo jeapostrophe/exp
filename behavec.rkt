@@ -15,8 +15,7 @@
     (match evts [(list pat ...) #t] [_ #f]))
   (provide evt-regexp)
   
-  (define (monitor-allows? monitor evt) (monitor evt))
-  (define (b-> monitor label . ctcs)
+  (define (b-> monitor-allows? label . ctcs)
     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
     (define rng-ctc (first rng-l))
     (define how-many-doms (length dom-ctcs))
@@ -37,18 +36,17 @@
        (λ (f)
          (define proj-label (gensym label))
          (if (first-order? f)
-             (if (monitor-allows? monitor (evt:proj label proj-label f))
+             (if (monitor-allows? (evt:proj label proj-label f))
                  (λ args 
                    (define app-label (gensym label))         
                    (define args-ctc
                      (map (λ (dom x) (dom x))
                           dom-projs args))
-                   (if (monitor-allows? monitor (evt:call label proj-label f app-label args-ctc))
+                   (if (monitor-allows? (evt:call label proj-label f app-label args-ctc))
                        (local [(define ans-ctc
                                  (rng-proj 
                                   (apply f args-ctc)))]
-                         (if (monitor-allows? monitor 
-                                              (evt:return label proj-label f app-label args-ctc ans-ctc))
+                         (if (monitor-allows? (evt:return label proj-label f app-label args-ctc ans-ctc))
                              ans-ctc
                              (raise-blame-error
                               (blame-swap b) f
