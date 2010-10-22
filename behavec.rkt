@@ -67,46 +67,35 @@
 (module sort/c racket
   (require 'behavec unstable/match)
   (define (make-sort-monitor)
-    (define event-ch (make-channel))
-    (thread 
-     (λ ()
-       (let loop ([evts empty])
-         (match-define (vector reply-ch evt) (channel-get event-ch))
-         (define new-evts (list* evt evts))
-         (define okay-to-call-order?
-           (match new-evts
-             [(list (evt:call 'order proj _ _ _)
-                    _ ...
-                    (evt:return 'sort _ _ _ _ _)
-                    _ ...
-                    (evt:proj 'order proj _)
-                    _ ...)
-              #f]
-             [_
-              #t]))
-         (define observed-to-not-be-transitive?
-           (match new-evts
-             [(list (evt:return 'order _ f _ (list c b) #f)
-                    _ ...
-                    (evt:return 'order _ f _ (list b a) #t)
-                    _ ...
-                    (evt:return 'order _ f _ (list c a) #f)
-                    _ ...)
-              #t]
-             [_
-              #f]))
-         (define okay?
-           (and okay-to-call-order?
-                (not observed-to-not-be-transitive?)))
-         (channel-put reply-ch okay?)
-         (loop new-evts))))
-    event-ch)
-  (define the-monitor-ch
+    (define evts empty)
+    (λ (evt)
+      (set! evts (list* evt evts))
+      (and 
+       ; Are we returning from order after a return from sort, where we previously projected this
+       ; order?
+       (match evts
+         [(list (evt:call 'order proj _ _ _)
+                _ ...
+                (evt:return 'sort _ _ _ _ _)
+                _ ...
+                (evt:proj 'order proj _)
+                _ ...)
+          #f]
+         [_
+          #t])
+       ; Is there a witness that the order is not transitive?
+       (match evts
+         [(list (evt:return 'order _ f _ (list c b) #f)
+                _ ...
+                (evt:return 'order _ f _ (list b a) #t)
+                _ ...
+                (evt:return 'order _ f _ (list c a) #f)
+                _ ...)
+          #f]
+         [_
+          #t]))))
+  (define the-monitor
     (make-sort-monitor))
-  (define (the-monitor evt)
-    (define reply-ch (make-channel))
-    (channel-put the-monitor-ch (vector reply-ch evt))
-    (channel-get reply-ch))
   (define sort/c
     (b-> the-monitor 'sort
          (b-> the-monitor 'order
