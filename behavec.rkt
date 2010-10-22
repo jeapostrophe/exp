@@ -5,8 +5,8 @@
   ;; Structs
   (struct evt (label))
   (struct evt:proj evt (proj-label f))
-  (struct evt:call evt:proj (app-label args))
-  (struct evt:return evt:call (val))
+  (struct evt:call evt (proj-label f app-label args))
+  (struct evt:return evt (proj-label f app-label args vals))
   (provide (struct-out evt) (struct-out evt:proj)
            (struct-out evt:call) (struct-out evt:return))
   
@@ -44,49 +44,24 @@
     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
     (define rng-ctc (first rng-l))
     (define how-many-doms (length dom-ctcs))
-    (define first-order?
-      (λ (x) (and (procedure? x) (procedure-arity-includes? x how-many-doms))))
-    (make-contract
-     #:name 'b->
-     #:first-order
-     first-order?
-     #:projection
-     (λ (b)
-       (define dom-projs 
-         (map (λ (dom)
-                ((contract-projection dom) (blame-swap b)))
-              dom-ctcs))
-       (define rng-proj
-         ((contract-projection rng-ctc) b))
-       (λ (f)
-         (define proj-label (gensym label))
-         (if (first-order? f)
-             (if (monitor-allows? (evt:proj label proj-label f))
-                 (λ args 
-                   (define app-label (gensym label))         
-                   (define args-ctc
-                     (map (λ (dom x) (dom x))
-                          dom-projs args))
-                   (if (monitor-allows? (evt:call label proj-label f app-label args-ctc))
-                       (local [(define ans-ctc
-                                 (rng-proj 
-                                  (apply f args-ctc)))]
-                         (if (monitor-allows? (evt:return label proj-label f app-label args-ctc ans-ctc))
-                             ans-ctc
-                             (raise-blame-error
-                              (blame-swap b) f
-                              "monitor disallowed return with args ~e and ans ~e" args-ctc ans-ctc)))
-                       (raise-blame-error
-                        b f
-                        "monitor disallowed called with args ~e" args-ctc)))
-                 (raise-blame-error
-                  b f
-                  "monitor disallowed projection of ~e"
-                  f))
-             (raise-blame-error
-              b f
-              "expected a function of ~a argument(s), got: ~e"
-              how-many-doms f))))))
+    (define (monitor-interpose b evt)
+      (match evt
+        [(evt:proj label proj f)
+         (if (procedure-arity-includes? f how-many-doms)
+             (and (monitor-allows? evt)
+                  f)
+             (raise-blame-error b f "expected a function of ~a argument(s), got: ~e" how-many-doms f))]
+        [(evt:call label proj f app args)
+         (and (monitor-allows? evt)
+              (for/list ([ctc (in-list dom-ctcs)]
+                         [arg (in-list args)])
+                (define proj ((contract-projection ctc) (blame-swap b)))
+                (proj arg)))]
+        [(evt:return label proj f app args (list ret))
+         (define rng-proj ((contract-projection rng-ctc) b))
+         (and (monitor-allows? evt)
+              (list (rng-proj ret)))]))
+    (b->* monitor-interpose label))
   (provide b->))
 
 (module sort/c racket
@@ -106,9 +81,9 @@
                       (evt:proj 'order proj _) _ ...)
           ; Is there a witness that the order is not transitive?
           (evt-regexp evts
-                      (evt:return 'order _ f _ (list c b) #f) _ ...
-                      (evt:return 'order _ f _ (list b a) #t) _ ...
-                      (evt:return 'order _ f _ (list c a) #f) _ ...)))))
+                      (evt:return 'order _ f _ (list c b) (list #f)) _ ...
+                      (evt:return 'order _ f _ (list b a) (list #t)) _ ...
+                      (evt:return 'order _ f _ (list c a) (list #f)) _ ...)))))
     this-monitor)
   (define sort-monitor
     (make-sort-monitor))
