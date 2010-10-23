@@ -12,6 +12,7 @@
     (set! evts (list* evt evts))
     (not
      (or
+      ; XXX We should have another property that open/close must not be called after file-user returns.
       ; By the time file-user returns, it must have closed everything it opens
       (match evts
         [(list (evt:return 'file-user _ _ app _ _)
