@@ -60,10 +60,10 @@
   (define (sort <= l)
     (define actual-<=
       (if (not last-<=)
-          (begin (printf "Saving <= for later\n")
+          (begin #;(printf "Saving <= for later\n")
                  (set! last-<= <=)
                  <=)
-          (begin (printf "Using old <=\n")
+          (begin #;(printf "Using old <=\n")
                  last-<=)))
     (raw:sort actual-<= l))
   (provide/contract

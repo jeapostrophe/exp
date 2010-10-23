@@ -34,7 +34,7 @@
                     (define rets/proj (monitor-interpose b (evt:return label proj-label f app-label args/proj rets)))
                     (if rets/proj
                         (apply values rets/proj)
-                        (raise-blame-error (blame-swap b) f "monitor disallowed return with ans ~e" rets))))
+                        (raise-blame-error b f "monitor disallowed return with ans ~e" rets))))
                  (raise-blame-error b f "monitor disallowed called with args ~e" args)))
            (raise-blame-error b f "monitor disallowed projection of ~e" f))))))
 
