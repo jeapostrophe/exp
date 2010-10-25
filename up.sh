@@ -31,6 +31,6 @@ for i in svn.* ; do
     do_dir $i svn_up
 done
 
-for i in git.* github.*/* ; do
+for i in git.* github.*/* usr.plt/*/* ; do
     do_dir $i git_up
 done
