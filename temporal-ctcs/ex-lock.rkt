@@ -22,6 +22,8 @@
       (define (fail) (esc #f))
       (match evt
         [(evt:call 'user _ _ _ _ app (list lock use unlock))
+         (hash-set! locked? app #f)
+         (hash-set! returned? app #f)
          (hash-set! lock->user (projection-label lock) app)
          (hash-set! use->user (projection-label use) app)
          (hash-set! unlock->user (projection-label unlock) app)]
@@ -37,23 +39,23 @@
        (match evt
         ; Must not lock or unlock twice
         [(evt:call 'lock p _ _ _ _ _)
-         (not (hash-ref locked? (hash-ref lock->user p fail) #f))]
+         (not (hash-ref locked? (hash-ref lock->user p fail) fail))]
         [(evt:call 'unlock p _ _ _ _ _)
-         (hash-ref locked? (hash-ref unlock->user p fail) #f)]
+         (hash-ref locked? (hash-ref unlock->user p fail) fail)]
         ; Must not use resource unless locked
         [(evt:call 'use p _ _ _ _ _)
-         (hash-ref locked? (hash-ref use->user p fail) #f)]
+         (hash-ref locked? (hash-ref use->user p fail) fail)]
         ; Otherwise, okay
         [_
          #t])
        ; Must not use anything after return
        (match evt
         [(evt:call 'lock p _ _ _ _ _)
-         (not (hash-ref returned? (hash-ref lock->user p fail) #f))]
+         (not (hash-ref returned? (hash-ref lock->user p fail) fail))]
         [(evt:call 'unlock p _ _ _ _ _)
-         (not (hash-ref returned? (hash-ref unlock->user p fail) #f))]
+         (not (hash-ref returned? (hash-ref unlock->user p fail) fail))]
         [(evt:call 'use p _ _ _ _ _)
-         (not (hash-ref returned? (hash-ref use->user p fail) #f))]
+         (not (hash-ref returned? (hash-ref use->user p fail) fail))]
         ; Otherwise, okay
         [_
          #t]))))
