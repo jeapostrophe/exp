@@ -86,6 +86,7 @@
       (lock) (use) (unlock)
       (use-resource
        (λ (lock1 use1 unlock1)
+         ; Note out of order unlocking
          (lock1) (lock)
          (use) (use1)
          (unlock1) (unlock)))
