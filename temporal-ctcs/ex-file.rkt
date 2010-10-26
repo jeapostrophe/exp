@@ -1,5 +1,10 @@
 #lang racket/load
 
+#| This shows the pattern where you can capture that something has not been done
+   by introducing a "user" function that provides a temporal interval during which
+   a property must be true.
+|#
+
 (module files racket
   (require "temporal.rkt" unstable/match)
   (define (use-files f)
