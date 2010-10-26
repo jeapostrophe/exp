@@ -1,126 +1,131 @@
 #lang racket/load
 
-; XXX Not complete!
-(module mem racket
+#| This file is an attempt to show a different style of monitor
+   that doesn't record the event trace, but rather records the
+   pertinent information.
+|#
+
+(module lock racket
   (require "temporal.rkt" unstable/match)
-  (define (use-mem f)
-    (define addr 0)
-    (define (malloc)
-      (begin0 addr
-              (set! addr (add1 addr))))
-    (define (free i) (void))
-    (f malloc free))
+  (define (use-resource f)
+    (f (λ () "lock" (void))
+       (λ () "use" (void))
+       (λ () "unlock" (void))))  
   
-  (define evts empty)
-  (define (file-monitor evt)
-    (set! evts (list* evt evts))
-    (not
-     (or
-      ; By the time file-user returns, it must have closed everything it opens
-      (match evts
-        [(list (evt:return 'file-user _ _ app _ _)
-               between-evts ...
-               (evt:call 'file-user _ _ app _)
-               _ ...)
-         (define still-open
-           (for/fold ([fds (set)])
-             ; The log is stored in reverse, so we have to reverse it to look at the in temporal order
-             ([evt (in-list (reverse between-evts))])
-             (match evt
-               [(evt:call 'open _ _ _ (list fd))
-                (set-add fds fd)]
-               [(evt:call 'close _ _ _ (list fd))
-                (set-remove fds fd)]
-               [_
-                fds])))
-         (not (set-empty? still-open))]
-        ; If the above pattern doesn't match, then we haven't yet returned
+  (define locked? (make-weak-hasheq))
+  (define lock->user (make-weak-hasheq))
+  (define unlock->user (make-weak-hasheq))
+  (define use->user (make-weak-hasheq))
+  (define returned? (make-weak-hasheq))
+  (define (monitor evt)
+    (let/ec esc
+      (define (fail) (esc #f))
+      (match evt
+        [(evt:call 'user _ _ _ _ app (list lock use unlock))
+         (hash-set! lock->user (projection-label lock) app)
+         (hash-set! use->user (projection-label use) app)
+         (hash-set! unlock->user (projection-label unlock) app)]
+        [(evt:return 'user _ _ _ _ app _ _)
+         (hash-set! returned? app #t)]
+        [(evt:return 'lock p _ _ _ _ _ _)
+         (hash-set! locked? (hash-ref lock->user p fail) #t)]
+        [(evt:return 'unlock p _ _ _ _ _ _)
+         (hash-set! locked? (hash-ref unlock->user p fail) #f)]
         [_
-         #f])
-      ; We cannot close something that is not open...
-      (match evts
-        [(list (evt:call 'close _ _ _ (list fd))
-               (and since-evts (not (evt:call 'file-user _ _ _ _))) ...
-               (evt:call 'file-user _ _ _ _)
-               _ ...)
-         (define 
-           fd-opened?
-           (for/fold ([fd-opened? #f])
-             ([evt (in-list (reverse since-evts))])
-             (match evt
-               [(evt:call 'open _ _ _ (list (== fd)))
-                #t]
-               [(evt:call 'close _ _ _ (list (== fd)))
-                #f]
-               [_
-                fd-opened?])))
-         (not fd-opened?)]
+         (void)])
+      (and
+       (match evt
+        ; Must not lock or unlock twice
+        [(evt:call 'lock p _ _ _ _ _)
+         (not (hash-ref locked? (hash-ref lock->user p fail) #f))]
+        [(evt:call 'unlock p _ _ _ _ _)
+         (hash-ref locked? (hash-ref unlock->user p fail) #f)]
+        ; Must not use resource unless locked
+        [(evt:call 'use p _ _ _ _ _)
+         (hash-ref locked? (hash-ref use->user p fail) #f)]
+        ; Otherwise, okay
         [_
-         #f]))))
+         #t])
+       ; Must not use anything after return
+       (match evt
+        [(evt:call 'lock p _ _ _ _ _)
+         (not (hash-ref returned? (hash-ref lock->user p fail) #f))]
+        [(evt:call 'unlock p _ _ _ _ _)
+         (not (hash-ref returned? (hash-ref unlock->user p fail) #f))]
+        [(evt:call 'use p _ _ _ _ _)
+         (not (hash-ref returned? (hash-ref use->user p fail) #f))]
+        ; Otherwise, okay
+        [_
+         #t]))))
   
   (provide/contract
-   [use-files
-    (->t file-monitor 'use-files
-         (->t file-monitor 'file-user
-              (->t file-monitor 'open
-                   any/c any/c)
-              (->t file-monitor 'close
-                   any/c any/c)
+   [use-resource
+    (->t monitor 'server
+         (->t monitor 'user
+              (->t monitor 'lock void)
+              (->t monitor 'use void)
+              (->t monitor 'unlock void)
               any/c)
          any/c)]))
 
-(module good-client racket
-  (require 'files)
-  (define (go!)
-    (use-files
-     (λ (open close)
-       (open 0)
-       (close 0)
-       (open 0)
-       (open 1)
-       (close 0)
-       (close 1)
-       (open 2)
-       (open 1)
-       (close 1)
-       (close 2))))
-  (provide go!))
-
-(module bad-client1 racket
-  (require 'files)
-  (define (go!)
-    (use-files
-     (λ (open close)
-       (open 0))))
-  (provide go!))
-(module bad-client2 racket
-  (require 'files)
-  (define (go!)
-    (use-files
-     (λ (open close)
-       (close 0))))
-  (provide go!))
-(module bad-client3 racket
-  (require 'files)
-  (define (go!)
-    (use-files
-     (λ (open close)
-       (open 0)
-       (close 0)
-       (close 0))))
-  (provide go!))
-
 (module tester racket
   (require tests/eli-tester
-           (prefix-in good: 'good-client)
-           (prefix-in bad1: 'bad-client1)
-           (prefix-in bad2: 'bad-client2)
-           (prefix-in bad3: 'bad-client3))
+           'lock)
   (test
-   (good:go!) => (void)
-   (bad1:go!) =error> "disallowed"
-   (bad2:go!) =error> "disallowed"
-   (bad3:go!) =error> "disallowed"))
+   (use-resource
+    (λ (lock use unlock)
+      (lock) (use) (unlock)
+      (lock) (use) (use) (unlock)))
+   =>
+   (void)
+   
+   (use-resource
+    (λ (lock use unlock)
+      (lock) (use) (unlock)
+      (use-resource
+       (λ (lock1 use1 unlock1)
+         (lock1) (lock)
+         (use) (use1)
+         (unlock1) (unlock)))
+      (lock) (use) (use) (unlock)))
+   =>
+   (void)
+   
+   (use-resource
+    (λ (lock use unlock)
+      (use)))
+   =error>
+   "disallowed"
+   
+   (use-resource
+    (λ (lock use unlock)
+      (lock) (use) (unlock) (unlock)))
+   =error>
+   "disallowed"
+   
+   (use-resource
+    (λ (lock use unlock)
+      (lock) (lock)))
+   =error>
+   "disallowed"
+   
+   (use-resource
+    (λ (lock use unlock)
+      (lock) (unlock) (use)))
+   =error>
+   "disallowed"
+   
+   ((use-resource (λ (lock use unlock) lock)))
+   =error>
+   "disallowed"
+   
+   ((use-resource (λ (lock use unlock) use)))
+   =error>
+   "disallowed"
+   
+   ((use-resource (λ (lock use unlock) unlock)))
+   =error>
+   "disallowed"
+   ))
 
 (require 'tester)
-       
