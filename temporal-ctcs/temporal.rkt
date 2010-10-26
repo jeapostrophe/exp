@@ -13,6 +13,13 @@
   (match evts [(list pat ...) #t] [_ #f]))
 (provide evt-regexp)
 
+(define (make-trace-predicate ?)
+  (define evts empty)
+  (λ (evt)
+    (set! evts (cons evt evts))
+    (? evts)))
+(provide make-trace-predicate)
+
 (define LABELS (make-weak-hasheq))
 (define (projection-label v)
   (hash-ref LABELS v #f))

@@ -2,27 +2,22 @@
 
 (module sort/c racket
   (require "temporal.rkt" unstable/match)
-  (define (make-sort-monitor)
-    (define evts empty)
-    (define this-monitor
-      (λ (evt)
-        (set! evts (list* evt evts))
-        (not
-         (or 
-          ; Are we returning from order after a return from sort, where we previously projected this
-          ; order?
-          (evt-regexp evts
-                      (evt:call 'order proj _ _ _ _ _) _ ...
-                      (evt:return 'sort _ _ _ _ _ _ _) _ ...
-                      (evt:proj 'order proj _) _ ...)
-          ; Is there a witness that the order is not transitive?
-          (evt-regexp evts
-                      (evt:return 'order _ f _ _ _ (list c b) (list #f)) _ ...
-                      (evt:return 'order _ f _ _ _ (list b a) (list #t)) _ ...
-                      (evt:return 'order _ f _ _ _ (list c a) (list #f)) _ ...)))))
-    this-monitor)
   (define sort-monitor
-    (make-sort-monitor))
+    (make-trace-predicate
+     (λ (evts)
+       (not
+        (or 
+         ; Are we returning from order after a return from sort, where we previously projected this
+         ; order?
+         (evt-regexp evts
+                     (evt:call 'order proj _ _ _ _ _) _ ...
+                     (evt:return 'sort _ _ _ _ _ _ _) _ ...
+                     (evt:proj 'order proj _) _ ...)
+         ; Is there a witness that the order is not transitive?
+         (evt-regexp evts
+                     (evt:return 'order _ f _ _ _ (list c b) (list #f)) _ ...
+                     (evt:return 'order _ f _ _ _ (list b a) (list #t)) _ ...
+                     (evt:return 'order _ f _ _ _ (list c a) (list #f)) _ ...))))))
   (define sort/c
     (->t sort-monitor 'sort
          (->t sort-monitor 'order
