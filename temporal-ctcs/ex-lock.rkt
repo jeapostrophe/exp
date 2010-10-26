@@ -6,7 +6,7 @@
 |#
 
 (module lock racket
-  (require "temporal.rkt" unstable/match)
+  (require "temporal.rkt")
   (define (use-resource f)
     (f (λ () "lock" (void))
        (λ () "use" (void))
