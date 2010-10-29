@@ -24,14 +24,15 @@
 (define (projection-label v)
   (hash-ref LABELS v #f))
 
-(define (->t* monitor-interpose label)
+(define (*->t* make-monitor-interpose label)
   (make-contract
-   #:name '->t
+   #:name '*->t*
    #:first-order procedure?
    #:projection
    (λ (b)
      ; XXX Add a monitor setup here?
      (λ (f)
+       (define monitor-interpose (make-monitor-interpose))
        (define proj-label (gensym label))
        (define f/proj (monitor-interpose b (evt:proj label proj-label f)))
        (if f/proj
@@ -52,32 +53,44 @@
              f-final)
            (raise-blame-error b f "monitor disallowed projection of ~e" f))))))
 
-(define (->t monitor-allows? label . ctcs)
+(define (->t* monitor-interpose label)
+  (*->t* (λ () monitor-interpose) label))
+
+(define (*->t make-monitor-allows? label . ctcs)
   (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
   (define rng-ctc (first rng-l))
   (define how-many-doms (length dom-ctcs))
-  (define (monitor-interpose b evt)
-    (match evt
-      [(evt:proj label proj f)
-       (if (procedure-arity-includes? f how-many-doms)
-           (and (monitor-allows? evt)
-                f)
-           (raise-blame-error b f "expected a function of ~a argument(s), got: ~e" how-many-doms f))]
-      [(evt:call label proj f f/proj f-final app args)
-       (define args-ctc
-         (for/list ([ctc (in-list dom-ctcs)]
-                    [arg (in-list args)])
-           (define proj ((contract-projection ctc) (blame-swap b)))
-           (proj arg)))
-       (and (monitor-allows? (evt:call label proj f f/proj f-final app args-ctc))
-            args-ctc)]
-      [(evt:return label proj f f/proj f-final app args (list ret))
-       (define rng-proj ((contract-projection rng-ctc) b))
-       (define ret-ctc (list (rng-proj ret)))
-       (and (monitor-allows? (evt:return label proj f f/proj f-final app args ret-ctc))
-            ret-ctc)]))
-  (->t* monitor-interpose label))
+  (define (make-monitor-interpose)
+    (define monitor-allows?
+      (make-monitor-allows?))
+    (define (monitor-interpose b evt)
+      (match evt
+        [(evt:proj label proj f)
+         (if (procedure-arity-includes? f how-many-doms)
+             (and (monitor-allows? evt)
+                  f)
+             (raise-blame-error b f "expected a function of ~a argument(s), got: ~e" how-many-doms f))]
+        [(evt:call label proj f f/proj f-final app args)
+         (define args-ctc
+           (for/list ([ctc (in-list dom-ctcs)]
+                      [arg (in-list args)])
+             (define proj ((contract-projection ctc) (blame-swap b)))
+             (proj arg)))
+         (and (monitor-allows? (evt:call label proj f f/proj f-final app args-ctc))
+              args-ctc)]
+        [(evt:return label proj f f/proj f-final app args (list ret))
+         (define rng-proj ((contract-projection rng-ctc) b))
+         (define ret-ctc (list (rng-proj ret)))
+         (and (monitor-allows? (evt:return label proj f f/proj f-final app args ret-ctc))
+              ret-ctc)]))
+    monitor-interpose)
+  (*->t* make-monitor-interpose label))
+
+(define (->t monitor-allows? label . ctcs)
+  (apply *->t (λ () monitor-allows?) label ctcs))
 
 (provide projection-label
+         *->t*
          ->t*
+         *->t
          ->t)
