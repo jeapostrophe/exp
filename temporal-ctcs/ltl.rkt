@@ -27,6 +27,7 @@
   (ltl:not (ltl:U (ltl:not phi) (ltl:not psi))))
 (struct ltl:X ltl (f) #:transparent)
 
+; XXX Based on \cite{872506}
 (define (models w f)
   (match f
     [(ltl:P ?)
