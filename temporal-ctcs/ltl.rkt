@@ -27,37 +27,6 @@
   (ltl:not (ltl:U (ltl:not phi) (ltl:not psi))))
 (struct ltl:X ltl (f) #:transparent)
 
-; XXX This is broken
-(define (step x_0 f)
-  (match f
-    [(ltl:P ?)
-     (if (? x_0)
-         (values #t ltl:true)
-         (values #f ltl:true))]
-    [(ltl:X f)
-     (error 'step "Does not support X")]
-    [(ltl:not f)
-     (define-values (ok k) (step x_0 f))
-     (values (not ok) (ltl:not k))]
-    [(ltl:and phi psi)
-     (define-values (okl phik) (step x_0 phi))
-     (define-values (okr psik) (step x_0 psi))
-     (values (and okl okr)
-             (ltl:and phik psik))]
-    [(ltl:U phi psi)
-     (step x_0 (ltl:or psi (ltl:and phi (ltl:X (ltl:U phi psi)))))]))
-   
-(define (step* w f)
-  (match w
-    [(list)
-     (models w f)]
-    [(list x_0)
-     (define-values (ok? k) (step x_0 f))
-     ok?]
-    [(list-rest x_0 x_1)
-     (define-values (ok? k) (step x_0 f))
-     (and ok? (step* x_1 k))]))
-
 (define (models w f)
   (match f
     [(ltl:P ?)
@@ -104,11 +73,9 @@
          racket/function)
 
 (define-syntax-rule (test-ltl-false l f)
-  (begin (check-false (models l f))
-         #;(check-false (step* l f))))
+  (begin (check-false (models l f))))
 (define-syntax-rule (test-ltl-true l f)
-  (begin (check-true (models l f))
-         #;(check-true (step* l f))))
+  (begin (check-true (models l f))))
   
 (test-ltl-false empty ltl:true)
 (test-ltl-false empty ltl:false)
