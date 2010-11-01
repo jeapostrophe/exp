@@ -18,6 +18,7 @@
 (define ltl:false
   (ltl:P (λ (e) #f)))
 ; U means "find something that matches psi and make sure everything before matches phi"
+;   or    "phi must hold until psi holds [and psi must hold eventually]"
 (struct ltl:U (phi psi) #:transparent)
 (define (ltl:eventually f)
   (ltl:U ltl:true f))
