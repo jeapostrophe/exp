@@ -135,6 +135,7 @@
 
 (define only-odd?-once (ltl:always (ltl:-> (ltl:P odd?) (ltl:X (ltl:always (ltl:not (ltl:P odd?)))))))
 (test-ltl-true empty only-odd?-once)
+(test-ltl-true (list 2) only-odd?-once)
 (test-ltl-true (list 1) only-odd?-once)
 (test-ltl-true (list 1 2) only-odd?-once)
 (test-ltl-true (list 2 1 2) only-odd?-once)

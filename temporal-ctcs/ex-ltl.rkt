@@ -32,6 +32,9 @@
   
   (test
    (let ([a (get-affine)])
+     (void))
+   
+   (let ([a (get-affine)])
      (a))
    
    (let ([a (get-affine)])
