@@ -23,22 +23,17 @@
        ...)
     (syntax/loc stx
       (local
-        [; next : state input -> (seteq state ...)
-         (define (next st i)
-           (set-union
-            (seteq)
-            (if (eq? st 'state)
-                (match i
-                  [evt (seteq 'next-state ...)]
-                  ...
-                  [_ (seteq)])
-                (seteq))
-            ...))
+        [(define state 
+           (match-lambda
+             [evt (seteq next-state ...)]
+             ...
+             [_ (seteq)]))
+         ...
          ; epsilon-states : state -> (seteq state ...)
          (define (epsilon-states st)
            (set-union
             (seteq)
-            (if (eq? st 'state) (seteq 'state 'epsilon-state ...) (seteq))
+            (if (eq? st state) (seteq state epsilon-state ...) (seteq))
             ...))
          ; run : (seteq state) input -> (seteq state)
          (define (run current-states input)
@@ -46,12 +41,12 @@
              (for/fold ([next-states (seteq)])
                ([current-state (in-set current-states)])
                (set-union next-states
-                          (next current-state input))))
+                          (current-state input))))
            next-states)
          ; accepting? : (seteq state) -> boolean
          (define (accepting? states)
            (for/or ([next (in-set states)])
-             (or (eq? 'end next)
+             (or (eq? end next)
                  ...)))
          ; producer : input -> an-nfa-state
          ; make-an-nfa-state : (seteq state) -> an-nfa-state
@@ -72,7 +67,7 @@
                            (make-an-nfa-state (run next input)))))
          ; initial : an-nfa-state
          (define initial
-           (make-an-nfa-state (seteq 'start)))]
+           (make-an-nfa-state (seteq start)))]
         initial))]))
 
 (define (nfa-advance nfa input)
