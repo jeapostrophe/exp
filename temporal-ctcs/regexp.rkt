@@ -6,6 +6,7 @@
 (define-syntax (seq stx) (raise-syntax-error 'seq "Outside regex" stx))
 (define-syntax (union stx) (raise-syntax-error 'union "Outside regex" stx))
 
+; compile-regex MUST create start and MUST NOT create end
 (define-for-syntax (compile-regex start e end)
   (syntax-parse
    e
@@ -47,7 +48,8 @@
          [end (generate-temporary 'end)])
       (quasisyntax/loc stx
         (nfa start (end)
-             #,@(compile-regex #'start #'e #'end))))]))
+             #,@(compile-regex #'start #'e #'end)
+             [end ()])))]))
 
 (define regex-accepts? nfa-accepts?)  
 
