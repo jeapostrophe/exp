@@ -90,9 +90,12 @@
    [(union lhs:expr rest:expr ...)
     (compile-regex #'(union lhs (union rest ...)))]
    [pat:expr
-    (syntax/loc e
-      (nfa start_pat (end_pat)
-           [start_pat ([pat (end_pat)])]))]))
+    (with-syntax*
+        ([start_pat (generate-temporary 'start_pat)]
+         [end_pat (generate-temporary 'end_pat)])
+      (syntax/loc e
+        (nfa start_pat (end_pat)
+             [start_pat ([pat (end_pat)])])))]))
 
 (define-syntax (regex stx)
   (syntax-parse
@@ -113,7 +116,3 @@
  (regex-accepts? M (list 0 1 0 0 1 0))
  (regex-accepts? M (list))
  (regex-accepts? M (list 1 0)) => #f)
-
-    
-    
-    
