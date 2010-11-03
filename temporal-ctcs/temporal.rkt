@@ -24,6 +24,16 @@
 (define (projection-label v)
   (hash-ref LABELS v #f))
 
+#;(define (K first-order? make-projection)
+  (make-contract
+   #:name 'K
+   #:first-order first-order?
+   #:projection
+   (λ (b)
+     (λ (f)
+       (define-values (dom-Ks rng-Ks) (make-projection b f))
+       ...))))
+
 (define (*->t* make-monitor-interpose label)
   (make-contract
    #:name '*->t*
