@@ -55,7 +55,16 @@
               #,@e-states
               [#,end ()]))]))
 
-(define regex-accepts? nfa/ep-accepts?)  
+(define regex-advance nfa/ep-advance)
+(define regex-accepting? nfa/ep-accepting?)
+(define regex-accepts? nfa/ep-accepts?)
+
+(provide
+ seq union
+ regex
+ regex-advance
+ regex-accepting?
+ regex-accepts?)
 
 (require tests/eli-tester)
 (define M

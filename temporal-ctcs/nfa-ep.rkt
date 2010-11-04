@@ -48,12 +48,14 @@
              ...)))]))
 
 (define nfa/ep-advance nfa-advance)
+(define nfa/ep-accepting? nfa-accepting?)
 (define nfa/ep-accepts? nfa-accepts?)
 
 (provide
  epsilon
  nfa/ep
  nfa/ep-advance
+ nfa/ep-accepting?
  nfa/ep-accepts?)
 
 (require tests/eli-tester)

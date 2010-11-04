@@ -49,17 +49,19 @@
            (make-an-nfa-state (seteq start ...)))]
         initial))]))
 
+(define nfa-accepting? an-nfa-state-accepting?)
 (define (nfa-advance nfa input)
   ((an-nfa-state-next nfa) input))
 
 (define (nfa-accepts? nfa evts)
   (if (empty? evts)
-      (an-nfa-state-accepting? nfa)
+      (nfa-accepting? nfa)
       (nfa-accepts? (nfa-advance nfa (first evts)) (rest evts))))
 
 (provide
  nfa
  nfa-advance
+ nfa-accepting?
  nfa-accepts?)
 
 (require tests/eli-tester)
