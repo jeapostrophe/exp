@@ -16,13 +16,13 @@
     (define start (generate-temporary 'start))
     (define-values (start_lhs lhs-states) (compile-regex #'lhs (list start)))
     (values
-     start
+     (list start)
      (quasisyntax/loc e
-       ([#,start ([epsilon (#,start_lhs #,@ends)])]
+       ([#,start ([epsilon (#,@start_lhs #,@ends)])]
         #,@lhs-states)))]
    [(seq lhs:expr rhs:expr)
     (define-values (start_rhs rhs-states) (compile-regex #'rhs ends))
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs (list start_rhs)))
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs start_rhs))
     (values start_lhs
             (quasisyntax/loc e
               (#,@lhs-states
@@ -32,17 +32,15 @@
    [(union lhs:expr rhs:expr)
     (define-values (start_lhs lhs-states) (compile-regex #'lhs ends))
     (define-values (start_rhs rhs-states) (compile-regex #'rhs ends))
-    (define start (generate-temporary 'start_union))
-    (values start
+    (values (append start_lhs start_rhs)
             (quasisyntax/loc e
-              ([#,start ([epsilon (#,start_lhs #,start_rhs)])]
-               #,@lhs-states
+              (#,@lhs-states
                #,@rhs-states)))]
    [(union lhs:expr rest:expr ...)
     (compile-regex #'(union lhs (union rest ...)) ends)]
    [pat:expr
     (define start (generate-temporary #'pat))
-    (values start
+    (values (list start)
             (quasisyntax/loc e
               ([#,start ([pat (#,@ends)])])))]))
 
@@ -51,9 +49,9 @@
    stx
    [(_ e:expr)
     (define end (generate-temporary 'end))
-    (define-values (start e-states) (compile-regex #'e (list end)))
+    (define-values (starts e-states) (compile-regex #'e (list end)))
     (quasisyntax/loc stx
-      (nfa/ep (#,start) (#,end)
+      (nfa/ep (#,@starts) (#,end)
               #,@e-states
               [#,end ()]))]))
 
