@@ -7,10 +7,10 @@
                      racket/list
                      racket/base))
 
-(struct an-nfa-state (accepting? next))
+(struct an-nfa/ep-state (accepting? next))
 
-(define-syntax (epsilon stx) (raise-syntax-error 'epsilon "Outside nfa" stx))
-(define-syntax (nfa stx)
+(define-syntax (epsilon stx) (raise-syntax-error 'epsilon "Outside nfa/ep" stx))
+(define-syntax (nfa/ep stx)
   (syntax-parse
    stx
    #:literals (epsilon)
@@ -48,8 +48,8 @@
            (for/or ([next (in-set states)])
              (or (eq? end next)
                  ...)))
-         ; producer : input -> an-nfa-state
-         ; make-an-nfa-state : (seteq state) -> an-nfa-state
+         ; producer : input -> an-nfa/ep-state
+         ; make-an-nfa/ep-state : (seteq state) -> an-nfa/ep-state
          (define (add-epsilon-states sts)
            (for/fold ([next-states (seteq)])
              ([current-state (in-set sts)])
@@ -60,33 +60,33 @@
            (if (= (set-count sts) (set-count ns))
                ns
                (add-epsilon-states* ns)))
-         (define (make-an-nfa-state current-states)
+         (define (make-an-nfa/ep-state current-states)
            (define next (add-epsilon-states* current-states))
-           (an-nfa-state (accepting? next)
+           (an-nfa/ep-state (accepting? next)
                          (λ (input)
-                           (make-an-nfa-state (run next input)))))
-         ; initial : an-nfa-state
+                           (make-an-nfa/ep-state (run next input)))))
+         ; initial : an-nfa/ep-state
          (define initial
-           (make-an-nfa-state (seteq start)))]
+           (make-an-nfa/ep-state (seteq start)))]
         initial))]))
 
-(define (nfa-advance nfa input)
-  ((an-nfa-state-next nfa) input))
+(define (nfa/ep-advance nfa/ep input)
+  ((an-nfa/ep-state-next nfa/ep) input))
 
-(define (nfa-accepts? nfa evts)
+(define (nfa/ep-accepts? nfa/ep evts)
   (if (empty? evts)
-      (an-nfa-state-accepting? nfa)
-      (nfa-accepts? (nfa-advance nfa (first evts)) (rest evts))))
+      (an-nfa/ep-state-accepting? nfa/ep)
+      (nfa/ep-accepts? (nfa/ep-advance nfa/ep (first evts)) (rest evts))))
 
 (provide
  epsilon
- nfa
- nfa-advance
- nfa-accepts?)
+ nfa/ep
+ nfa/ep-advance
+ nfa/ep-accepts?)
 
 (require tests/eli-tester)
 (define M
-  (nfa s0 (s1 s3)
+  (nfa/ep s0 (s1 s3)
        [s0 ([epsilon (s1 s3)])]
        [s1 ([0 (s2)]
             [1 (s1)])]
@@ -98,10 +98,10 @@
             [1 (s3)])]))
 
 (test
- (nfa-accepts? M (list 1 0 1 0 1))
- (nfa-accepts? M (list 0 1 0 1 0))
- (nfa-accepts? M (list 1 0 1 1 0 1))
- (nfa-accepts? M (list 0 1 0 0 1 0))
- (nfa-accepts? M (list))
- (nfa-accepts? M (list 1 0)) => #f)
+ (nfa/ep-accepts? M (list 1 0 1 0 1))
+ (nfa/ep-accepts? M (list 0 1 0 1 0))
+ (nfa/ep-accepts? M (list 1 0 1 1 0 1))
+ (nfa/ep-accepts? M (list 0 1 0 0 1 0))
+ (nfa/ep-accepts? M (list))
+ (nfa/ep-accepts? M (list 1 0)) => #f)
 

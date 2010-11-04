@@ -1,5 +1,5 @@
 #lang racket
-(require "nfa.rkt"
+(require "nfa-ep.rkt"
          (for-syntax syntax/parse
                      unstable/syntax))
 
@@ -47,11 +47,11 @@
         ([start (generate-temporary 'start)]
          [end (generate-temporary 'end)])
       (quasisyntax/loc stx
-        (nfa start (end)
+        (nfa/ep start (end)
              #,@(compile-regex #'start #'e #'end)
              [end ()])))]))
 
-(define regex-accepts? nfa-accepts?)  
+(define regex-accepts? nfa/ep-accepts?)  
 
 (require tests/eli-tester)
 (define M
