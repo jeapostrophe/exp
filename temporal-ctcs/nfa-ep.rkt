@@ -1,5 +1,5 @@
 #lang racket/base
-(require "nfa.rkt"
+(require "nfa-bits.rkt"
          (for-syntax syntax/parse
                      unstable/syntax
                      syntax/id-table
