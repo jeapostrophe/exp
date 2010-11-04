@@ -14,7 +14,7 @@
   (syntax-parse
    stx
    #:literals (epsilon)
-   [(_ start:id
+   [(_ (start:id ...)
        (end:id ...)
        [state:id ((~optional [epsilon (epsilon-state:id ...)]
                              #:defaults ([(epsilon-state 1) empty]))
@@ -67,7 +67,7 @@
                            (make-an-nfa/ep-state (run next input)))))
          ; initial : an-nfa/ep-state
          (define initial
-           (make-an-nfa/ep-state (seteq start)))]
+           (make-an-nfa/ep-state (seteq start ...)))]
         initial))]))
 
 (define (nfa/ep-advance nfa/ep input)
@@ -86,7 +86,7 @@
 
 (require tests/eli-tester)
 (define M
-  (nfa/ep s0 (s1 s3)
+  (nfa/ep (s0) (s1 s3)
        [s0 ([epsilon (s1 s3)])]
        [s1 ([0 (s2)]
             [1 (s1)])]

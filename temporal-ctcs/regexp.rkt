@@ -6,50 +6,56 @@
 (define-syntax (seq stx) (raise-syntax-error 'seq "Outside regex" stx))
 (define-syntax (union stx) (raise-syntax-error 'union "Outside regex" stx))
 
-; compile-regex MUST create start and MUST NOT create end
-(define-for-syntax (compile-regex start e end)
+; compile-regex : pattern end-state-id -> (values start-state-id nfa-states)
+; compile-regex MUST NOT create end
+(define-for-syntax (compile-regex e end)
   (syntax-parse
    e
    #:literals (seq union *)
    [(* lhs:expr)
-    (with-syntax*
-        ([start_lhs (generate-temporary 'start_lhs)])
-      (quasisyntax/loc e
-        ([#,start ([epsilon (start_lhs #,end)])]
-         #,@(compile-regex #'start_lhs #'lhs start))))]
+    (define start (generate-temporary 'start))
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs start))
+    (values
+     start
+     (quasisyntax/loc e
+       ([#,start ([epsilon (#,start_lhs #,end)])]
+        #,@lhs-states)))]
    [(seq lhs:expr rhs:expr)
-    (with-syntax*
-        ([start_rhs (generate-temporary 'start_rhs)])
-      (quasisyntax/loc e
-        (#,@(compile-regex start #'lhs #'start_rhs)
-         #,@(compile-regex #'start_rhs #'rhs end))))]
+    (define-values (start_rhs rhs-states) (compile-regex #'rhs end))
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs start_rhs))
+    (values start_lhs
+            (quasisyntax/loc e
+              (#,@lhs-states
+               #,@rhs-states)))]
    [(seq lhs:expr rest:expr ...)
-    (compile-regex start #'(seq lhs (seq rest ...)) end)]
+    (compile-regex #'(seq lhs (seq rest ...)) end)]
    [(union lhs:expr rhs:expr)
-    (with-syntax*
-        ([start_lhs (generate-temporary 'start_lhs)]
-         [start_rhs (generate-temporary 'start_rhs)])
-      (quasisyntax/loc e
-        ([#,start ([epsilon (start_lhs start_rhs)])]
-         #,@(compile-regex #'start_lhs #'lhs end)
-         #,@(compile-regex #'start_rhs #'rhs end))))]
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs end))
+    (define-values (start_rhs rhs-states) (compile-regex #'rhs end))
+    (define start (generate-temporary 'start_union))
+    (values start
+            (quasisyntax/loc e
+              ([#,start ([epsilon (#,start_lhs #,start_rhs)])]
+               #,@lhs-states
+               #,@rhs-states)))]
    [(union lhs:expr rest:expr ...)
-    (compile-regex start #'(union lhs (union rest ...)) end)]
+    (compile-regex #'(union lhs (union rest ...)) end)]
    [pat:expr
-    (quasisyntax/loc e
-      ([#,start ([pat (#,end)])]))]))
+    (define start (generate-temporary #'pat))
+    (values start
+            (quasisyntax/loc e
+              ([#,start ([pat (#,end)])])))]))
 
 (define-syntax (regex stx)
   (syntax-parse
    stx
    [(_ e:expr)
-    (with-syntax*
-        ([start (generate-temporary 'start)]
-         [end (generate-temporary 'end)])
-      (quasisyntax/loc stx
-        (nfa/ep start (end)
-             #,@(compile-regex #'start #'e #'end)
-             [end ()])))]))
+    (define end (generate-temporary 'end))
+    (define-values (start e-states) (compile-regex #'e end))
+    (quasisyntax/loc stx
+      (nfa/ep (#,start) (#,end)
+              #,@e-states
+              [#,end ()]))]))
 
 (define regex-accepts? nfa/ep-accepts?)  
 
