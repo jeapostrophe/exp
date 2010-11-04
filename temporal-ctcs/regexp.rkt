@@ -8,30 +8,30 @@
 
 ; compile-regex : pattern end-state-id -> (values start-state-id nfa-states)
 ; compile-regex MUST NOT create end
-(define-for-syntax (compile-regex e end)
+(define-for-syntax (compile-regex e ends)
   (syntax-parse
    e
    #:literals (seq union *)
    [(* lhs:expr)
     (define start (generate-temporary 'start))
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs start))
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs (list start)))
     (values
      start
      (quasisyntax/loc e
-       ([#,start ([epsilon (#,start_lhs #,end)])]
+       ([#,start ([epsilon (#,start_lhs #,@ends)])]
         #,@lhs-states)))]
    [(seq lhs:expr rhs:expr)
-    (define-values (start_rhs rhs-states) (compile-regex #'rhs end))
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs start_rhs))
+    (define-values (start_rhs rhs-states) (compile-regex #'rhs ends))
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs (list start_rhs)))
     (values start_lhs
             (quasisyntax/loc e
               (#,@lhs-states
                #,@rhs-states)))]
    [(seq lhs:expr rest:expr ...)
-    (compile-regex #'(seq lhs (seq rest ...)) end)]
+    (compile-regex #'(seq lhs (seq rest ...)) ends)]
    [(union lhs:expr rhs:expr)
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs end))
-    (define-values (start_rhs rhs-states) (compile-regex #'rhs end))
+    (define-values (start_lhs lhs-states) (compile-regex #'lhs ends))
+    (define-values (start_rhs rhs-states) (compile-regex #'rhs ends))
     (define start (generate-temporary 'start_union))
     (values start
             (quasisyntax/loc e
@@ -39,19 +39,19 @@
                #,@lhs-states
                #,@rhs-states)))]
    [(union lhs:expr rest:expr ...)
-    (compile-regex #'(union lhs (union rest ...)) end)]
+    (compile-regex #'(union lhs (union rest ...)) ends)]
    [pat:expr
     (define start (generate-temporary #'pat))
     (values start
             (quasisyntax/loc e
-              ([#,start ([pat (#,end)])])))]))
+              ([#,start ([pat (#,@ends)])])))]))
 
 (define-syntax (regex stx)
   (syntax-parse
    stx
    [(_ e:expr)
     (define end (generate-temporary 'end))
-    (define-values (start e-states) (compile-regex #'e end))
+    (define-values (start e-states) (compile-regex #'e (list end)))
     (quasisyntax/loc stx
       (nfa/ep (#,start) (#,end)
               #,@e-states
