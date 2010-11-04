@@ -1,5 +1,6 @@
 #lang racket/base
 (require racket/local
+         racket/unsafe/ops
          racket/match
          racket/set
          racket/list
@@ -35,28 +36,38 @@
     (define end-set (set->num #'(end ...)))
     (define start-set (set->num #'(start ...)))
     
+    (define is-fixnum? (fixnum? how-many))
+    
     (with-syntax*
         ([(state_n ...) (build-list how-many (λ (x) x))]
          [end-set end-set]
          [start-set start-set]
          [((next-state_n ...) ...)
           (for/list ([states (in-list (syntax->list #'(((next-state ...) ...) ...)))])
-            (syntax-map set->num states))])
+            (syntax-map set->num states))]
+         ; Use optimized version if there are not too many states
+         [op= (if is-fixnum? #'unsafe-fx= #'=)]
+         [bit-shift (if is-fixnum? #'unsafe-fxlshift #'arithmetic-shift)]
+         [bit-ior (if is-fixnum? #'unsafe-fxior #'bitwise-ior)]
+         [bit-and (if is-fixnum? #'unsafe-fxand #'bitwise-and)])
       (syntax/loc stx
         (local
           [; run : (seteq state) input -> (seteq state)
            (define (run current-states input)
-             (bitwise-ior
-              (if (bitwise-bit-set? current-states state_n)
-                  (match input
-                    [evt next-state_n]
-                    ...
-                    [_ 0])
-                  0)
-              ...))
+             (define next 0)
+             (define compare 1)
+             (begin
+               (unless (op= 0 (bit-and current-states compare))
+                 (match input
+                   [evt (set! next (bit-ior next next-state_n))]
+                   ...
+                   [_ #f]))
+               (set! compare (bit-shift compare 1)))
+             ...
+             next)
            ; accepting? : (seteq state) -> boolean
            (define (accepting? states)
-             (not (zero? (bitwise-and states end-set))))
+             (not (op= 0 (bit-and states end-set))))
            ; producer : input -> an-nfa-state
            ; make-an-nfa-state : (seteq state) -> an-nfa-state
            (define (make-an-nfa-state next)
