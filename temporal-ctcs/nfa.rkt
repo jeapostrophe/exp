@@ -31,10 +31,10 @@
          ...
          ; epsilon-states : state -> (seteq state ...)
          (define (epsilon-states st)
-           (set-union
-            (seteq)
-            (if (eq? st state) (seteq state epsilon-state ...) (seteq))
-            ...))
+           (cond
+             [(eq? st state)
+              (seteq state epsilon-state ...)]
+             ...))
          ; run : (seteq state) input -> (seteq state)
          (define (run current-states input)
            (define next-states
