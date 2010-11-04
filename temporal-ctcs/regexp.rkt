@@ -6,7 +6,7 @@
 (define-syntax (seq stx) (raise-syntax-error 'seq "Outside regex" stx))
 (define-syntax (union stx) (raise-syntax-error 'union "Outside regex" stx))
 
-; compile-regex : pattern end-state-id -> (values start-state-id nfa-states)
+; compile-regex : pattern end-state-ids -> (values start-state-ids nfa-states)
 ; compile-regex MUST NOT create end
 (define-for-syntax (compile-regex e ends)
   (syntax-parse
