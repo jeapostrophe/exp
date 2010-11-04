@@ -1,13 +1,11 @@
 #lang racket/base
-(require racket/local
-         racket/match
-         racket/set
-         racket/list
+(require "nfa.rkt"
          (for-syntax syntax/parse
+                     unstable/syntax
+                     syntax/id-table
+                     racket/dict
                      racket/list
                      racket/base))
-
-(struct an-nfa/ep-state (accepting? next))
 
 (define-syntax (epsilon stx) (raise-syntax-error 'epsilon "Outside nfa/ep" stx))
 (define-syntax (nfa/ep stx)
@@ -21,62 +19,36 @@
                   [evt:expr (next-state:id ...)]
                   ...)]
        ...)
-    (syntax/loc stx
-      (local
-        [(define state 
-           (match-lambda
-             [evt (seteq next-state ...)]
-             ...
-             [_ (seteq)]))
-         ...
-         ; epsilon-states : state -> (seteq state ...)
-         (define (epsilon-states st)
-           (cond
-             [(eq? st state)
-              (seteq state epsilon-state ...)]
-             ...))
-         ; run : (seteq state) input -> (seteq state)
-         (define (run current-states input)
-           (define next-states
-             (for/fold ([next-states (seteq)])
-               ([current-state (in-set current-states)])
-               (set-union next-states
-                          (current-state input))))
-           next-states)
-         ; accepting? : (seteq state) -> boolean
-         (define (accepting? states)
-           (for/or ([next (in-set states)])
-             (or (eq? end next)
-                 ...)))
-         ; producer : input -> an-nfa/ep-state
-         ; make-an-nfa/ep-state : (seteq state) -> an-nfa/ep-state
-         (define (add-epsilon-states sts)
-           (for/fold ([next-states (seteq)])
-             ([current-state (in-set sts)])
-             (set-union next-states
-                        (epsilon-states current-state))))
-         (define (add-epsilon-states* sts)
-           (define ns (add-epsilon-states sts))
-           (if (= (set-count sts) (set-count ns))
-               ns
-               (add-epsilon-states* ns)))
-         (define (make-an-nfa/ep-state current-states)
-           (define next (add-epsilon-states* current-states))
-           (an-nfa/ep-state (accepting? next)
-                         (λ (input)
-                           (make-an-nfa/ep-state (run next input)))))
-         ; initial : an-nfa/ep-state
-         (define initial
-           (make-an-nfa/ep-state (seteq start ...)))]
-        initial))]))
+    (define state->epsilon (make-bound-id-table))
+    (for ([stx (in-list (syntax->list #'([state epsilon-state ...] ...)))])
+      (syntax-case stx ()
+        [[state . es]
+         (bound-id-table-set! state->epsilon #'state (syntax->list #'es))]))
+    (define seen? (make-parameter (make-immutable-bound-id-table)))
+    (define (state->epsilons state)
+      (if (dict-has-key? (seen?) state)
+          empty
+          (parameterize ([seen? (bound-id-table-set (seen?) state #t)])
+            (define es (bound-id-table-ref state->epsilon state empty))
+            (list* state (append-map state->epsilons es)))))
+    (with-syntax*
+        ([((start* ...) ...)
+          (syntax-map state->epsilons #'(start ...))]
+         [((((next-state* ...) ...) ...) ...)
+          (syntax-map (λ (ns*)
+                        (syntax-map (λ (ns)
+                                      (syntax-map state->epsilons ns))
+                                    ns*))
+                      #'(((next-state ...) ...) ...))])
+      (syntax/loc stx
+        (nfa (start* ... ...)
+             (end ...)
+             [state ([evt (next-state* ... ...)]
+                     ...)]
+             ...)))]))
 
-(define (nfa/ep-advance nfa/ep input)
-  ((an-nfa/ep-state-next nfa/ep) input))
-
-(define (nfa/ep-accepts? nfa/ep evts)
-  (if (empty? evts)
-      (an-nfa/ep-state-accepting? nfa/ep)
-      (nfa/ep-accepts? (nfa/ep-advance nfa/ep (first evts)) (rest evts))))
+(define nfa/ep-advance nfa-advance)
+(define nfa/ep-accepts? nfa-accepts?)
 
 (provide
  epsilon
