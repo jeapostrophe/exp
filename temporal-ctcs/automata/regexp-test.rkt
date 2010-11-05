@@ -12,7 +12,7 @@
            (not (regex-accepts? r fail)) ...))))
 (define-syntax-rule (test-regex R (succ ...) (fail ...))
   (test (test-regex* R (succ ...) (fail ...))
-        #;(test-regex* (complement R) (fail ...) (succ ...))))
+        (test-regex* (complement R) (fail ...) (succ ...))))
 
 (test
  (test-regex "A"
@@ -20,7 +20,7 @@
              [(list)
               (list "B")])
  
- #;(test-regex (complement "A")
+ (test-regex (complement "A")
              [(list)
               (list "B")
               (list "A" "A")]
@@ -69,18 +69,18 @@
              []
              [(list) (list 1)])
  
- #;(test-regex (difference (? even?) 2)
+ (test-regex (difference (? even?) 2)
              [(list 4)
               (list 6)]
              [(list 3)
               (list 2)])
  
- #;(test-regex (intersection (? even?) 2)
+ (test-regex (intersection (? even?) 2)
              [(list 2)]
              [(list 1)
               (list 4)])
  
- #;(test-regex (complement (seq "A" (opt "B")))
+ (test-regex (complement (seq "A" (opt "B")))
              [(list "A" "B" "C")]
              [(list "A")
               (list "A" "B")])

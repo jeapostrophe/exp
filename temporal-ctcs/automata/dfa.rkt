@@ -16,6 +16,8 @@
 (define-syntax (*dfa stx)
   (syntax-parse
    stx
+   ; XXX start must be a state
+   ; XXX every next-state must be a state
    [(_ start:id
        ([state:id ([evt:expr next-state:id] ...)]
         ...)

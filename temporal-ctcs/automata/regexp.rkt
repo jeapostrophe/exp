@@ -1,5 +1,6 @@
 #lang racket
-(require "regexp-help.rkt"
+(require "dfa.rkt"
+         "regexp-help.rkt"
          (for-syntax syntax/parse
                      racket/list
                      racket/match
@@ -15,89 +16,114 @@
 (define-syntax (union stx) (raise-syntax-error 'union "Outside regex" stx))
 (define-syntax (star stx) (raise-syntax-error 'star "Outside regex" stx))
 
-(define (fail-forever input)
-  (values #f #t fail-forever))
-(define (regex-or lhs-next rhs-next)
-  (λ (input)
-    (define-values (lhs-accepting? lhs-done? lhs-next+) (lhs-next input))
-    (define-values (rhs-accepting? rhs-done? rhs-next+) (rhs-next input))
-    (values (or lhs-accepting? rhs-accepting?)
-            (or lhs-done? rhs-done?)
-            (regex-or lhs-next+ rhs-next+))))
-(define (regex-seq accepting? done? next get-after)
-  (if done?
-      (get-after)
-      (values accepting?
-              done?
-              (λ (input)
-                (define-values (accepting?+ done?+ next+) (next input))
-                (regex-seq accepting?+ done?+ next+ get-after)))))
-
-(define-syntax (compile-regex stx)
+(define-for-syntax (compile-regex e)
   (syntax-parse
-   stx
+   e
    #:literals (complement seq union star epsilon)
-   [(_ (complement lhs:expr))
-    (raise-syntax-error 'regex "Complement not supported" stx)]
-   [(_ (star lhs:expr))
-    (raise-syntax-error 'regex "Star not supported" stx)
-    #;(syntax/loc stx
-      (let-values ([(lhs-accepting? lhs-next) (compile-regex lhs)])
-        (letrec ([this (λ () (regex-seq #t lhs-next this))])
-          (this))))]
-   [(_ (seq lhs:expr rhs:expr))
-    (syntax/loc stx
-      (let-values ([(lhs-accepting? lhs-done? lhs-next) (compile-regex lhs)])
-        (regex-seq lhs-accepting? lhs-done? lhs-next (λ () (compile-regex rhs)))))]
-   [(_ (seq lhs:expr rest:expr ...))
-    (syntax/loc stx
-      (compile-regex (seq lhs (seq rest ...))))]
-   [(_ (union lhs:expr rhs:expr))
-    (syntax/loc stx
-      (let-values ([(lhs-accepting? lhs-done? lhs-next) (compile-regex lhs)]
-                   [(rhs-accepting? rhs-done? rhs-next) (compile-regex rhs)])
-        (values (or lhs-accepting? rhs-accepting?)
-                (or lhs-done? rhs-done?)
-                (regex-or lhs-next rhs-next))))]
+   [(complement lhs:expr)
+    #;(with-syntax*
+        [(_ start_1 ([accepting-state_1 (accepting-rule_1 ...)] ...) (non-accepting_1 ...))
+         (compile-regex #'lhs)]
+      ...)
+    
+    (raise-syntax-error 'regex "Complement not supported" e)]
+   [(star lhs:expr)
+    (raise-syntax-error 'regex "Star not supported" e)
+    #;(with-syntax*
+        ([start_star (generate-temporary 'start_star)]
+         [(_ (starts_1 ...) ([accepting-state_1 (accepting-rule_1 ...)] ...) (non-accepting_1 ...))
+          (compile-regex #'lhs)])
+      (quasisyntax/loc e
+        (nfa* (start_star) 
+              ([start_star ([epsilon (starts_1 ...)])])
+              ([accepting-state_1 ([epsilon (start_star)] accepting-rule_1 ...)] ...
+               non-accepting_1 ...))))]
+   [(seq lhs:expr rhs:expr)
+    (raise-syntax-error 'regex "Seq not supported" e)
+    #;(with-syntax* 
+        ([(_ start_1 ([accepting-state_1 (accepting-rule_1 ...)] ...) (non-accepting_1 ...))
+          (compile-regex #'lhs)]
+         [(_ start_2 (accepting_2 ...) (non-accepting_2 ...))
+          (compile-regex #'rhs)]
+         [([accepting-state_2 . _] ...) #'(accepting_2 ...)])
+      (quasisyntax/loc e
+        (dfa start_1
+              (accepting_2 ...)
+              ([accepting-state_1 ([epsilon (starts_2 ...)] accepting-rule_1 ...)] ...
+               non-accepting_1 ...
+               non-accepting_2 ...))))]
+   [(seq lhs:expr rest:expr ...)
+    (compile-regex #'(seq lhs (seq rest ...)))]
+   [(union lhs:expr rhs:expr)
+    (define (state-cross-product lhs rhs)
+      (for*/list ([a_1 (in-list (syntax->list lhs))]
+                  [a_2 (in-list (syntax->list rhs))])
+        (with-syntax*
+            ([[accept_1 ([evt_1 next_1] ...)] a_1]
+             [[accept_2 ([evt_2 next_2] ...)] a_2])
+          (quasisyntax
+           [a_1*a_2 
+           #,@(for*/list ([e_1 (in-list (syntax->list #'([evt_1 next_1] ...)))]
+                          [e_2 (in-list (syntax->list #'([evt_2 next_2] ...)))])
+                (with-syntax*
+                    ([[evt_1 next_1] e_1]
+                     [[evt_2 next_2] e_2])
+                  (syntax
+                   [(and evt_1 evt_2) (
+            
+            ([evt_1*evt_2 next_1*next_2] ...)]))))
+    (with-syntax*
+        ([(_ start_1 
+             ([accept_1 ([evt_1 next_1] ...)] ...)
+             ([!accept_1 ([!evt_1 !next_1] ...)] ...))
+          (compile-regex #'lhs)]
+         [(_ start_2
+             ([accept_2 ([evt_2 next_2] ...)] ...)
+             ([!accept_2 ([!evt_2 !next_2] ...)] ...))
+          (compile-regex #'lhs)]
+         [([accept_1*accept_2 ([evt_1*evt_2 next_1*next_2] ...)])
+          (state-cross-product #'([accept_1 ([evt_1 next_1] ...)] ...)
+                               #'([accept_2 ([evt_2 next_2] ...)] ...))])
+      (dfa start_1*start_2
+           ([accept_1*accept_2 ([evt_1*evt_2 next_1*next_2] ...)] ...
+            [accept_1*!accept_2 ([evt_1*!evt_2 next_1*!next_2] ...)] ...
+            [!accept_1*accept_2 ([!evt_1*evt_2 !next_1*next_2] ...)] ...)
+           ([!accept_1*!accept_2 ([!evt_1*!evt_2 !next_1*!next_2] ...)] ...)))
+      
+    
+    (raise-syntax-error 'regex "Union not supported" e)
+    #;(with-syntax* 
+        ([(_ start_1 (accepting_1 ...) (non-accepting_1 ...)) (compile-regex #'lhs)]
+         [(_ start_2 (accepting_2 ...) (non-accepting_2 ...)) (compile-regex #'rhs)])
+      (quasisyntax/loc e
+        (nfa* (starts_1 ... starts_2 ...)
+              (accepting_1 ... accepting_2 ...)
+              (non-accepting_1 ... non-accepting_2 ...))))]
    [(union lhs:expr rest:expr ...)
-    (syntax/loc stx
-      (compile-regex (union lhs (union rest ...))))]
-   [(_ (~and e (~var transformer (static regex-transformer? "regex transformer"))))
-    (quasisyntax/loc stx
-      (compile-regex #,((regex-transformer->regex (attribute transformer.value)) #'e)))]
-   [(_ (~and e ((~var transformer (static regex-transformer? "regex transformer")) . _)))
-    (quasisyntax/loc stx
-      (compile-regex #,((regex-transformer->regex (attribute transformer.value)) #'e)))]
-   [(_ epsilon)
-    (syntax/loc stx
-      (values #t #t fail-forever))]
-   [(_ pat:expr)
-    (syntax/loc stx
-      (values #f #t
-              (match-lambda [pat (values #t #t fail-forever)]
-                            [_ (values #f #t fail-forever)])))]))
+    (compile-regex #'(union lhs (union rest ...)))]
+   [(~var transformer (static regex-transformer? "regex transformer"))
+    (compile-regex ((regex-transformer->regex (attribute transformer.value)) e))]
+   [((~var transformer (static regex-transformer? "regex transformer")) . _)
+    (compile-regex ((regex-transformer->regex (attribute transformer.value)) e))]
+   [epsilon
+    (syntax/loc e
+      (dfa start ([start ()]) ()))]
+   [pat:expr
+    (syntax/loc e
+      (dfa start ([end ()]) ([start ([pat end])])))]))
 
-(define-syntax-rule (make-a-regex ce)
-  (call-with-values
-   (λ () ce)
-   (λ (a d n) (a-regex a n))))
-(define-syntax-rule (regex e)
-  (make-a-regex (compile-regex e)))
+(define-syntax (regex stx)
+  (syntax-case stx ()
+    [(_ e)
+     (compile-regex #'e)]))
 
-(struct a-regex (accepting? advancer))
-        
-(define (regex-advance r i)
-  (make-a-regex ((a-regex-advancer r) i)))
-(define regex-accepting? a-regex-accepting?)
-(define (regex-accepts? regex evts)
-  (if (empty? evts)
-      (regex-accepting? regex)
-      (regex-accepts? (regex-advance regex (first evts)) (rest evts))))
+(define regex-accepting? dfa-accepting?)
+(define regex-accepts? dfa-accepts?)
 
 (provide
  complement seq union star epsilon
  define-regex-transformer
  regex
- regex-advance
+ (rename-out [dfa? regex?])
  regex-accepting?
  regex-accepts?)
