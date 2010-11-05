@@ -14,13 +14,13 @@
    #:literals (epsilon)
    [(_ (start:id ...)
        (end:id ...)
-       [state:id ((~optional [epsilon (epsilon-state:id ...)]
-                             #:defaults ([(epsilon-state 1) empty]))
+       [state:id ([epsilon (epsilon-state:id ...)]
+                  ...
                   [evt:expr (next-state:id ...)]
                   ...)]
        ...)
     (define state->epsilon (make-bound-id-table))
-    (for ([stx (in-list (syntax->list #'([state epsilon-state ...] ...)))])
+    (for ([stx (in-list (syntax->list #'([state epsilon-state ... ...] ...)))])
       (syntax-case stx ()
         [[state . es]
          (bound-id-table-set! state->epsilon #'state (syntax->list #'es))]))
@@ -61,7 +61,8 @@
 (require tests/eli-tester)
 (define M
   (nfa/ep (s0) (s1 s3)
-       [s0 ([epsilon (s1 s3)])]
+       [s0 ([epsilon (s1)]
+            [epsilon (s3)])]
        [s1 ([0 (s2)]
             [1 (s1)])]
        [s2 ([0 (s1)]

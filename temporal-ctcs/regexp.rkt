@@ -3,119 +3,83 @@
          "regexp-help.rkt"
          (for-syntax syntax/parse
                      racket/list
+                     racket/match
                      "regexp-help.rkt"
                      unstable/syntax))
 
 (define-syntax-rule (define-regex-transformer id lam)
   (define-syntax id (regex-transformer lam)))
 
-(define-syntax (complement stx) (raise-syntax-error 'complement "Outside regex" stx))
 (define-syntax (seq stx) (raise-syntax-error 'seq "Outside regex" stx))
 (define-syntax (union stx) (raise-syntax-error 'union "Outside regex" stx))
 (define-syntax (star stx) (raise-syntax-error 'star "Outside regex" stx))
 
-; XXX Maybe I should change this so that compilation explicitly returns accepting states too?
-; compile-regex : pattern end-state-ids -> (values start-state-ids nfa-states)
-; compile-regex MUST NOT create end and MUST return start-state-ids that exist
-(define-for-syntax (compile-regex e ends)
+(define-for-syntax (compile-regex e)
   (syntax-parse
    e
-   #:literals (complement seq union star epsilon)
-   ; XXX doesn't work
-   #|
-http://compilers.iecc.com/comparch/article/10-01-033
-
-Complement is simple, in particular: the complemented NFA inherits all
-of states and transitions of the original NFA. The meaning of the
-states is inverted: non-accepting states in the original become
-acceptance states, and vice versa.
-   |#
-   [(complement lhs:expr)
-    (define deadend (generate-temporary 'deadend))
-    (define fail (generate-temporary 'fail))
-    ; The sub-regex will compiled so that when it succeeds, it goes to the deadend
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs (list deadend)))
-    (define not-lhs-states
-      (for/list ([stx (in-list (syntax->list lhs-states))])
-        (syntax-case stx (epsilon)
-          [[lhs-state ([epsilon (next-state_e ...)] [evt (next-state ...)] ...)]
-           (quasisyntax/loc stx
-             [lhs-state ([epsilon (next-state_e ... #,@ends)]
-                         [evt (next-state ...)] ...
-                         ; If it doesn't match this, then go to the fail state
-                         [(not (or evt ...)) (#,fail)])])]
-          [[lhs-state ([evt (next-state ...)] ...)]
-           (quasisyntax/loc stx
-             [lhs-state (; If there is no epsilon, then this is not an accepting state
-                         ; so transition to the end states
-                         ; (If we transitioned to the fail state, then we'd consume all
-                         ;  input and thus accept the same strings)
-                         [epsilon #,ends]
-                         [evt (next-state ...)] ...
-                         ; If it doesn't match this, then go to the fail state
-                         [(not (or evt ...)) (#,fail)])])])))
-    (values start_lhs
-            (quasisyntax/loc e
-              ; The explicit fail state cycles on every input and 
-              ; otherwise goes to the end of the whole machine
-              ([#,fail ([epsilon #,ends]
-                        [_ (#,fail)])]
-               ; The deadend goes nowhere
-               [#,deadend ()]
-               #,@not-lhs-states)))]
+   #:literals (seq union star epsilon)
    [(star lhs:expr)
-    (define start (generate-temporary 'start))
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs (list start)))
-    (values
-     (list start)
-     (quasisyntax/loc e
-       ([#,start ([epsilon (#,@start_lhs #,@ends)])]
-        #,@lhs-states)))]
+    (with-syntax*
+        ([start_star (generate-temporary 'start_star)]
+         [(_ (starts_1 ...) ([accepting-state_1 (accepting-rule_1 ...)] ...) (non-accepting_1 ...))
+          (compile-regex #'lhs)])
+      (quasisyntax/loc e
+        (nfa* (start_star) 
+              ([start_star ([epsilon (starts_1 ...)])])
+              ([accepting-state_1 ([epsilon (start_star)] accepting-rule_1 ...)] ...
+               non-accepting_1 ...))))]
    [(seq lhs:expr rhs:expr)
-    (define-values (start_rhs rhs-states) (compile-regex #'rhs ends))
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs start_rhs))
-    (values start_lhs
-            (quasisyntax/loc e
-              (#,@lhs-states
-               #,@rhs-states)))]
+    (with-syntax* 
+        ([(_ (starts_1 ...) ([accepting-state_1 (accepting-rule_1 ...)] ...) (non-accepting_1 ...))
+          (compile-regex #'lhs)]
+         [(_ (starts_2 ...) (accepting_2 ...) (non-accepting_2 ...))
+          (compile-regex #'rhs)]
+         [([accepting-state_2 . _] ...) #'(accepting_2 ...)])
+      (quasisyntax/loc e
+        (nfa* (starts_1 ...)
+              (accepting_2 ...)
+              ([accepting-state_1 ([epsilon (starts_2 ...)] accepting-rule_1 ...)] ...
+               non-accepting_1 ...
+               non-accepting_2 ...))))]
    [(seq lhs:expr rest:expr ...)
-    (compile-regex #'(seq lhs (seq rest ...)) ends)]
+    (compile-regex #'(seq lhs (seq rest ...)))]
    [(union lhs:expr rhs:expr)
-    (define-values (start_lhs lhs-states) (compile-regex #'lhs ends))
-    (define-values (start_rhs rhs-states) (compile-regex #'rhs ends))
-    (values (append start_lhs start_rhs)
-            (quasisyntax/loc e
-              (#,@lhs-states
-               #,@rhs-states)))]
+    (with-syntax* 
+        ([(_ (starts_1 ...) (accepting_1 ...) (non-accepting_1 ...)) (compile-regex #'lhs)]
+         [(_ (starts_2 ...) (accepting_2 ...) (non-accepting_2 ...)) (compile-regex #'rhs)])
+      (quasisyntax/loc e
+        (nfa* (starts_1 ... starts_2 ...)
+              (accepting_1 ... accepting_2 ...)
+              (non-accepting_1 ... non-accepting_2 ...))))]
    [(union lhs:expr rest:expr ...)
-    (compile-regex #'(union lhs (union rest ...)) ends)]
+    (compile-regex #'(union lhs (union rest ...)))]
    [(~var transformer (static regex-transformer? "regex transformer"))
-    (compile-regex ((regex-transformer->regex (attribute transformer.value)) e) ends)]
+    (compile-regex ((regex-transformer->regex (attribute transformer.value)) e))]
    [((~var transformer (static regex-transformer? "regex transformer")) . _)
-    (compile-regex ((regex-transformer->regex (attribute transformer.value)) e) ends)]
+    (compile-regex ((regex-transformer->regex (attribute transformer.value)) e))]
    [epsilon
-    (values ends
-            empty)]
+    (with-syntax ([start (generate-temporary #'pat)])
+      (quasisyntax/loc e
+        (nfa* (start) ([start ()]) ())))]
    [pat:expr
-    (define start (generate-temporary #'pat))
-    (values (list start)
-            (quasisyntax/loc e
-              ([#,start ([pat (#,@ends)])])))]))
+    (with-syntax ([start (generate-temporary #'pat)]
+                  [end (generate-temporary 'end)])
+      (quasisyntax/loc e
+        (nfa* (start) ([end ()]) ([start ([pat (end)])]))))]))
 
 (require (for-syntax racket/pretty))
 (define-syntax (regex stx)
   (syntax-parse
    stx
    [(_ e:expr)
-    (define end (generate-temporary 'end))
-    (define-values (starts e-states) (compile-regex #'e (list end)))
-    (define res
+    (with-syntax*
+        ([(_ starts (accepting-rule ...) (non-accepting-rule ...))
+          (compile-regex #'e)]
+         [([accepting-state . _] ...) #'(accepting-rule ...)])
       (quasisyntax/loc stx
-        (nfa/ep (#,@starts) (#,end)
-                #,@e-states
-                [#,end ()])))
-    (pretty-print (syntax->datum res))    
-    res]))
+        (nfa/ep starts (accepting-state ...)
+                accepting-rule ...
+                non-accepting-rule ...)))]))
 
 (define regex-advance nfa/ep-advance)
 (define regex-accepting? nfa/ep-accepting?)
@@ -146,7 +110,9 @@ acceptance states, and vice versa.
 (define-regex-transformer never
   (syntax-parser
    [x:id #'(plus (and 1 (not 1)))]))
-; XXX Test these
+(define-regex-transformer complement
+  (λ (stx)
+    (raise-syntax-error 'complement "Not supported" stx)))
 (define-regex-transformer difference
   (syntax-rules ()
     [(_ A B)
@@ -159,47 +125,96 @@ acceptance states, and vice versa.
 (provide opt plus rep never difference intersection)
 
 (require tests/eli-tester)
-#|
-(define M
-  (regex (seq epsilon
+
+(define-syntax-rule (test-regex* R (succ ...) (fail ...))
+  (let ()
+    (define r (regex R))
+    (test #:failure-prefix (format "~s" 'R)
+          (test
+           (regex-accepts? r succ) ...
+           (not (regex-accepts? r fail)) ...))))
+(define-syntax-rule (test-regex R (succ ...) (fail ...))
+  (test (test-regex* R (succ ...) (fail ...))
+        #;(test-regex* (complement R) (fail ...) (succ ...))))
+
+(test
+ (test-regex "A"
+             [(list "A")]
+             [(list)
+              (list "B")])
+ 
+ #;(test-regex (complement "A")
+             [(list)
+              (list "B")
+              (list "A" "A")]
+             [(list "A")])
+ 
+ (test-regex (seq 0 1)
+             [(list 0 1)]
+             [(list)
+              (list 0)
+              (list 0 1 1)])
+ 
+ (test-regex (union 0 1)
+             [(list 1)
+              (list 0)]
+             [(list)
+              (list 0 1)
+              (list 0 1 1)])
+ 
+ (test-regex (star 0)
+             [(list)
+              (list 0)
+              (list 0 0)]
+             [(list 1)])
+ 
+ (test-regex epsilon
+             [(list)]
+             [(list 0)])
+ 
+ (test-regex (opt "A")
+             [(list)
+              (list "A")]
+             [(list "B")])
+
+ (test-regex (plus "A")
+             [(list "A")
+              (list "A" "A")]
+             [(list)])
+ 
+ (test-regex (rep "A" 3)
+             [(list "A" "A" "A")]
+             [(list)
+              (list "A")
+              (list "A" "A")])
+ 
+ (test-regex never
+             []
+             [(list) (list 1)])
+ 
+ #;(test-regex (difference (? even?) 2)
+             [(list 4)
+              (list 6)]
+             [(list 3)
+              (list 2)])
+ 
+ #;(test-regex (intersection (? even?) 2)
+             [(list 2)]
+             [(list 1)
+              (list 4)])
+ 
+ #;(test-regex (complement (seq "A" (opt "B")))
+             [(list "A" "B" "C")]
+             [(list "A")
+              (list "A" "B")])
+ 
+ (test-regex (seq epsilon
               (union (seq (star 1) (star (seq 0 (star 1) 0 (star 1))))
                      (seq (star 0) (star (seq 1 (star 0) 1 (star 0)))))
-              epsilon)))
-(define N
-  (regex (seq "A" (opt "B"))))
-(define O
-  (regex (plus "A")))
-(define P
-  (regex (rep "A" 3)))
-(define Q
-  (regex never))
-(define S
-  (regex (complement (seq "A" (opt "B")))))
-(test
- (regex-accepts? Q (list)) => #f
- (regex-accepts? Q (list "A")) => #f
- (regex-accepts? N (list "A"))
- (regex-accepts? N (list "A" "B"))
- (regex-accepts? N (list "A" "B" "C")) => #f 
- (regex-accepts? S (list "A")) => #f
- (regex-accepts? S (list "A" "B")) => #f
- (regex-accepts? S (list "A" "B" "C"))
- (regex-accepts? O (list)) => #f
- (regex-accepts? O (list "A"))
- (regex-accepts? O (list "A" "A"))
- (regex-accepts? P (list)) => #f
- (regex-accepts? P (list "A")) => #f
- (regex-accepts? P (list "A" "A")) => #f
- (regex-accepts? P (list "A" "A" "A"))
- (regex-accepts? M (list 1 0 1 0 1))
- (regex-accepts? M (list 0 1 0 1 0))
- (regex-accepts? M (list 1 0 1 1 0 1))
- (regex-accepts? M (list 0 1 0 0 1 0))
- (regex-accepts? M (list))
- (regex-accepts? M (list 1 0)) => #f)
-|#
-
-(regex-accepts? (regex (seq "A" (opt "B")))
-                (list "A" "B" "C"))
-(regex-accepts? (regex (complement (seq "A" (opt "B"))))
-                (list "A" "B" "C"))
+              epsilon)
+             [(list 1 0 1 0 1)
+              (list 0 1 0 1 0)
+              (list 1 0 1 1 0 1)
+              (list 0 1 0 0 1 0)
+              (list)]
+             [(list 1 0)]))
