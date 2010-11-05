@@ -23,9 +23,6 @@
 (define-regex-transformer never
   (syntax-parser
    [x:id #'(plus (and 1 (not 1)))]))
-(define-regex-transformer complement
-  (λ (stx)
-    (raise-syntax-error 'complement "Not supported" stx)))
 (define-regex-transformer difference
   (syntax-rules ()
     [(_ A B)
