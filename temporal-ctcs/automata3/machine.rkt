@@ -3,10 +3,8 @@
          racket/list)
 
 (struct machine (next)
-        #:transparent
         #:property prop:procedure 0)
-(struct machine-accepting machine ()
-        #:transparent)
+(struct machine-accepting machine ())
 
 (define (machine-complement m)
   (define const
@@ -24,6 +22,12 @@
   (const
    (λ (input)
      (machine-union (m1 input) (m2 input)))))
+
+(define (machine-intersect m1 m2)
+  (machine-complement
+   (machine-union
+    (machine-complement m1)
+    (machine-complement m2))))
 
 (define (machine-seq* m1 make-m2)
   (define seqd-next
@@ -55,6 +59,8 @@
   (machine (λ (input) machine-null)))
 (define machine-epsilon
   (machine-accepting (λ (input) machine-null)))
+(define machine-sigma
+  (machine-accepting (λ (input) machine-sigma)))
 
 (provide/contract
  [machine-accepts? (machine? (listof any/c) . -> . boolean?)]
@@ -62,7 +68,10 @@
  [struct (machine-accepting machine) ([next (any/c . -> . machine?)])]
  [machine-null machine?]
  [machine-epsilon machine?]
+ [machine-sigma machine?]
  [machine-complement (machine? . -> . machine?)]
  [machine-union (machine? machine? . -> . machine?)]
+ [machine-intersect (machine? machine? . -> . machine?)]
+ [machine-seq* (machine? (-> machine?) . -> . machine?)]
  [machine-seq (machine? machine? . -> . machine?)]
  [machine-star (machine? . -> . machine?)])
