@@ -25,35 +25,26 @@
    (λ (input)
      (machine-union (m1 input) (m2 input)))))
 
-(define (machine-seq m1 m2)
-  ; If they both start accepting, then they both accept the empty string,
-  ; so we should accept
-  (define initial
-    (if (and (machine-accepting? m1) (machine-accepting? m2))
-        machine-accepting
-        machine))
-  (define seqd
-    (initial
-     (λ (input)
-       (machine-seq (m1 input) m2))))
+(define (machine-seq* m1 make-m2)
+  (define seqd-next
+    (λ (input)
+      (machine-seq* (m1 input) make-m2)))
   (if (machine-accepting? m1)
-      (machine-union seqd m2)
-      seqd))
+      (let ([m2 (make-m2)])
+        (machine-union 
+         (if (machine-accepting? m2)
+             (machine-accepting seqd-next)
+             (machine seqd-next))
+         m2))
+      (machine seqd-next)))
+
+(define (machine-seq m1 m2)
+  (machine-seq* m1 (λ () m2)))
 
 (define (machine-star m1)
-  ; Accept an empty sequence
   (machine-accepting
-   (λ (input)
-     (define next-m1
-        (m1 input))
-     (define m2
-       (machine-star m1))
-     (define finish-m1
-       (machine-seq next-m1 m2))
-     (if (machine-accepting? next-m1)
-         ; If we have reached the end, then potentially stop
-         (machine-union finish-m1 m2)
-         finish-m1))))
+   (machine-next
+    (machine-seq* m1 (λ () (machine-star m1))))))
 
 (define (machine-accepts? m evts)
   (if (empty? evts)
