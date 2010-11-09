@@ -48,7 +48,12 @@
 (define (machine-star m1)
   (machine-accepting
    (machine-next
-    (machine-seq* m1 (λ () (machine-star m1))))))
+    (machine-seq* 
+     ; Since seq* will force the RHS if m1 is accepting, this could go into
+     ; an infinite loop. However, by removing the accepting-ness, we don't change
+     ; the overall behavior because we ultimately make it initially accepting.
+     (machine (machine-next m1))
+     (λ () (machine-star m1))))))
 
 (define (machine-accepts? m evts)
   (if (empty? evts)
