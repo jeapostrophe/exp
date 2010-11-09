@@ -3,6 +3,7 @@
          "re-help.rkt"
          racket/match
          (for-syntax syntax/parse
+                     unstable/syntax
                      racket/base
                      "re-help.rkt"))
 
@@ -17,40 +18,51 @@
 (define-syntax (star stx) (raise-syntax-error 'star "Outside re" stx))
 
 (define-syntax (re stx)
-  (syntax-parse
-   stx
-   #:literals (complement seq union star epsilon nullset)
-   [(_ (complement lhs:expr))
-    (syntax/loc stx
-      (machine-complement (re lhs)))]
-   [(_ (star lhs:expr))
-    (syntax/loc stx
-      (machine-star (re lhs)))]
-   [(_ (seq lhs:expr rhs:expr))
-    (syntax/loc stx
-      (machine-seq (re lhs) (re rhs)))]
-   [(_ (seq lhs:expr rest:expr ...))
-    (syntax/loc stx
-      (re (seq lhs (seq rest ...))))]
-   [(_ (union lhs:expr rhs:expr))
-    (syntax/loc stx
-      (machine-union (re lhs) (re rhs)))]
-   [(_ (union lhs:expr rest:expr ...))
-    (syntax/loc stx
-      (re (union lhs (union rest ...))))]
-   [(_ (~and e (~var transformer (static re-transformer? "re transformer"))))
-    (quasisyntax/loc stx
-      (re #,((re-transformer->re (attribute transformer.value)) #'e)))]
-   [(_ (~and e ((~var transformer (static re-transformer? "re transformer")) . _)))
-    (quasisyntax/loc stx
-      (re #,((re-transformer->re (attribute transformer.value)) #'e)))]
-   [(_ epsilon)
-    (syntax/loc stx machine-epsilon)]
-   [(_ nullset)
-    (syntax/loc stx machine-null)]
-   [(_ pat:expr)
-    (syntax/loc stx
-      (machine (match-lambda [pat machine-epsilon] [_ machine-null])))]))
+  (with-disappeared-uses
+      (syntax-parse
+       stx
+       #:literals (complement seq union star epsilon nullset)
+       [(_ ((~and op complement) lhs:expr))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (machine-complement (re lhs)))]
+       [(_ ((~and op star) lhs:expr))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (machine-star (re lhs)))]
+       [(_ ((~and op seq) lhs:expr rhs:expr))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (machine-seq (re lhs) (re rhs)))]
+       [(_ ((~and op seq) lhs:expr rest:expr ...))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (re (seq lhs (seq rest ...))))]
+       [(_ ((~and op union) lhs:expr rhs:expr))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (machine-union (re lhs) (re rhs)))]
+       [(_ ((~and op union) lhs:expr rest:expr ...))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (re (union lhs (union rest ...))))]
+       [(_ (~and e (~var transformer (static re-transformer? "re transformer"))))
+        (record-disappeared-uses (list #'transformer))
+        (quasisyntax/loc stx
+          (re #,((re-transformer->re (attribute transformer.value)) #'e)))]
+       [(_ (~and e ((~var transformer (static re-transformer? "re transformer")) . _)))
+        (record-disappeared-uses (list #'transformer))
+        (quasisyntax/loc stx
+          (re #,((re-transformer->re (attribute transformer.value)) #'e)))]
+       [(_ (~and op epsilon))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx machine-epsilon)]
+       [(_ (~and op nullset))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx machine-null)]
+       [(_ pat:expr)
+        (syntax/loc stx
+          (machine (match-lambda [pat machine-epsilon] [_ machine-null])))])))
 
 (define re-accepting? machine-accepting?)
 (define re-accepts? machine-accepts?)

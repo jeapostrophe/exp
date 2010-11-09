@@ -1,5 +1,9 @@
 #lang racket
-(require (for-syntax syntax/parse)
+(require unstable/match
+         (for-syntax syntax/parse
+                     syntax/id-table
+                     racket/dict
+                     unstable/syntax)
          "temporal.rkt"
          "automata3/re.rkt"
          "automata3/re-ext.rkt")
@@ -9,35 +13,47 @@
 (define-syntax-rule (define-stx-ids id ...)
   (begin (define-stx-id id) ...))
 
-(define-stx-ids forall Pair Sum : call ret dot U)
+(define-stx-ids forall Pair Sum :)
+
+(define-for-syntax (compile-K binds mon stx)
+  (with-disappeared-uses
+      (syntax-parse
+       stx
+       #:literals (Pair Sum : ->)
+       [((~and p Pair) K_1 K_2)
+        (record-disappeared-uses (list #'p))
+        (quasisyntax/loc stx
+          (cons/c #,(compile-K binds mon #'K_1)
+                  #,(compile-K binds mon #'K_2)))]
+       [((~and s Sum) K_1 K_2)
+        (record-disappeared-uses (list #'s))
+        (quasisyntax/loc stx
+          (or/c #,(compile-K binds mon #'K_1)
+                #,(compile-K binds mon #'K_2)))]
+       [((~and c :) n ((~and a ->) K_1 K_2))
+        (record-disappeared-uses (list #'c #'a))
+        (dict-set! binds #'n #t)
+        (quasisyntax/loc stx
+          (->t #,mon n 
+               #,(compile-K binds mon #'K_1)
+               #,(compile-K binds mon #'K_2)))]
+       [?:expr
+        (syntax/loc stx
+          ?)])))
+
 (define-syntax (M stx)
   (syntax-parse
    stx
    [(_ K:expr T*:expr)
-    (syntax/loc stx
-      (let ([monitor (compile-T* T*)])
-        (compile-K monitor K)))]))
-(define-syntax (compile-K stx)
-  (syntax-parse
-   stx
-   #:literals (Pair Sum : ->)
-   [(_ mon (Pair K_1 K_2))
-    (syntax/loc stx
-      (cons/c (compile-K mon K_1)
-              (compile-K mon K_2)))]
-   [(_ mon (Sum K_1 K_2))
-    (syntax/loc stx
-      (or/c (compile-K mon K_1)
-            (compile-K mon K_2)))]
-   [(_ mon (: n (-> K_1 K_2)))
-    (syntax/loc stx
-      ; XXX Try to create real bindings
-      (->t mon 'n 
-           (compile-K mon K_1)
-           (compile-K mon K_2)))]
-   [(_ mon ?:expr)
-    (syntax/loc stx
-      ?)]))
+    (with-syntax ([monitor (generate-temporary 'monitor)])
+      (define binds (make-bound-id-table))
+      (define ctc (compile-K binds #'monitor #'K))
+      (quasisyntax/loc stx
+        (let (#,@(for/list ([n (in-dict-keys binds)])
+                   (quasisyntax/loc n
+                     [#,n '#,(generate-temporary n)])))
+          (let ([monitor (compile-T* T*)])
+            #,ctc))))]))
 
 (define (re->evt-predicate m)
   (define current-re m)
@@ -49,43 +65,32 @@
           (set! current-re (m evt))
           (re-accepting? current-re)))))
 
-(define-for-syntax (T->re stx)
-  (syntax-parse
-   stx
-   #:literals (call ret dot seq * not U)
-   [(call n:id p:expr)
-    (syntax/loc stx
-      ; XXX Don't use symbols for n
-      (evt:call 'n _ _ _ _ _ (list p)))]
-   [(ret n:id p:expr)
-    (syntax/loc stx
-      ; XXX Don't use symbols for n
-      (evt:return 'n _ _ _ _ _ _ (list p)))]
-   ; XXX Is this "all" or any one event?
-   [dot
-    (syntax/loc stx
-      _)]
-   [(seq T_1:expr T_2:expr)
-    (quasisyntax/loc stx
-      (seq #,(T->re #'T_1) #,(T->re #'T_2)))]
-   [(* T_1:expr)
-    (quasisyntax/loc stx
-      (star #,(T->re #'T_1)))]
-   [(not T_1:expr)
-    (quasisyntax/loc stx
-      (complement #,(T->re #'T_1)))]
-   [(U T_1:expr T_2:expr)
-    (quasisyntax/loc stx
-      (union #,(T->re #'T_1) #,(T->re #'T_2)))]))
+(define-re-transformer call
+  (λ (stx)
+    (syntax-parse
+     stx
+     [(call n:id p:expr)
+      (syntax/loc stx
+        (evt:call (== n) _ _ _ _ _ (list p)))])))
+(define-re-transformer ret
+  (λ (stx)
+    (syntax-parse
+     stx
+     [(ret n:id p:expr)
+      (syntax/loc stx
+        (evt:return (== n) _ _ _ _ _ _ (list p)))])))
+
 (define-syntax (compile-T* stx)
-  (syntax-parse
-   stx
-   #:literals (forall)
-   ; XXX I don't handle quantifiers yet
-   [(_ (forall () T:expr))
-    (quasisyntax/loc stx
-      (re->evt-predicate
-       (re #,(T->re #'T))))]))
+  (with-disappeared-uses
+      (syntax-parse
+       stx
+       #:literals (forall)
+       ; XXX I don't handle quantifiers yet
+       [(_ ((~and f forall) () T:expr))
+        (record-disappeared-uses (list #'f))
+        (quasisyntax/loc stx
+          (re->evt-predicate
+           (re T)))])))
 
 #;(define MallocFreeSpec
     (M (Pair (: malloc (-> void? addr?))
@@ -100,8 +105,8 @@
   (M (Pair (: malloc (-> void? addr?))
            (: free (-> addr? void?)))
      (forall ()
-             (not (seq (call free _)
-                       (seq (* (not (ret malloc _)))
-                            (call free _)))))))
+             (complement (seq (call free _)
+                              (seq (star (complement (ret malloc _)))
+                                   (call free _)))))))
 
 
