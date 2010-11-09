@@ -1,7 +1,5 @@
 #lang racket/base
 (require racket/match
-         unstable/match
-         racket/function
          racket/stxparam
          (for-syntax racket/base
                      syntax/parse
@@ -46,8 +44,7 @@
     (if (evt:proj? evt)
         #t
         (begin
-          (printf "~S\n" evt)
-          (set! current-re (m evt))
+          (set! current-re (current-re evt))
           (re-accepting? current-re)))))
 
 (define-re-transformer call
@@ -56,14 +53,14 @@
      stx
      [(call n:id p:expr ...)
       (syntax/loc stx
-        (evt:call (== 'n) _ _ _ _ _ (list p ...)))])))
+        (evt:call 'n _ _ _ _ _ (list p ...)))])))
 (define-re-transformer ret
   (λ (stx)
     (syntax-parse
      stx
      [(ret n:id p:expr ...)
       (syntax/loc stx
-        (evt:return (== 'n) _ _ _ _ _ _ (list p ...)))])))
+        (evt:return 'n _ _ _ _ _ _ (list p ...)))])))
 
 (define-syntax (compile-T* stx)
   (with-disappeared-uses

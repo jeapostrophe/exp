@@ -66,6 +66,7 @@
 
 (define re-accepting? machine-accepting?)
 (define re-accepts? machine-accepts?)
+(define re-accepts?/prefix-closed machine-accepts?/prefix-closed)
 
 (provide
  complement seq union star epsilon nullset
@@ -73,4 +74,5 @@
  re
  (rename-out [machine? re?])
  re-accepting?
- re-accepts?)
+ re-accepts?
+ re-accepts?/prefix-closed)

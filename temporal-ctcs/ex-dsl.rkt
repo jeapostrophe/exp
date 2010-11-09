@@ -1,5 +1,6 @@
 #lang racket
 (require "dsl.rkt"
+         "temporal.rkt"
          tests/eli-tester)
 
 #;(define MallocFreeSpec
@@ -40,12 +41,25 @@
              (complement (seq (star _) (call free _) (star _) (call free _) (star _))))))
 (test
  ; The whole sequence is rejected
- (re-accepts? (re (complement (seq (star _) 'cf (star _) 'cf (star _))))
-              '(cm rm cf rf cm rm cf rf cf rf))
+ (re-accepts?/prefix-closed
+  (re (complement (seq (star _) 'cf (star _) 'cf (star _))))
+  '(cm rm cf rf cm rm cf rf cf rf))
  => #f
  ; The shortest erroring prefix is rejected
- (re-accepts? (re (complement (seq (star _) 'cf (star _) 'cf (star _))))
-              '(cm rm cf rf cm rm cf))
+ (re-accepts?/prefix-closed
+  (re (complement (seq (star _) 'cf (star _) 'cf (star _))))
+  '(cm rm cf rf cm rm cf))
+ => #f
+ ; Now with the real structs
+ (let ()
+   (define cm (evt:call 'malloc #f #f #f #f #f empty))
+   (define rm (evt:return 'malloc #f #f #f #f #f empty empty))
+   (define cf (evt:call 'free #f #f #f #f #f (list 0)))
+   (define rf (evt:return 'free #f #f #f #f #f (list 0) (void)))
+   (re-accepts?/prefix-closed
+    (re (complement (seq (star _) (evt:call 'free _ _ _ _ _ (list _)) (star _)
+                         (evt:call 'free _ _ _ _ _ (list _)) (star _))))
+    (list cm rm cf rf cm rm cf)))
  => #f
  (test-spec NoFreeTwiceSpec) =error> "disallowed")
 

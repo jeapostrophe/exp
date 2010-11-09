@@ -59,6 +59,12 @@
   (if (empty? evts)
       (machine-accepting? m)
       (machine-accepts? (m (first evts)) (rest evts))))
+(define (machine-accepts?/prefix-closed m evts)
+  (if (empty? evts)
+      (machine-accepting? m)
+      (let ([n (m (first evts))])
+        (and (machine-accepting? n)
+             (machine-accepts? n (rest evts))))))
 
 (define machine-null
   (machine (λ (input) machine-null)))
@@ -69,6 +75,7 @@
 
 (provide/contract
  [machine-accepts? (machine? (listof any/c) . -> . boolean?)]
+ [machine-accepts?/prefix-closed (machine? (listof any/c) . -> . boolean?)]
  [struct machine ([next (any/c . -> . machine?)])]
  [struct (machine-accepting machine) ([next (any/c . -> . machine?)])]
  [machine-null machine?]
