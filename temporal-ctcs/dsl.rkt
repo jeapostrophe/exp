@@ -42,11 +42,11 @@
 (define (re->evt-predicate m)
   (define current-re m)
   (λ (evt)
-    (printf "~S\n" evt)
     ; Projections are not in the DSL
     (if (evt:proj? evt)
         #t
         (begin
+          (printf "~S\n" evt)
           (set! current-re (m evt))
           (re-accepting? current-re)))))
 
