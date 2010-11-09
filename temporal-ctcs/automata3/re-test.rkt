@@ -104,4 +104,16 @@
            (list 1 0 1 1 0 1)
            (list 0 1 0 0 1 0)
            (list)]
-          [(list 1 0)]))
+          [(list 1 0)])
+ 
+ (test-re (star (complement 1))
+          [(list 0 2 3 4)
+           (list)
+           (list 2)
+           ; This is correct, because the complement machine
+           ; could accept '(234 5 9 1), which is not '(1)
+           ; Then the star kicks in and it accepts '(9 0)
+           (list 234 5 9 1 9 0)
+           (list 1 0)
+           (list 0 1)]
+          [(list 1)]))
