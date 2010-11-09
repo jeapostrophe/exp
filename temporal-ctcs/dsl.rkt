@@ -15,6 +15,8 @@
 
 (define-stx-ids forall Pair Sum :)
 
+; XXX Make this a normal contract macro that communicates
+;     with syntax parameters, so I don't need Pair or Sum
 (define-for-syntax (compile-K binds mon stx)
   (with-disappeared-uses
       (syntax-parse
