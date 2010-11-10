@@ -28,38 +28,38 @@
 (define addr? number?)
 
 (define NoFreeSpec
-  (M (cons/c (n-> malloc addr?)
-             (n-> free addr? void?))
+  (M (cons/c (n-> 'malloc addr?)
+             (n-> 'free addr? void?))
      (forall ()
              ; It is okay as long as you never call free
-             (complement (seq (star _) (call free _) (star _))))))
+             (complement (seq (star _) (call 'free _) (star _))))))
 (test (test-spec NoFreeSpec) =error> "disallowed")
 
 (define NoFreeTwiceSpec
-  (M (cons/c (n-> malloc addr?)
-             (n-> free addr? void?))
+  (M (cons/c (n-> 'malloc addr?)
+             (n-> 'free addr? void?))
      (forall ()
-             (complement (seq (star _) (call free _) (star _) (call free _) (star _))))))
+             (complement (seq (star _) (call 'free _) (star _) (call 'free _) (star _))))))
 (test (test-spec NoFreeTwiceSpec) =error> "disallowed")
 
 (define MallocFreeBalancedSpec
-  (M (cons/c (n-> malloc addr?)
-             (n-> free addr? void?))
+  (M (cons/c (n-> 'malloc addr?)
+             (n-> 'free addr? void?))
      (forall ()
-             (star (seq (call malloc)
-                        (ret malloc _)
-                        (call free _)
-                        (ret free _))))))
+             (star (seq (call 'malloc)
+                        (ret 'malloc _)
+                        (call 'free _)
+                        (ret 'free _))))))
 (test (test-spec MallocFreeBalancedSpec) =error> "disallowed")
 
 ; This is a faulty spec because the complement of (ret malloc _) contains a lot
 (define MallocFreeSpec
-  (M (cons/c (n-> malloc addr?)
-             (n-> free addr? void?))
+  (M (cons/c (n-> 'malloc addr?)
+             (n-> 'free addr? void?))
      (forall ()
-             (complement (seq (call free _)
-                              (star (complement (ret malloc _)))
-                              (call free _)
+             (complement (seq (call 'free _)
+                              (star (not (ret 'malloc _)))
+                              (call 'free _)
                               (star _))))))
 (test (test-spec MallocFreeSpec) =error> "disallowed")
 

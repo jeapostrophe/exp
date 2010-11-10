@@ -23,9 +23,9 @@
 (define-syntax (n-> stx)
   (syntax-parse
    stx
-   [(_ n:id K_1 ... K_2)
+   [(_ n:expr K_1 ... K_2)
     (syntax/loc stx
-      (->t stx-monitor-id 'n K_1 ... K_2))]))
+      (->t stx-monitor-id n K_1 ... K_2))]))
 
 (define-syntax (M stx)
   (syntax-parse
@@ -48,20 +48,20 @@
           (set! current-re (current-re evt))
           (re-accepting? current-re)))))
 
-(define-re-transformer call
+(define-match-expander call
   (λ (stx)
     (syntax-parse
      stx
-     [(call n:id p:expr ...)
+     [(call n:expr p:expr ...)
       (syntax/loc stx
-        (evt:call 'n _ _ _ _ _ (list p ...)))])))
-(define-re-transformer ret
+        (evt:call n _ _ _ _ _ (list p ...)))])))
+(define-match-expander ret
   (λ (stx)
     (syntax-parse
      stx
-     [(ret n:id p:expr ...)
+     [(ret n:expr p:expr ...)
       (syntax/loc stx
-        (evt:return 'n _ _ _ _ _ _ (list p ...)))])))
+        (evt:return n _ _ _ _ _ _ (list p ...)))])))
 
 (define-syntax (compile-T* stx)
   (with-disappeared-uses
