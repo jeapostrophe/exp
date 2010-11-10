@@ -1,6 +1,7 @@
 #lang racket
 (require "re.rkt"
          "re-ext.rkt"
+         unstable/match
          tests/eli-tester)
 
 (define-syntax-rule (test-re* R (succ ...) (fail ...))
@@ -116,4 +117,11 @@
            (list 234 5 9 1 9 0)
            (list 1 0)
            (list 0 1)]
-          [(list 1)]))
+          [(list 1)])
+ 
+ (test-re (dseq x (== x))
+          [(list 0 0)
+           (list 1 1)]
+          [(list)
+           (list 1)
+           (list 1 0)]))

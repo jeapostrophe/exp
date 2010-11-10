@@ -76,13 +76,15 @@
 (test (test-spec MallocFreeSpec good) =error> "disallowed" 
       (test-spec MallocFreeSpec bad) =error> "disallowed")
 
+(require unstable/match)
 (define MallocFreeSpecQ
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall (x)
+     (forall ()
              (complement (seq (star _)
-                              (call 'free x)
-                              (star (not (ret 'malloc x)))
-                              (call 'free x))))))
+                              (dseq (call 'free x)
+                                    (seq
+                                     (star (not (ret 'malloc (== x))))
+                                     (call 'free (== x)))))))))
 (test (test-spec MallocFreeSpecQ good)
       (test-spec MallocFreeSpecQ bad) =error> "disallowed")

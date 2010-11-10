@@ -16,12 +16,13 @@
 (define-syntax (seq stx) (raise-syntax-error 'seq "Outside re" stx))
 (define-syntax (union stx) (raise-syntax-error 'union "Outside re" stx))
 (define-syntax (star stx) (raise-syntax-error 'star "Outside re" stx))
+(define-syntax (dseq stx) (raise-syntax-error 'dseq "Outside re" stx))
 
 (define-syntax (re stx)
   (with-disappeared-uses
       (syntax-parse
        stx
-       #:literals (complement seq union star epsilon nullset)
+       #:literals (complement seq union star epsilon nullset dseq)
        [(_ ((~and op complement) lhs:expr))
         (record-disappeared-uses (list #'op))
         (syntax/loc stx
@@ -60,6 +61,10 @@
        [(_ (~and op nullset))
         (record-disappeared-uses (list #'op))
         (syntax/loc stx machine-null)]
+       [(_ ((~and op dseq) pat:expr rhs:expr))
+        (record-disappeared-uses (list #'op))
+        (syntax/loc stx
+          (machine (match-lambda [pat (re rhs)] [_ machine-null])))]
        [(_ pat:expr)
         (syntax/loc stx
           (machine (match-lambda [pat machine-epsilon] [_ machine-null])))])))
@@ -69,7 +74,7 @@
 (define re-accepts?/prefix-closed machine-accepts?/prefix-closed)
 
 (provide
- complement seq union star epsilon nullset
+ complement seq union star epsilon nullset dseq
  define-re-transformer
  re
  (rename-out [machine? re?])
