@@ -10,7 +10,8 @@
           "automata3/re.rkt"
           "automata3/re-ext.rkt"))
 
-(define-syntax-parameter stx-monitor-id (λ (stx) (raise-syntax-error 'n-> "Used outside M" stx)))
+(define-syntax-parameter stx-monitor-id 
+  (λ (stx) (raise-syntax-error 'n-> "Used outside M" stx)))
 
 (define-syntax-rule (n-> n K_1 ... K_2)
   (->t stx-monitor-id n K_1 ... K_2))
