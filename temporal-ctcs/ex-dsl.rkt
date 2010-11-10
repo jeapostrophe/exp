@@ -44,50 +44,45 @@
 (define NoFreeSpec
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall ()
-             ; It is okay as long as you never call free
-             (complement (seq (star _) (call 'free _) (star _))))))
+     ; It is okay as long as you never call free
+     (complement (seq (star _) (call 'free _) (star _)))))
 (test (test-spec NoFreeSpec good) =error> "disallowed"
       (test-spec NoFreeSpec bad) =error> "disallowed")
 
 (define NoFreeTwiceSpec
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall ()
-             (complement (seq (star _) (call 'free _) (star _) (call 'free _) (star _))))))
+     (complement (seq (star _) (call 'free _) (star _) (call 'free _) (star _)))))
 (test (test-spec NoFreeTwiceSpec good) =error> "disallowed"
       (test-spec NoFreeTwiceSpec bad) =error> "disallowed")
 
 (define MallocFreeBalancedSpec
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall ()
-             (star (seq (call 'malloc)
-                        (ret 'malloc _)
-                        (call 'free _)
-                        (ret 'free _))))))
+     (star (seq (call 'malloc)
+                (ret 'malloc _)
+                (call 'free _)
+                (ret 'free _)))))
 (test (test-spec MallocFreeBalancedSpec good) =error> "disallowed" 
       (test-spec MallocFreeBalancedSpec bad) =error> "disallowed")
 
 (define MallocFreeSpec
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall ()
-             (complement (seq (star _)
-                              (call 'free _)
-                              (star (not (ret 'malloc _)))
-                              (call 'free _))))))
+     (complement (seq (star _)
+                      (call 'free _)
+                      (star (not (ret 'malloc _)))
+                      (call 'free _)))))
 (test (test-spec MallocFreeSpec good) =error> "disallowed" 
       (test-spec MallocFreeSpec bad) =error> "disallowed")
 
 (define MallocFreeSpecNQ
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall ()
-             (complement (seq (star _)
-                              (call 'free x)
-                              (star (not (ret 'malloc x)))
-                              (call 'free x))))))
+     (complement (seq (star _)
+                      (call 'free x)
+                      (star (not (ret 'malloc x)))
+                      (call 'free x)))))
 (test (test-spec MallocFreeSpecNQ good) =error> "disallowed" 
       (test-spec MallocFreeSpecNQ bad) =error> "disallowed")
 
@@ -95,11 +90,10 @@
 (define MallocFreeSpecQ
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
-     (forall ()
-             (complement (seq (star _)
-                              (dseq (call 'free x)
-                                    (seq
-                                     (star (not (ret 'malloc (== x))))
-                                     (call 'free (== x)))))))))
+     (complement (seq (star _)
+                      (dseq (call 'free addr)
+                            (seq
+                             (star (not (ret 'malloc (== addr))))
+                             (call 'free (== addr))))))))
 (test (test-spec MallocFreeSpecQ good)
       (test-spec MallocFreeSpecQ bad) =error> "disallowed")
