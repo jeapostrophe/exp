@@ -5,7 +5,7 @@
          "temporal.rkt"
          "automata3/re.rkt"
          "automata3/re-ext.rkt")
-(provide call ret M n->
+(provide call ret monitor n->
          (all-from-out 
           "automata3/re.rkt"
           "automata3/re-ext.rkt"))
@@ -15,7 +15,7 @@
 (define-syntax-rule (n-> n K_1 ... K_2)
   (->t stx-monitor-id n K_1 ... K_2))
 
-(define-syntax-rule (M K T)
+(define-syntax-rule (monitor K T)
   (let ([monitor (re->evt-predicate (re T))])
     (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
                          K)))
