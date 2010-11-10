@@ -44,7 +44,6 @@
     (if (evt:proj? evt)
         #t
         (begin
-          (printf "~S\n" evt)
           (set! current-re (current-re evt))
           (re-accepting? current-re)))))
 

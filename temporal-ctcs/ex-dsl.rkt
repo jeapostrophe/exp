@@ -52,14 +52,12 @@
                         (ret 'free _))))))
 (test (test-spec MallocFreeBalancedSpec) =error> "disallowed")
 
-; This is a faulty spec because the complement of (ret malloc _) contains a lot
 (define MallocFreeSpec
   (M (cons/c (n-> 'malloc addr?)
              (n-> 'free addr? void?))
      (forall ()
-             (complement (seq (call 'free _)
-                              (star (not (ret 'malloc _)))
+             (complement (seq (star _)
                               (call 'free _)
-                              (star _))))))
+                              (star (not (ret 'malloc _)))
+                              (call 'free _))))))
 (test (test-spec MallocFreeSpec) =error> "disallowed")
-
