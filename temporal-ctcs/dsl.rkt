@@ -40,12 +40,8 @@
 (define (re->evt-predicate m)
   (define current-re m)
   (λ (evt)
-    ; Projections are not in the DSL
-    (if (evt:proj? evt)
-        #t
-        (begin
-          (set! current-re (current-re evt))
-          (re-accepting? current-re)))))
+    (set! current-re (current-re evt))
+    (re-accepting? current-re)))
 
 (define-match-expander call
   (λ (stx)
