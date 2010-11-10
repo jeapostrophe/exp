@@ -25,6 +25,10 @@
 (define (good malloc free)
   (define a (malloc))
   (free a)
+  (define e (malloc))
+  (define f (malloc))
+  (free e)
+  (free f)
   (define c (malloc))
   (define d (malloc))
   (free d)
@@ -75,6 +79,17 @@
                               (call 'free _))))))
 (test (test-spec MallocFreeSpec good) =error> "disallowed" 
       (test-spec MallocFreeSpec bad) =error> "disallowed")
+
+(define MallocFreeSpecNQ
+  (M (cons/c (n-> 'malloc addr?)
+             (n-> 'free addr? void?))
+     (forall ()
+             (complement (seq (star _)
+                              (call 'free x)
+                              (star (not (ret 'malloc x)))
+                              (call 'free x))))))
+(test (test-spec MallocFreeSpecNQ good) =error> "disallowed" 
+      (test-spec MallocFreeSpecNQ bad) =error> "disallowed")
 
 (require unstable/match)
 (define MallocFreeSpecQ
