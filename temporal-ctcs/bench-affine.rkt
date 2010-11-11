@@ -9,7 +9,7 @@
   (use-affine
    (λ (f)
      (define used? #f)
-     (for ([i (in-range 1000)])
+     (for ([i (in-range 10000)])
        (sync (alarm-evt (random 100)))
        (unless (or used? (zero? (random 3)))
          (set! used? #t)
