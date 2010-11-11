@@ -24,6 +24,7 @@
 (define (re->evt-predicate m)
   (define current-re m)
   (λ (evt)
+    #;(printf "~S\n" evt)
     (set! current-re (current-re evt))
     (re-accepting? current-re)))
 

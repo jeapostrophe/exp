@@ -41,6 +41,40 @@
               (listof any/c)
               (listof any/c))]))
 
+(module qdsl-sort racket
+  (require "dsl.rkt" "temporal.rkt" 'raw-sort unstable/match)
+  (provide make-sort)
+  (define (make-sort)
+    (contract
+     (monitor (n-> 'sort
+                   (n-> 'order any/c any/c boolean?)
+                   (listof any/c)
+                   (listof any/c))
+              (complement
+               (seq (star _) 
+                    (dseq
+                     (evt:proj 'order proj _)
+                     (seq (star _)
+                          (evt:return 'sort _ _ _ _ _ _ _) (star _)
+                          (evt:call 'order (== proj) _ _ _ _ _))))))
+     sort 'pos 'neg)))
+
+(module dsl-sort racket
+  (require "dsl.rkt" "temporal.rkt" 'raw-sort)
+  (provide make-sort)
+  (define (make-sort)
+    (contract (monitor (n-> 'sort
+                            (n-> 'order any/c any/c boolean?)
+                            (listof any/c)
+                            (listof any/c))
+                       (complement
+                        (seq (star _)
+                             (evt:proj 'order _ _) (star _)
+                             (evt:return 'sort _ _ _ _ _ _ _) (star _)
+                             (evt:call 'order _ _ _ _ _ _))))
+              sort
+              'pos 'neg)))
+
 (module smart-sort racket
   (require "temporal.rkt" 'raw-sort)
   (define returned? (make-weak-hasheq))
@@ -62,6 +96,8 @@
 
 (module sort-timer racket
   (require (prefix-in dumb: 'dumb-sort)
+           (prefix-in dsl: 'dsl-sort)
+           (prefix-in qdsl: 'qdsl-sort)
            (prefix-in smart: 'smart-sort)
            (prefix-in raw: 'raw-sort)
            (prefix-in ctc: 'ctc-sort)
@@ -72,6 +108,8 @@
           ["raw" (raw:sort <= l)]
           ["ctc" (ctc:sort <= l)]
           ["dumb" (dumb:sort <= l)]
+          ["qdsl" ((qdsl:make-sort) <= l)]
+          ["dsl" ((dsl:make-sort) <= l)]
           ["smart" (smart:sort <= l)]))
 
 (require 'sort-timer)

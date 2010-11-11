@@ -67,7 +67,7 @@
           (machine (match-lambda [pat (re rhs)] [_ machine-null])))]
        [(_ pat:expr)
         (syntax/loc stx
-          (machine (match-lambda [pat machine-epsilon] [_ machine-null])))])))
+          (re (dseq pat epsilon)))])))
 
 (define re-accepting? machine-accepting?)
 (define re-accepts? machine-accepts?)
