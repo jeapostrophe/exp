@@ -95,7 +95,8 @@
 (define machine-sigma*
   (machine-accepting (λ (input) machine-sigma*)))
 
-(provide/contract
+(provide (all-defined-out))
+#;(provide/contract
  [machine-accepts? (machine? (listof any/c) . -> . boolean?)]
  [machine-accepts?/prefix-closed (machine? (listof any/c) . -> . boolean?)]
  [struct machine ([next (any/c . -> . machine?)])]
