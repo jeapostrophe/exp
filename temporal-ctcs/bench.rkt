@@ -59,6 +59,26 @@
                           (evt:call 'order (== proj) _ _ _ _ _))))))
      sort 'pos 'neg)))
 
+(module zdsl-sort racket
+  (require "dsl.rkt" "temporal.rkt" 'raw-sort unstable/match)
+  (provide make-sort)
+  (define (make-sort)
+    (contract
+     (monitor 
+      (n-> 'sort
+           (n-> 'cmp positive? positive? boolean?)
+           (listof positive?)
+           (listof positive?))
+      (complement
+       (union
+        (seq (star _) (call 'sort _ _)
+             (star _) (call 'sort _ _))
+        (seq (star _) (ret 'sort _)
+             (star _) (call 'cmp _ _)))))
+     sort 'pos 'neg)))
+
+(require 'zdsl-sort)
+
 (module dsl-sort racket
   (require "dsl.rkt" "temporal.rkt" 'raw-sort)
   (provide make-sort)
@@ -112,4 +132,4 @@
           ["dsl" ((dsl:make-sort) <= l)]
           ["smart" (smart:sort <= l)]))
 
-(require 'sort-timer)
+#;(require 'sort-timer)
