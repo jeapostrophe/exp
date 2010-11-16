@@ -77,8 +77,57 @@
     monitor-interpose)
   (*->t* make-monitor-interpose label))
 
+#;(define (->t monitor-allows? label . ctcs)
+    (apply *->t (λ () monitor-allows?) label ctcs))
+
 (define (->t monitor-allows? label . ctcs)
-  (apply *->t (λ () monitor-allows?) label ctcs))
+  (make-contract
+   #:name '->t
+   #:first-order procedure?
+   #:projection
+   (λ (b)
+     (define-values (dom-ctcs rng-l) (split-at ctcs (sub1 (length ctcs))))
+     (define rng-ctc (first rng-l))
+     (define how-many-doms (length dom-ctcs))
+     (define dom-projs
+       (for/list ([ctc (in-list dom-ctcs)])
+         ((contract-projection ctc) (blame-swap b))))
+     (define rng-proj ((contract-projection rng-ctc) b))
+     (λ (f)
+       (define proj-label (gensym label))
+       (define f/proj 
+         (if (procedure-arity-includes? f how-many-doms)
+             (and (monitor-allows? (evt:proj label proj-label f))
+                  f)
+             (raise-blame-error b f "expected a function of ~a argument(s), got: ~e" how-many-doms f)))
+       (if f/proj
+           (letrec ([f-final
+                     (λ args 
+                       (define app-label (gensym label))
+                       (define args-ctc
+                         (for/list ([proj (in-list dom-projs)]
+                                    [arg (in-list args)])
+                           (proj arg)))
+                       (define args/proj 
+                         (and (monitor-allows? (evt:call label proj-label f f/proj f-final app-label 
+                                                         args-ctc))
+                              args-ctc))                       
+                       (if args/proj
+                           (let ()
+                             (define ret (apply f/proj args/proj))
+                             (define ret-proj (rng-proj ret))
+                             (define ret-ctc (list ret-proj))
+                             (define rets/proj 
+                               (and (monitor-allows? (evt:return label proj-label f f/proj f-final app-label
+                                                                 args-ctc ret-ctc))
+                                    ret-proj))
+                             (if rets/proj
+                                 rets/proj
+                                 (raise-blame-error b f "monitor disallowed return with ans ~e" ret-ctc)))
+                           (raise-blame-error b f "monitor disallowed called with args ~e" args-ctc)))])
+             (hash-set! LABELS f-final proj-label)
+             f-final)
+           (raise-blame-error b f "monitor disallowed projection of ~e" f))))))
 
 (provide projection-label
          *->t*
