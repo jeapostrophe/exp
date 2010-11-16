@@ -1,7 +1,7 @@
 #lang racket/load
 
 (module ltl-dsl racket
-  (require "ltl.rkt" "temporal.rkt")
+  (require "ltl.rkt" "temporal.rkt" "bad-re.rkt")
   (define (make-ltl-predicate f)
     (make-trace-predicate
      (λ (evts)

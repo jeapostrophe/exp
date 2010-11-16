@@ -1,4 +1,7 @@
-#lang racket
+#lang racket/base
+(require racket/contract
+         racket/match
+         racket/list)
 
 ;; Structs
 (struct evt (label) #:transparent)
@@ -8,31 +11,9 @@
 (provide (struct-out evt) (struct-out evt:proj)
          (struct-out evt:call) (struct-out evt:return))
 
-;; Event stream regexp
-(define-syntax-rule (evt-regexp evts pat ...)
-  (match evts [(list pat ...) #t] [_ #f]))
-(provide evt-regexp)
-
-(define (make-trace-predicate ?)
-  (define evts empty)
-  (λ (evt)
-    (set! evts (cons evt evts))
-    (? evts)))
-(provide make-trace-predicate)
-
 (define LABELS (make-weak-hasheq))
 (define (projection-label v)
   (hash-ref LABELS v #f))
-
-#;(define (K first-order? make-projection)
-  (make-contract
-   #:name 'K
-   #:first-order first-order?
-   #:projection
-   (λ (b)
-     (λ (f)
-       (define-values (dom-Ks rng-Ks) (make-projection b f))
-       ...))))
 
 (define (*->t* make-monitor-interpose label)
   (make-contract

@@ -1,7 +1,7 @@
 #lang racket/load
 
 (module linear racket
-  (require "temporal.rkt")
+  (require "temporal.rkt" "bad-re.rkt")
   (define (use-linear f)
     (f void))
   (define linear-monitor

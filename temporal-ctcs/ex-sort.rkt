@@ -1,7 +1,7 @@
 #lang racket/load
 
 (module sort/c racket
-  (require "temporal.rkt")
+  (require "temporal.rkt" "bad-re.rkt")
   (define sort-monitor
     (make-trace-predicate
      (λ (evts)

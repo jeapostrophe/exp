@@ -1,7 +1,7 @@
 #lang racket/load
 
 (module affine racket
-  (require "temporal.rkt")
+  (require "temporal.rkt" "bad-re.rkt")
   (define (get-affine)
     void)
   (define affine-monitor
