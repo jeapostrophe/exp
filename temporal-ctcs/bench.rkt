@@ -25,7 +25,7 @@
              (listof any/c))]))
 
 (module dumb-sort racket
-  (require "temporal.rkt" 'raw-sort)
+  (require "temporal.rkt" "bad-re.rkt" 'raw-sort)
   (define sort-monitor
     (make-trace-predicate
      (λ (evts)
@@ -76,8 +76,6 @@
         (seq (star _) (ret 'sort _)
              (star _) (call 'cmp _ _)))))
      sort 'pos 'neg)))
-
-(require 'zdsl-sort)
 
 (module dsl-sort racket
   (require "dsl.rkt" "temporal.rkt" 'raw-sort)
@@ -132,4 +130,4 @@
           ["dsl" ((dsl:make-sort) <= l)]
           ["smart" (smart:sort <= l)]))
 
-#;(require 'sort-timer)
+(require 'sort-timer)
