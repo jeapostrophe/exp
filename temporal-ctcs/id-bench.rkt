@@ -31,8 +31,7 @@
              'f integer? integer?)
             id 'pos 'neg))
 (define dsl-ctc
-  (contract (monitor (n-> 'f integer? integer?)
-                     (star _))
+  (contract (monitor (n-> 'f integer? integer?))
             id 'pos 'neg))
 (define dsl-ctc+atomic
   (contract (monitor (n-> 'f integer? integer?)

@@ -16,10 +16,16 @@
 (define-syntax-rule (n-> n K_1 ... K_2)
   (->t stx-monitor-id n K_1 ... K_2))
 
-(define-syntax-rule (monitor K T)
-  (let ([monitor (re->evt-predicate (re T))])
-    (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
-                         K)))
+(define-syntax monitor
+  (syntax-rules ()
+    [(_ K)
+     (let ([monitor (λ (x) #t)])
+       (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
+                            K))]
+    [(_ K T)
+     (let ([monitor (re->evt-predicate (re T))])
+       (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
+                            K))]))
 
 (define (re->evt-predicate m)
   (define current-re m)
