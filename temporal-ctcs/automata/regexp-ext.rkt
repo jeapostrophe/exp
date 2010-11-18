@@ -1,5 +1,5 @@
 #lang racket
-(require "regexp.rkt"
+(require "regexp-nfa.rkt"
          (for-syntax syntax/parse
                      racket/list
                      racket/match
