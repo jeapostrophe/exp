@@ -108,6 +108,6 @@
              #'(nfa* (start) ([end ()]) ([start ([pat (end)])])))
            #:attr machine
            #'(machine (match-lambda [pat machine-epsilon] [_ machine-null]))
-           #:attr best (or (attribute nfa) (attribute machine))))
+           #:attr best (attribute machine)))
 
 (provide sre)
