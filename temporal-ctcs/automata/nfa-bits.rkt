@@ -1,5 +1,9 @@
 #lang racket/base
-(require racket/local
+
+; XXX This needs to use machine.rkt
+
+(require "machine.rkt"
+         racket/local
          racket/unsafe/ops
          racket/match
          racket/set
@@ -10,8 +14,6 @@
                      racket/dict
                      racket/list
                      racket/base))
-
-(struct an-nfa-state (accepting? next))
 
 (define-syntax (nfa stx)
   (syntax-parse
@@ -71,22 +73,21 @@
            ; producer : input -> an-nfa-state
            ; make-an-nfa-state : (seteq state) -> an-nfa-state
            (define (make-an-nfa-state next)
-             (an-nfa-state (accepting? next)
-                           (λ (input)
-                             (make-an-nfa-state (run next input)))))
+             (define constructor
+               (if (accepting? next)
+                   machine-accepting
+                   machine))
+             (constructor
+              (λ (input)
+                (make-an-nfa-state (run next input)))))
            ; initial : an-nfa-state
            (define initial
              (make-an-nfa-state start-set))]
           initial)))]))
 
-(define nfa-accepting? an-nfa-state-accepting?)
-(define (nfa-advance nfa input)
-  ((an-nfa-state-next nfa) input))
-
-(define (nfa-accepts? nfa evts)
-  (if (empty? evts)
-      (nfa-accepting? nfa)
-      (nfa-accepts? (nfa-advance nfa (first evts)) (rest evts))))
+(define nfa-accepting? machine-accepting?)
+(define (nfa-advance nfa input) (nfa input))
+(define nfa-accepts? machine-accepts?)
 
 (provide
  nfa

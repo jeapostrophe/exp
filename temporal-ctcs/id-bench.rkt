@@ -54,7 +54,7 @@
             ...)))
 
 (stress-it 
- (expt 10 6)
+ (expt 10 4)
  raw
  ctc
  monitor-ctc
