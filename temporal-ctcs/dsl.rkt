@@ -3,12 +3,12 @@
          racket/stxparam
          (for-syntax racket/base)
          "temporal.rkt"
-         "automata3/re.rkt"
-         "automata3/re-ext.rkt")
+         "automata/re.rkt"
+         "automata/re-ext.rkt")
 (provide call ret monitor n->
          (all-from-out 
-          "automata3/re.rkt"
-          "automata3/re-ext.rkt"))
+          "automata/re.rkt"
+          "automata/re-ext.rkt"))
 
 (define-syntax-parameter stx-monitor-id 
   (λ (stx) (raise-syntax-error 'n-> "Used outside monitor" stx)))
