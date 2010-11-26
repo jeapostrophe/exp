@@ -10,6 +10,8 @@
 
 (define-literal-set re-ops (complement seq union star epsilon nullset dseq))
 
+; XXX I don't know why the #:dos don't work. When I uncomment them I get:
+; re-compile.rkt:22:17: #%app: bad syntax in: (#%app record-disappeared-uses (list (syntax op)))
 (define-syntax-class sre 
   #:literal-sets (re-ops)
   #:description "Fully Expanded Regular Expression"
