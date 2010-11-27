@@ -13,6 +13,7 @@
    #:projection
    (λ (b)
      (define proj ((contract-projection ctc) b))
+     (define bs (blame-swap b))
      (λ (x)
        (define proj-label (gensym label))
        (define proj-x (proj x))
@@ -28,7 +29,7 @@
                         (if (monitor-allows? (evt:return label proj-label proj-x app-label args rets))
                             (apply values rets)
                             (raise-blame-error b x "monitor disallowed return of ~e" rets))))
-                     (raise-blame-error (blame-swap b) x "monitor disallowed call with ~e" args)))
+                     (raise-blame-error bs x "monitor disallowed call with ~e" args)))
                proj-x)
            (raise-blame-error b x "monitor disallowed after projection of ~e" x))))))
 
