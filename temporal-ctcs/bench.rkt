@@ -24,97 +24,58 @@
              (listof any/c)
              (listof any/c))]))
 
-(module dumb-sort racket
-  (require "temporal.rkt" "bad-re.rkt" 'raw-sort)
-  (define sort-monitor
-    (make-trace-predicate
-     (λ (evts)
-       (not
-        (evt-regexp evts
-                    (evt:call 'order proj _ _ _ _ _) _ ...
-                    (evt:return 'sort _ _ _ _ _ _ _) _ ...
-                    (evt:proj 'order proj _) _ ...)))))
-  (provide/contract
-   [sort (->t sort-monitor 'sort
-              (->t sort-monitor 'order
-                   any/c any/c boolean?)
-              (listof any/c)
-              (listof any/c))]))
-
 (module qdsl-sort racket
-  (require "dsl.rkt" "temporal.rkt" 'raw-sort unstable/match)
+  (require "dsl.rkt" "monitor.rkt" 'raw-sort unstable/match)
   (provide make-sort)
   (define (make-sort)
     (contract
-     (monitor (n-> 'sort
-                   (n-> 'order any/c any/c boolean?)
-                   (listof any/c)
-                   (listof any/c))
-              (complement
-               (seq (star _) 
-                    (dseq
-                     (evt:proj 'order proj _)
-                     (seq (star _)
-                          (evt:return 'sort _ _ _ _ _ _ _) (star _)
-                          (evt:call 'order (== proj) _ _ _ _ _))))))
-     sort 'pos 'neg)))
-
-(module zdsl-sort racket
-  (require "dsl.rkt" "temporal.rkt" 'raw-sort unstable/match)
-  (provide make-sort)
-  (define (make-sort)
-    (contract
-     (monitor 
-      (n-> 'sort
-           (n-> 'cmp positive? positive? boolean?)
-           (listof positive?)
-           (listof positive?))
-      (complement
-       (union
-        (seq (star _) (call 'sort _ _)
-             (star _) (call 'sort _ _))
-        (seq (star _) (ret 'sort _)
-             (star _) (call 'cmp _ _)))))
+     (with-monitor (label 'sort (-> (label 'order (-> any/c any/c boolean?))
+                                    (listof any/c)
+                                    (listof any/c)))
+       (complement
+        (seq (star _) 
+             (dseq
+              (evt:proj 'order proj _)
+              (seq (star _)
+                   (evt:return 'sort _ _ _ _ _) (star _)
+                   (evt:call 'order (== proj) _ _ _))))))
      sort 'pos 'neg)))
 
 (module dsl-sort racket
-  (require "dsl.rkt" "temporal.rkt" 'raw-sort)
+  (require "dsl.rkt" "monitor.rkt" 'raw-sort)
   (provide make-sort)
   (define (make-sort)
-    (contract (monitor (n-> 'sort
-                            (n-> 'order any/c any/c boolean?)
-                            (listof any/c)
-                            (listof any/c))
-                       (complement
-                        (seq (star _)
-                             (evt:proj 'order _ _) (star _)
-                             (evt:return 'sort _ _ _ _ _ _ _) (star _)
-                             (evt:call 'order _ _ _ _ _ _))))
+    (contract (with-monitor (label 'sort (-> (label 'order (-> any/c any/c boolean?))
+                                             (listof any/c)
+                                             (listof any/c)))
+                (complement
+                 (seq (star _)
+                      (evt:proj 'order _ _) (star _)
+                      (evt:return 'sort _ _ _ _ _) (star _)
+                      (evt:call 'order _  _ _ _))))
               sort
               'pos 'neg)))
 
 (module smart-sort racket
-  (require "temporal.rkt" 'raw-sort)
-  (define returned? (make-weak-hasheq))
+  (require "monitor.rkt" 'raw-sort)
+  (define returned? #f)
   (define (sort-monitor evt)
     (match evt
       [(evt:proj 'order proj _)
-       (hash-set! returned? proj #f)]
-      [(evt:return 'sort _ _ _ _ _ (list f _) _)
-       (hash-set! returned? (projection-label f) #t)]
-      [(evt:call 'order proj _ _ _ _ _)
-       (not (hash-ref returned? proj #t))]
+       #t]
+      [(evt:return 'sort _ _ _ (list f _) _)
+       (set! returned? #t)]
+      [(evt:call 'order proj _ _ _)
+       (not returned?)]
       [_ #t]))
   (provide/contract
-   [sort (->t sort-monitor 'sort
-              (->t sort-monitor 'order
-                   any/c any/c boolean?)
-              (listof any/c)
-              (listof any/c))]))
+   [sort (monitor/c sort-monitor 'sort
+                    (-> (monitor/c sort-monitor 'order (-> any/c any/c boolean?))
+                        (listof any/c)
+                        (listof any/c)))]))
 
 (module sort-timer racket
-  (require (prefix-in dumb: 'dumb-sort)
-           (prefix-in dsl: 'dsl-sort)
+  (require (prefix-in dsl: 'dsl-sort)
            (prefix-in qdsl: 'qdsl-sort)
            (prefix-in smart: 'smart-sort)
            (prefix-in raw: 'raw-sort)
@@ -122,10 +83,9 @@
            tests/stress)
   
   (define l (build-list 200 (compose random add1)))
-  (stress 4
+  (stress 1
           ["raw" (raw:sort <= l)]
           ["ctc" (ctc:sort <= l)]
-          ["dumb" (dumb:sort <= l)]
           ["qdsl" ((qdsl:make-sort) <= l)]
           ["dsl" ((dsl:make-sort) <= l)]
           ["smart" (smart:sort <= l)]))

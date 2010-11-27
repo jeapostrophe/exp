@@ -2,21 +2,21 @@
 (require racket/match
          racket/stxparam
          (for-syntax racket/base)
-         "temporal.rkt"
+         "monitor.rkt"
          "automata/re.rkt"
          "automata/re-ext.rkt")
-(provide call ret monitor n->
+(provide call ret with-monitor label
          (all-from-out 
           "automata/re.rkt"
           "automata/re-ext.rkt"))
 
 (define-syntax-parameter stx-monitor-id 
-  (λ (stx) (raise-syntax-error 'n-> "Used outside monitor" stx)))
+  (λ (stx) (raise-syntax-error 'label "Used outside monitor" stx)))
 
-(define-syntax-rule (n-> n K_1 ... K_2)
-  (->t stx-monitor-id n K_1 ... K_2))
+(define-syntax-rule (label n K)
+  (monitor/c stx-monitor-id n K))
 
-(define-syntax monitor
+(define-syntax with-monitor
   (syntax-rules ()
     [(_ K)
      (let ([monitor (λ (x) #t)])
@@ -37,9 +37,9 @@
 (define-match-expander call
   (syntax-rules ()
     [(_ n p ...)
-     (evt:call n _ _ _ _ _ (list p ...))]))
+     (evt:call n _ _ _ (list p ...))]))
 
 (define-match-expander ret
   (syntax-rules ()
     [(_ n p ...)
-     (evt:return n _ _ _ _ _ _ (list p ...))]))
+     (evt:return n _ _ _ _ (list p ...))]))

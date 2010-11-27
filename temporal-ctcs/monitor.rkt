@@ -30,3 +30,9 @@
                      (raise-blame-error (blame-swap b) x "monitor disallowed call with ~e" args)))
                proj-x)
            (raise-blame-error b x "monitor disallowed after projection of ~e" x))))))
+
+(provide (struct-out evt)
+         (struct-out evt:proj)
+         (struct-out evt:call)
+         (struct-out evt:return)
+         monitor/c)

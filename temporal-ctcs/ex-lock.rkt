@@ -6,69 +6,60 @@
 |#
 
 (module lock racket
-  (require "temporal.rkt")
+  (require "monitor.rkt")
   (define (use-resource f)
-    (f (λ () "lock" (void))
-       (λ () "use" (void))
-       (λ () "unlock" (void))))  
-  
-  (define locked? (make-weak-hasheq))
-  (define lock->user (make-weak-hasheq))
-  (define unlock->user (make-weak-hasheq))
-  (define use->user (make-weak-hasheq))
-  (define returned? (make-weak-hasheq))
-  (define (monitor evt)
-    (let/ec esc
-      (define (fail) (esc #f))
+    (define (protect label g)
+      (contract (monitor/c monitor label (-> void)) g
+                'pos 'neg))
+    
+    (define locked? #f)
+    (define returned? #f)
+    (define (monitor evt)
       (match evt
-        [(evt:call 'user _ _ _ _ app (list lock use unlock))
-         (hash-set! locked? app #f)
-         (hash-set! returned? app #f)
-         (hash-set! lock->user (projection-label lock) app)
-         (hash-set! use->user (projection-label use) app)
-         (hash-set! unlock->user (projection-label unlock) app)]
-        [(evt:return 'user _ _ _ _ app _ _)
-         (hash-set! returned? app #t)]
-        [(evt:return 'lock p _ _ _ _ _ _)
-         (hash-set! locked? (hash-ref lock->user p fail) #t)]
-        [(evt:return 'unlock p _ _ _ _ _ _)
-         (hash-set! locked? (hash-ref unlock->user p fail) #f)]
+        [(evt:return 'user _ _ app _ _)
+         (set! returned? #t)]
+        [(evt:return 'lock p  _ _ _ _)
+         (set! locked? #t)]
+        [(evt:return 'unlock p _ _ _ _)
+         (set! locked? #f)]
         [_
          (void)])
       (and
        (match evt
-        ; Must not lock or unlock twice
-        [(evt:call 'lock p _ _ _ _ _)
-         (not (hash-ref locked? (hash-ref lock->user p fail) fail))]
-        [(evt:call 'unlock p _ _ _ _ _)
-         (hash-ref locked? (hash-ref unlock->user p fail) fail)]
-        ; Must not use resource unless locked
-        [(evt:call 'use p _ _ _ _ _)
-         (hash-ref locked? (hash-ref use->user p fail) fail)]
-        ; Otherwise, okay
-        [_
-         #t])
+         ; Must not lock or unlock twice
+         [(evt:call 'lock p _ _ _)
+          (not locked?)]
+         [(evt:call 'unlock p _ _ _)
+          locked?]
+         ; Must not use resource unless locked
+         [(evt:call 'use p _ _ _)
+          locked?]
+         ; Otherwise, okay
+         [_
+          #t])
        ; Must not use anything after return
        (match evt
-        [(evt:call 'lock p _ _ _ _ _)
-         (not (hash-ref returned? (hash-ref lock->user p fail) fail))]
-        [(evt:call 'unlock p _ _ _ _ _)
-         (not (hash-ref returned? (hash-ref unlock->user p fail) fail))]
-        [(evt:call 'use p _ _ _ _ _)
-         (not (hash-ref returned? (hash-ref use->user p fail) fail))]
-        ; Otherwise, okay
-        [_
-         #t]))))
+         [(evt:call 'lock p _ _ _)
+          (not returned?)]
+         [(evt:call 'unlock p _ _ _)
+          (not returned?)]
+         [(evt:call 'use p _ _ _)
+          (not returned?)]
+         ; Otherwise, okay
+         [_
+          #t])))
+    
+    ((contract (monitor/c monitor 'user any/c) f
+               'pos 'neg)
+     (protect 'lock (λ () (void)))
+     (protect 'use (λ () (void)))
+     (protect 'unlock (λ () (void)))))
   
   (provide/contract
    [use-resource
-    (->t monitor 'server
-         (->t monitor 'user
-              (->t monitor 'lock void)
-              (->t monitor 'use void)
-              (->t monitor 'unlock void)
-              any/c)
-         any/c)]))
+    (-> (-> (-> void) (-> void) (-> void)
+            any/c)
+        any/c)]))
 
 (module tester racket
   (require tests/eli-tester

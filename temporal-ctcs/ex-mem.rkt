@@ -4,7 +4,7 @@
 |#
 
 (module mem racket
-  (require "temporal.rkt")
+  (require "monitor.rkt")
   
   (define free-list empty)
   (define last-addr 0)
@@ -22,20 +22,20 @@
     ; Only allow freeing of allocated things, disallow double frees
     ; and track addrs using malloc returns
     (match evt
-      [(evt:return 'malloc _ _ _ _ _ _ (list addr))
+      [(evt:return 'malloc _ _ _ _ (list addr))
        (hash-set! allocated addr #t)
        #t]
-      [(evt:call 'free _ _ _ _ _ (list addr))
+      [(evt:call 'free _ _  _ (list addr))
        (hash-has-key? allocated addr)]
-      [(evt:return 'free _ _ _ _ _ (list addr) _)
+      [(evt:return 'free _ _ _ (list addr) _)
        (hash-remove! allocated addr)
        #t]
       [_
        #t]))
   
   (provide/contract
-   [malloc (->t monitor 'malloc number?)]
-   [free (->t monitor 'free number? void)]))
+   [malloc (monitor/c monitor 'malloc (-> number?))]
+   [free (monitor/c monitor 'free (-> number? void))]))
 
 (module mem-test racket
   (require tests/eli-tester

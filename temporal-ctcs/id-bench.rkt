@@ -1,6 +1,6 @@
 #lang racket/base
 (require tests/stress
-         "temporal.rkt"
+         "monitor.rkt"
          "dsl.rkt"
          racket/match
          racket/contract)
@@ -13,11 +13,11 @@
   (contract (-> integer? integer?) id
             'pos 'neg))
 (define monitor-ctc
-  (contract (->t (λ (x) #t) 'f
-                 integer? integer?)
+  (contract (monitor/c (λ (x) #t) 'f
+                       (-> integer? integer?))
             id 'pos 'neg))
 (define monitor-ctc+atomic
-  (contract (->t
+  (contract (monitor/c
              (let ([called? #f])
                (match-lambda
                  [(? evt:proj? x)
@@ -28,19 +28,20 @@
                  [(? evt:return? x)
                   (begin0 called?
                           (set! called? #f))]))
-             'f integer? integer?)
+             'f
+             (-> integer? integer?))
             id 'pos 'neg))
 (define dsl-ctc
-  (contract (monitor (-> integer? integer?))
+  (contract (with-monitor (-> integer? integer?))
             id 'pos 'neg))
 (define dsl-ctc+atomic
-  (contract (monitor (n-> 'f integer? integer?)
-                     (seq (? evt:proj?)
-                          (star 
-                           (seq (call 'f _)
-                                (ret 'f _)))
-                          ; We need this to preserve prefix-closure
-                          (opt (call 'f _))))
+  (contract (with-monitor (label 'f (-> integer? integer?))
+              (seq (? evt:proj?)
+                   (star 
+                    (seq (call 'f _)
+                         (ret 'f _)))
+                   ; We need this to preserve prefix-closure
+                   (opt (call 'f _))))
             id 'pos 'neg))
 
 (define-syntax-rule (stress-it x ver ...)

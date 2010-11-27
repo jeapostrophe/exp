@@ -22,7 +22,7 @@
      (f))))
 
 ; The benchmarks
-(require "temporal.rkt")
+(require "monitor.rkt")
 
 (define ctc
   (contract
@@ -51,8 +51,8 @@
 (require "dsl.rkt")
 (define (rgx)
   (contract
-   (monitor 
-    (-> (-> (n-> 'affine any/c) any/c) any/c)
+   (with-monitor 
+    (-> (-> (label 'affine (-> any/c)) any/c) any/c)
     (complement
      (seq (star _)
           (call 'affine)
