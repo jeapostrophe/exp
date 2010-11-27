@@ -25,7 +25,7 @@
              (listof any/c))]))
 
 (module qdsl-sort racket
-  (require "../dsl.rkt" "../monitor.rkt" 'raw-sort unstable/match)
+  (require "../dsl.rkt" 'raw-sort unstable/match)
   (provide make-sort)
   (define (make-sort)
     (contract
@@ -42,7 +42,7 @@
      sort 'pos 'neg)))
 
 (module dsl-sort racket
-  (require "../dsl.rkt" "../monitor.rkt" 'raw-sort)
+  (require "../dsl.rkt" 'raw-sort)
   (provide make-sort)
   (define (make-sort)
     (contract (with-monitor (label 'sort (-> (label 'order (-> any/c any/c boolean?))

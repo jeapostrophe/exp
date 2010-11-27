@@ -1,6 +1,5 @@
 #lang racket/base
 (require tests/stress
-         "../monitor.rkt"
          "../dsl.rkt"
          racket/match
          racket/contract)

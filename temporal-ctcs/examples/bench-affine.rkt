@@ -22,8 +22,6 @@
      (f))))
 
 ; The benchmarks
-(require "../monitor.rkt")
-
 (define ctc
   (contract
    (-> (-> (-> any/c) any/c) any/c)
