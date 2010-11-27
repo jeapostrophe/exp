@@ -18,6 +18,7 @@
        (define proj-x (proj x))
        (if (monitor-allows? (evt:proj label proj-label proj-x))
            (if (procedure? proj-x)
+               ; XXX Could I specialize for a few arguments/returns?
                (λ args
                  (define app-label (gensym label))
                  (if (monitor-allows? (evt:call label proj-label proj-x app-label args))
