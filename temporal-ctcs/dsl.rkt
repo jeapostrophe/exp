@@ -6,7 +6,8 @@
          "automata/re.rkt"
          "automata/re-ext.rkt")
 (provide call ret with-monitor label
-         (all-from-out 
+         (all-from-out
+          "monitor.rkt"
           "automata/re.rkt"
           "automata/re-ext.rkt"))
 

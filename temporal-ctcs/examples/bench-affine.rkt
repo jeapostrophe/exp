@@ -22,7 +22,7 @@
      (f))))
 
 ; The benchmarks
-(require "monitor.rkt")
+(require "../monitor.rkt")
 
 (define ctc
   (contract
@@ -48,7 +48,7 @@
    (-> (-> aff-> any/c) any/c)
    raw 'pos 'neg))
 
-(require "dsl.rkt")
+(require "../dsl.rkt")
 (define (rgx)
   (contract
    (with-monitor 

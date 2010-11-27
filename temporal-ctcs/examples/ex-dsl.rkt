@@ -1,6 +1,6 @@
 #lang racket
-(require "dsl.rkt"
-         "monitor.rkt"
+(require "../dsl.rkt"
+         "../monitor.rkt"
          tests/eli-tester)
 
 (define (test-spec spec f)
