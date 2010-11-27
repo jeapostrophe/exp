@@ -10,8 +10,6 @@
 
 (define-literal-set re-ops (complement seq union star epsilon nullset dseq))
 
-; XXX I don't know why the #:dos don't work. When I uncomment them I get:
-; re-compile.rkt:22:17: #%app: bad syntax in: (#%app record-disappeared-uses (list (syntax op)))
 (define-syntax-class sre 
   #:literal-sets (re-ops)
   #:description "Fully Expanded Regular Expression"
@@ -20,14 +18,14 @@
   ; best is the best thing to embed in a machine
   #:attributes (nfa machine best)
   (pattern ((~and op complement) lhs:sre)
-           ;#:do [(record-disappeared-uses (list #'op))]
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
            #:attr machine
            #`(machine-complement #,(attribute lhs.best))
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern ((~and op star) lhs:sre)
-           ;#:do [(record-disappeared-uses (list #'op))]
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa 
            (and (attribute lhs.nfa)
                 (with-syntax*
@@ -43,7 +41,7 @@
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern ((~and op seq) lhs:sre rhs:sre)
-           ;#:do [(record-disappeared-uses (list #'op))]
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa
            (and (attribute lhs.nfa)
                 (attribute rhs.nfa)
@@ -63,7 +61,7 @@
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern ((~and op union) lhs:sre rhs:sre)
-           ;#:do [(record-disappeared-uses (list #'op))]
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa
            (and (attribute lhs.nfa)
                 (attribute rhs.nfa)
@@ -78,7 +76,7 @@
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern (~and op epsilon)
-           ;#:do [(record-disappeared-uses (list #'op))]
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa
            (with-syntax ([start (generate-temporary 'start)])
              #'(nfa* (start) ([start ()]) ()))
@@ -87,7 +85,7 @@
            #:attr best (attribute machine))
   
   (pattern (~and op nullset)
-           ;#:do [(record-disappeared-uses (list #'op))]
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa
            (with-syntax ([end (generate-temporary 'end)])
              #'(nfa* (end) () ([end ()])))
@@ -95,7 +93,8 @@
            #'machine-null
            #:attr best (attribute machine))
            
-  (pattern (dseq pat:expr rhs:sre)
+  (pattern ((~and op dseq) pat:expr rhs:sre)
+           #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
            #:attr machine
            #`(machine (match-lambda [pat #,(attribute rhs.best)] [_ machine-null]))
