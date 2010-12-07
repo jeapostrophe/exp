@@ -19,6 +19,7 @@
        (define proj-x (proj x))
        (if (monitor-allows? (evt:proj label proj-label proj-x))
            (if (procedure? proj-x)
+               ; XXX Test keyword procs
                ; XXX Could I specialize for a few arguments/returns?
                (λ args
                  (define app-label (gensym label))
