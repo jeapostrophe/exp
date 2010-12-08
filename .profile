@@ -24,7 +24,7 @@ alias rc=raco
 
 function teamtmp() {
     NAME=$(date +%Y%m%d%H%M-)$(basename $1)
-    scp $1 schizo.cs.byu.edu:public_html/tmp/${NAME}
+    scp -r $1 schizo.cs.byu.edu:public_html/tmp/${NAME}
     echo http://faculty.cs.byu.edu/~jay/tmp/${NAME}
 }
 
