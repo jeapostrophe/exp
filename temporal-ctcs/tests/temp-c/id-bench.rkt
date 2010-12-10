@@ -1,6 +1,7 @@
 #lang racket/base
 (require tests/stress
-         "../dsl.rkt"
+         racket/require
+         (path-up "temp-c/dsl.rkt")
          racket/match
          racket/contract)
 

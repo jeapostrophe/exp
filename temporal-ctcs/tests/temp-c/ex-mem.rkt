@@ -4,7 +4,7 @@
 |#
 
 (module mem racket
-  (require "../monitor.rkt")
+  (require racket/require (path-up "temp-c/monitor.rkt"))
   
   (define free-list empty)
   (define last-addr 0)

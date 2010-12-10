@@ -6,7 +6,7 @@
 |#
 
 (module lock racket
-  (require "../monitor.rkt")
+  (require racket/require (path-up "temp-c/monitor.rkt"))
   (define (use-resource f)
     (define (protect label g)
       (contract (monitor/c monitor label (-> void)) g

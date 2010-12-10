@@ -3,13 +3,14 @@
          racket/stxparam
          (for-syntax racket/base)
          "monitor.rkt"
-         "automata/re.rkt"
-         "automata/re-ext.rkt")
+         "../automata/machine.rkt"
+         "../automata/re.rkt"
+         "../automata/re-ext.rkt")
 (provide call ret with-monitor label
          (all-from-out
           "monitor.rkt"
-          "automata/re.rkt"
-          "automata/re-ext.rkt"))
+          "../automata/re.rkt"
+          "../automata/re-ext.rkt"))
 
 (define-syntax-parameter stx-monitor-id 
   (λ (stx) (raise-syntax-error 'label "Used outside monitor" stx)))
@@ -32,7 +33,7 @@
   (define current-re m)
   (λ (evt)
     (set! current-re (current-re evt))
-    (re-accepting? current-re)))
+    (machine-accepting? current-re)))
 
 (define-match-expander call
   (syntax-rules ()
