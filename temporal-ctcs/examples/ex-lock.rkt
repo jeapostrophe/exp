@@ -16,34 +16,34 @@
     (define returned? #f)
     (define (monitor evt)
       (match evt
-        [(evt:return 'user _ _ app _ _)
+        [(evt:return 'user _ _ app _ _ _ _)
          (set! returned? #t)]
-        [(evt:return 'lock p  _ _ _ _)
+        [(evt:return 'lock p  _ _ _ _ _ _)
          (set! locked? #t)]
-        [(evt:return 'unlock p _ _ _ _)
+        [(evt:return 'unlock p _ _ _ _ _ _)
          (set! locked? #f)]
         [_
          (void)])
       (and
        (match evt
          ; Must not lock or unlock twice
-         [(evt:call 'lock p _ _ _)
+         [(evt:call 'lock p _ _ _ _ _)
           (not locked?)]
-         [(evt:call 'unlock p _ _ _)
+         [(evt:call 'unlock p _ _ _ _ _)
           locked?]
          ; Must not use resource unless locked
-         [(evt:call 'use p _ _ _)
+         [(evt:call 'use p _ _ _ _ _)
           locked?]
          ; Otherwise, okay
          [_
           #t])
        ; Must not use anything after return
        (match evt
-         [(evt:call 'lock p _ _ _)
+         [(evt:call 'lock p _ _ _ _ _)
           (not returned?)]
-         [(evt:call 'unlock p _ _ _)
+         [(evt:call 'unlock p _ _ _ _ _)
           (not returned?)]
-         [(evt:call 'use p _ _ _)
+         [(evt:call 'use p _ _ _ _ _)
           (not returned?)]
          ; Otherwise, okay
          [_

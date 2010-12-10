@@ -25,7 +25,7 @@
              (listof any/c))]))
 
 (module qdsl-sort racket
-  (require "../dsl.rkt" 'raw-sort unstable/match)
+  (require (file "../dsl.rkt") 'raw-sort unstable/match)
   (provide make-sort)
   (define (make-sort)
     (contract
@@ -37,12 +37,12 @@
              (dseq
               (evt:proj 'order proj _)
               (seq (star _)
-                   (evt:return 'sort _ _ _ _ _) (star _)
-                   (evt:call 'order (== proj) _ _ _))))))
+                   (evt:return 'sort _ _ _ _ _ _ _) (star _)
+                   (evt:call 'order (== proj) _ _ _ _ _))))))
      sort 'pos 'neg)))
 
 (module dsl-sort racket
-  (require "../dsl.rkt" 'raw-sort)
+  (require (file "../dsl.rkt") 'raw-sort)
   (provide make-sort)
   (define (make-sort)
     (contract (with-monitor (label 'sort (-> (label 'order (-> any/c any/c boolean?))
@@ -51,21 +51,21 @@
                 (complement
                  (seq (star _)
                       (evt:proj 'order _ _) (star _)
-                      (evt:return 'sort _ _ _ _ _) (star _)
-                      (evt:call 'order _  _ _ _))))
+                      (evt:return 'sort _ _ _ _ _ _ _) (star _)
+                      (evt:call 'order _  _ _ _ _ _))))
               sort
               'pos 'neg)))
 
 (module smart-sort racket
-  (require "../monitor.rkt" 'raw-sort)
+  (require (file "../monitor.rkt") 'raw-sort)
   (define returned? #f)
   (define (sort-monitor evt)
     (match evt
       [(evt:proj 'order proj _)
        #t]
-      [(evt:return 'sort _ _ _ (list f _) _)
+      [(evt:return 'sort _ _ _ _ _ (list f _) _)
        (set! returned? #t)]
-      [(evt:call 'order proj _ _ _)
+      [(evt:call 'order proj _ _ _ _ _)
        (not returned?)]
       [_ #t]))
   (provide/contract
