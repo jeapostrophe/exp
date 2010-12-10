@@ -1,6 +1,8 @@
 #lang racket
-(require "re.rkt"
-         "re-ext.rkt"
+(require racket/require 
+         (path-up "automata/machine.rkt")
+         (path-up "automata/re.rkt")
+         (path-up "automata/re-ext.rkt")
          unstable/match
          tests/eli-tester)
 
@@ -9,8 +11,8 @@
     (define r (re R))
     (test #:failure-prefix (format "~s" 'R)
           (test
-           (re-accepts? r succ) ...
-           (not (re-accepts? r fail)) ...))))
+           (machine-accepts? r succ) ...
+           (not (machine-accepts? r fail)) ...))))
 (define-syntax-rule (test-re R (succ ...) (fail ...))
   (test (test-re* R (succ ...) (fail ...))
         (test-re* (complement R) (fail ...) (succ ...))))

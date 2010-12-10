@@ -1,5 +1,5 @@
 #lang racket/base
-(require "nfa-bits.rkt"
+(require "nfa.rkt"
          (for-syntax syntax/parse
                      unstable/syntax
                      syntax/id-table
@@ -47,36 +47,5 @@
                      ...)]
              ...)))]))
 
-(define nfa/ep-advance nfa-advance)
-(define nfa/ep-accepting? nfa-accepting?)
-(define nfa/ep-accepts? nfa-accepts?)
-
-(provide
- epsilon
- nfa/ep
- nfa/ep-advance
- nfa/ep-accepting?
- nfa/ep-accepts?)
-
-(require tests/eli-tester)
-(define M
-  (nfa/ep (s0) (s1 s3)
-       [s0 ([epsilon (s1)]
-            [epsilon (s3)])]
-       [s1 ([0 (s2)]
-            [1 (s1)])]
-       [s2 ([0 (s1)]
-            [1 (s2)])]
-       [s3 ([0 (s3)]
-            [1 (s4)])]
-       [s4 ([0 (s4)]
-            [1 (s3)])]))
-
-(test
- (nfa/ep-accepts? M (list 1 0 1 0 1))
- (nfa/ep-accepts? M (list 0 1 0 1 0))
- (nfa/ep-accepts? M (list 1 0 1 1 0 1))
- (nfa/ep-accepts? M (list 0 1 0 0 1 0))
- (nfa/ep-accepts? M (list))
- (nfa/ep-accepts? M (list 1 0)) => #f)
-
+(provide epsilon
+         nfa/ep)

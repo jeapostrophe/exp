@@ -1,7 +1,5 @@
 #lang racket/base
 
-; XXX This needs to use machine.rkt
-
 (require "machine.rkt"
          racket/local
          racket/unsafe/ops
@@ -85,33 +83,4 @@
              (make-an-nfa-state start-set))]
           initial)))]))
 
-(define nfa-accepting? machine-accepting?)
-(define (nfa-advance nfa input) (nfa input))
-(define nfa-accepts? machine-accepts?)
-
-(provide
- nfa
- nfa-advance
- nfa-accepting?
- nfa-accepts?)
-
-(require tests/eli-tester)
-(define M
-  (nfa (s1 s3) (s1 s3)
-       [s1 ([0 (s2)]
-            [1 (s1)])]
-       [s2 ([0 (s1)]
-            [1 (s2)])]
-       [s3 ([0 (s3)]
-            [1 (s4)])]
-       [s4 ([0 (s4)]
-            [1 (s3)])]))
-
-(test
- (nfa-accepts? M (list 1 0 1 0 1))
- (nfa-accepts? M (list 0 1 0 1 0))
- (nfa-accepts? M (list 1 0 1 1 0 1))
- (nfa-accepts? M (list 0 1 0 0 1 0))
- (nfa-accepts? M (list))
- (nfa-accepts? M (list 1 0)) => #f)
-
+(provide nfa)

@@ -59,15 +59,7 @@
         [(_ the-re)
          (re-compile (re-expand #'the-re))])))
 
-(define re-accepting? machine-accepting?)
-(define re-accepts? machine-accepts?)
-(define re-accepts?/prefix-closed machine-accepts?/prefix-closed)
-
 (provide
  complement seq union star epsilon nullset dseq
  define-re-transformer
- re
- (rename-out [machine? re?])
- re-accepting?
- re-accepts?
- re-accepts?/prefix-closed)
+ re)
