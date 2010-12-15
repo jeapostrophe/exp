@@ -95,12 +95,16 @@
 (define machine-sigma*
   (machine-accepting (λ (input) machine-sigma*)))
 
-(provide (all-defined-out))
-#;(provide/contract
+(define-syntax-rule (provide/contract* [id ctc] ...)
+  (provide id ...))
+
+(provide (struct-out machine)
+         (struct-out machine-accepting))
+(provide/contract*
  [machine-accepts? (machine? (listof any/c) . -> . boolean?)]
  [machine-accepts?/prefix-closed (machine? (listof any/c) . -> . boolean?)]
- [struct machine ([next (any/c . -> . machine?)])]
- [struct (machine-accepting machine) ([next (any/c . -> . machine?)])]
+ #;[struct machine ([next (any/c . -> . machine?)])]
+ #;[struct (machine-accepting machine) ([next (any/c . -> . machine?)])]
  [machine-null machine?]
  [machine-epsilon machine?]
  [machine-sigma* machine?]
