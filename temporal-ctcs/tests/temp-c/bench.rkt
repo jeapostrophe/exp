@@ -35,10 +35,10 @@
        (complement
         (seq (star _) 
              (dseq
-              (evt:proj 'order proj _)
+              (monitor:proj 'order proj _)
               (seq (star _)
-                   (evt:return 'sort _ _ _ _ _ _ _) (star _)
-                   (evt:call 'order (== proj) _ _ _ _ _))))))
+                   (monitor:return 'sort _ _ _ _ _ _ _) (star _)
+                   (monitor:call 'order (== proj) _ _ _ _ _))))))
      sort 'pos 'neg)))
 
 (module dsl-sort racket
@@ -50,9 +50,9 @@
                                              (listof any/c)))
                 (complement
                  (seq (star _)
-                      (evt:proj 'order _ _) (star _)
-                      (evt:return 'sort _ _ _ _ _ _ _) (star _)
-                      (evt:call 'order _  _ _ _ _ _))))
+                      (monitor:proj 'order _ _) (star _)
+                      (monitor:return 'sort _ _ _ _ _ _ _) (star _)
+                      (monitor:call 'order _  _ _ _ _ _))))
               sort
               'pos 'neg)))
 
@@ -61,11 +61,11 @@
   (define returned? #f)
   (define (sort-monitor evt)
     (match evt
-      [(evt:proj 'order proj _)
+      [(monitor:proj 'order proj _)
        #t]
-      [(evt:return 'sort _ _ _ _ _ (list f _) _)
+      [(monitor:return 'sort _ _ _ _ _ (list f _) _)
        (set! returned? #t)]
-      [(evt:call 'order proj _ _ _ _ _)
+      [(monitor:call 'order proj _ _ _ _ _)
        (not returned?)]
       [_ #t]))
   (provide/contract

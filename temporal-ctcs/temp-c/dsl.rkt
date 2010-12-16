@@ -25,11 +25,11 @@
        (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
                             K))]
     [(_ K T)
-     (let ([monitor (re->evt-predicate (re T))])
+     (let ([monitor (re->monitor-predicate (re T))])
        (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
                             K))]))
 
-(define (re->evt-predicate m)
+(define (re->monitor-predicate m)
   (define current-re m)
   (λ (evt)
     (set! current-re (current-re evt))
@@ -38,9 +38,9 @@
 (define-match-expander call
   (syntax-rules ()
     [(_ n p ...)
-     (evt:call n _ _ _ _ _ (list p ...))]))
+     (monitor:call n _ _ _ _ _ (list p ...))]))
 
 (define-match-expander ret
   (syntax-rules ()
     [(_ n p ...)
-     (evt:return n _ _ _ _ _ _ (list p ...))]))
+     (monitor:return n _ _ _ _ _ _ (list p ...))]))

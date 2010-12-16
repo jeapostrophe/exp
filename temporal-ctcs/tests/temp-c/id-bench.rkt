@@ -20,12 +20,12 @@
   (contract (monitor/c
              (let ([called? #f])
                (match-lambda
-                 [(? evt:proj? x)
+                 [(? monitor:proj? x)
                   #t]
-                 [(? evt:call? x)
+                 [(? monitor:call? x)
                   (begin0 (not called?)
                           (set! called? #t))]
-                 [(? evt:return? x)
+                 [(? monitor:return? x)
                   (begin0 called?
                           (set! called? #f))]))
              'f
@@ -36,7 +36,7 @@
             id 'pos 'neg))
 (define dsl-ctc+atomic
   (contract (with-monitor (label 'f (-> integer? integer?))
-              (seq (? evt:proj?)
+              (seq (? monitor:proj?)
                    (star 
                     (seq (call 'f _)
                          (ret 'f _)))

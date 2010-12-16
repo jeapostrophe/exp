@@ -10,7 +10,7 @@
 
 @title{@bold{Automata}: Compiling State Machines}
 
-@author+email["Jay McCarthy" "jay@racket-lang.org"]
+@author[@author+email["Jay McCarthy" "jay@racket-lang.org"]]
 
 @defmodule[automata]
 

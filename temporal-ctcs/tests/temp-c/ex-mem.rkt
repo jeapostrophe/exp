@@ -22,12 +22,12 @@
     ; Only allow freeing of allocated things, disallow double frees
     ; and track addrs using malloc returns
     (match evt
-      [(evt:return 'malloc _ _ _ _ _ _ (list addr))
+      [(monitor:return 'malloc _ _ _ _ _ _ (list addr))
        (hash-set! allocated addr #t)
        #t]
-      [(evt:call 'free _ _  _ _ _ (list addr))
+      [(monitor:call 'free _ _  _ _ _ (list addr))
        (hash-has-key? allocated addr)]
-      [(evt:return 'free _ _ _ _ _ (list addr) _)
+      [(monitor:return 'free _ _ _ _ _ (list addr) _)
        (hash-remove! allocated addr)
        #t]
       [_
