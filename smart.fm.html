@@ -1,0 +1,382 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<style type="text/css">
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0 1%;
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+h1, h2 {
+    font-weight: normal;
+}
+h1 {
+    margin: 0 -1% 0.5em -1%;
+    padding: 0.25em 0 0.25em 1%;
+    border-width: 0 0 2px 0;
+    border-color: #888;
+    border-style: solid;
+    background-color: #eee;
+    font-size: 1.5em;
+}
+h2 {
+    margin-top: 0.5em;
+    font-size: 1.25em;
+}
+div {
+    display: inline;
+}
+textarea {
+    display: inline;
+    margin-bottom: 20px;
+    font-size: 0.8em;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+</style>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+var userId = 'jeapostrophe';        // Insert your smart.fm ID (ex. var userId = 'en45';)
+var beginOfWeek = 0;    // 0: Sun, 1: Mon
+var baseOptions = {
+    width: 448,
+    height: 224,
+    colors: ['#00a8c4a0', '#70c4e0a0'],
+    cht: 'bvs',
+    legend: 'none'
+};
+
+var types = ['Monthly', 'Weekly', 'Daily'];
+var bars = {Monthly: 12, Weekly: 13, Daily: 14};
+
+var scales = [
+    {scale:  30, step:  5},
+    {scale:  60, step: 10},
+    {scale:  90, step: 15},
+    {scale: 120, step: 15},
+    {scale: 180, step: 30},
+    {scale: 240, step: 30}
+];
+for (var mul = 0; mul < 4; mul++) {
+    var baseScales = [
+        {scale: 60 *  5, step: 60 * 1},
+        {scale: 60 *  6, step: 60 * 1},
+        {scale: 60 *  7, step: 60 * 1},
+        {scale: 60 *  8, step: 60 * 1},
+        {scale: 60 * 10, step: 60 * 2},
+        {scale: 60 * 12, step: 60 * 2},
+        {scale: 60 * 15, step: 60 * 3},
+        {scale: 60 * 20, step: 60 * 4},
+        {scale: 60 * 25, step: 60 * 5},
+        {scale: 60 * 30, step: 60 * 5},
+        {scale: 60 * 40, step: 60 * 5}
+    ];
+    for (var i in baseScales) {
+        for (var j = 0; j < mul; j++) {
+            baseScales[i].scale *= 10;
+            baseScales[i].step  *= 10;
+        }
+    }
+    scales = scales.concat(baseScales);
+}
+
+var tables = {};
+var charts = {};
+var isInitialized = false;
+
+var currentPageI = 0;
+var currentPageD = 0;
+var secsDailyI = {};
+var secsDailyD = {};
+var timeLatest = Date.UTC(2007, 0, 1) / 1000;
+
+while (!userId) {
+    userId = window.prompt('Input your smart.fm ID:', 'en45');
+}
+
+google.load('visualization', '1', {packages:['imagechart']});
+google.setOnLoadCallback(initCharts);
+
+setInterval(startLoadResults, 100);
+
+function startLoadResults() {
+    if (currentPageI == 0 && currentPageD == 0 && isInitialized) {
+        loadNextResults();
+        clearTimeout();
+    }
+}
+
+function callScript(url) {
+    var elemScript = document.createElement('script');
+    elemScript.setAttribute('type', 'text/javascript');
+    elemScript.setAttribute('src', url);
+    elemScript.setAttribute('charset', 'UTF-8');
+    document.getElementsByTagName('head').item(0).appendChild(elemScript);
+}
+
+function loadNextResults() {
+    if (currentPageI <= currentPageD) {
+        if (currentPageI < 10000) {
+            currentPageI++;
+            callScript('http://api.smart.fm/users/' + userId + '/study_results/iknow.json?page=' + currentPageI + '&per_page=100&callback=updateResults');
+        }
+    } else {
+        if (currentPageD < 10000) {
+            currentPageD++;
+            callScript('http://api.smart.fm/users/' + userId + '/study_results/dictation.json?page=' + currentPageD + '&per_page=100&callback=updateResults');
+        }
+    }
+}
+
+function updateResults(results) {
+    if (results.today > timeLatest) {
+        timeLatest = results.today;
+    }
+
+    var secsDaily;
+    if (typeof results.total_summary.studied != 'undefined') {
+        secsDaily = secsDailyI;
+        if (results.study_results.length == 0) {
+            currentPageI = 10000;
+        }
+    } else if (typeof results.total_summary.skill_level != 'undefined') {
+        secsDaily = secsDailyD;
+        if (results.study_results.length == 0) {
+            currentPageD = 10000;
+        }
+    } else {
+        alert('ASSERT: Unexpected result.');
+    }
+
+    for (var i = 0; i < results.study_results.length; i++) {
+        var time = results.study_results[i].timestamp;
+        secsDaily[time] = results.study_results[i].seconds;
+    }
+
+    updateCharts();
+    if (currentPageI != 10000 || currentPageD != 10000) {
+        loadNextResults();
+    } else {
+        updateImageURLs();
+    }
+}
+
+function initCharts() {
+    for (var i = 0; i < types.length; i++) {
+        tables[types[i]] = new google.visualization.DataTable();
+        tables[types[i]].addColumn('date', 'Time');
+        tables[types[i]].addColumn('number', 'iKnow!');
+        tables[types[i]].addColumn('number', 'Dicatation');
+        tables[types[i]].addRows(bars[types[i]]);
+
+        charts[types[i]] = new google.visualization.ImageChart(document.getElementById('chart' + types[i]));
+        charts[types[i]].draw(tables[types[i]], baseOptions);
+
+        var div = document.getElementById('chart' + types[i]);
+        var textarea = document.createElement('textarea');
+        textarea.value = 'Loading...';
+        textarea.id = 'url' + types[i];
+        textarea.rows = 5;
+        textarea.readOnly  = true;
+        textarea.style.width = div.getElementsByTagName('img').item(0).offsetWidth + 'px';
+//        textarea.addEventListener('click', function() {this.select(); this.focus();}, this);
+        textarea.onclick = function() {this.select(); this.focus();};
+        //div.parentNode.insertBefore(textarea, div.nextSibling);
+    }
+
+    isInitialized = true;
+}
+
+function makeTimeString(min) {
+    var hh = Math.floor(min / 60);
+    var mm = (hh > 0) ? ('0' + min % 60).slice(-2) : min % 60;
+    return ((hh > 0) ? hh + ':' : '') + mm;
+}
+
+function makeTitle(date) {
+    return 'Study Time - ' + userId + ' (' + date.getUTCFullYear() + '-' + ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' + ('00' + date.getUTCDate()).slice(-2) + ')';
+}
+
+function makeBarChartOptions(table) {
+    var numColumns = table.getNumberOfColumns();
+    var numRows    = table.getNumberOfRows();
+
+    var options = {};
+    for (var key in baseOptions) {
+        options[key] = baseOptions[key];
+    }
+
+    var chms = [];
+    for (var col = 1; col < numColumns; col++) {
+        for (var row = 0; row < numRows; row++) {
+            var mins = table.getValue(row, col);
+            if (mins > 0) {
+                chms.push(['t' + makeTimeString(mins), null, col - 1, row, 9, , 'c'].join(','));
+            }
+        }
+    }
+    var minsTotalMax = 0;
+    for (var row = 0; row < numRows; row++) {
+        var minsTotal = 0;
+        var num = 0;
+        for (var col = 1; col < numColumns; col++) {
+            var mins = table.getValue(row, col);
+            if (mins <= 0 || isNaN(mins)) {
+                continue;
+            }
+            minsTotal += mins;
+            num++;
+        }
+        if (minsTotalMax < minsTotal) {
+            minsTotalMax = minsTotal;
+        }
+        if (num >= 2) {
+            chms.push(['t' + makeTimeString(minsTotal), null, 1, row, 9].join(','));
+        }
+    }
+    options.chm = chms.join('|');
+
+    var scale = scales[0].scale;
+    var step  = scales[0].step;
+    for (var i in scales) {
+        if (minsTotalMax < scales[i].scale) {
+            scale = scales[i].scale;
+            step  = scales[i].step;
+            break;
+        }
+    }
+    var width = ('' + step / scale).slice(0, 5);
+    options.chf = 'c,ls,90,ffffff,'+ width + ',f0f0f0,' + width;
+    options.max = scale;
+    options.valueLabelsInterval = step;
+
+    var chxls = [];
+    for (var min = 0; min <= scale; min += step) {
+        chxls.push(makeTimeString(min));
+    }
+    options.chxl = '0:|';
+    for (var row = 0; row < numRows; row++) {
+        options.chxl += table.getFormattedValue(row, 0) + '|';
+    }
+    options.chxl += '1:|' + chxls.join('|');
+
+    return options;
+}
+
+function updateImageURLs() {
+    for (var i = 0; i < types.length; i++) {
+        var imageUrl = encodeURI(unescape(document.getElementById('chart' + types[i]).getElementsByTagName('img').item(0).src)).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\,/g, '%2C');
+        document.getElementById('url' + types[i]).value = '<img src="' + imageUrl + '" alt="">';
+    }
+}
+
+function updateCharts() {
+    var dateLatest = new Date(timeLatest * 1000);
+
+    if (tables['Monthly'] != undefined && charts['Monthly'] != undefined) {
+        var months = bars['Monthly'];
+        var yyyy = dateLatest.getUTCFullYear();
+        var mm = dateLatest.getUTCMonth();
+        for (var i = months - 1; i >= 0; i--) {
+            var lastDay = (new Date(yyyy, mm + 1, 0)).getDate();
+            var secMonthI = 0;
+            var secMonthD = 0;
+            for (var dd = 1; dd <= lastDay; dd++) {
+                var date = new Date(Date.UTC(yyyy, mm, dd));
+                var time = date.getTime() / 1000;
+                if (secsDailyI[time] != undefined) {
+                    secMonthI += secsDailyI[time];
+                }
+                if (secsDailyD[time] != undefined) {
+                    secMonthD += secsDailyD[time];
+                }
+            }
+
+            tables['Monthly'].setCell(i, 0, date);
+            tables['Monthly'].setCell(i, 1, Math.round(secMonthI / 60));
+            tables['Monthly'].setCell(i, 2, Math.round(secMonthD / 60));
+
+            if (mm > 0) {
+                mm--;
+            } else {
+                mm = 11;
+                yyyy--;
+            }
+        }
+
+        var formatter = new google.visualization.DateFormat({pattern: 'yy/MM'});
+        formatter.format(tables['Monthly'], 0);
+
+        var options = makeBarChartOptions(tables['Monthly']);
+        options.title = 'Monthly ' + makeTitle(dateLatest);
+        charts['Monthly'].draw(tables['Monthly'], options);
+    }
+
+    if (tables['Weekly'] != undefined && charts['Weekly'] != undefined) {
+        var weeks = bars['Weekly'];
+        var time = timeLatest - 86400 * (7 * (weeks - 1) + dateLatest.getUTCDay() + (7 - beginOfWeek) % 7);
+        for (var i = 0; i < weeks; i++) {
+            var date = new Date(time * 1000);
+
+            var secWeekI = 0;
+            var secWeekD = 0;
+            for (var j = 0; j < 7; j++) {
+                if (secsDailyI[time] != undefined) {
+                    secWeekI += secsDailyI[time];
+                }
+                if (secsDailyD[time] != undefined) {
+                    secWeekD += secsDailyD[time];
+                }
+                time += 86400;
+            }
+
+            tables['Weekly'].setCell(i, 0, date);
+            tables['Weekly'].setCell(i, 1, Math.round(secWeekI / 60));
+            tables['Weekly'].setCell(i, 2, Math.round(secWeekD / 60));
+        }
+
+        var formatter = new google.visualization.DateFormat({pattern: 'M/d'});
+        formatter.format(tables['Weekly'], 0);
+
+        var options = makeBarChartOptions(tables['Weekly']);
+        options.title = 'Weekly ' + makeTitle(dateLatest);
+        charts['Weekly'].draw(tables['Weekly'], options);
+    }
+
+    if (tables['Daily'] != undefined && charts['Daily'] != undefined) {
+        var days = bars['Daily'];
+        var time = timeLatest - 86400 * (days - 1);
+        for (var i = 0; i < days; i++) {
+            var date = new Date(time * 1000);
+
+            tables['Daily'].setCell(i, 0, date);
+            tables['Daily'].setCell(i, 1, Math.round(secsDailyI[time] / 60));
+            tables['Daily'].setCell(i, 2, Math.round(secsDailyD[time] / 60));
+
+            time += 86400;
+        }
+
+        var formatter = new google.visualization.DateFormat({pattern: 'M/d'});
+        formatter.format(tables['Daily'], 0);
+
+        var options = makeBarChartOptions(tables['Daily']);
+        options.title = 'Daily ' + makeTitle(dateLatest);
+        charts['Daily'].draw(tables['Daily'], options);
+    }
+}
+</script>
+<title>Study Time</title>
+</head>
+
+<h1>Study Time</h1>
+<h2>Monthly</h2>
+<div id="chartMonthly">Loading...</div>
+<h2>Weekly</h2>
+<div id="chartWeekly">Loading...</div>
+<h2>Daily</h2>
+<div id="chartDaily">Loading...</div>
+
+</html>

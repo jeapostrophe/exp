@@ -13,7 +13,7 @@ hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
 hash -d courses=~work/courses
-hash -d 330=~courses/2010/fall/330
+hash -d 630=~courses/2011/winter/630
 
 export PATH=~work/papers/etc/bin:$PATH
 
