@@ -14,8 +14,9 @@ hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
 hash -d courses=~work/courses
 hash -d 630=~courses/2011/winter/630
+hash -d j=~github/home/journal
 
-export PATH=~work/papers/etc/bin:$PATH
+export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 
 setopt autopushd pushdminus pushdsilent pushdtohome
 

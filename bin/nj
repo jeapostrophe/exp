@@ -1,0 +1,13 @@
+#!/bin/zsh
+source ~/.zshrc
+
+FILE=$(date "+%Y%m%d.txt")
+cd ~j/d
+if [ -f ${FILE} ] ; then
+    echo "Journal entry exists"
+    exit 1
+fi
+LANG=en date "+%A, %B %e %Y%n" > ${FILE}
+git add ${FILE}
+emacs -nw ${FILE}
+git commit -m "New journal entry" ${FILE}
