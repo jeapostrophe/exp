@@ -1,5 +1,7 @@
 source ~/.profile
 
+setopt printeightbit
+
 hash -d scm=$SVNROOT
 hash -d plt=$PLTHOME
 hash -d ws=~plt/collects/web-server
