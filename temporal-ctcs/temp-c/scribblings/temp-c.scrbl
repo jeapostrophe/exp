@@ -93,7 +93,33 @@ used correctly.
 @section[#:tag "dsl"]{Domain Specific Language}
 
 @defmodule[temp-c/dsl]
-@(require (for-label "../dsl.rkt"))
+@(require (for-label racket/match
+                     racket/contract
+                     "../dsl.rkt"
+                     "../../automata/re.rkt"
+                     "../../automata/re-ext.rkt"))
 @interaction-eval[#:eval our-eval (require "../dsl.rkt")]
 
-XXX
+Constructing explicit monitors using only @racket[monitor/c] can be a bit onerous. This module provides some helpful tools for making the definition easier. It provides everything from @racketmodname[temp-c/monitor], as well as all bindings from @racketmodname[automata/re] and @racketmodname[automata/re-ext]. The latter provide a DSL for writing "dependent" regular expression machines over arbitrary @racketmodname[racket/match] patterns.
+
+First, a few @racket[match] patterns are available to avoid specify all the details of monitored events (since most of the time the detailed options are unnecessary.)
+
+@defform[(call n a ...)]{ A @racket[match] expander for call events to the labeled function @racket[n] with arguments @racket[a]. }
+@defform[(ret n a ...)]{ A @racket[match] expander for return events to the labeled function @racket[n] with return values @racket[a]. }
+
+@defform[(with-monitor contract-expr re-expr)]{ Defines a monitored contract where the structural portion of the contract is the @racket[contract-expr] (which may included embedded @racket[label] expressions) and where the temporal portion of the contract is the regular expression given by @racket[re-expr]. }
+
+@defform[(label id contract-expr)]{ Labels a portion of a structural contract inside of @racket[with-monitor] with the label @racket[id]. }
+
+Here is a short example for @racket[_malloc] and @racket[_free]:
+@racketblock[
+(with-monitor 
+    (cons/c (label 'malloc (-> addr?))
+            (label 'free (-> addr? void?)))
+  (complement 
+   (seq (star _)
+        (dseq (call 'free addr)
+              (seq
+               (star (not (ret 'malloc (== addr))))
+               (call 'free (== addr)))))))
+]
