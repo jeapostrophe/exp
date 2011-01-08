@@ -21,7 +21,6 @@ The contract system implies the presence of a "monitoring system" that ensures t
 
 @defmodule[temp-c/monitor]
 @(require (for-label "../monitor.rkt"))
-@interaction-eval[#:eval our-eval (require "../monitor.rkt" racket/contract racket/match)]
 
 @deftogether[[
 @defstruct*[monitor ([label symbol?]) #:transparent]
@@ -98,7 +97,6 @@ used correctly.
                      "../dsl.rkt"
                      "../../automata/re.rkt"
                      "../../automata/re-ext.rkt"))
-@interaction-eval[#:eval our-eval (require "../dsl.rkt")]
 
 Constructing explicit monitors using only @racket[monitor/c] can be a bit onerous. This module provides some helpful tools for making the definition easier. It provides everything from @racketmodname[temp-c/monitor], as well as all bindings from @racketmodname[automata/re] and @racketmodname[automata/re-ext]. The latter provide a DSL for writing "dependent" regular expression machines over arbitrary @racketmodname[racket/match] patterns.
 
