@@ -1,8 +1,8 @@
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=/opt/local/bin:/opt/local:/sbin:/Developer/usr/bin:$PATH
 export MANPATH=/opt/local/share/man:$MANPATH
 export TEXINPUTS=/opt/local/share/coq/latex:$TEXINPUTS
-#export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/opt/local/lib
-#export DYLD_FRAMEWORK_PATH=$DYLD_FRAMEWORK_PATH:/opt/local/Library/Frameworks
+#export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/opt/local/lib:/Developer/usr/lib:
+#export DYLD_FRAMEWORK_PATH=$DYLD_FRAMEWORK_PATH:/opt/local/Library/Frameworks:
 
 export SVNROOT=$HOME/Dev/scm
 export PROJS=$SVNROOT/github.jeapostrophe/work
