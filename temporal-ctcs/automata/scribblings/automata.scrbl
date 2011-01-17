@@ -20,7 +20,7 @@ This package provides macros and functions for writing state machines over @rack
 
 @defmodule[automata/machine]
 @(require (for-label "../machine.rkt"))
-@interaction-eval[#:eval our-eval (require "../machine.rkt")]
+@interaction-eval[#:eval our-eval (require automata/machine)]
 
 Each of the subsequent macros compile to instances of the machines provided by this module. This is a documented feature of the modules, so these functions should be used to, for example, determine if the machine is currently accepting.
 
@@ -90,7 +90,7 @@ Each of the subsequent macros compile to instances of the machines provided by t
 
 @defmodule[automata/dfa]
 @(require (for-label "../dfa.rkt"))
-@interaction-eval[#:eval our-eval (require "../dfa.rkt")]
+@interaction-eval[#:eval our-eval (require automata/dfa)]
 
 This module provides a macro for deterministic finite automata.
 
@@ -125,7 +125,7 @@ This module provides a macro for deterministic finite automata.
 
 @defmodule[automata/nfa]
 @(require (for-label "../nfa.rkt"))
-@interaction-eval[#:eval our-eval (require "../nfa.rkt")]
+@interaction-eval[#:eval our-eval (require automata/nfa)]
 
 This module provides a macro for non-deterministic finite automata.
 
@@ -166,7 +166,7 @@ This module provides a macro for non-deterministic finite automata.
 
 @defmodule[automata/nfa-ep]
 @(require (for-label "../nfa-ep.rkt"))
-@interaction-eval[#:eval our-eval (require "../nfa-ep.rkt")]
+@interaction-eval[#:eval our-eval (require automata/nfa-ep)]
 
 This module provides a macro for non-deterministic finite automata with epsilon transitions.
 

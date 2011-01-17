@@ -14,7 +14,7 @@
 @defmodule[automata/re]
 @(require (for-label "../re.rkt"
                      "../machine.rkt"))
-@interaction-eval[#:eval our-eval (require "../re.rkt")]
+@interaction-eval[#:eval our-eval (require automata/re)]
 
 This module provides a macro for regular expression compilation.
 
@@ -55,7 +55,7 @@ This module provides a macro for regular expression compilation.
 
 @defmodule[automata/re-ext]
 @(require (for-label "../re-ext.rkt"))
-@interaction-eval[#:eval our-eval (require "../re-ext.rkt")]
+@interaction-eval[#:eval our-eval (require automata/re-ext)]
 
 This module provides a few transformers that extend the syntax of regular expression patterns.
 
@@ -67,7 +67,7 @@ This module provides a few transformers that extend the syntax of regular expres
 
 @section[#:tag "re-ex"]{Examples}
 
-@interaction-eval[#:eval our-eval (require "../machine.rkt" racket/function)]
+@interaction-eval[#:eval our-eval (require automata/machine racket/function)]
 
 @defexamples[
 #:eval our-eval
