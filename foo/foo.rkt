@@ -1,38 +1,4 @@
 #lang racket/base
-; 	Purely-functional Object-Oriented System in Scheme
-;
-; The present code implements a classless, delegation-based OO system, similar
-; to those of Self or Javascript. This is a full-fledged OO system with
-; encapsulation, object identity, inheritance and polymorphism. It is also
-; a purely functional system: there is not a single assignment or
-; other mutation in the code below.
-;
-; A closure (encapsulating a message map, and private parameters if any)
-; is the object in this system. Sending a message to an object -- i.e.,
-; applying the object to a message selector and arguments, -- results
-; in a list. Its head is the object in a new state, having processed the
-; message; the rest of the list are the results of the message if any.
-; Objects' identity is decided by an eq? predicate applied to the result of
-; an 'identity' message. A "set-x" method returns an object with a new state,
-; but with the same identity as the source object. An object in a changed
-; state is in a sense a "child" of the original object. No wonder
-; implementations of "mutation" and inheritance are so similar in this
-; OO system.
-;
-; This code was meant to be "light"; therefore it deliberately uses only the
-; most basic Scheme constructions. No macros/syntactic closures are employed
-; (although they are certainly possible and appropriate).
-;
-; This code has been discussed in an article "Re: FP, OO and relations. Does
-; anyone trump the others?"
-; posted on comp.lang.smalltalk, comp.lang.functional, and comp.lang.scheme
-; on Wed Dec 29 05:13:58 1999 GMT, Message-ID: <84c4qe$48j$1@nnrp1.deja.com>
-; See also http://pobox.com/~oleg/ftp/Scheme/oop-in-fp.txt
-; The article presents a more familiar OO system with mutations, and contrasts
-; it with a purely-functional OO system, which is implemented in this present
-; file.
-;
-; $Id: pure-oo-system.scm,v 1.2 2000/03/01 02:50:40 oleg Exp oleg $
 (require (for-syntax racket/base
                      syntax/parse
                      "foo-stx.rkt")
@@ -73,19 +39,6 @@
                                                body ...)))
               n ...)))]))
 
-; This function makes a new dispatcher closure -- a new
-; object: a dispatcher _is_ an object.
-; A message map is a list of associations of message
-; selectors with message handlers. A message selector
-; is a symbol. A message handler is a procedure. It should
-; take the dispatcher (i.e., _self_) as the first argument,
-; and message's arguments as other parameters, if any.
-; Every object always accepts a message 'mmap and replies with
-; its message map. This feature is used to create an
-; object with a new state, and to implement a delegation-based
-; inheritance (see make-point-3D below). The similarity
-; between the two runs deeper: an object with a changed state
-; is in a sense a "child" of the original object.
 (struct an-object (mmap)
         #:property prop:procedure
         ; XXX keywords
@@ -97,15 +50,16 @@
                                         (my-class ao) sel)))
                  ao args)))
 
-(define-syntax (object stx)
-  (syntax-parse
-   stx
-   ; XXX parent contract
-   [(_ parent:expr m ...)
-    (syntax/loc stx
-      (an-object
-       (mmap (an-object-mmap parent)
-             m ...)))]))
+(define-syntax-rule (object parent m ...)
+  (an-object
+   ; XXX contract the parent
+   (mmap (an-object-mmap parent)
+         m ...)))
+(define-syntax-rule (extend m ...)
+  (object self m ...))
+(define-syntax-rule (update [f e] ...)
+  (let ([i e] ...)
+    (extend (define (f) i) ...)))
 
 (define-method* identity my-class)
 (define (object%)
@@ -126,11 +80,9 @@
           (define (get-x) x)
           (define (get-y) y)
           (define (set-x new-x)
-            (object self 
-                    (define (get-x) new-x)))
+            (update [get-x new-x]))
           (define (set-y new-y)
-            (object self
-                    (define (get-y) new-y)))
+            (update [get-y new-y]))
           (define (my-class)
             "point-2D")
           (define (of-class)
@@ -178,8 +130,7 @@
   (object (make-point-2D x y)
           (define (get-z) z)
           (define (set-z new-z)
-            (object self
-                    (define (get-z) new-z)))
+            (update [get-z new-z]))
           (define (my-class)
             "point-3D")))
 
