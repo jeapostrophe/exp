@@ -16,7 +16,7 @@
   (begin (define-method m) ...))
 
 (define-syntax-parameter self 
-  (λ (stx) (raise-syntax-error 'self "Used outside mmap")))
+  (λ (stx) (raise-syntax-error 'self "Used outside object")))
 (define mmap-empty (hasheq))
 (define mmap-set hash-set)
 (define mmap-ref hash-ref)
