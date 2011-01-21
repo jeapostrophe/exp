@@ -25,28 +25,11 @@
 
 (define p (point-2D 5 6))
 (define p1 (point-2D 5 6))
-(test
- (of-class p1) => "point-2D"
- (get-x p) => 5
- (get-x p1) => 5
- 
- (print-x-y p) => (list "point-2D" 5 6)
- ; p and p1 happen at this point to be in the same state
- (equal? (print-x-y p) (print-x-y p1))
- 
- ; but p and p1 are different, non-identical objects
- (eq? (identity p) (identity p1)) => #f)
 
 ; pm is the object 'p' after the "mutation"
 ; Note that closures 'pm' and 'p' _share_ all the common state,
 ; including their identity
 (define pm (set-x p 10))
-(test
- (print-x-y pm) => (list "point-2D" 10 6)
- 
- ; States differ, identities are the same
- (equal? (print-x-y p) (print-x-y pm)) => #f
- (eq? (identity p) (identity pm)))
 
 ; Illustrating inheritance and polymorphism
 ; A derived "object" inherits the message-map of its parent, and
@@ -67,6 +50,23 @@
 (define q (point-3D 1 2 3))
 
 (test
+ (of-class p1) => "point-2D"
+ (get-x p) => 5
+ (get-x p1) => 5
+ 
+ (print-x-y p) => (list "point-2D" 5 6)
+ ; p and p1 happen at this point to be in the same state
+ (equal? (print-x-y p) (print-x-y p1))
+ 
+ ; but p and p1 are different, non-identical objects
+ (eq? (identity p) (identity p1)) => #f
+
+ (print-x-y pm) => (list "point-2D" 10 6)
+ 
+ ; States differ, identities are the same
+ (equal? (print-x-y p) (print-x-y pm)) => #f
+ (eq? (identity p) (identity pm))
+
  ; Although print-x-y was defined for objects of type point-2D,
  ; it accepts point-3D objects as well. Note however that the head
  ; of print-x-y's result spells "point-3D". This is because a point-3D

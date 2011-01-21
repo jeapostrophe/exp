@@ -1,6 +1,7 @@
 #lang racket/base
 (require (for-syntax racket/base
                      syntax/parse
+                     unstable/syntax
                      "foo-stx.rkt")
          racket/stxparam)
 
@@ -29,15 +30,17 @@
    [(_ parent-e:expr
        (define ((~var message (static method? "method")) . fmls) body:expr ...)
        n ...)
-    (with-syntax ([m-id (method-id (attribute message.value))])
-      (syntax/loc stx
-        (mmap (mmap-set parent-e
-                        m-id
-                        ; XXX Keywords
-                        (λ (the-self . fmls)
-                          (syntax-parameterize ([self (make-rename-transformer #'the-self)])
-                                               body ...)))
-              n ...)))]))
+    (with-disappeared-uses
+        (with-syntax ([m-id (method-id (attribute message.value))])
+          (record-disappeared-uses (list #'message))
+          (syntax/loc stx
+            (mmap (mmap-set parent-e
+                            m-id
+                            ; XXX Keywords
+                            (λ (the-self . fmls)
+                              (syntax-parameterize ([self (make-rename-transformer #'the-self)])
+                                                   body ...)))
+                  n ...))))]))
 
 (struct an-object (mmap)
         #:property prop:procedure
