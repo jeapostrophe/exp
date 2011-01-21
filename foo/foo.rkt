@@ -49,6 +49,7 @@
          [parent
           (mmap-set parent 
                     'message 
+                    ; XXX Keywords
                     (λ (the-self . fmls)
                       (syntax-parameterize ([self (make-rename-transformer #'the-self)])
                                            body)))]
@@ -83,15 +84,20 @@
        (error (dispatcher 'my-class) " does not understand " selector)]))
   dispatcher)
 
+(define (object%)
+  (define me (gensym 'obj))
+  (make-dispatcher
+   (mmap mmap-empty
+         (define (identity) (list self me)))))
+
 ;;;;;;; Tests
 (require tests/eli-tester)
 
 ; point-2D object and its constructor
 
 (define (make-point-2D x y)
-  (define (my-identity) message-map)
   (define message-map
-    (mmap mmap-empty
+    (mmap ((object%) 'mmap)
           (define (get-x) (list self x))
           (define (get-y) (list self y))
           (define (set-x new-x)
@@ -102,8 +108,6 @@
             (list (make-dispatcher
                    (mmap (self 'mmap)
                          (define (get-y) (list self new-y))))))
-          (define (identity)
-            (list self my-identity))
           (define (my-class)
             (list self "point-2D"))
           (define (of-class)
