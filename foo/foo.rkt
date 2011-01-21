@@ -33,28 +33,48 @@
 ; file.
 ;
 ; $Id: pure-oo-system.scm,v 1.2 2000/03/01 02:50:40 oleg Exp oleg $
+(require (for-syntax racket/base
+                     syntax/parse
+                     "foo-stx.rkt")
+         racket/stxparam)
 
+(define-syntax (define-method stx)
+  (syntax-parse
+   stx
+   [(_ m:id)
+    (syntax/loc stx
+      (begin
+        (define m-id (gensym 'm))
+        (define-syntax m (method #'m-id))))]))
+(define-syntax-rule (define-method* m ...)
+  (begin (define-method m) ...))
 
-(require racket/stxparam
-         (for-syntax racket/base))
+; XXX dispatcher as a struct
+; XXX object macro rather than make-dispatcher/mmap
+
 (define-syntax-parameter self 
   (λ (stx) (raise-syntax-error 'self "Used outside mmap")))
 (define mmap-empty (hasheq))
 (define mmap-set hash-set)
 (define mmap-ref hash-ref)
-(define-syntax-rule (mmap parent-e
-                          (define (message . fmls) body)
-                          ...)
-  (let* ([parent parent-e]
-         [parent
-          (mmap-set parent 
-                    'message 
-                    ; XXX Keywords
-                    (λ (the-self . fmls)
-                      (syntax-parameterize ([self (make-rename-transformer #'the-self)])
-                                           body)))]
-         ...)
-    parent))
+(define-syntax (mmap stx)
+  (syntax-parse
+   stx
+   #:literals (define)
+   [(_ parent-e:expr)
+    (syntax/loc stx parent-e)]
+   [(_ parent-e:expr
+       (define ((~var message (static method? "method")) . fmls) body:expr ...)
+       n ...)
+    (with-syntax ([m-id (method-id (attribute message.value))])
+      (syntax/loc stx
+        (mmap (mmap-set parent-e
+                        m-id
+                        ; XXX Keywords
+                        (λ (the-self . fmls)
+                          (syntax-parameterize ([self (make-rename-transformer #'the-self)])
+                                               body ...)))
+              n ...)))]))
 
 ; This function makes a new dispatcher closure -- a new
 ; object: a dispatcher _is_ an object.
@@ -78,16 +98,17 @@
        =>
        (lambda (handler-ass)
          (apply handler-ass dispatcher args))]
-      [(eq? selector 'my-class)
-       (list dispatcher "UNKNOWN")]
       [else
-       (error (dispatcher 'my-class) " does not understand " selector)]))
+       (error 'dispatch "~a does not understand ~v" (my-class dispatcher) selector)]))
   dispatcher)
+
+(define-method* identity my-class)
 
 (define (object%)
   (define me (gensym 'obj))
   (make-dispatcher
    (mmap mmap-empty
+         (define (my-class) (list self "UNKNOWN"))
          (define (identity) (list self me)))))
 
 ;;;;;;; Tests
@@ -95,6 +116,7 @@
 
 ; point-2D object and its constructor
 
+(define-method* get-x get-y set-x set-y of-class)
 (define (make-point-2D x y)
   (define message-map
     (mmap ((object%) 'mmap)
@@ -111,43 +133,43 @@
           (define (my-class)
             (list self "point-2D"))
           (define (of-class)
-            (self 'my-class))))
+            (my-class self))))
   (make-dispatcher message-map))
 
 (define (print-x-y obj)
   (define (rev-apply lst handler) (apply handler lst))
-  (rev-apply (obj 'get-x)
+  (rev-apply (get-x obj)
              (lambda (obj x)
-               (rev-apply (obj 'get-y)
+               (rev-apply (get-y obj)
                           (lambda (obj y)
-                            (rev-apply (obj 'my-class)
+                            (rev-apply (my-class obj)
                                        (lambda (obj my-class)
                                          (list my-class x y))))))))
 
 (define p (make-point-2D 5 6))
 (define p1 (make-point-2D 5 6))
 (test
- (p1 'of-class) => (list p1 "point-2D")
- (p 'get-x) => (list p 5)
- (p1 'get-x) => (list p1 5)
-
+ (of-class p1) => (list p1 "point-2D")
+ (get-x p) => (list p 5)
+ (get-x p1) => (list p1 5)
+ 
  (print-x-y p) => (list "point-2D" 5 6)
-; p and p1 happen at this point to be in the same state
+ ; p and p1 happen at this point to be in the same state
  (equal? (print-x-y p) (print-x-y p1))
-
-; but p and p1 are different, non-identical objects
- (eq? (cadr (p 'identity)) (cadr (p1 'identity))) => #f)
+ 
+ ; but p and p1 are different, non-identical objects
+ (eq? (cadr (identity p)) (cadr (identity p1))) => #f)
 
 ; pm is the object 'p' after the "mutation"
 ; Note that closures 'pm' and 'p' _share_ all the common state,
 ; including their identity
-(define pm (car (p 'set-x 10)))
+(define pm (car (set-x p 10)))
 (test
  (print-x-y pm) => (list "point-2D" 10 6)
-
-; States differ, identities are the same
+ 
+ ; States differ, identities are the same
  (equal? (print-x-y p) (print-x-y pm)) => #f
- (eq? (cadr (p 'identity)) (cadr (pm 'identity))))
+ (eq? (cadr (identity p)) (cadr (identity pm))))
 
 ; Illustrating inheritance and polymorphism
 ; A derived "object" inherits the message-map of its parent, and
@@ -156,6 +178,7 @@
 ; searched, the subclass is able to override the behavior of its
 ; superclass.
 
+(define-method* get-z set-z)
 (define (make-point-3D x y z)
   (define message-map
     (mmap ((make-point-2D x y) 'mmap)
@@ -172,22 +195,22 @@
 (define q (make-point-3D 1 2 3))
 
 (test
-; Although print-x-y was defined for objects of type point-2D,
-; it accepts point-3D objects as well. Note however that the head
-; of print-x-y's result spells "point-3D". This is because a point-3D
-; object overrides the message 'my-class of its parent class
-(print-x-y q) => (list "point-3D" 1 2)
-(q 'get-z) => (list q 3)
-
-; Demonstrating the use of inherited methods....
-(let ((obj (car ((car (q 'set-x 11)) 'set-z 12))))
-  (append (print-x-y obj) (cdr (obj 'get-z))))
-=> (list "point-3D" 11 2 12) 
-
-(q 'of-class) => (list q "point-3D") ; notice polymorphism!!!
-; The of-class method is implemented in point-2D yet the result is
-; "point-3D". This is because the 'of-class method sends the message
-; 'my-class to itself. The latter handler is over-ridden in a
-; class point-3D to return its own title, "point-3D".
-
-)
+ ; Although print-x-y was defined for objects of type point-2D,
+ ; it accepts point-3D objects as well. Note however that the head
+ ; of print-x-y's result spells "point-3D". This is because a point-3D
+ ; object overrides the message 'my-class of its parent class
+ (print-x-y q) => (list "point-3D" 1 2)
+ (get-z q) => (list q 3)
+ 
+ ; Demonstrating the use of inherited methods....
+ (let ((obj (car (set-z (car (set-x q 11)) 12))))
+   (append (print-x-y obj) (cdr (get-z obj))))
+ => (list "point-3D" 11 2 12) 
+ 
+ (of-class q) => (list q "point-3D") ; notice polymorphism!!!
+ ; The of-class method is implemented in point-2D yet the result is
+ ; "point-3D". This is because the 'of-class method sends the message
+ ; 'my-class to itself. The latter handler is over-ridden in a
+ ; class point-3D to return its own title, "point-3D".
+ 
+ )
