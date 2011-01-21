@@ -91,14 +91,11 @@
         ; XXX keywords
         (λ (ao sel . args)
           (define message-map (an-object-mmap ao))
-          (cond
-            [(mmap-ref message-map sel #f)
-             =>
-             (lambda (handler-ass)
-               ; XXX keywords
-               (apply handler-ass ao args))]
-            [else
-             (error 'object "~a does not understand ~v" (my-class ao) sel)])))
+          ; XXX keywords
+          (apply (mmap-ref message-map sel 
+                           (λ () (error 'object "~a does not understand ~v"
+                                        (my-class ao) sel)))
+                 ao args)))
 
 (define-syntax (object stx)
   (syntax-parse
