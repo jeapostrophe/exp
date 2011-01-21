@@ -47,12 +47,12 @@
           ; XXX keywords
           (apply (mmap-ref message-map sel 
                            (λ () (error 'object "~a does not understand ~v"
-                                        (my-class ao) sel)))
+                                        (class ao) sel)))
                  ao args)))
 
 (define-syntax-rule (object parent m ...)
   (an-object
-   ; XXX contract the parent
+   ; XXX contract the parent to be an-object?
    (mmap (an-object-mmap parent)
          m ...)))
 (define-syntax-rule (extend m ...)
@@ -61,12 +61,12 @@
   (let ([i e] ...)
     (extend (define (f) i) ...)))
 
-(define-method* identity my-class)
+(define-method* identity class)
 (define (object%)
   (define me (gensym 'obj))
   (an-object
    (mmap mmap-empty
-         (define (my-class) "object")
+         (define (class) "object")
          (define (identity) me))))
 
 ;;;;;;; Tests
@@ -75,7 +75,7 @@
 ; point-2D object and its constructor
 
 (define-method* get-x get-y set-x set-y of-class)
-(define (make-point-2D x y)
+(define (point-2D x y)
   (object (object%)
           (define (get-x) x)
           (define (get-y) y)
@@ -83,18 +83,18 @@
             (update [get-x new-x]))
           (define (set-y new-y)
             (update [get-y new-y]))
-          (define (my-class)
+          (define (class)
             "point-2D")
           (define (of-class)
-            (my-class self))))
+            (class self))))
 
 (define (print-x-y obj)
-  (list (my-class obj)
+  (list (class obj)
         (get-x obj)
         (get-y obj)))
 
-(define p (make-point-2D 5 6))
-(define p1 (make-point-2D 5 6))
+(define p (point-2D 5 6))
+(define p1 (point-2D 5 6))
 (test
  (of-class p1) => "point-2D"
  (get-x p) => 5
@@ -126,21 +126,21 @@
 ; superclass.
 
 (define-method* get-z set-z)
-(define (make-point-3D x y z)
-  (object (make-point-2D x y)
+(define (point-3D x y z)
+  (object (point-2D x y)
           (define (get-z) z)
           (define (set-z new-z)
             (update [get-z new-z]))
-          (define (my-class)
+          (define (class)
             "point-3D")))
 
-(define q (make-point-3D 1 2 3))
+(define q (point-3D 1 2 3))
 
 (test
  ; Although print-x-y was defined for objects of type point-2D,
  ; it accepts point-3D objects as well. Note however that the head
  ; of print-x-y's result spells "point-3D". This is because a point-3D
- ; object overrides the message 'my-class of its parent class
+ ; object overrides the message 'class of its parent class
  (print-x-y q) => (list "point-3D" 1 2)
  (get-z q) => 3
  
@@ -152,7 +152,7 @@
  (of-class q) => "point-3D" ; notice polymorphism!!!
  ; The of-class method is implemented in point-2D yet the result is
  ; "point-3D". This is because the 'of-class method sends the message
- ; 'my-class to itself. The latter handler is over-ridden in a
+ ; 'class to itself. The latter handler is over-ridden in a
  ; class point-3D to return its own title, "point-3D".
  
  )
