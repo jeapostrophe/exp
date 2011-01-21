@@ -49,9 +49,6 @@
 (define-syntax-rule (define-method* m ...)
   (begin (define-method m) ...))
 
-; XXX dispatcher as a struct
-; XXX object macro rather than make-dispatcher/mmap
-
 (define-syntax-parameter self 
   (λ (stx) (raise-syntax-error 'self "Used outside mmap")))
 (define mmap-empty (hasheq))
@@ -89,24 +86,34 @@
 ; inheritance (see make-point-3D below). The similarity
 ; between the two runs deeper: an object with a changed state
 ; is in a sense a "child" of the original object.
-(define (make-dispatcher message-map)
-  (define (dispatcher selector . args)
-    (cond
-      [(eq? selector 'mmap)
-       message-map]
-      [(mmap-ref message-map selector #f)
-       =>
-       (lambda (handler-ass)
-         (apply handler-ass dispatcher args))]
-      [else
-       (error 'dispatch "~a does not understand ~v" (my-class dispatcher) selector)]))
-  dispatcher)
+(struct an-object (mmap)
+        #:property prop:procedure
+        ; XXX keywords
+        (λ (ao sel . args)
+          (define message-map (an-object-mmap ao))
+          (cond
+            [(mmap-ref message-map sel #f)
+             =>
+             (lambda (handler-ass)
+               ; XXX keywords
+               (apply handler-ass ao args))]
+            [else
+             (error 'object "~a does not understand ~v" (my-class ao) sel)])))
+
+(define-syntax (object stx)
+  (syntax-parse
+   stx
+   ; XXX parent contract
+   [(_ parent:expr m ...)
+    (syntax/loc stx
+      (an-object
+       (mmap (an-object-mmap parent)
+             m ...)))]))
 
 (define-method* identity my-class)
-
 (define (object%)
   (define me (gensym 'obj))
-  (make-dispatcher
+  (an-object
    (mmap mmap-empty
          (define (my-class) (list self "UNKNOWN"))
          (define (identity) (list self me)))))
@@ -118,23 +125,19 @@
 
 (define-method* get-x get-y set-x set-y of-class)
 (define (make-point-2D x y)
-  (define message-map
-    (mmap ((object%) 'mmap)
+  (object (object%)
           (define (get-x) (list self x))
           (define (get-y) (list self y))
           (define (set-x new-x)
-            (list (make-dispatcher
-                   (mmap (self 'mmap)
-                         (define (get-x) (list self new-x))))))
+            (list (object self 
+                          (define (get-x) (list self new-x)))))
           (define (set-y new-y)
-            (list (make-dispatcher
-                   (mmap (self 'mmap)
-                         (define (get-y) (list self new-y))))))
+            (list (object self
+                          (define (get-y) (list self new-y)))))
           (define (my-class)
             (list self "point-2D"))
           (define (of-class)
             (my-class self))))
-  (make-dispatcher message-map))
 
 (define (print-x-y obj)
   (define (rev-apply lst handler) (apply handler lst))
@@ -180,17 +183,14 @@
 
 (define-method* get-z set-z)
 (define (make-point-3D x y z)
-  (define message-map
-    (mmap ((make-point-2D x y) 'mmap)
+  (object (make-point-2D x y)
           (define (get-z) (list self z))
           (define (set-z new-z)
             (list
-             (make-dispatcher
-              (mmap (self 'mmap)
-                    (define (get-z) (list self new-z))))))
+             (object self
+                     (define (get-z) (list self new-z)))))
           (define (my-class)
             (list self "point-3D"))))
-  (make-dispatcher message-map))
 
 (define q (make-point-3D 1 2 3))
 
