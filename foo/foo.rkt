@@ -69,6 +69,8 @@
        (error (dispatcher 'my-class) " does not understand " selector))))
   dispatcher)
 
+;;;;;;; Tests
+(require tests/eli-tester)
 
 ; point-2D object and its constructor
 
@@ -107,26 +109,28 @@
 
 (define p (make-point-2D 5 6))
 (define p1 (make-point-2D 5 6))
-(p1 'of-class) ; ==> (#<procedure p1> "point-2D")
-(p 'get-x)     ; ==> (#<procedure p> 5)
-(p1 'get-x)    ; ==> (#<procedure p1> 5)
+(test
+ (p1 'of-class) => (list p1 "point-2D")
+ (p 'get-x) => (list p 5)
+ (p1 'get-x) => (list p1 5)
 
-(print-x-y p)  ; ==> ("point-2D" 5 6)
+ (print-x-y p) => (list "point-2D" 5 6)
 ; p and p1 happen at this point to be in the same state
-(equal? (print-x-y p) (print-x-y p1)) ; ==> #t
+ (equal? (print-x-y p) (print-x-y p1))
 
 ; but p and p1 are different, non-identical objects
-(eq? (cadr (p 'identity)) (cadr (p1 'identity))) ; ==> #f
+ (eq? (cadr (p 'identity)) (cadr (p1 'identity))) => #f)
 
 ; pm is the object 'p' after the "mutation"
 ; Note that closures 'pm' and 'p' _share_ all the common state,
 ; including their identity
 (define pm (car (p 'set-x 10)))
-(print-x-y pm) ; ==> ("point-2D" 10 6)
+(test
+ (print-x-y pm) => (list "point-2D" 10 6)
 
 ; States differ, identities are the same
-(equal? (print-x-y p) (print-x-y pm)) ; ==> #f
-(eq? (cadr (p 'identity)) (cadr (pm 'identity))) ; ==> #t
+ (equal? (print-x-y p) (print-x-y pm)) => #f
+ (eq? (cadr (p 'identity)) (cadr (pm 'identity))))
 
 ; Illustrating inheritance and polymorphism
 ; A derived "object" inherits the message-map of its parent, and
@@ -153,22 +157,23 @@
 
 (define q (make-point-3D 1 2 3))
 
+(test
 ; Although print-x-y was defined for objects of type point-2D,
 ; it accepts point-3D objects as well. Note however that the head
 ; of print-x-y's result spells "point-3D". This is because a point-3D
 ; object overrides the message 'my-class of its parent class
-(print-x-y q)  ; ==> ("point-3D" 1 2)
-(q 'get-z)     ; ==> (#<procedure q> 3)
+(print-x-y q) => (list "point-3D" 1 2)
+(q 'get-z) => (list q 3)
 
 ; Demonstrating the use of inherited methods....
 (let ((obj (car ((car (q 'set-x 11)) 'set-z 12))))
   (append (print-x-y obj) (cdr (obj 'get-z))))
-; ==> ("point-3D" 11 2 12) 
+=> (list "point-3D" 11 2 12) 
 
-(q 'of-class)
-; ==> (#<procedure q> "point-3D") ; notice polymorphism!!!
+(q 'of-class) => (list q "point-3D") ; notice polymorphism!!!
 ; The of-class method is implemented in point-2D yet the result is
 ; "point-3D". This is because the 'of-class method sends the message
 ; 'my-class to itself. The latter handler is over-ridden in a
 ; class point-3D to return its own title, "point-3D".
 
+)
