@@ -115,8 +115,8 @@
   (define me (gensym 'obj))
   (an-object
    (mmap mmap-empty
-         (define (my-class) (list self "UNKNOWN"))
-         (define (identity) (list self me)))))
+         (define (my-class) "object")
+         (define (identity) me))))
 
 ;;;;;;; Tests
 (require tests/eli-tester)
@@ -126,53 +126,48 @@
 (define-method* get-x get-y set-x set-y of-class)
 (define (make-point-2D x y)
   (object (object%)
-          (define (get-x) (list self x))
-          (define (get-y) (list self y))
+          (define (get-x) x)
+          (define (get-y) y)
           (define (set-x new-x)
-            (list (object self 
-                          (define (get-x) (list self new-x)))))
+            (object self 
+                    (define (get-x) new-x)))
           (define (set-y new-y)
-            (list (object self
-                          (define (get-y) (list self new-y)))))
+            (object self
+                    (define (get-y) new-y)))
           (define (my-class)
-            (list self "point-2D"))
+            "point-2D")
           (define (of-class)
             (my-class self))))
 
 (define (print-x-y obj)
-  (define (rev-apply lst handler) (apply handler lst))
-  (rev-apply (get-x obj)
-             (lambda (obj x)
-               (rev-apply (get-y obj)
-                          (lambda (obj y)
-                            (rev-apply (my-class obj)
-                                       (lambda (obj my-class)
-                                         (list my-class x y))))))))
+  (list (my-class obj)
+        (get-x obj)
+        (get-y obj)))
 
 (define p (make-point-2D 5 6))
 (define p1 (make-point-2D 5 6))
 (test
- (of-class p1) => (list p1 "point-2D")
- (get-x p) => (list p 5)
- (get-x p1) => (list p1 5)
+ (of-class p1) => "point-2D"
+ (get-x p) => 5
+ (get-x p1) => 5
  
  (print-x-y p) => (list "point-2D" 5 6)
  ; p and p1 happen at this point to be in the same state
  (equal? (print-x-y p) (print-x-y p1))
  
  ; but p and p1 are different, non-identical objects
- (eq? (cadr (identity p)) (cadr (identity p1))) => #f)
+ (eq? (identity p) (identity p1)) => #f)
 
 ; pm is the object 'p' after the "mutation"
 ; Note that closures 'pm' and 'p' _share_ all the common state,
 ; including their identity
-(define pm (car (set-x p 10)))
+(define pm (set-x p 10))
 (test
  (print-x-y pm) => (list "point-2D" 10 6)
  
  ; States differ, identities are the same
  (equal? (print-x-y p) (print-x-y pm)) => #f
- (eq? (cadr (identity p)) (cadr (identity pm))))
+ (eq? (identity p) (identity pm)))
 
 ; Illustrating inheritance and polymorphism
 ; A derived "object" inherits the message-map of its parent, and
@@ -184,13 +179,12 @@
 (define-method* get-z set-z)
 (define (make-point-3D x y z)
   (object (make-point-2D x y)
-          (define (get-z) (list self z))
+          (define (get-z) z)
           (define (set-z new-z)
-            (list
-             (object self
-                     (define (get-z) (list self new-z)))))
+            (object self
+                    (define (get-z) new-z)))
           (define (my-class)
-            (list self "point-3D"))))
+            "point-3D")))
 
 (define q (make-point-3D 1 2 3))
 
@@ -200,14 +194,14 @@
  ; of print-x-y's result spells "point-3D". This is because a point-3D
  ; object overrides the message 'my-class of its parent class
  (print-x-y q) => (list "point-3D" 1 2)
- (get-z q) => (list q 3)
+ (get-z q) => 3
  
  ; Demonstrating the use of inherited methods....
- (let ((obj (car (set-z (car (set-x q 11)) 12))))
-   (append (print-x-y obj) (cdr (get-z obj))))
+ (let ([obj (set-z (set-x q 11) 12)])
+   (append (print-x-y obj) (list (get-z obj))))
  => (list "point-3D" 11 2 12) 
  
- (of-class q) => (list q "point-3D") ; notice polymorphism!!!
+ (of-class q) => "point-3D" ; notice polymorphism!!!
  ; The of-class method is implemented in point-2D yet the result is
  ; "point-3D". This is because the 'of-class method sends the message
  ; 'my-class to itself. The latter handler is over-ridden in a
