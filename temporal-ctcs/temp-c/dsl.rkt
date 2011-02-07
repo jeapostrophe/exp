@@ -25,11 +25,32 @@
        (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
                             K))]
     [(_ K T)
-     (let ([monitor (re->monitor-predicate (re T))])
+     (let ([monitor (re->monitor-predicate/serial (re T))])
+       (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
+                            K))]
+    [(_ K #:concurrent T)
+     (let ([monitor (re->monitor-predicate/concurrent (re T))])
        (syntax-parameterize ([stx-monitor-id (make-rename-transformer #'monitor)])
                             K))]))
 
-(define (re->monitor-predicate m)
+(define (re->monitor-predicate/concurrent m)
+  (define t
+    (thread 
+     (λ ()
+       (let loop ([current-re m])
+         (define m (thread-receive))
+         (define evt (car m))
+         (define qt (cdr m))
+         (define new-re (current-re evt))
+         (thread-send qt (machine-accepting? new-re) #f)
+         (loop new-re)))))
+  (define (accepts? evt)
+    (thread-resume t (current-thread))
+    (and (thread-send t (cons evt (current-thread)) #f)
+         (thread-receive)))
+  accepts?)
+
+(define (re->monitor-predicate/serial m)
   (define current-re m)
   (λ (evt)
     (set! current-re (current-re evt))
