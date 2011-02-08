@@ -3,64 +3,49 @@
          (path-up "temp-c/dsl.rkt")
          tests/eli-tester)
 
+(define count 0)
+(define (evil? v)
+  (define nc (add1 count))
+  (sleep (random))
+  (set! count nc)
+  #t)
 
 (define (test-spec spec)
-  (define (f g) (g))
+  (define (f g) g)
   (define f/c (contract spec f 'pos 'neg))
   
   (define x #f)
-  (define s1 (make-semaphore))
-  (define s2 (make-semaphore))
+  (define (body)
+    (with-handlers ([exn? (λ (e) (set! x e))])
+      (f/c 1)))
   (define t1
-    (thread
-     (λ ()
-       (with-handlers ([exn? (λ (e) (set! x e))])
-         (f/c
-          (λ ()
-            (semaphore-post s1)
-            (semaphore-wait s2)))
-         (semaphore-post s1)))))
+    (thread body))
   (define t2
-    (thread
-     (λ ()
-       (with-handlers ([exn? (λ (e) (set! x e))])
-         (semaphore-wait s1)
-         (f/c
-          (λ ()
-            (semaphore-post s2)
-            (semaphore-wait s1)))))))
+    (thread body))
   
   (thread-wait t1)
   (thread-wait t2)
   (when x
     (raise x)))
 
-(define Race
-  (with-monitor
-      (label 'f ((label 'g (-> void?)) . -> . void?))
-    (complement
-     (seq _ (call 'f _)
-          _ (call 'g)
-          (call 'f _)
-          _ (call 'g)
-          (ret 'g _)
-          (ret 'f _)
-          (ret 'g _)
-          (ret 'f _)))))
-(define Concurrent
-  (with-monitor
-      (label 'f ((label 'g (-> void?)) . -> . void?))
-    #:concurrent
-    (complement
-     (seq _ (call 'f _)
-          _ (call 'g)
-          (call 'f _)
-          _ (call 'g)
-          (ret 'g _)
-          (ret 'f _)
-          (ret 'g _)
-          (ret 'f _)))))
+(define-syntax-rule (dupe r c K T)
+  (begin (define r (with-monitor K T))
+         (define c (with-monitor K #:concurrent T))))
+
+(dupe Race Concurrent
+      (label 'f (number? . -> . number?))
+      (seq (monitor:proj 'f _ _)
+           (star (union (call 'f (? evil?))
+                        (ret 'f _)))))
 
 (test
- (test-spec Race) => (void)
- (test-spec Concurrent) =error> "disallowed")
+ #:failure-prefix "Race"
+ (test
+  (set! count 0)
+  (test-spec Race)
+  count => 2)
+ #:failure-prefix "Concurrent"
+ (test
+  (set! count 0)
+  (test-spec Concurrent)
+  count => 2))

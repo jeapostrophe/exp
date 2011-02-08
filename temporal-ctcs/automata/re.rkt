@@ -21,12 +21,16 @@
    [((~and op star) lhs:expr)
     (quasisyntax/loc stx
       (op #,(re-expand #'lhs)))]
+   [((~and op seq) lhs:expr)
+    (re-expand #'lhs)]
    [((~and op seq) lhs:expr rhs:expr)
     (quasisyntax/loc stx
       (op #,(re-expand #'lhs) #,(re-expand #'rhs)))]
    [((~and op seq) lhs:expr rest:expr ...)
     (quasisyntax/loc stx
       #,(re-expand #'(op lhs (op rest ...))))]
+   [((~and op union) lhs:expr)
+    (re-expand #'lhs)]
    [((~and op union) lhs:expr rhs:expr)
     (quasisyntax/loc stx
       (op #,(re-expand #'lhs) #,(re-expand #'rhs)))]
