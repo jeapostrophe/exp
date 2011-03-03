@@ -6,7 +6,7 @@
 (define frame 
   (new frame% 
        [label "Example"]
-       [x (- x)] [y (- y)]
+       [x 0] [y (- y)]
        [width w] [height h]
        [style '(hide-menu-bar no-resize-border no-caption no-system-menu)]))
 
