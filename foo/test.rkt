@@ -3,7 +3,6 @@
          "foo.rkt")
 
 ; point-2D object and its constructor
-
 (define-method* get-x get-y test-kw set-x set-y of-class)
 (define (point-2D x y)
   (object (object%)
