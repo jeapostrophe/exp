@@ -4,11 +4,13 @@
 
 ; point-2D object and its constructor
 
-(define-method* get-x get-y set-x set-y of-class)
+(define-method* get-x get-y test-kw set-x set-y of-class)
 (define (point-2D x y)
   (object (object%)
           (define (get-x) x)
           (define (get-y) y)
+          (define (test-kw #:something z)
+            (+ x y z))
           (define (set-x new-x)
             (update [get-x new-x]))
           (define (set-y new-y)
@@ -53,6 +55,7 @@
  (of-class p1) => "point-2D"
  (get-x p) => 5
  (get-x p1) => 5
+ (test-kw p #:something 7) => 18
  
  (print-x-y p) => (list "point-2D" 5 6)
  ; p and p1 happen at this point to be in the same state
@@ -85,4 +88,4 @@
  ; 'class to itself. The latter handler is over-ridden in a
  ; class point-3D to return its own title, "point-3D".
  
- )
+ (object 1) =error> "the parent argument")

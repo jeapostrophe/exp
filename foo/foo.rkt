@@ -2,6 +2,7 @@
 (require (for-syntax racket/base
                      syntax/parse
                      unstable/syntax
+                     unstable/wrapc
                      "foo-stx.rkt")
          racket/stxparam)
 
@@ -36,7 +37,6 @@
           (syntax/loc stx
             (mmap (mmap-set parent-e
                             m-id
-                            ; XXX Keywords
                             (λ (the-self . fmls)
                               (syntax-parameterize ([self (make-rename-transformer #'the-self)])
                                                    body ...)))
@@ -44,20 +44,27 @@
 
 (struct an-object (mmap)
         #:property prop:procedure
-        ; XXX keywords
-        (λ (ao sel . args)
-          (define message-map (an-object-mmap ao))
-          ; XXX keywords
-          (apply (mmap-ref message-map sel 
-                           (λ () (error 'object "~a does not understand ~v"
-                                        (class ao) sel)))
-                 ao args)))
+        (make-keyword-procedure
+         (λ (kws kw-args ao sel . args)
+           (define message-map (an-object-mmap ao))
+           (keyword-apply
+            (mmap-ref message-map sel 
+                      (λ () (error 'object "~a does not understand ~v"
+                                   (class ao) sel)))
+            kws kw-args
+            ao args))))
 
-(define-syntax-rule (object parent m ...)
-  (an-object
-   ; XXX contract the parent to be an-object?
-   (mmap (an-object-mmap parent)
-         m ...)))
+(define-syntax (object stx)
+  (syntax-case stx ()
+    [(_ parent m ...)
+     (with-syntax ([parent/c
+                    (wrap-expr/c #'an-object? #'parent
+                                 #:name "the parent argument"
+                                 #:context stx)])
+       (syntax/loc stx
+         (an-object
+          (mmap (an-object-mmap parent/c)
+                m ...))))]))
 (define-syntax-rule (extend m ...)
   (object self m ...))
 (define-syntax-rule (update [f e] ...)
