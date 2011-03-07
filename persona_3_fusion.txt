@@ -1,232 +1,76 @@
-PPPP	EEEE	RRRR	SSSS	OOOO	NN      N	  A	    333333
-P  P	E	R  R	S	O  O	N N     N        A A	          3
-P  P	E	R  R	S	O  O	N  N    N       A   A             3 
-PPPP	EEEE	RRRR	SSSS	O  O	N   N   N      AAAAAAA          33  
-P	E	R R	   S	O  O	N    N  N     A       A           3
-P	E	R  R	   S	O  O	N     N N    A         A          3
-P	EEEE	R   R	SSSS	OOOO	N      NN   A           A   333333   
-
-			Persona 3 Fusion FAQ V.Emperor
-				By: Nekoshoujo
-               Email: Murderbychopsticks (at) gmail (dot) com 
-
-    ==========================================================================
-   //      Table of Contents          //             Code                  //
-   ==========================================================================
-   //    Dates                        //              <DT>                 //
-   //    Copyright stuff              //              <CR>                 //
-   //    How-To                       //              <H2>                 //
-   //    Fool                         //              <F>                  //
-   //    Magician                     //              <MGC>                //
-   //    High Priestess               //              <HP>                 //
-   //    Empress                      //              <E1>                 //
-   //    Emperor                      //              <E2>                 //
-   //    Hierophant                   //              <H>                  //
-   //    Lovers                       //              <LV>                 //
-   //    Chariot                      //              <C>                  //
-   //    Strength                     //              <STR>                //
-   //    Hermet                       //              <HR>                 //
-   //    Wheel of Fortune             //              <WF>                 //
-   //    Justice                      //              <JST>                //
-   //    Hanged Man                   //              <HM>                 //
-   //    Death                        //              <D>                  //
-   //    Temperance                   //              <TMP>                //
-   //    Devil                        //              <DV>                 //
-   //    Tower                        //              <T>                  //
-   //    Star                         //              <ST>                 //
-   //    Moon                         //              <M>                  //
-   //    Sun                          //              <S>                  //
-   //    Judgement                    //              <JDG>                //
-   //    Little bits                  //              <LB>                 //
-  ==========================================================================
-
-   Note: Use the search function and copy pasta the section code to go 
-         directly to the section.
-
-<Dates> <DT>
-August 14th, 2006 - FAQ created.
-March 3rd,2007 - Lots of additions and changes.
-September 20th, 2007 - Minor additions and changes.
-November 2nd, 2007 - Made conditions more precise because some people CAN'T
-		     READ.
-
-<Copyright Stuff> <CR>
-
-This document is protected by copyright law and international treaties.
-Unauthorized reproduction and distribution of this document, or any 
-portion of it, may result in severe civil and criminal penalties, and 
-you will be shot in the head (And it won't be with an S.E.E.S gun, 
-I promise you.)
-
-If you have a site where you would like to post this FAQ, you may do so by 
-e-mailing me for permission or asking me on GameFAQs' Persona 3 board.
-If permission is granted, you cannot change a single character of this 
-document.
-
-<How To> <H2>
-
-[]--------------------------------------------------------------------------[]
-| Arcana  <Code>       |                    Personae Used                    |
-|----------------------------------------------------------------------------|
-|Level of Persona.     | Personae used to fuse (All fusions listed)          |
-|	Persona Name   | (Restrictions)                                      |
-[]--------------------------------------------------------------------------[]
-
-Note: If you see an x at the end of a fusion, with no persona following it,
-it means that there was not enough room to fit the persona and it will appear
-on the next line. (Ex. Susa-no-O's fusion) 
-
-[]--------------------------------------------------------------------------[]
-| 0. <Fool>  <F>       |                    Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 01. Orpheus     | Player starts with Orpheus.                         |
-|		       | Legion x Ose                                        |
-|----------------------------------------------------------------------------|
+|   Lv 01. Orpheus     | (Player starts with Orpheus.)                         |
+|		       | (Legion x Ose)                                        |
 |   Lv 12. Legion      | Orpheus x Nekomata x Apsaras                        |
-|----------------------------------------------------------------------------|
 |   Lv 22. Ose         | Sati x Valkyrie x Zochoten			     |
-|----------------------------------------------------------------------------|
 |   Lv 34. Black Frost | King Frost x Jack Frost x Pyro Jack x Queen Mab     |
 |                      | (Can only be performed after 9/21)                  |
-|----------------------------------------------------------------------------|
 |   Lv 44. Decarabia   | Ose x Parvati x Rangda                              |
-|----------------------------------------------------------------------------|
 |   Lv 55. Loki        | Nandi x Sakimitama x Succubus                       |
-|----------------------------------------------------------------------------|
-|   Lv 76. Susa-no-O   | Orpheus x Legion x Ose x Black Frost x Decarabia x  |
-|                      | Loki                                                |
+|   Lv 76. Susa-no-O   | Orpheus x Legion x Ose x Black Frost x Decarabia x Loki                                                |
 |                      | (The Fool Social Link must be maxed)                |
 |                      | (Can only be performed after 9/21)                  |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| I. <Magician>   <MGC>|                    Personae Used                    |
-|----------------------------------------------------------------------------|
 |   Lv 05. Nekomata    | Pixie x Apsaras                                     |
-|----------------------------------------------------------------------------|
 |   Lv 08. Jack Frost  | Unicorn x Pixie                                     |
 |                      | Pixie x Apsaras x Nekomata                          |
-|----------------------------------------------------------------------------|
 |   Lv 14. Pyro Jack   | Yomotsu-Shikome x Gurr                              |
 |                      | Unicorn x Chimera                                   |
-|----------------------------------------------------------------------------|
 |   Lv 20. Sati        | Naga x Gurr                                         |
-|----------------------------------------------------------------------------|
 |   Lv 28. Orobas      | Flauros x Narcissus                                 |
-|----------------------------------------------------------------------------|
 |   Lv 40. Rangda      | Omitsunu x Ganga                                    |
-|----------------------------------------------------------------------------|
-|   Lv 50. Surtr       | Decarabia x Ne Zha                                  |
+|   Lv 50. Surtr       | Decarabia x Ne-Zha                                  |
 |                      | Tchernobog x Nebiros                                |
 |                      | (The Magician Social Link must be maxed)            |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| II. <High Priestess> <HP>|                Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 03. Apsaras         | Orpheus x Pixie                                 |
-|----------------------------------------------------------------------------|
+|   Lv 03. Apsaras         | (Shuffle time)                                 |
 |   Lv 11. Unicorn         | Forneus x Aramitama                             |
-|----------------------------------------------------------------------------|
 |   Lv 18. Sarasvati       | Jack Frost x Gurr                               |
-|----------------------------------------------------------------------------|
 |   Lv 26. Ganga           | Ose x Narcissus                                 |
-|----------------------------------------------------------------------------|
 |   Lv 35. Parvati         | Queen Mab x Genbu                               |
-|----------------------------------------------------------------------------|
 |   Lv 47. Kikuri-Hime     | Decarabia x Taraka                              |
-|----------------------------------------------------------------------------|
 |   Lv 60. Scathach        | Kali x Suzaku x Trumpeter                       |
 |                          | Loki x Raphael                                  |
 |                          | (The High Priestess Social Link must be maxed)  |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| III. <Empress>  <E1> |                    Personae Used                    |
-|----------------------------------------------------------------------------|
-|  Lv 33. Lhiannan Sith| Nigimitama x Gurr                                   |
-|----------------------------------------------------------------------------|
+|  Lv 33. Lhiannan Sith | Nigimitama x Gurr                                   |
 |  Lv 47. Lakshmi      | Dionysus x Omitsunu                                 |
-|----------------------------------------------------------------------------|
 |  Lv 57. Hariti       | Scathach x Suzaku                                   |
-|----------------------------------------------------------------------------|
 |  Lv 62. Gabriel      | Horus x Barong                                      |
-|----------------------------------------------------------------------------|
-|  Lv 69. Mother Harlot| Set x Raphael                                       |
-|----------------------------------------------------------------------------|
+|  Lv 69. Mother Harlot | Set x Raphael                                       |
 |  Lv 75. Skadi        | Mother Harlot x Trumpeter x Kikuri-Hime             |
-|                      | Mother Harlot x Wu Kong x Surtr                     |
+|                      | Mother Harlot x Wu-Kong x Surtr                     |
 |                      | Arahabaki x Set x Shiva                             |
 |                      | Mother Harlot x Gabriel x Hariti                    |
 |                      | Garuda x Set x Mother Harlot                        |
-|----------------------------------------------------------------------------|
-|  Lv 84. Alilat       | Asura  x Susa-no-O                                  |
+|  Lv 84. Alilat       | Asura x Susa-no-O                                  |
 |                      | (The Empress Social Link must be maxed)             |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| IV. <Emperor>    <E2>  |                   Personae Used                   |
-|----------------------------------------------------------------------------|
 |   Lv 07. Forneus       | Pixie x Aramitama                                 |
-|----------------------------------------------------------------------------|
 |   Lv 15. Oberon        | Pixie x Zochoten                                  |
-|----------------------------------------------------------------------------|
-|   Lv 24. Take-Mikazuchi| Fortuna x Berith                                  |
-|----------------------------------------------------------------------------|
+|   Lv 24. Take-Mikazuchi | Fortuna x Berith                                  |
 |   Lv 30. King Frost    | Orobas x Queen Mab                                |
 |                        | Queen Mab x Omitsunu                              |
 |                        | (Must have completed Elizabeth's 22nd request.)   |
-|----------------------------------------------------------------------------|
-|   Lv 36. Raja Naga     | Clotho x Taraka                                   |
+|   Lv 36. Raja-Naga     | Clotho x Taraka                                   |
 |                        | Lhiannan Sith x Virtue                            |
-|----------------------------------------------------------------------------|
 |   Lv 46. Kingu         | Lhiannan Sith x Dominion                          |
 |                        | Rangda x Virtue                                   |
-|----------------------------------------------------------------------------|
 |   Lv 52. Barong        | Titania x Koumokuten                              |
-|----------------------------------------------------------------------------|
 |   Lv 57. Odin          | Surtr x Atropos                                   |
 |                        | (The Emperor Social Link must be maxed)           |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| V. <Hierophant>  <H>  |                  Personae Used                     |
-|----------------------------------------------------------------------------|
 |   Lv 07. Omoikane     | Orpheus x Nekomata                                 |
 |                       | Apsaras x Nekomata                                 |
-|----------------------------------------------------------------------------|
 |   Lv 13. Berith       | Unicorn x Jack Frost                               |
-|----------------------------------------------------------------------------|
 |   Lv 23. Flauros      | Take-Minakata x Mitra                              |
-|----------------------------------------------------------------------------|
 |   Lv 31. Beiji Weng   | Genbu x Ose                                        |
-|----------------------------------------------------------------------------|
 |   Lv 41. Ananta       | Parvati x Orobas                                   |
-|----------------------------------------------------------------------------|
-|   Lv 53. Daisoujou    | Mitra x Aramitama x Kushimitama x Sakimitama x     |
-|                       | Nigimitama                                         |
+|   Lv 53. Daisoujou    | Mitra x Aramitama x Kushimitama x Sakimitama x Nigimitama                                         |
 |                       | (Can only be performed after 9/21)                 |
-|----------------------------------------------------------------------------|
 |   Lv 61. Huang-Long   | Genbu x Seiryuu x Suzaku x Byakko                  |
 |                       | (Hierophant Social Link must be maxed)             |
 |                       | (Can only be performed after 9/21)                 |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| VI. <Lovers>   <LV>   |                  Personae Used                     |
-|----------------------------------------------------------------------------|
-|   Lv 02. Pixie        | Queen Mab x Narcissus                              |
-|                       | (Shuffle Time as well.)                            |
-|----------------------------------------------------------------------------|
+|   Lv 02. Pixie        | (Shuffle Time as well.)                            |
 |   Lv 20. Narcissus    | Fortuna x Nigimitama                               |
-|----------------------------------------------------------------------------|
 |   Lv 27. Queen Mab    | Kushimitama x Mitra                                |
-|----------------------------------------------------------------------------|
 |   Lv 39. Sakimitama   | Clotho x Genbu                                     |
-|----------------------------------------------------------------------------|
 |   Lv 50. Titania      | Okuninushi x Lachesis                              |
 |                       | Jack Frost x King Frost x Skadi                    |
-|----------------------------------------------------------------------------|
 |   Lv 61. Raphael      | Tchernobog x Lakshmi                               |
 |                       | Gabriel x Kikuri-Hime                              |
 |                       | Gabriel x Succubus                                 |
@@ -234,201 +78,101 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                       | Surtr x Horus                                      |
 |                       | Hariti x Suzaku x Nandi                            |
 |                       | Barong x Hariti                                    |
-|----------------------------------------------------------------------------|
 |   Lv 68. Qubele       | Suzaku x Atropos x Raphael                         |
 |                       | Titania x Lilith x Metatron                        |
 |                       | Titania x Metatron x Kikuri-Hime                   |
 |                       | Lilith x Metatron x Raphael                        |
 |                       | Raphael x Hariti x Barong                          |
 |                       | (The Lovers Social Link must be maxed)             |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| VII. <Chariot>  <C>|                   Personae Used                       |
-|----------------------------------------------------------------------------|
-|   Lv 06. Aramitama | Pixie x Angel
-|----------------------------------------------------------------------------|
-|   Lv 09. Chimera   | Forneus x Omoikane
-|----------------------------------------------------------------------------|
+|   Lv 06. Aramitama | Pixie x Angel |
+|   Lv 09. Chimera   | Forneus x Omoikane |
 |   Lv 14. Zochoten  | Unicorn x Omoikane                                    |
-|----------------------------------------------------------------------------|
 |   Lv 19. Ares      | Naga x Berith                                         |
-|----------------------------------------------------------------------------|
 |   Lv 30. Omitsunu  | Flauros x Oberon                                      |
-|----------------------------------------------------------------------------|
 |   Lv 37. Ne-Zha    | Taraka x Orobas                                       |
 |                    | (Must have completed Elizabeth's 29th request.)       |
-|----------------------------------------------------------------------------|
-|   Lv 43. Komokuten | Lhiannan Sith x Nrisinha                              |
-|----------------------------------------------------------------------------|
+|   Lv 43. Koumokuten | Lhiannan Sith x Nrisinha                              |
 |   Lv 53. Thor      | Atropos x Throne                                      |
 |                    | (Chariot Social Link must be maxed)                   |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| VIII. <Strength> <STR>|                   Personae Used                    |
-|----------------------------------------------------------------------------|
 |   Lv 13. Valkyrie     | Yomotsu-Shikome x Apsaras                          |
-|----------------------------------------------------------------------------|
 |   Lv 21. Titan        | Naga x Unicorn                                     |
-|----------------------------------------------------------------------------|
 |   Lv 29. Jikokuten    | Lamia x Ganga                                      |
-|----------------------------------------------------------------------------|
 |   Lv 37. Hanuman      | Taraka x King Frost                                |
-|----------------------------------------------------------------------------|
-|   Lv 46. Nrisinha     | Raja Naga x Kurama-Tengu                           |
-|----------------------------------------------------------------------------|
+|   Lv 46. Nrisinha     | Raja-Naga x Kurama-Tengu                           |
 |   Lv 49. Kali         | Ubelluris x Kikuri-Hime                            |
-|----------------------------------------------------------------------------|
 |   Lv 55. Siegfried    | Atropos x Mother Harlot                            |
 |                       | Nrisinha x Atropos x Barong                        |
 |                       | (The strength Social Link must be maxed)           |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| IX. <Hermit>    <HR>     |                  Personae Used                  |
-|----------------------------------------------------------------------------|
 |   Lv 09. Yomotsu-Shikome | Aramitama x Angel                               |
-|----------------------------------------------------------------------------|
 |   Lv 17. Naga            | Zochoten x Angel                                |
-|----------------------------------------------------------------------------|
 |   Lv 25. Lamia           | Take-Minakata x Oberon                          |
-|----------------------------------------------------------------------------|
 |   Lv 32. Taraka          | Orthrus x Queen Mab                             |
-|----------------------------------------------------------------------------|
 |   Lv 41. Kurama-Tengu    | Vasuki x Jikokuten                              |
 |                          | Parvati x Hanuman                               |
-|----------------------------------------------------------------------------|
 |   Lv 50. Nebiros         | Kali x Kikuri-Hime                              |
-|                          |(Must have completed Elizabeth's 42nd request)   |
-|----------------------------------------------------------------------------|
-|   Lv 54. Arahabaki       | Omoikane x Take-Minakata x Okuninushi x         |
-|                          | Kikuri-Hime                                     |
+|                          | (Must have completed Elizabeth's 42nd request)   |
+|   Lv 54. Arahabaki       | Omoikane x Take-Minakata x Okuninushi x Kikuri-Hime                                     |
 |                          | (Hermit Social Link must be maxed)              |
 |                          | (Can only be made after 9/21)                   |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| X. <Wheel of Fortune> <WF>|                 Personae Used                  |
-|----------------------------------------------------------------------------|
 |   Lv 17. Fortuna          | Gurr x Zochoten                                |
-|----------------------------------------------------------------------------|
 |   Lv 23. Kushimitama      | Naga x Take-Minakata                           |
-|----------------------------------------------------------------------------|
 |   Lv 33. Clotho           | Yamata-no-Orochi x Ose                         |
-|----------------------------------------------------------------------------|
 |   Lv 45. Lachesis         | Vasuki x Taraka                                |
-|----------------------------------------------------------------------------|
 |   Lv 54. Atropos          | Nrisinha x Succubus                            |
-|----------------------------------------------------------------------------|
 |   Lv 62. Norn             | Clotho x Lachesis x Atropos                    |
 |                           | (Wheel of Fortune Social Link must be maxed)   |
 |                           | (Special demon fusion)                         |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XI. <Justice>     <JST>|                  Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 04. Angel         | Orpheus x Apsaras                                 |
-|----------------------------------------------------------------------------|
-|   Lv 10. Archangel     | Aramitama x Omoikana                              |
-|----------------------------------------------------------------------------|
+|   Lv 04. Angel         | (Shuffle time)                                 |
+|   Lv 10. Arch-Angel     | Aramitama x Omoikane                              |
 |   Lv 16. Principality  | Berith x Zochoten                                 |
-|----------------------------------------------------------------------------|
 |   Lv 25. Power         | Oberon x Sarasvati                                |
-|----------------------------------------------------------------------------|
 |   Lv 32. Virtue        | Lamia x Queen Mab                                 |
-|----------------------------------------------------------------------------|
 |   Lv 42. Dominion      | Parvati x King Frost                              |
-|----------------------------------------------------------------------------|
 |   Lv 51. Throne        | Decarabia x Lachesis                              |
-|----------------------------------------------------------------------------|
 |   Lv 59. Melchizedek   | Kikuri-Hime x Loki                                |
 |                        | Raphael x Mother Harlot x Suzaku                  |
 |                        | (The Justice Social Link must be maxed)           |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XII. <Hanged Man>  <HM>|                  Personae Used                    |
-|----------------------------------------------------------------------------|
 |   Lv 10. Inugami       | Nigimitama x Forneus                              |
-|----------------------------------------------------------------------------|
-|   Lv 21. Take-Minakata | Nigimitama x Yomtsu-Shikome                       |
-|----------------------------------------------------------------------------|
+|   Lv 21. Take-Minakata | Nigimitama x Yomotsu-Shikome                       |
 |   Lv 28. Orthrus       | Titan x Yamata-no-Orochi                          |
 |                        | Titan x Pale Rider                                |
-|----------------------------------------------------------------------------|
 |   Lv 38. Vasuki        | Taraka x Genbu                                    |
-|----------------------------------------------------------------------------|
 |   Lv 48. Ubelluris     | Decarabia x Hanuman                               |
-|----------------------------------------------------------------------------|
-|   Lv 58. Attis         | Inugami x Take-Minakata x Orthrus xVasuki x       |
-|                        | Ubelluris                                         |
+|   Lv 58. Attis         | Inugami x Take-Minakata x Orthrus x Vasuki x Ubelluris                                         |
 |                        | (The Hanged Man Social Link must be maxed)        |
 |                        | (Can only be made after 9/21)                     |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XIII. <Death>   <D>  |                     Personae Used                   |
-|----------------------------------------------------------------------------|
 |   Lv 19. Loa         | Nigimitama x Chimera                                |
-|----------------------------------------------------------------------------|
 |   Lv 24. Pale Rider  | Vetala x Naga                                       |
 |                      | (Must have completed Elizabeth's 8th request.)      |
-|----------------------------------------------------------------------------|
 |   Lv 35. Samael      | Lamia x Vetala                                      |
 |                      | Orobas x Mitra                                      |
-|----------------------------------------------------------------------------|
 |   Lv 45. Mot         | Incubus x Seiryuu                                   |
-|----------------------------------------------------------------------------|
-|   Lv 56. Alice       | Lilim x Pixie x Ne-Zha x Nacissus                   |
+|   Lv 56. Alice       | Lilim x Pixie x Ne-Zha x Narcissus                   |
 |                      | (Can only be made after 9/21)                       |
-|----------------------------------------------------------------------------|
 |   Lv 64. Thanatos    | Loa x Pale Rider x Samael x Mot x Alice             |
 |                      | (The Death Social Link must be maxed)               |
 |                      | (Can only be made after 9/21)                       |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XIV. <Temperance> <TMP>|                   Personae Used                   |
-|----------------------------------------------------------------------------|
 |   Lv 12. Nigimitama    | Yomotsu-Shikome x Aramitama                       |
-|----------------------------------------------------------------------------|
 |   Lv 22. Mitra         | Naga x Zochoten                                   |
-|----------------------------------------------------------------------------|
 |   Lv 29. Genbu         | Kushimitama x Zochoten x Power                    |
 |                        | Omitsunu x Lamia                                  |
-|----------------------------------------------------------------------------|
 |   Lv 36. Seiryuu       | Raja-Naga x Orobas                                |
-|----------------------------------------------------------------------------|
 |   Lv 44. Okuninushi    | Raja-Naga x Rangda                                |
-|----------------------------------------------------------------------------|
 |   Lv 51. Suzaku        | Succubus x Rangda                                 |
-|----------------------------------------------------------------------------|
 |   Lv 56. Byakko        | Surtr x Barong                                    |
 |                        | Girimehkala x Vishnu                              |
 |                        | Lakshmi x Lucifer                                 |
 |                        | (The Temperance Social Link must be maxed)        |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XV. <Devil>  <DV> |                      Personae Used                     |
-|----------------------------------------------------------------------------|
 |   Lv 08. Lilim    | Aramitama x Nekomata                                   |
-|----------------------------------------------------------------------------|
 |   Lv 24. Vetala   | Arch-Angel x Forneus                                   |
 |                   | Chimera x Jack Frost                                   |
 |                   | Take-Minakata x Jack Frost                             |
-|----------------------------------------------------------------------------|
 |   Lv 34. Incubus  | Pale Rider x Queen Mab                                 |
-|----------------------------------------------------------------------------|
 |   Lv 52. Succubus | Vasuki x Samael                                        |
 |                   | Gabriel x Samael                                       |
-|----------------------------------------------------------------------------|
 |   Lv 61. Lilith   | Lilim x Vetala x Incubus x Succubus                    |
 |                   | (Must have completed Elizabeth's 48th request.)        |
 |                   | (Can only be made after 9/21)                          |
-|----------------------------------------------------------------------------|
 |   Lv 70. Abaddon  | Succubus x Ne-Zha x Surtr                              |
 |                   | Gabriel x Koumokuten                                   |
 |                   | Raphael x Thanatos                                     |
@@ -436,45 +180,32 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                   | Uriel x Genbu x Lilith                                 |
 |                   | Gabriel x Thor                                         |
 |                   | Thor x Hariti                                          |
-|----------------------------------------------------------------------------|
-|   Lv 81. Beelzebub| Lilim x Vetala x Incubus x Succubus x Lilith x Abaddon |
+|   Lv 81. Beelzebub | Lilim x Vetala x Incubus x Succubus x Lilith x Abaddon |
 |                   | (The Devil Social Link must be maxed)                  |
 |                   | ((Can only be made after 9/21)                         |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XVI. <Tower>   <T>   |                   Personae Used                     |
-|----------------------------------------------------------------------------|
 |   Lv 31. Eligor      | Incubus x Yamata-no-Orochi x Sati                   |
 |                      | Lilim x Pixie x Loa                                 |
 |                      | Ganga x Take-Mikazuchi x Power                      |
-|----------------------------------------------------------------------------|
-|   Lv 40. Cu chulainn | Incubus x Nandi x Taraka                            |
+|   Lv 40. Cu-Chulainn | Incubus x Nandi x Taraka                            |
 |                      | Incubus x Nandi x Genbu                             |
 |                      | Incubus x Fortuna x Beiji Weng                      |
-|----------------------------------------------------------------------------|
 |   Lv 54. Uriel       | Okuninushi x Kurama-Tengu x Incubus                 |
 |                      | Anubis x Flauros x Ganga                            |
 |                      | Mot x Barong x Vasuki                               |
 |                      | Mot x Barong x Virtue                               |
 |                      | Dominion x Jikokuten x Mot                          |
 |                      | Seiryuu x Eligor x Kingu                            |
-|                      | Asura x Narashimha x Okuninushi                     |
-|----------------------------------------------------------------------------|
+|                      | Asura x Nrisinha x Okuninushi                     |
 |   Lv 60. Bishamonten | Succubus x Suzaku x Surtr                           |
 |                      | Garuda x Set x King Frost                           |
-|----------------------------------------------------------------------------|
 |   Lv 67. Wu-Kong     | Garuda x Set x Kikuri-Hime                          |
 |                      | Garuda x Set x Kaiwan                               |
 |                      | Titania x Lilith x Thanatos                         |
-|----------------------------------------------------------------------------|
 |   Lv 73. Masakado    | Bishamonten x Jikokuten x Koumokuten x Zochoten     |
 |                      | (Must have completed Elizabeth's 52nd request.)     |
 |                      | (Can only be made after 9/21)                       |
-|----------------------------------------------------------------------------|
 |   Lv 82. Shiva       | Barong x Rangda                                     |
 |                      | (Special demon fusion)                              |
-|----------------------------------------------------------------------------|
 |   Lv 86. Chi-You     | Ganesha x Saturnus x Set                            |
 |                      | Raphael x Saturnus x Set                            |
 |                      | Garuda x Set x Saturnus                             |
@@ -482,28 +213,18 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                      | Suzaku x Abaddon x Saturnus                         |
 |                      | Mother Harlot x Bishamonten x Trumpeter             |
 |                      | (The Tower Social Link must be maxed)               |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XVII. <Star>  <ST> |                    Personae Used                      |
-|----------------------------------------------------------------------------|
 |   Lv 39. Nandi     | Gurr x Unicorn                                        |
-|----------------------------------------------------------------------------|
 |   Lv 49. Kaiwan    | Kikuri-Hime x Dionysus                                |
-|----------------------------------------------------------------------------|
 |   Lv 58. Ganesha   | Anubis x Decarabia                                    |
 |                    | Succubus x Kikuri-Hime x Ananta                       |
 |                    | Alice x Girimehkala                                   |
-|----------------------------------------------------------------------------|
 |   Lv 65. Garuda    | Bishamonten x Raphael                                 |
 |                    | Alice x Set                                           |
-|----------------------------------------------------------------------------|
 |   Lv 74. Saturnus  | Raphael x Shiva                                       |
 |                    | Throne x Shiva                                        |
-|                    | Garuda x Seth x Loki                                  |
+|                    | Garuda x Set x Loki                                  |
 |                    | Garuda x Suzaku x Horus                               |
 |                    | Garuda x Suzaku x Thanatos                            |
-|----------------------------------------------------------------------------|
 |   Lv 88. Lucifer   | Kali x Vishnu x Saturnus                              |
 |                    | Mother Harlot x Abaddon x Shiva                       |
 |                    | Set x Kikuri-Hime x Saturnus                          |
@@ -514,26 +235,16 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                    | Loki x Saturnus x Trumpeter                           |
 |                    | Ganesha x Garuda x Saturnus                           |
 |                    | (The Star Social Link must be maxed)                  |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XVIII. <Moon>    <M>      |                  Personae Used                 |
-|----------------------------------------------------------------------------|
-|   Lv 15. Gurr             | Oprheus x Nekomata x Angel                     |
+|   Lv 15. Gurr             | Orpheus x Nekomata x Angel                     |
 |                           | Valkyrie x Nigimitama                          |
-|----------------------------------------------------------------------------|
 |   Lv 26. Yamata-no-Orochi | Loa x Oberon                                   |
 |                           | Mitra x Valkyrie                               |
-|----------------------------------------------------------------------------|
 |   Lv 42. Girimehkala      | Gurr x Rangda x Vetala x Taraka                |
 |                           | (Can only be made after 9/21)                  |
-|----------------------------------------------------------------------------|
 |   Lv 48. Dionysus         | Vetala x Orthrus                               |
 |                           | Power x Alice                                  |
-|----------------------------------------------------------------------------|
 |   Lv 58. Tchernobog       | Suzaku x Throne                                |
 |                           | Asura x Alice                                  |
-|----------------------------------------------------------------------------|
 |   Lv 66. Set              | Ubelluris x Succubus x Tchernobog              |
 |                           | Melchizedek x Alice x Jatayu                   |
 |                           | King Frost x Melchizedek x Satan               |
@@ -541,30 +252,19 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                           | Garuda x Barong x Thanatos                     |
 |                           | Garuda x Suzaku                                |
 |                           | Beelzebub x Ananta x Vishnu                    |
-|----------------------------------------------------------------------------|
 |   Lv 71. Sandalphon       | Garuda x Suzaku x Yata-Garasu x Gurr x Horus   |
 |                           | (The Moon Social Link must be maxed)           |
 |                           | (Can only be made after 9/21)                  |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XIX. <Sun>    <S>    |                    Personae Used                    |
-|----------------------------------------------------------------------------|
 |   Lv 30. Yata-Garasu | Fortuna x Sati x Clotho                             |
-|----------------------------------------------------------------------------|
-|   Lv 43. Quetzalcoatl| Yata-Garasu x Jatayu                                |
+|   Lv 43. Quetzalcoatl | Yata-Garasu x Jatayu                                |
 |                      | Hanuman x Gurr x Eligor                             |
-|----------------------------------------------------------------------------|
 |   Lv 55. Jatayu      | Quetzalcoatl x Suzaku x Thor                        |
 |                      | Quetzalcoatl x Atropos x Power                      |
 |                      | Uriel x Quetzalcoatl x Kaiwan                       |
-|                      | Nandi x Yamata no Orochi x Uriel                    |
-|----------------------------------------------------------------------------|
+|                      | Nandi x Yamata-no-Orochi x Uriel                    |
 |   Lv 63. Horus       | Yata-Garasu x Quetzalcoatl x Jatayu                 |
-|----------------------------------------------------------------------------|
 |   Lv 75. Metatron    | Michael x Uriel x Raphael x Gabriel                 |
 |                      | (Can only be made after 9/21)                       |
-|----------------------------------------------------------------------------|
 |   Lv 78. Vishnu      | Arahabaki x Raphael x Shiva                         |
 |                      | Arahabaki x Abaddon x Shiva                         |
 |                      | Garuda x Set x Ganesha                              |
@@ -572,48 +272,23 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                      | Garuda x Set x Kaiwan                               |
 |                      | Bishamonten x Uriel x Thanatos                      |
 |                      | Gabriel x Saturnus x Attis                          |
-|----------------------------------------------------------------------------|
-|   Lv 85. Asura       | Yata-Garasu x Quetzalcoatl x Jatayu x Horus x       |
-|                      | Metatron x Vishnu                                   |
+|   Lv 85. Asura       | Yata-Garasu x Quetzalcoatl x Jatayu x Horus x Metatron x Vishnu                                   |
 |                      | (The Sun Social Link must be maxed)                 |
 |                      | (Can only be made after 9/21)                       |
-[]--------------------------------------------------------------------------[]
-
-[]--------------------------------------------------------------------------[]
-| XX. <Judgement> <JDG>|                   Personae Used                     |
-|----------------------------------------------------------------------------|
 |   Lv 59. Anubis      | Eligor x Arch-Angel x Forneus                       |
-|----------------------------------------------------------------------------|
 |   Lv 65. Trumpeter   | Garuda x Bishamonten x Uriel                        |
 |                      | Surtr x Horus x Lilith                              |
 |                      | Bishamonten x Uriel x Lilith                        |
 |                      | Kaiwan x Horus x Anubis                             |
-|----------------------------------------------------------------------------|
 |   Lv 72. Michael     | Cu-Chulainn x Raphael x Shiva                       |
 |                      | Gabriel x Horus x Ganesha                           |
 |                      | Satan x Messiah                                     |
 |                      | Thanatos x Gabriel x Raphael                        |
-|----------------------------------------------------------------------------|
 |   Lv 79. Satan       | Michael x Anubis x Trumpeter                        |
 |                      | Raphael x Thanatos x Shiva                          |
 |                      | Lilith x Abaddon x Masakado                         |
 |                      | Suzaku x Michael x Abaddon                          |
 |                      | Vishnu x Set x Asura                                |
-|----------------------------------------------------------------------------|
 |   Lv 90. Messiah     | Orpheus x Thanatos                                  |
 |                      | (The Judgement Social Link must be maxed)           |
 |                      | (Special demon fusion)                              |
-[]--------------------------------------------------------------------------[]
-
-<Little Bits> <LB>
-
-Any questions regarding fusions should be sent to my email inbox or asked 
-through the Persona 3 GameFAQs board. Poorly typed (God help you, if you can't
-type) and/or questions not about my FAQ or fusions in general WILL BE 
-rejected.
-
-Credits:
-GameKouryaku's Japanese fusion charts. http://gamekouryaku.com/peru3/141.html
-The Dark Unknown <3
-Chardes (Ganesha error)
-Magnolia (Jatayu error)
