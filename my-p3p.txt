@@ -1,88 +1,5 @@
-PPPP	EEEE	RRRR	SSSS	OOOO	NN      N	  A	    333333
-P  P	E	R  R	S	O  O	N N     N        A A	          3
-P  P	E	R  R	S	O  O	N  N    N       A   A             3 
-PPPP	EEEE	RRRR	SSSS	O  O	N   N   N      AAAAAAA          33  
-P	E	R R	   S	O  O	N    N  N     A       A           3
-P	E	R  R	   S	O  O	N     N N    A         A          3
-P	EEEE	R   R	SSSS	OOOO	N      NN   A           A   333333   
-
-			Persona 3 Fusion FAQ V.Emperor
-				By: Nekoshoujo
-               Email: Murderbychopsticks (at) gmail (dot) com 
-
-    ==========================================================================
-   //      Table of Contents          //             Code                  //
-   ==========================================================================
-   //    Dates                        //              <DT>                 //
-   //    Copyright stuff              //              <CR>                 //
-   //    How-To                       //              <H2>                 //
-   //    Fool                         //              <F>                  //
-   //    Magician                     //              <MGC>                //
-   //    High Priestess               //              <HP>                 //
-   //    Empress                      //              <E1>                 //
-   //    Emperor                      //              <E2>                 //
-   //    Hierophant                   //              <H>                  //
-   //    Lovers                       //              <LV>                 //
-   //    Chariot                      //              <C>                  //
-   //    Strength                     //              <STR>                //
-   //    Hermet                       //              <HR>                 //
-   //    Wheel of Fortune             //              <WF>                 //
-   //    Justice                      //              <JST>                //
-   //    Hanged Man                   //              <HM>                 //
-   //    Death                        //              <D>                  //
-   //    Temperance                   //              <TMP>                //
-   //    Devil                        //              <DV>                 //
-   //    Tower                        //              <T>                  //
-   //    Star                         //              <ST>                 //
-   //    Moon                         //              <M>                  //
-   //    Sun                          //              <S>                  //
-   //    Judgement                    //              <JDG>                //
-   //    Little bits                  //              <LB>                 //
-  ==========================================================================
-
-   Note: Use the search function and copy pasta the section code to go 
-         directly to the section.
-
-<Dates> <DT>
-August 14th, 2006 - FAQ created.
-March 3rd,2007 - Lots of additions and changes.
-September 20th, 2007 - Minor additions and changes.
-November 2nd, 2007 - Made conditions more precise because some people CAN'T
-		     READ.
-
-<Copyright Stuff> <CR>
-
-This document is protected by copyright law and international treaties.
-Unauthorized reproduction and distribution of this document, or any 
-portion of it, may result in severe civil and criminal penalties, and 
-you will be shot in the head (And it won't be with an S.E.E.S gun, 
-I promise you.)
-
-If you have a site where you would like to post this FAQ, you may do so by 
-e-mailing me for permission or asking me on GameFAQs' Persona 3 board.
-If permission is granted, you cannot change a single character of this 
-document.
-
-<How To> <H2>
-
-[]--------------------------------------------------------------------------[]
-| Arcana  <Code>       |                    Personae Used                    |
-|----------------------------------------------------------------------------|
-|Level of Persona.     | Personae used to fuse (All fusions listed)          |
-|	Persona Name   | (Restrictions)                                      |
-[]--------------------------------------------------------------------------[]
-
-Note: If you see an x at the end of a fusion, with no persona following it,
-it means that there was not enough room to fit the persona and it will appear
-on the next line. (Ex. Susa-no-O's fusion) 
-
 []--------------------------------------------------------------------------[]
 | 0. <Fool>  <F>       |                    Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 01. Orpheus     | Player starts with Orpheus.                         |
-|		       | Legion x Ose                                        |
-|----------------------------------------------------------------------------|
-|   Lv 12. Legion      | Orpheus x Nekomata x Apsaras                        |
 |----------------------------------------------------------------------------|
 |   Lv 22. Ose         | Sati x Valkyrie x Zochoten			     |
 |----------------------------------------------------------------------------|
@@ -93,7 +10,7 @@ on the next line. (Ex. Susa-no-O's fusion)
 |----------------------------------------------------------------------------|
 |   Lv 55. Loki        | Nandi x Sakimitama x Succubus                       |
 |----------------------------------------------------------------------------|
-|   Lv 76. Susa-no-O   | Orpheus x Legion x Ose x Black Frost x Decarabia x  |
+|   Lv 76. Susa-no-O   | Orpheus x Slime x Ose x Black Frost x Decarabia x|
 |                      | Loki                                                |
 |                      | (The Fool Social Link must be maxed)                |
 |                      | (Can only be performed after 9/21)                  |
@@ -101,14 +18,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 
 []--------------------------------------------------------------------------[]
 | I. <Magician>   <MGC>|                    Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 05. Nekomata    | Pixie x Apsaras                                     |
-|----------------------------------------------------------------------------|
-|   Lv 08. Jack Frost  | Unicorn x Pixie                                     |
-|                      | Pixie x Apsaras x Nekomata                          |
-|----------------------------------------------------------------------------|
-|   Lv 14. Pyro Jack   | Yomotsu-Shikome x Gurr                              |
-|                      | Unicorn x Chimera                                   |
 |----------------------------------------------------------------------------|
 |   Lv 20. Sati        | Naga x Gurr                                         |
 |----------------------------------------------------------------------------|
@@ -123,8 +32,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 
 []--------------------------------------------------------------------------[]
 | II. <High Priestess> <HP>|                Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 03. Apsaras         | Orpheus x Pixie                                 |
 |----------------------------------------------------------------------------|
 |   Lv 11. Unicorn         | Forneus x Aramitama                             |
 |----------------------------------------------------------------------------|
@@ -167,8 +74,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 []--------------------------------------------------------------------------[]
 | IV. <Emperor>    <E2>  |                   Personae Used                   |
 |----------------------------------------------------------------------------|
-|   Lv 07. Forneus       | Pixie x Aramitama                                 |
-|----------------------------------------------------------------------------|
 |   Lv 15. Oberon        | Pixie x Zochoten                                  |
 |----------------------------------------------------------------------------|
 |   Lv 24. Take-Mikazuchi| Fortuna x Berith                                  |
@@ -192,11 +97,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 []--------------------------------------------------------------------------[]
 | V. <Hierophant>  <H>  |                  Personae Used                     |
 |----------------------------------------------------------------------------|
-|   Lv 07. Omoikane     | Orpheus x Nekomata                                 |
-|                       | Apsaras x Nekomata                                 |
-|----------------------------------------------------------------------------|
-|   Lv 13. Berith       | Unicorn x Jack Frost                               |
-|----------------------------------------------------------------------------|
 |   Lv 23. Flauros      | Take-Minakata x Mitra                              |
 |----------------------------------------------------------------------------|
 |   Lv 31. Beiji Weng   | Genbu x Ose                                        |
@@ -214,9 +114,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 
 []--------------------------------------------------------------------------[]
 | VI. <Lovers>   <LV>   |                  Personae Used                     |
-|----------------------------------------------------------------------------|
-|   Lv 02. Pixie        | Queen Mab x Narcissus                              |
-|                       | (Shuffle Time as well.)                            |
 |----------------------------------------------------------------------------|
 |   Lv 20. Narcissus    | Fortuna x Nigimitama                               |
 |----------------------------------------------------------------------------|
@@ -246,10 +143,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 []--------------------------------------------------------------------------[]
 | VII. <Chariot>  <C>|                   Personae Used                       |
 |----------------------------------------------------------------------------|
-|   Lv 06. Aramitama | Pixie x Angel
-|----------------------------------------------------------------------------|
-|   Lv 09. Chimera   | Forneus x Omoikane
-|----------------------------------------------------------------------------|
 |   Lv 14. Zochoten  | Unicorn x Omoikane                                    |
 |----------------------------------------------------------------------------|
 |   Lv 19. Ares      | Naga x Berith                                         |
@@ -268,8 +161,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 []--------------------------------------------------------------------------[]
 | VIII. <Strength> <STR>|                   Personae Used                    |
 |----------------------------------------------------------------------------|
-|   Lv 13. Valkyrie     | Yomotsu-Shikome x Apsaras                          |
-|----------------------------------------------------------------------------|
 |   Lv 21. Titan        | Naga x Unicorn                                     |
 |----------------------------------------------------------------------------|
 |   Lv 29. Jikokuten    | Lamia x Ganga                                      |
@@ -287,8 +178,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 
 []--------------------------------------------------------------------------[]
 | IX. <Hermit>    <HR>     |                  Personae Used                  |
-|----------------------------------------------------------------------------|
-|   Lv 09. Yomotsu-Shikome | Aramitama x Angel                               |
 |----------------------------------------------------------------------------|
 |   Lv 17. Naga            | Zochoten x Angel                                |
 |----------------------------------------------------------------------------|
@@ -328,10 +217,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 
 []--------------------------------------------------------------------------[]
 | XI. <Justice>     <JST>|                  Personae Used                    |
-|----------------------------------------------------------------------------|
-|   Lv 04. Angel         | Orpheus x Apsaras                                 |
-|----------------------------------------------------------------------------|
-|   Lv 10. Archangel     | Aramitama x Omoikana                              |
 |----------------------------------------------------------------------------|
 |   Lv 16. Principality  | Berith x Zochoten                                 |
 |----------------------------------------------------------------------------|
@@ -392,8 +277,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 []--------------------------------------------------------------------------[]
 | XIV. <Temperance> <TMP>|                   Personae Used                   |
 |----------------------------------------------------------------------------|
-|   Lv 12. Nigimitama    | Yomotsu-Shikome x Aramitama                       |
-|----------------------------------------------------------------------------|
 |   Lv 22. Mitra         | Naga x Zochoten                                   |
 |----------------------------------------------------------------------------|
 |   Lv 29. Genbu         | Kushimitama x Zochoten x Power                    |
@@ -413,8 +296,6 @@ on the next line. (Ex. Susa-no-O's fusion)
 
 []--------------------------------------------------------------------------[]
 | XV. <Devil>  <DV> |                      Personae Used                     |
-|----------------------------------------------------------------------------|
-|   Lv 08. Lilim    | Aramitama x Nekomata                                   |
 |----------------------------------------------------------------------------|
 |   Lv 24. Vetala   | Arch-Angel x Forneus                                   |
 |                   | Chimera x Jack Frost                                   |
@@ -604,16 +485,3 @@ on the next line. (Ex. Susa-no-O's fusion)
 |                      | (The Judgement Social Link must be maxed)           |
 |                      | (Special demon fusion)                              |
 []--------------------------------------------------------------------------[]
-
-<Little Bits> <LB>
-
-Any questions regarding fusions should be sent to my email inbox or asked 
-through the Persona 3 GameFAQs board. Poorly typed (God help you, if you can't
-type) and/or questions not about my FAQ or fusions in general WILL BE 
-rejected.
-
-Credits:
-GameKouryaku's Japanese fusion charts. http://gamekouryaku.com/peru3/141.html
-The Dark Unknown <3
-Chardes (Ganesha error)
-Magnolia (Jatayu error)
