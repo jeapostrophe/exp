@@ -1,3 +1,4 @@
+17 ("Principality" "Naga" "Fortuna")
 ("Fool"
  ("Orpheus" 1 4352)
  ("Slime" 12 9203)
@@ -19,7 +20,7 @@
  ("Surt" 52 #f))
 ("Priestess"
  ("Apsaras" 3 3728)
- ("Unicorn" 11 #f)
+ ("Unicorn" 11 6800)
  ("High Pixie" 21 #f)
  ("Sarasvati" 27 #f)
  ("Ganga" 35 #f)
@@ -37,7 +38,7 @@
  ("Alilat" 84 #f))
 ("Emperor"
  ("Forneus" 7 5468)
- ("Oberon" 15 #f)
+ ("Oberon" 15 12092)
  ("Take-mikazuchi" 24 #f)
  ("King Frost" 30 #f)
  ("Raja Naga" 36 #f)
@@ -55,8 +56,8 @@
  ("Kohryu" 66 #f))
 ("Lovers"
  ("Pixie" 2 3452)
- ("Alp" 6 #f)
- ("Tam Lin" 13 #f)
+ ("Alp" 6 3875)
+ ("Tam Lin" 13 7292)
  ("Narcissus" 20 #f)
  ("Queen Mab" 27 #f)
  ("Saki Mitama" 39 #f)
@@ -66,7 +67,7 @@
 ("Chariot"
  ("Ara Mitama" 6 4883)
  ("Chimera" 9 6800)
- ("Zouchouten" 14 #f)
+ ("Zouchouten" 14 11075)
  ("Ares" 19 #f)
  ("Oumitsunu" 30 #f)
  ("Nata Taishi" 37 #f)
@@ -75,7 +76,7 @@
 ("Justice"
  ("Angel" 4 4187)
  ("Archangel" 10 6107)
- ("Principality" 16 #f)
+ ("Principality" 16 11075)
  ("Power" 25 #f)
  ("Virtue" 32 #f)
  ("Dominion" 42 #f)
@@ -83,7 +84,7 @@
  ("Melchizedek" 59 #f))
 ("Hermit"
  ("Yomotsu Shikome" 9 5468)
- ("Naga" 17 #f)
+ ("Naga" 17 12092)
  ("Lamia" 25 #f)
  ("Mothman" 32 #f)
  ("Taraka" 38 #f)
@@ -92,7 +93,7 @@
  ("Kumbhanda" 56 #f)
  ("Arahabaki" 60 #f))
 ("Fortune"
- ("Fortuna" 17 #f)
+ ("Fortuna" 17 12092)
  ("Empusa" 23 #f)
  ("Kusi Mitama" 29 #f)
  ("Clotho" 38 #f)
@@ -109,7 +110,7 @@
  ("Kali" 55 #f)
  ("Siegfried" 59 #f))
 ("Hanged Man"
- ("Inugami" 10 #f)
+ ("Inugami" 10 6107)
  ("Take-minakata" 21 #f)
  ("Orthrus" 28 #f)
  ("Vasuki" 38 #f)

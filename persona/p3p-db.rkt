@@ -9,13 +9,22 @@
   (with-input-from-file
       db-pth
     (λ ()
+      (define max-lvl (read))
+      (define inv (read))
       (for/fold ([db empty])
         ([a (in-port)])
         (match-define (cons arcana ps) a)
         (for/fold ([db db])
           ([a (in-list ps)])
           (match-define (list name base-lvl cost) a)
-          (cons (persona arcana name base-lvl cost)
+          (cons (persona arcana name base-lvl
+                         (cond
+                           [(base-lvl . > . max-lvl)
+                            +inf.0]
+                           [(member name inv)
+                            0]
+                           [else
+                            cost]))
                 db))))))
 
 (define-runtime-path fusion-db-pth "normal-spread.dat")
@@ -75,7 +84,7 @@
        2))))
 
 (define (find-result-persona l a)
-  (findf (compose (curry < l)
+  (findf (compose (curry <= l)
                   persona-base-lvl)
          (arcana-personas a)))
 
