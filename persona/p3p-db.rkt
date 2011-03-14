@@ -37,9 +37,9 @@
              (cons (persona arcana name base-lvl cost)
                    db)]))))))
 
-(printf "\n~a/~a (~a)\n\n" 
+(printf "\n~a/~a = ~a% complete\n\n" 
         (- total unfused) total
-        unfused/level)
+        (real->decimal-string (* 100 (/ (- total unfused) total)) 2))
 
 (define (trim s) (regexp-replace #px"\\s+$" s ""))
 (define (parse-db db)
