@@ -1,0 +1,456 @@
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR00]    || Fool       | Fool       |
+|            ||-------------------------|
+| - 0 -      || Magician   | Justice    |
+|            || Priestess  | Hermit     |
+| Fool       || Empress    | Emperor    |
+|            || Hierophant | Devil      |
+|            || Lovers     | Fortune    |
+|            || Chariot    | Death      |
+|            || Death      | Judgement  |
+|            || Tower      | Aeon       |
+|            || Judgement  | Aeon       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR01]    || Fool       | Priestess  |
+|            || Fool       | Hanged Man |
+| - I -      ||-------------------------|
+| Magician   || Magician   | Magician   |
+|            ||-------------------------|
+|            || Priestess  | Fortune    |
+|            || Empress    | Devil      |
+|            || Hierophant | Justice    |
+|            || Chariot    | Justice    |
+|            || Hermit     | Moon       |
+|            || Devil      | Star       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR02]    || Fool       | Hermit     |
+|            ||-------------------------|
+| - II -     || Priestess  | Priestess  |
+|            ||-------------------------|
+| Priestess  || Empress    | Hierophant |
+|            || Hierophant | Star       |
+|            || Lovers     | Temperance |
+|            || Justice    | Hanged Man |
+|            || Strength   | Star       |
+|            || Strength   | Sun        |
+|            || Moon       | Judgement  |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR03]    || Fool       | Sun        |
+|            || Magician   | Tower      |
+| - III -    || Priestess  | Temperance |
+|            || Priestess  | Aeon       |
+|            ||-------------------------|
+| Empress    || Empress    | Empress    |
+|            ||-------------------------|
+|            || Emperor    | Sun        |
+|            || Hierophant | Death      |
+|            || Lovers     | Moon       |
+|            || Strength   | Devil      |
+|            || Hanged Man | Moon       |
+|            || Temperance | Moon       |
+|            || Sun        | Aeon       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR04]    || Fool       | Magician   |
+|            || Magician   | Fortune    |
+| - IV -     || Priestess  | Chariot    |
+|            || Priestess  | Death      |
+| Emperor    || Empress    | Justice    |
+|            ||-------------------------|
+|            || Emperor    | Emperor    |
+|            ||-------------------------|
+|            || Hierophant | Fortune    |
+|            || Hierophant | Strength   |
+|            || Justice    | Star       |
+|            || Justice    | Sun        |
+|            || Hermit     | Fortune    |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR05]    || Fool       | Temperance |
+|            || Priestess  | Emperor    |
+| - V -      || Priestess  | Justice    |
+| Hierophant || Emperor    | Judgement  |
+|            ||-------------------------|
+|            || Hierophant | Hierophant |
+|            ||-------------------------|
+|            || Lovers     | Hermit     |
+|            || Lovers     | Strength   |
+|            || Lovers     | Star       |
+|            || Lovers     | Sun        |
+|            || Hanged Man | Temperance |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR06]    || Fool       | Emperor    |
+|            || Magician   | Emperor    |
+| - VI -     || Magician   | Sun        |
+|            || Priestess  | Empress    |
+| Lovers     || Empress    | Hermit     |
+|            || Empress    | Temperance |
+|            || Empress    | Moon       |
+|            || Empress    | Sun        |
+|            || Empress    | Judgement  |
+|            || Emperor    | Hermit     |
+|            || Hierophant | Judgement  |
+|            ||-------------------------|
+|            || Lovers     | Lovers     |
+|            ||-------------------------|
+|            || Fortune    | Temperance |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR07]    || Fool       | Justice    |
+|            || Priestess  | Hierophant |
+| - VII -    || Priestess  | Strength   |
+|            || Empress    | Strength   |
+| Chariot    || Empress    | Hanged Man |
+|            || Emperor    | Hierophant |
+|            || Emperor    | Justice    |
+|            || Hierophant | Hermit     |
+|            ||-------------------------|
+|            || Chariot    | Chariot    |
+|            ||-------------------------|
+|            || Justice    | Fortune    |
+|            || Hermit     | Star       |
+|            || Fortune    | Sun        |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR08]    || Fool       | Fortune    |
+|            || Fool       | Devil      |
+| - VIII -   || Priestess  | Star       |
+|            || Priestess  | Judgement  |
+| Justice    || Emperor    | Chariot    |
+|            || Chariot    | Strength   |
+|            ||-------------------------|
+|            || Justice    | Justice    |
+|            ||-------------------------|
+|            || Temperance | Judgement  |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR09]    || Fool       | Hierophant |
+|            || Magician   | Hierophant |
+| - IX -     || Priestess  | Lovers     |
+|            || Emperor    | Star       |
+| Hermit     || Lovers     | Hanged Man |
+|            || Chariot    | Fortune    |
+|            ||-------------------------|
+|            || Hermit     | Hermit     |
+|            ||-------------------------|
+|            || Fortune    | Devil      |
+|            || Temperance | Star       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR10]    || Fool       | Empress    |
+|            || Fool       | Moon       |
+| - X -      || Magician   | Star       |
+|            || Magician   | Moon       |
+| Fortune    || Empress    | Lovers     |
+|            || Hierophant | Hanged Man |
+|            || Chariot    | Hanged Man |
+|            || Chariot    | Moon       |
+|            || Hermit     | Strength   |
+|            || Hermit     | Hanged Man |
+|            ||-------------------------|
+|            || Fortune    | Fortune    |
+|            ||-------------------------|
+|            || Strength   | Hanged Man |
+|            || Tower      | Moon       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR11]    || Fool       | Death      |
+|            || Priestess  | Hanged Man |
+| - XI -     || Empress    | Fortune    |
+|            || Emperor    | Lovers     |
+| Strength   || Hierophant | Temperance |
+|            || Lovers     | Chariot    |
+|            || Justice    | Hermit     |
+|            || Fortune    | Hanged Man |
+|            ||-------------------------|
+|            || Strength   | Strength   |
+|            ||-------------------------|
+|            || Hanged Man | Star       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR12]    || Fool       | Strength   |
+|            || Magician   | Empress    |
+| - XII -    || Magician   | Hermit     |
+|            || Emperor    | Strength   |
+| Hanged Man || Emperor    | Temperance |
+|            || Lovers     | Justice    |
+|            || Lovers     | Aeon       |
+|            || Chariot    | Hermit     |
+|            || Hermit     | Temperance |
+|            || Strength   | Death      |
+|            || Strength   | Judgement  |
+|            ||-------------------------|
+|            || Hanged Man | Hanged Man |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR13]    || Fool       | Aeon       |
+|            || Magician   | Temperance |
+| - XIII -   || Priestess  | Tower      |
+|            || Emperor    | Tower      |
+| Death      || Lovers     | Devil      |
+|            || Chariot    | Temperance |
+|            || Chariot    | Aeon       |
+|            || Hermit     | Devil      |
+|            || Hermit     | Tower      |
+|            || Hanged Man | Devil      |
+|            || Hanged Man | Tower      |
+|            ||-------------------------|
+|            || Death      | Death      |
+|            ||-------------------------|
+|            || Devil      | Sun        |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR14]    || Fool       | Lovers     |
+|            || Magician   | Devil      |
+| - XIV -    || Empress    | Star       |
+|            || Emperor    | Hanged Man |
+| Temperance || Hierophant | Lovers     |
+|            || Hierophant | Chariot    |
+|            || Hierophant | Tower      |
+|            || Hierophant | Moon       |
+|            || Hierophant | Sun        |
+|            || Fortune    | Sun        |
+|            || Hanged Man | Aeon       |
+|            ||-------------------------|
+|            || Temperance | Temperance |
+|            ||-------------------------|
+|            || Star       | Judgement  |
+|            || Moon       | Sun        |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR15]    || Fool       | Chariot    |
+|            || Magician   | Priestess  |
+| - XV -     || Magician   | Lovers     |
+|            || Magician   | Hanged Man |
+| Devil      || Empress    | Chariot    |
+|            || Empress    | Death      |
+|            || Lovers     | Death      |
+|            || Fortune    | Aeon       |
+|            || Hanged Man | Death      |
+|            || Death      | Judgement  |
+|            || Temperance | Tower      |
+|            ||-------------------------|
+|            || Devil      | Devil      |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR16]    || Magician   | Death      |
+|            || Magician   | Judgement  |
+| - XVI -    || Emperor    | Moon       |
+|            || Hierophant | Aeon       |
+| Tower      || Chariot    | Judgement  |
+|            || Justice    | Moon       |
+|            || Hermit     | Death      |
+|            || Hermit     | Judgement  |
+|            || Strength   | Aeon       |
+|            || Death      | Temperance |
+|            || Death      | Star       |
+|            ||-------------------------|
+|            || Tower      | Tower      |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR17]    || Fool       | Judgement  |
+|            || Magician   | Strength   |
+| - XVII -   || Priestess  | Moon       |
+|            || Priestess  | Sun        |
+| Star       || Lovers     | Tower      |
+|            || Chariot    | Devil      |
+|            || Hermit     | Sun        |
+|            || Hermit     | Aeon       |
+|            || Fortune    | Judgement  |
+|            || Death      | Moon       |
+|            || Temperance | Aeon       |
+|            ||-------------------------|
+|            || Star       | Star       |
+|            ||-------------------------|
+|            || Sun        | Judgement  |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR18]    || Fool       | Tower      |
+|            || Magician   | Chariot    |
+| - XVIII -  || Empress    | Aeon       |
+|            || Emperor    | Death      |
+| Moon       || Chariot    | Tower      |
+|            || Justice    | Death      |
+|            || Justice    | Temperance |
+|            || Fortune    | Star       |
+|            || Strength   | Temperance |
+|            || Death      | Sun        |
+|            || Temperance | Devil      |
+|            || Devil      | Judgement  |
+|            || Tower      | Sun        |
+|            ||-------------------------|
+|            || Moon       | Moon       |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR19]    || Magician   | Aeon       |
+|            || Emperor    | Fortune    |
+| - XIX -    || Emperor    | Aeon       |
+|            || Lovers     | Judgement  |
+| Sun        || Chariot    | Star       |
+|            || Justice    | Tower      |
+|            || Fortune    | Strength   |
+|            || Death      | Tower      |
+|            || Death      | Aeon       |
+|            || Star       | Moon       |
+|            ||-------------------------|
+|            || Sun        | Sun        |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR20]    || Justice    | Aeon       |
+|            || Fortune    | Death      |
+| - XX -     || Strength   | Tower      |
+|            || Hanged Man | Sun        |
+| Judgement  || Death      | Devil      |
+|            || Temperance | Sun        |
+|            || Devil      | Tower      |
+|            || Devil      | Moon       |
+|            || Tower      | Star       |
+|            || Moon       | Aeon       |
+|            ||-------------------------|
+|            || Judgement  | Judgement  |
+ ---------------------------------------
+
+
+ =======================================
+|            || Normal Res | Normal Res |
+| Desired    ||     - OR - |     - OR - |
+| Result     || 3rd Arcana | 3rd Arcana |
+|=======================================|
+| [TFR22]    || Fool       | Star       |
+|            || Justice    | Judgement  |
+| - XXII -   || Fortune    | Tower      |
+|            || Strength   | Moon       |
+| Aeon       || Hanged Man | Judgement  |
+|            || Tower      | Judgement  |
+|            || Star       | Sun        |
+|            ||-------------------------|
+|            || Aeon       | Aeon       |
+ ---------------------------------------
