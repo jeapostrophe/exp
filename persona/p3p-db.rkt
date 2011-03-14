@@ -9,6 +9,7 @@
 (define unfused/level 0)
 
 (struct persona (arcana name base-lvl cost) #:transparent)
+(printf "Special:\n")
 (define db
   (with-input-from-file
       db-pth
@@ -22,16 +23,21 @@
           ([a (in-list ps)])
           (match-define (list name base-lvl cost) a)
           (set! total (add1 total))
-          (unless cost
+          (unless (number? cost)
             (when (base-lvl . <= . max-lvl)
               (set! unfused/level (add1 unfused/level)))
             (set! unfused (add1 unfused)))
-          (if (base-lvl . > . max-lvl)
-              db
-              (cons (persona arcana name base-lvl cost)
-                    db)))))))
+          (cond
+            [(base-lvl . > . max-lvl)
+             db]
+            [(symbol? cost)
+             (printf "\t~a\n" name)
+             db]
+            [else
+             (cons (persona arcana name base-lvl cost)
+                   db)]))))))
 
-(printf "~a/~a (~a)\n" 
+(printf "\n~a/~a (~a)\n\n" 
         (- total unfused) total
         unfused/level)
 
@@ -114,65 +120,44 @@
   (for/fold ([os empty])
     ([1*2 (in-list (hash-ref normal-db a))])
     (match-define (cons 1st-arcana 2nd-arcana) 1*2)
-    (for*/fold ([os os])
-      ([1st (arcana-personas 1st-arcana)]
-       [2nd (arcana-personas 2nd-arcana)]
-       #:when (not (equal? 1st 2nd)))
-      (define cost
-        (+* (persona-cost 1st)
-            (persona-cost 2nd)))
-      (if (and 
-           (equal?
-            p
-            (find-result-persona (normal-fusion-lvl 1st 2nd) a))
-           (not (equal? cost +inf.0)))
-          (cons (fusion:normal cost 1st 2nd) os)
-          os))))
+    (if (equal? 1st-arcana 2nd-arcana)
+        os ; XXX
+        (for*/fold ([os os])
+          ([1st (arcana-personas 1st-arcana)]
+           [2nd (arcana-personas 2nd-arcana)]
+           #:when (not (equal? 1st 2nd)))
+          (define cost
+            (+* (persona-cost 1st)
+                (persona-cost 2nd)))
+          (if (and 
+               (equal?
+                p
+                (find-result-persona (normal-fusion-lvl 1st 2nd) a))
+               (not (equal? cost +inf.0)))
+              (cons (fusion:normal cost 1st 2nd) os)
+              os)))))
+
+(define (triangle-fusions p)
+  ; XXX
+  empty)
 
 (for ([p (in-list db)]
       #:when (not (persona-cost p)))
   (match-define (persona a name lvl _) p)
   (printf "Lvl ~a. ~a\n" lvl name)
   
+  (define recipe? #f)
   (for* ([v
           (in-list
-           (sort (normal-fusions p) < #:key fusion-cost))])
+           (sort (append (normal-fusions p)
+                         (triangle-fusions p))
+                 < #:key fusion-cost))])
     (match v
       [(fusion:normal cost 1st 2nd)
+       (set! recipe? #t)
        (printf "\t~a x ~a [~a]\n" (persona-name 1st) (persona-name 2nd) cost)]
       [#f
        (void)]))
   
-  
-  )
-
-#|
-(define all
-  (for/list ([p (in-list db)]
-             #:when (not (persona-cost p)))
-    (cons p (find-best-fusion/normal p))))
-
-(define all-avail
-  (filter cdr all))
-
-(define all-avail/sorted
-  (sort all-avail < #:key (compose pairing-cost cdr)))
-
-(define (persona/name n)
-  (findf (compose (curry string=? n) persona-name) db))
-
-(for ([p*p (in-list all-avail/sorted)])
-  (match-define 
-   (cons 
-    (persona t_arcana t_name t_base-lvl t_cost)
-    (pairing 
-     (persona 1_arcana 1_name 1_base-lvl 1_cost)
-     (persona 2_arcana 2_name 2_base-lvl 2_cost)
-     cost))
-   p*p)
-  (printf "~a = ~a (~a) x ~a (~a) [~a]\n"
-          t_name 
-          1_name 1_cost
-          2_name 2_cost
-          cost))
-|#
+  (unless recipe?
+    (printf "\tUnavailable\n")))
