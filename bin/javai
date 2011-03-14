@@ -1,0 +1,7 @@
+#/bin/sh
+FILE=$1
+
+cd p && \
+javac $FILE.java && \
+java $(basename *.class .class) && \
+rm *.class
