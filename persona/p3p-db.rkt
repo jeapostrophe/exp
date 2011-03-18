@@ -141,6 +141,9 @@
   ; XXX
   empty)
 
+(define (persona/name n)
+  (findf (compose (curry string=? n) persona-name) db))
+
 (for ([p (in-list db)]
       #:when (not (persona-cost p)))
   (match-define (persona a name lvl _) p)
