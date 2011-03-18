@@ -1,5 +1,7 @@
-#lang racket
-(require tests/eli-tester)
+#lang racket/base
+(require racket/contract
+         racket/match
+         tests/eli-tester)
 
 ; A space is #f, 'X, or 'O
 (define space/c 
@@ -137,6 +139,9 @@
 (require unstable/match
          racket/require
          (path-up "temp-c/dsl.rkt"))
+(provide
+ (rename-out [tic-tac-toe
+              tic-tac-toe:raw]))
 (provide/contract
  [tic-tac-toe
   (with-monitor
