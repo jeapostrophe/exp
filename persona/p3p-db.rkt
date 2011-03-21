@@ -75,7 +75,7 @@
                       arcana]
                      [_
                       note])
-                   (list* (cons 1st 2nd) combos))]
+                   (list* (cons 1st 2nd) (cons 2nd 1st) combos))]
           [_
            (values reading? arcana combos)])
         (values reading? arcana combos))]))
@@ -100,25 +100,42 @@
                         db)
                 < #:key persona-base-lvl))))
 
+(define (average . l)
+  (floor (/ (apply + l) (length l))))
+
+(define (post-fusion-level k . p)
+  (+ k
+     (apply average
+            (map persona-base-lvl p))))
+
 (define (normal-fusion-lvl 1st 2nd)
-  (add1
-   (floor
-    (/ (+ (persona-base-lvl 1st)
-          (persona-base-lvl 2nd))
-       2))))
+  (post-fusion-level 1 1st 2nd))
+
+(define (triangle-fusion-lvl 1st 2nd 3rd)
+  (post-fusion-level 5 1st 2nd 3rd))
 
 (define (find-result-persona l a)
   (findf (compose (curry <= l)
                   persona-base-lvl)
          (arcana-personas a)))
 
-(define (+* a b)
-  (if (and (number? a) (number? b))
-      (+ a b)
+(define (+* . xs)
+  (if (andmap number? xs)
+      (apply + xs)
       +inf.0))
 
-(struct fusion (cost) #:transparent)
-(struct fusion:normal fusion (1st 2nd) #:transparent)
+(struct fusion (cost ps) #:transparent)
+
+(define (unique . l)
+  (equal? l (remove-duplicates l)))
+
+(define MAX 10)
+(define (take* l p)
+  (if ((length l) . < . p)
+      l
+      (take l p)))
+(define (fusion-add f l)
+  (take* (sort (remove-duplicates (cons f l)) < #:key fusion-cost) MAX))
 
 (define (normal-fusions p)
   (match-define (persona a _ _ _) p)
@@ -130,7 +147,7 @@
         (for*/fold ([os os])
           ([1st (arcana-personas 1st-arcana)]
            [2nd (arcana-personas 2nd-arcana)]
-           #:when (not (equal? 1st 2nd)))
+           #:when (unique 1st 2nd))
           (define cost
             (+* (persona-cost 1st)
                 (persona-cost 2nd)))
@@ -139,12 +156,37 @@
                 p
                 (find-result-persona (normal-fusion-lvl 1st 2nd) a))
                (not (equal? cost +inf.0)))
-              (cons (fusion:normal cost 1st 2nd) os)
+              (fusion-add (fusion cost (set 1st 2nd)) os)
               os)))))
 
-(define (triangle-fusions p)
-  ; XXX
-  empty)
+(define (triangle-fusions p)  
+  (match-define (persona a _ _ _) p)
+  (for/fold ([os empty])
+    ([i*3 (in-list (hash-ref triangle-db a))])
+    (match-define (cons i-arcana 3rd-arcana) i*3)
+    (if (equal? i-arcana 3rd-arcana)
+        os ; XXX        
+        (for/fold ([os os])
+          ([1*2 (in-list (hash-ref normal-db i-arcana))])
+          (match-define (cons 1st-arcana 2nd-arcana) 1*2)
+          (if (equal? 1st-arcana 2nd-arcana)
+              os ; XXX
+              (for*/fold ([os os])
+                ([1st (arcana-personas 1st-arcana)]
+                 [2nd (arcana-personas 2nd-arcana)]
+                 [3rd (arcana-personas 3rd-arcana)]
+                 #:when (unique 1st 2nd 3rd))
+                (define cost
+                  (+* (persona-cost 1st)
+                      (persona-cost 2nd)
+                      (persona-cost 3rd)))
+                (if (and 
+                     (equal?
+                      p
+                      (find-result-persona (triangle-fusion-lvl 1st 2nd 3rd) a))
+                     (not (equal? cost +inf.0)))
+                    (fusion-add (fusion cost (set 1st 2nd 3rd)) os)
+                    os)))))))
 
 (define (persona/name n)
   (findf (compose (curry string=? n) persona-name) db))
@@ -161,9 +203,16 @@
                          (triangle-fusions p))
                  < #:key fusion-cost))])
     (match v
-      [(fusion:normal cost 1st 2nd)
+      [(fusion cost ps)
        (set! recipe? #t)
-       (printf "\t~a x ~a [~a]\n" (persona-name 1st) (persona-name 2nd) cost)]
+       (printf "\t")
+       (for ([p (in-set ps)]
+             [i (in-naturals)])
+         (unless (zero? i)
+           (printf " x "))
+         (printf "~a" (persona-name p)))
+       (printf " [~a]\n"
+               cost)]
       [#f
        (void)]))
   
