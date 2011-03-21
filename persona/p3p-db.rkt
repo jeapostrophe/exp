@@ -34,7 +34,12 @@
              (printf "\t~a\n" name)
              db]
             [else
-             (cons (persona arcana name base-lvl cost)
+             (cons (persona arcana name base-lvl 
+                            (cond 
+                              [(member name inv)
+                               0]
+                              [else
+                               cost]))
                    db)]))))))
 
 (printf "\n~a/~a = ~a% complete\n\n" 
