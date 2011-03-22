@@ -1,6 +1,7 @@
 #lang racket
 ; Based on http://www.gamefaqs.com/psp/971508-shin-megami-tensei-persona-3-portable/faqs/60399
-(require racket/runtime-path)
+(require racket/runtime-path
+         tests/eli-tester)
 
 (define-runtime-path db-pth "p3p-db.rktd")
 
@@ -119,10 +120,14 @@
 (define (triangle-fusion-lvl 1st 2nd 3rd)
   (post-fusion-level 5 1st 2nd 3rd))
 
+(define find-result-persona-cache (make-hash))
 (define (find-result-persona l a)
-  (findf (compose (curry <= l)
-                  persona-base-lvl)
-         (arcana-personas a)))
+  (hash-ref! find-result-persona-cache
+             (cons l a)
+             (λ ()
+               (findf (compose (curry <= l)
+                               persona-base-lvl)
+                      (arcana-personas a)))))
 
 (define (+* . xs)
   (if (andmap number? xs)
@@ -131,16 +136,44 @@
 
 (struct fusion (cost ps) #:transparent)
 
-(define (unique . l)
-  (equal? l (remove-duplicates l)))
+(define (unique? . l)
+  (define h (make-hash))
+  (not 
+   (for/or ([e (in-list l)])
+     (begin0 (hash-has-key? h e)
+             (hash-set! h e #t)))))
 
+(test (unique? "foo" "bar" "zog")
+      (unique? "foo" "bar" "zog" "foo") => #f
+      (unique? "foo" "foo") => #f)
+
+; This is like an insertion sort where the list can only ever be MAX elements
 (define MAX 10)
-(define (take* l p)
-  (if ((length l) . < . p)
-      l
-      (take l p)))
 (define (fusion-add f l)
-  (take* (sort (remove-duplicates (cons f l)) < #:key fusion-cost) MAX))
+  (fusion-add* f MAX l))
+(define (take* p l)
+  (cond
+    [(zero? p)
+     empty]
+    [(empty? l)
+     empty]
+    [else
+     (list* (first l)
+            (take* (sub1 p) (rest l)))]))
+(define (fusion-add* f n l)
+  (cond
+    [(zero? n)
+     empty]
+    [(empty? l)
+     (list f)]
+    [(equal? f (first l))
+     l]
+    [(< (fusion-cost f) (fusion-cost (first l)))
+     (list* f
+            (take* n l))]
+    [else
+     (list* (first l) 
+            (fusion-add* f (sub1 n) (rest l)))]))
 
 (define (normal-fusions p)
   (match-define (persona a _ _ _) p)
@@ -152,7 +185,7 @@
         (for*/fold ([os os])
           ([1st (arcana-personas 1st-arcana)]
            [2nd (arcana-personas 2nd-arcana)]
-           #:when (unique 1st 2nd))
+           #:when (unique? 1st 2nd))
           (define cost
             (+* (persona-cost 1st)
                 (persona-cost 2nd)))
@@ -180,7 +213,7 @@
                 ([1st (arcana-personas 1st-arcana)]
                  [2nd (arcana-personas 2nd-arcana)]
                  [3rd (arcana-personas 3rd-arcana)]
-                 #:when (unique 1st 2nd 3rd))
+                 #:when (unique? 1st 2nd 3rd))
                 (define cost
                   (+* (persona-cost 1st)
                       (persona-cost 2nd)
@@ -202,24 +235,21 @@
   (printf "Lvl ~a. ~a\n" lvl name)
   
   (define recipe? #f)
-  (for* ([v
-          (in-list
-           (sort (append (normal-fusions p)
-                         (triangle-fusions p))
-                 < #:key fusion-cost))])
-    (match v
-      [(fusion cost ps)
-       (set! recipe? #t)
-       (printf "\t")
-       (for ([p (in-set ps)]
-             [i (in-naturals)])
-         (unless (zero? i)
-           (printf " x "))
-         (printf "~a" (persona-name p)))
-       (printf " [~a]\n"
-               cost)]
-      [#f
-       (void)]))
+  (for ([v
+         (in-list
+          (sort (append (normal-fusions p)
+                        (triangle-fusions p))
+                < #:key fusion-cost))])
+    (match-define (fusion cost ps) v)
+    (set! recipe? #t)
+    (printf "\t")
+    (for ([p (in-set ps)]
+          [i (in-naturals)])
+      (unless (zero? i)
+        (printf " x "))
+      (printf "~a" (persona-name p)))
+    (printf " [~a]\n"
+            cost))
   
   (unless recipe?
     (printf "\tUnavailable\n")))
