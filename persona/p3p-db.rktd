@@ -1,4 +1,4 @@
-44 ("Seiryuu" "Loa" "Hanuman" "Rangda" "Clotho" "Incubus" "Succubus" "Dominion" "Oumitsunu" "Eligor")
+45 ("Seiryuu" "Loa" "Hanuman" "Rangda" "Clotho" "Incubus" "Succubus" "Dominion" "Oumitsunu" "Eligor")
 ("Fool"
  ("Orpheus" 1 4352)
  ("Slime" 12 9203)
@@ -17,7 +17,7 @@
  ("Sati" 28 32000)
  ("Orobas" 34 43772)
  ("Rangda" 40 57488)
- ("Surt" 52 special))
+ ("Surt" 52 #f))
 ("Priestess"
  ("Apsaras" 3 3728)
  ("Unicorn" 11 6800)
@@ -108,7 +108,7 @@
  ("Hanuman" 37 50387)
  ("Narasimha" 46 #f)
  ("Kali" 55 #f)
- ("Siegfried" 59 special))
+ ("Siegfried" 59 #f))
 ("Hanged Man"
  ("Inugami" 10 6107)
  ("Take-minakata" 21 16700)

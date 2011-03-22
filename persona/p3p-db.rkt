@@ -47,7 +47,7 @@
         (real->decimal-string (* 100 (/ (- total unfused) total)) 2))
 
 (define (trim s) (regexp-replace #px"\\s+$" s ""))
-(define (parse-db db)
+(define (parse-db db symmetric?)
   (for/fold ([reading? #f]
              [arcana #f]
              [combos empty])
@@ -75,20 +75,25 @@
                       arcana]
                      [_
                       note])
-                   (list* (cons 1st 2nd) (cons 2nd 1st) combos))]
+                   (list* (cons 1st 2nd)
+                          (if symmetric?
+                              (list*
+                               (cons 2nd 1st)
+                               combos)
+                              combos)))]
           [_
            (values reading? arcana combos)])
         (values reading? arcana combos))]))
   (void))
 
-(define-syntax-rule (define-db id pth)
+(define-syntax-rule (define-db id pth symmetric?)
   (begin
     (define-runtime-path db-pth pth)
     (define id (make-hash))
-    (with-input-from-file db-pth (λ () (parse-db id)))))
+    (with-input-from-file db-pth (λ () (parse-db id symmetric?)))))
 
-(define-db normal-db "normal-spread.dat")
-(define-db triangle-db "triangle-spread.dat")
+(define-db normal-db "normal-spread.dat" #f)
+(define-db triangle-db "triangle-spread.dat" #t)
 
 (define arcana->personas (make-hash))
 (define (arcana-personas a)
