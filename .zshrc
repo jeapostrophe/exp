@@ -10,6 +10,7 @@ hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
 hash -d github=~scm/github.jeapostrophe
+hash -d gb=~github/get-bonus
 hash -d exp=~scm/github.jeapostrophe/exp
 hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk

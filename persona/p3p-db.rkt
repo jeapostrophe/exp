@@ -1,4 +1,7 @@
 #lang racket
+(define TRIANGLE? #t)
+(define INVENTORY? #f)
+
 ; Based on http://www.gamefaqs.com/psp/971508-shin-megami-tensei-persona-3-portable/faqs/60399
 (require racket/runtime-path
          tests/eli-tester)
@@ -37,7 +40,7 @@
             [else
              (cons (persona arcana name base-lvl 
                             (cond 
-                              [(member name inv)
+                              [(and INVENTORY? (member name inv))
                                0]
                               [else
                                cost]))
@@ -229,7 +232,7 @@
 (define (persona/name n)
   (findf (compose (curry string=? n) persona-name) db))
 
-(for ([p (in-list db)]
+(for ([p (in-list (sort db >= #:key persona-base-lvl))]
       #:when (not (persona-cost p)))
   (match-define (persona a name lvl _) p)
   (printf "Lvl ~a. ~a\n" lvl name)
@@ -238,7 +241,9 @@
   (for ([v
          (in-list
           (sort (append (normal-fusions p)
-                        (triangle-fusions p))
+                        (if TRIANGLE?
+                            (triangle-fusions p)
+                            empty))
                 < #:key fusion-cost))])
     (match-define (fusion cost ps) v)
     (set! recipe? #t)
@@ -247,7 +252,7 @@
           [i (in-naturals)])
       (unless (zero? i)
         (printf " x "))
-      (printf "~a" (persona-name p)))
+      (printf "~a (~a)" (persona-name p) (persona-arcana p)))
     (printf " [~a]\n"
             cost))
   

@@ -1,7 +1,16 @@
-#/bin/sh
+#/bin/bash
 FILE=$1
 
-cd p && \
-javac $FILE.java && \
+cecho () {
+      echo '\033[0;47;34m\c'
+      echo $*
+      echo '\033[0m\c'
+}
+
+cd $(dirname $FILE) && \
+cecho Compiling... && \
+javac $FILE && \
+cecho Running... && \
 java $(basename *.class .class) && \
+cecho Cleaning up... && \
 rm *.class
