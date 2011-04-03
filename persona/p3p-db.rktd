@@ -1,6 +1,4 @@
-66 ("Hariti" "Kumbhanda" "Raphael" "Melchizedek" "Arahabaki" "Garuda" "Thanatos" "Trumpeter" "Horus" 
-             
-             XXX)
+75 ("Melchizedek" "Odin" "Horus" "Kartikeya" "Sparna" "Mother Harlot" "Sandalphon" "Michael" "Ananta")
 ("Fool"
  ("Orpheus" 1 4352)
  ("Slime" 12 9203)
@@ -35,7 +33,7 @@
  ("Laksmi" 57 97052)
  ("Hariti" 62 113747)
  ("Gabriel" 69 #f)
- ("Mother Harlot" 74 #f)
+ ("Mother Harlot" 74 189500)
  ("Skadi" 80 #f)
  ("Alilat" 84 special))
 ("Emperor"
@@ -46,7 +44,7 @@
  ("Raja Naga" 36 45923)
  ("Kingu" 46 73148)
  ("Barong" 52 93875)
- ("Odin" 57 special))
+ ("Odin" 57 139388))
 ("Hierophant"
  ("Omoikane" 7 5468)
  ("Berith" 13 10427)
@@ -55,7 +53,7 @@
  ("Thoth" 41 59963)
  ("Hokuto Seikun" 47 75947)
  ("Daisoujou" 53 111443)
- ("Kohryu" 66 special))
+ ("Kohryu" 66 180608))
 ("Lovers"
  ("Pixie" 2 3452)
  ("Alp" 6 3875)
@@ -65,7 +63,7 @@
  ("Saki Mitama" 39 50387)
  ("Titania" 48 75947)
  ("Raphael" 61 124412)
- ("Cybele" 68 special))
+ ("Cybele" 68 191003))
 ("Chariot"
  ("Ara Mitama" 6 4883)
  ("Chimera" 9 6800)
@@ -119,7 +117,7 @@
  ("Ubelluris" 48 78800)
  ("Hecatoncheires" 54 87683)
  ("Hell Biker" 60 124412)
- ("Attis" 67 #f))
+ ("Attis" 67 185027))
 ("Death"
  ("Ghoul" 18 15872)
  ("Pale Rider" 24 25323)
@@ -145,13 +143,13 @@
  ("Succubus" 43 76892)
  ("Pazuzu" 52 111443)
  ("Lilith" 61 special)
- ("Abaddon" 68 #f)
+ ("Abaddon" 68 177692)
  ("Beelzebub" 81 #f))
 ("Tower"
  ("Eligor" 31 48875)
  ("Cu Chulainn" 40 73148)
  ("Bishamonten" 60 147200)
- ("Seiten Taisei" 67 #f)
+ ("Seiten Taisei" 67 179147)
  ("Masakado" 73 special)
  ("Mara" 77 special)
  ("Shiva" 82 special)
@@ -163,9 +161,9 @@
  ("Kaiwan" 49 93875)
  ("Ganesha" 58 126848)
  ("Garuda" 65 156587)
- ("Kartikeya" 70 #f)
+ ("Kartikeya" 70 183548)
  ("Saturnus" 78 #f)
- ("Helel" 88 special))
+ ("Helel" 88 #f))
 ("Moon"
  ("Gurr" 15 11408)
  ("Yamatano-orochi" 26 26843)
@@ -173,26 +171,26 @@
  ("Dionysus" 48 90752)
  ("Chernobog" 58 126848)
  ("Seth" 66 160700)
- ("Baal Zebul" 71 #f)
- ("Sandalphon" 74 special))
+ ("Baal Zebul" 71 192512)
+ ("Sandalphon" 74 222323))
 ("Sun"
  ("Yatagarasu" 30 35708)
  ("Quetzalcoatl" 43 76892)
  ("Jatayu" 55 123203)
  ("Horus" 63 156587)
- ("Sparna" 70 #f)
+ ("Sparna" 70 194027)
  ("Vishnu" 78 #f)
  ("Asura" 85 special))
 ("Judgement"
  ("Anubis" 59 124412)
  ("Trumpeter" 65 149852)
- ("Michael" 72 #f)
+ ("Michael" 72 204800)
  ("Satan" 79 #f)
  ("Lucifer" 89 special)
  ("Messiah" 90 special))
 ("Aeon"
  ("Uriel" 63 140675)
- ("Nidhogg" 69 #f)
- ("Ananta" 75 #f)
+ ("Nidhogg" 69 167675)
+ ("Ananta" 75 197075)
  ("Atavaka" 80 #f)
  ("Metatron" 87 special))
