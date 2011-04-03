@@ -35,30 +35,26 @@ RECENTFILES=8
 precmd () {print -Pn "\e]0;$TPS1\a"}
 preexec () {print -Pn "\e]0;$TPS1 $2\a"}
 
-ZDIRS=~/.zdirs
+ZDIR=~/.zdir
 
-# Read in ZDIRS
-write_zdirs () {
-    dirs -lp >! $ZDIRS
+# Read in ZDIR
+write_zdir () {
+    pwd >! $ZDIR
 }
 
-# Read in ZDIRS
-read_zdirs () {
-    dirstack=()
-    while IFS= read -r line ; do
-	dirstack+=($line)
-    done < $ZDIRS
-    popd
+# Read in ZDIR
+read_zdir () {
+    pushd $(cat $ZDIR)
 }
 
 chpwd () {
     # Save what directory we are in for the future
-    write_zdirs
+    write_zdir
     # Show recently modified files
     ls -t | head -$RECENTFILES | tr '\n' '\0' | xargs -0 ls -d
 }
 
-read_zdirs
+read_zdir
 
 # Completions
 compctl -g '*(/)' rmdir dircmp
@@ -80,27 +76,3 @@ compctl -g '*(-/)' cd chdir dirs pushd
 
 # Ignore what's in the line
 #zstyle ':completion:*:(rm|kill|diff):*' ignore-line yes
-
-# Nice chdir
-cdirs () {
-    dirs -lp | sort | uniq -c | sort -nr | sed 's/^ *[0-9]* *//'
-}
-
-c () {
-    if [ "$1" = "" ] ; then
-	cdirs | cat -n
-    elif [[ "$1" = <-> ]] ; then
-	read_cdirs_into_reply
-	cd $reply[$1]
-    else
-	cd "$1"
-    fi
-}
-
-read_cdirs_into_reply () {
-    while IFS= read -r line ; do
-	reply+=($line)
-    done < <(cdirs)
-}
-
-compctl -Q -K read_cdirs_into_reply c
