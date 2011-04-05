@@ -54,6 +54,9 @@
     f))
 
 (set-cell! the-animation-graphic
-           (lift place-image (lift triangle (lift + 32 (lift * 5 (lift modulo seconds 100))) "solid" "red")
+           (lift place-image 
+                 (lift triangle
+                       (lift + 32 (lift * 5 (lift modulo seconds 100)))
+                       "solid" "red")
                  (/ MIN-WIDTH 2) (/ MIN-HEIGHT 2)
                  (empty-scene MIN-WIDTH MIN-HEIGHT)))

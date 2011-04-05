@@ -1,5 +1,6 @@
 #lang racket
 (require (for-syntax racket/function)
+         racket/async-channel
          racket/stxparam)
 
 (provide (all-defined-out))
