@@ -1,6 +1,6 @@
 #lang racket
 (define TRIANGLE? #f)
-(define INVENTORY? #t)
+(define INVENTORY? #f)
 
 ; Based on http://www.gamefaqs.com/psp/971508-shin-megami-tensei-persona-3-portable/faqs/60399
 (require racket/runtime-path
