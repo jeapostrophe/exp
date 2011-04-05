@@ -9,8 +9,6 @@
   (class* snip% ()
     (init-field sub-snips)
     
-    (printf "Snips: ~a\n" sub-snips)
-    
     (define (the-snip)
       (list-ref sub-snips
                 (modulo (current-seconds) (length sub-snips))))
@@ -26,6 +24,7 @@
     (delegate get-extent)
     (delegate draw)
     (delegate get-text)
+    (delegate copy)
     ; set-unmodified or modified
     
     (super-new)))
@@ -41,7 +40,5 @@
   (make-object
       reactive-snip% 
     sub-snips))
-
-sub-snips
 
 x
