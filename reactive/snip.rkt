@@ -1,44 +1,29 @@
 #lang racket/base
-(require (for-syntax racket/base)
+(require racket/gui/base
          racket/class
-         racket/function
-         racket/runtime-path
          racket/snip)
 
 (define reactive-snip%
   (class* snip% ()
-    (init-field sub-snips)
-    
-    (define (the-snip)
-      (list-ref sub-snips
-                (modulo (current-seconds) (length sub-snips))))
+    (init-field some-snip)
     
     (define-syntax-rule (delegate id)
       (define/override (id . a)
-        (define some-snip (the-snip))
-        (printf "Delegating (~a ~a) to ~a\n"
-                'id a
-                some-snip)
         (send/apply some-snip id a)))
     
     (delegate get-extent)
     (delegate draw)
     (delegate get-text)
-    (delegate copy)
-    ; set-unmodified or modified
+    (define/override (copy)
+      this)
+    
+    (inherit/super get-admin)
+    (define/public (update! s)
+      (set! some-snip s)
+      (queue-callback
+       (λ ()
+         (send (get-admin) needs-update this 0 0 2000 2000))))
     
     (super-new)))
 
-(define-runtime-path img1 '(lib "PLT-206-larval.png" "icons"))
-(define-runtime-path img2 '(lib "PLT-206-mars.jpg" "icons"))
-
-(define sub-snips
-      (map (curry make-object image-snip%) 
-           (list img1 img2)))
-
-(define x
-  (make-object
-      reactive-snip% 
-    sub-snips))
-
-x
+(provide reactive-snip%)
