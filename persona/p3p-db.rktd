@@ -1,4 +1,4 @@
-87 ("Odin" "Melchizedek" "Chi You" "Shiva" "Asura" "Beelzebub" "Loki" "Masakado")
+91 ("Odin" "Melchizedek" "Shiva" "Asura" "Loki" "Lucifer" "Messiah" "Thor" "Koumokuten" "Skadi" "Alilat")
 ("Fool"
  ("Orpheus" 1 4352)
  ("Slime" 12 9203)
@@ -35,7 +35,7 @@
  ("Gabriel" 69 143267)
  ("Mother Harlot" 74 189500)
  ("Skadi" 80 189500)
- ("Alilat" 84 special))
+ ("Alilat" 84 281075))
 ("Emperor"
  ("Forneus" 7 5468)
  ("Oberon" 15 12092)
@@ -72,7 +72,7 @@
  ("Oumitsunu" 30 35708)
  ("Nata Taishi" 37 57488)
  ("Koumokuten" 43 65075)
- ("Thor" 53 special))
+ ("Thor" 53 122000))
 ("Justice"
  ("Angel" 4 4187)
  ("Archangel" 10 6107)
@@ -163,7 +163,7 @@
  ("Garuda" 65 156587)
  ("Kartikeya" 70 183548)
  ("Saturnus" 78 228875)
- ("Helel" 88 #f))
+ ("Helel" 88 305372))
 ("Moon"
  ("Gurr" 15 11408)
  ("Yamatano-orochi" 26 26843)
@@ -186,8 +186,8 @@
  ("Trumpeter" 65 149852)
  ("Michael" 72 204800)
  ("Satan" 79 242267)
- ("Lucifer" 89 special)
- ("Messiah" 90 special))
+ ("Lucifer" 89 301568)
+ ("Messiah" 90 318875))
 ("Aeon"
  ("Uriel" 63 140675)
  ("Nidhogg" 69 167675)
