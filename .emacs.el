@@ -19,7 +19,8 @@
       (if progName
         (progn
           (message "Running...")
-	  (kill-buffer "*run-current-file*")
+	  (if (get-buffer "*run-current-file*")
+	      (kill-buffer "*run-current-file*"))
 	  (shell-command cmdStr "*run-current-file*"))
 	(progn
 	  (message "No recognized program file suffix for this file."))))))
