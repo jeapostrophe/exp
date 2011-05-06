@@ -7,10 +7,12 @@ cecho () {
       echo '\033[0m\c'
 }
 
-cd $(dirname $FILE) && \
+cd "$(dirname "$FILE")" && \
 cecho Compiling... && \
-javac $FILE && \
+javac "$FILE" && \
+cecho New classe files are: && \
+ls -1 *.class && \
 cecho Running... && \
-java $(basename *.class .class) && \
+java "$(basename "${FILE}" .java)" && \
 cecho Cleaning up... && \
 rm *.class
