@@ -10,7 +10,7 @@ cecho () {
 cd "$(dirname "$FILE")" && \
 cecho Compiling... && \
 javac "$FILE" && \
-cecho New classe files are: && \
+cecho New class files are: && \
 ls -1 *.class && \
 cecho Running... && \
 java "$(basename "${FILE}" .java)" && \
