@@ -32,7 +32,7 @@
                              (raise-blame-error b x "monitor disallowed return of ~e" rets))))
                       (raise-blame-error bs x "monitor disallowed call with (~e,~e,~e)" kws kw-args args))))
                proj-x)
-           (raise-blame-error b x "monitor disallowed after projection of ~e" x))))))
+           (raise-blame-error b x "monitor disallowed projection of ~e" x))))))
 
 (provide (struct-out monitor)
          (struct-out monitor:proj)
