@@ -15,10 +15,16 @@
 (define-for-syntax (re-expand stx)
   (syntax-parse
    stx
-   #:literals (complement seq union star epsilon nullset dseq)
+   #:literals (complement seq union star epsilon nullset dseq rec unquote)
    [((~and op complement) lhs:expr)
     (quasisyntax/loc stx
       (op #,(re-expand #'lhs)))]
+   [((~and op rec) v:id lhs:expr)
+    (quasisyntax/loc stx
+      (op v #,(re-expand #'lhs)))]
+   [((~and op unquote) e:expr)
+    (quasisyntax/loc stx
+      (op e))]
    [((~and op star) lhs:expr)
     (quasisyntax/loc stx
       (op #,(re-expand #'lhs)))]
@@ -65,6 +71,6 @@
          (re-compile (re-expand #'the-re))])))
 
 (provide
- complement seq union star epsilon nullset dseq
+ complement seq union star epsilon nullset dseq rec unquote
  define-re-transformer
  re)

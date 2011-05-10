@@ -29,10 +29,10 @@
                        (λ rets
                          (if (monitor-allows? (monitor:return label proj-label proj-x app-label kws kw-args args rets))
                              (apply values rets)
-                             (raise-blame-error b x "monitor disallowed return of ~e" rets))))
-                      (raise-blame-error bs x "monitor disallowed call with (~e,~e,~e)" kws kw-args args))))
+                             (raise-blame-error b x "temporal monitor disallowed return of ~e" rets))))
+                      (raise-blame-error bs x "temporal monitor disallowed call with\n\tkeywords ~e\n\tkeyword arguments ~e\n\tnormal arguments ~e" kws kw-args args))))
                proj-x)
-           (raise-blame-error b x "monitor disallowed projection of ~e" x))))))
+           (raise-blame-error b x "temporal monitor disallowed projection of ~e" x))))))
 
 (provide (struct-out monitor)
          (struct-out monitor:proj)

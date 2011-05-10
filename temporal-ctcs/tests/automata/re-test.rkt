@@ -126,4 +126,20 @@
            (list 1 1)]
           [(list)
            (list 1)
-           (list 1 0)]))
+           (list 1 0)])
+ 
+ (test-re (seq 1 (seq 2 3))
+          [(list 1 2 3)]
+          [(list 1)
+           (list 1 2)])
+ 
+ (test-re (rec x
+            (union #f
+                   (seq 1 ,x)))
+          [(list #f)
+           (list 1 #f)
+           (list 1 1 #f)
+           (list 1 1 1 #f)]
+          [(list 1)
+           (list 2)
+           (list 1 1 2)]))

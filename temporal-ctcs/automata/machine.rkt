@@ -77,6 +77,11 @@
        (machine (machine-next m1))
        (λ () (machine-star m1))))]))
 
+(define (machine-delay make-m)
+  (machine
+   (λ (input)
+     ((make-m) input))))
+
 (define (machine-accepts? m evts)
   (if (empty? evts)
       (machine-accepting? m)
@@ -111,6 +116,7 @@
  [machine-complement (machine? . -> . machine?)]
  [machine-union (machine? machine? . -> . machine?)]
  [machine-intersect (machine? machine? . -> . machine?)]
+ [machine-delay ((-> machine?) . -> . machine?)]
  [machine-seq* (machine? (-> machine?) . -> . machine?)]
  [machine-seq (machine? machine? . -> . machine?)]
  [machine-star (machine? . -> . machine?)])

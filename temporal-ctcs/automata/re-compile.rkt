@@ -9,7 +9,7 @@
                        (except-in "nfa-star.rkt" epsilon)
                        (prefix-in nfa: "nfa-star.rkt")))
 
-(define-literal-set re-ops (complement seq union star epsilon nullset dseq))
+(define-literal-set re-ops (complement seq union star epsilon nullset dseq rec unquote))
 
 (define-syntax-class sre 
   #:literal-sets (re-ops)
@@ -18,6 +18,32 @@
   ; machine is used for others
   ; best is the best thing to embed in a machine
   #:attributes (nfa machine best)
+  (pattern ((~and op unquote) e:expr)
+           #:do [(record-disappeared-uses (list #'op))]
+           #:attr nfa #f
+           #:attr machine
+           ; XXX contract to be a machine?
+           #`e
+           #:attr best (or (attribute nfa) (attribute machine)))
+  
+  (pattern ((~and op rec) v:id lhs:sre)
+           #:do [(record-disappeared-uses (list #'op))]
+           #:attr nfa #f
+           #:attr machine
+           #`(letrec ([inner
+                       (let-syntax ([v
+                                     (make-set!-transformer
+                                      (lambda (stx)
+                                        (syntax-case stx (set!)
+                                          ; Redirect mutation of x to y
+                                          [(set! _ _) 
+                                           (raise-syntax-error 'rec "Cannot mutate a rec binding" stx)]
+                                          ; Normal use of x really gets x
+                                          [id (identifier? #'id)  #'(machine-delay (λ () inner))])))])
+                         #,(attribute lhs.best))])
+               inner)
+           #:attr best (or (attribute nfa) (attribute machine)))
+  
   (pattern ((~and op complement) lhs:sre)
            #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
