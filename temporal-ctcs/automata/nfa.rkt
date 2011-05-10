@@ -8,6 +8,7 @@
          racket/list
          (for-syntax syntax/parse
                      syntax/id-table
+                     racket/syntax
                      unstable/syntax
                      racket/dict
                      racket/list

@@ -1,5 +1,6 @@
 #lang racket/base
 (require syntax/parse
+         racket/syntax
          unstable/syntax
          "re-help.rkt"
          (for-template racket/base

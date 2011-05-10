@@ -3,6 +3,7 @@
          "re-help.rkt"
          racket/match
          (for-syntax syntax/parse
+                     racket/syntax
                      unstable/syntax
                      racket/base
                      "re-help.rkt"

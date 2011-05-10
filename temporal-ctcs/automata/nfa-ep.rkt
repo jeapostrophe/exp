@@ -1,6 +1,7 @@
 #lang racket/base
 (require "nfa.rkt"
          (for-syntax syntax/parse
+                     racket/syntax
                      unstable/syntax
                      syntax/id-table
                      racket/dict
