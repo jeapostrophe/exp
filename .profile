@@ -50,4 +50,4 @@ function stoe() {
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 
-export LC_CTYPE=ja_JP.UTF-8
+#export LC_CTYPE=ja_JP.UTF-8

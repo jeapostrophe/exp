@@ -44,7 +44,7 @@ write_zdir () {
 
 # Read in ZDIR
 read_zdir () {
-    pushd $(cat $ZDIR)
+    pushd "$(cat $ZDIR)"
 }
 
 chpwd () {
