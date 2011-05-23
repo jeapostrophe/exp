@@ -18,6 +18,8 @@
 
 This module provides a macro for regular expression compilation.
 
+@; XXX Document unquote and rec
+
 @defform/subs[#:literals (complement seq union star epsilon nullset dseq)
                          (re re-pat)
                          ([re-pat (complement re-pat)

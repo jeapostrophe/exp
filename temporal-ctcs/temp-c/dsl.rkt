@@ -34,18 +34,19 @@
                             K))]))
 
 (define (re->monitor-predicate/concurrent m)
+  (define inner-accepts?
+    (re->monitor-predicate/serial m))
   (define t
     (thread 
      (λ ()
-       (let loop ([current-re m])
+       (let loop ()
          (define m (thread-receive))
          (define evt (car m))
          (define qt (cdr m))
-         (define new-re (current-re evt))
          (thread-resume qt (current-thread))
-         (thread-send qt (machine-accepting? new-re)
+         (thread-send qt (inner-accepts? evt)
                       (λ () (error 'monitor "Failed to contact requester")))
-         (loop new-re)))))
+         (loop)))))
   (define (accepts? evt)
     (thread-resume t (current-thread))
     (thread-send t (cons evt (current-thread))

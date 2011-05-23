@@ -17,6 +17,7 @@
      (λ (x)
        (define proj-label (gensym label))
        (define proj-x (proj x))
+       ; XXX Find a way to get a meaningful reason why the monitor failed
        (if (monitor-allows? (monitor:proj label proj-label proj-x))
            (if (procedure? proj-x)
                (make-keyword-procedure
@@ -30,6 +31,7 @@
                          (if (monitor-allows? (monitor:return label proj-label proj-x app-label kws kw-args args rets))
                              (apply values rets)
                              (raise-blame-error b x "temporal monitor disallowed return of ~e" rets))))
+                      ; XXX Specialize this message for when there are no kws
                       (raise-blame-error bs x "temporal monitor disallowed call with\n\tkeywords ~e\n\tkeyword arguments ~e\n\tnormal arguments ~e" kws kw-args args))))
                proj-x)
            (raise-blame-error b x "temporal monitor disallowed projection of ~e" x))))))

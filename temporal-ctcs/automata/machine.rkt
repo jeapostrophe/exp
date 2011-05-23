@@ -2,19 +2,35 @@
 (require racket/contract
          racket/list)
 
-(struct machine (next)
-        #:property prop:procedure 0)
+(struct machine (guts next)
+        #:mutable
+        #:property prop:procedure
+        (λ (m i)
+          ((machine-next m) i)))
 (struct machine-accepting machine ())
 
 (define (machine->accepting m)
   (if (machine-accepting? m)
       m
-      (machine-accepting (machine-next m))))
+      (machine-accepting 
+       (machine-guts m) 
+       (machine-next m))))
+(define (machine->non-accepting m)
+  (if (machine-accepting? m)
+      (machine 
+       (machine-guts m) 
+       (machine-next m))
+      m))
+(define (replace-guts ng m)
+  (define const
+    (if (machine-accepting? m) machine-accepting machine))
+  (const ng (machine-next m)))  
 
 (define (machine-complement m)
   (define const
     (if (machine-accepting? m) machine machine-accepting))
   (const
+   `(complement ,m)
    (λ (input)
      (machine-complement (m input)))))
 
@@ -35,6 +51,7 @@
            machine-accepting
            machine))
      (const
+      `(union ,m1 ,m2)
       (λ (input)
         (machine-union (m1 input) (m2 input))))]))
 
@@ -53,6 +70,7 @@
     [else
      (define next
        (machine
+        `(seq* ,m1 ,make-m2)
         (λ (input)
           (machine-seq* (m1 input) make-m2))))
      (if (machine-accepting? m1)
@@ -74,13 +92,20 @@
        ; Since seq* will force the RHS if m1 is accepting, this could go into
        ; an infinite loop. However, by removing the accepting-ness, we don't change
        ; the overall behavior because we ultimately make it initially accepting.
-       (machine (machine-next m1))
+       (machine->non-accepting m1)
        (λ () (machine-star m1))))]))
 
 (define (machine-delay make-m)
-  (machine
-   (λ (input)
-     ((make-m) input))))
+  (define m
+    (machine
+     `(delay ,make-m)
+     (λ (input)
+       ; XXX We don't change its accepting-ness
+       (define nm (make-m))
+       (set-machine-guts! m (machine-guts nm))
+       (set-machine-next! m (machine-next nm))
+       (nm input))))
+  m)
 
 (define (machine-accepts? m evts)
   (if (empty? evts)
@@ -94,18 +119,45 @@
              (machine-accepts? n (rest evts))))))
 
 (define machine-null
-  (machine (λ (input) machine-null)))
+  (machine 'null (λ (input) machine-null)))
 (define machine-epsilon
-  (machine-accepting (λ (input) machine-null)))
+  (machine-accepting 'epsilon (λ (input) machine-null)))
 (define machine-sigma*
-  (machine-accepting (λ (input) machine-sigma*)))
+  (machine-accepting 'sigma* (λ (input) machine-sigma*)))
+
+(require racket/match)
+(define (machine-explain m)
+  (match (machine-guts m)
+    [`(complement ,i)
+     `(complement ,(machine-explain i))]
+    [`(seq* ,a ,b)
+     ; If a is epsilon, then we shouldn't show this, but we would've
+     ; just returned b anyways.
+     (machine-explain a)]
+    [`(union ,a ,b)
+     `(union ,(machine-explain a)
+             ,(machine-explain b))]
+    [`(delay ,i)
+     ; If we have run it before, we'll never get this.
+     `delay]
+    [`null
+     `null]
+    [`epsilon
+     `epsilon]
+    [`sigma*
+     `sigma*]
+    [any
+     any]))
 
 (define-syntax-rule (provide/contract* [id ctc] ...)
   (provide id ...))
 
-(provide (struct-out machine)
-         (struct-out machine-accepting))
+(provide machine?
+         machine-accepting?
+         machine
+         machine-accepting)
 (provide/contract*
+ [machine-explain (machine? . -> . any/c)]
  [machine-accepts? (machine? (listof any/c) . -> . boolean?)]
  [machine-accepts?/prefix-closed (machine? (listof any/c) . -> . boolean?)]
  #;[struct machine ([next (any/c . -> . machine?)])]

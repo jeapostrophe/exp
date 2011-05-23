@@ -62,7 +62,7 @@
   (syntax-parse
    stx
    [the-re:sre
-    (attribute the-re.best)]))
+    (attribute the-re.all-machines)]))
 
 (define-syntax (re stx)
   (with-disappeared-uses

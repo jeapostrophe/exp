@@ -33,6 +33,8 @@
           [; state : input -> next-state
            (define state
              (state-constructor
+              '(dfa [evt next-state]
+                    ...)
               (match-lambda
                 [evt next-state]
                 ...)))

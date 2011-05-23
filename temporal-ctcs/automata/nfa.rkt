@@ -77,6 +77,7 @@
                    machine-accepting
                    machine))
              (constructor
+              `(nfa ,next)
               (λ (input)
                 (make-an-nfa-state (run next input)))))
            ; initial : an-nfa-state

@@ -16,16 +16,19 @@
   #:description "Fully Expanded Regular Expression"
   ; nfa is used for res without complement or dseq
   ; machine is used for others
+  ; all-machines is machines all the way down, no nfas
   ; best is the best thing to embed in a machine
-  #:attributes (nfa machine best)
+  #:attributes (nfa machine all-machines best)
   (pattern ((~and op unquote) e:expr)
            #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
            #:attr machine
            ; XXX contract to be a machine?
            #`e
-           #:attr best (or (attribute nfa) (attribute machine)))
+           #:attr all-machines (attribute machine)
+           #:attr best (attribute machine))
   
+  ; XXX This may not need to be built in because of unquote
   (pattern ((~and op rec) v:id lhs:sre)
            #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
@@ -42,14 +45,17 @@
                                           [id (identifier? #'id)  #'(machine-delay (λ () inner))])))])
                          #,(attribute lhs.best))])
                inner)
-           #:attr best (or (attribute nfa) (attribute machine)))
+           #:attr all-machines (attribute machine)
+           #:attr best (attribute machine))
   
   (pattern ((~and op complement) lhs:sre)
            #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
            #:attr machine
            #`(machine-complement #,(attribute lhs.best))
-           #:attr best (or (attribute nfa) (attribute machine)))
+           #:attr all-machines 
+           #`(machine-complement #,(attribute lhs.all-machines))
+           #:attr best (attribute machine))
   
   (pattern ((~and op star) lhs:sre)
            #:do [(record-disappeared-uses (list #'op))]
@@ -65,6 +71,8 @@
                            non-accepting_1 ...))))
            #:attr machine
            #`(machine-star #,(attribute lhs.best))
+           #:attr all-machines
+           #`(machine-star #,(attribute lhs.all-machines))
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern ((~and op seq) lhs:sre rhs:sre)
@@ -85,6 +93,8 @@
                            non-accepting_2 ...))))
            #:attr machine
            #`(machine-seq #,(attribute lhs.best) #,(attribute rhs.best))
+           #:attr all-machines
+           #`(machine-seq #,(attribute lhs.all-machines) #,(attribute rhs.all-machines))
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern ((~and op union) lhs:sre rhs:sre)
@@ -100,6 +110,8 @@
                           (non-accepting_1 ... non-accepting_2 ...))))
            #:attr machine
            #`(machine-union #,(attribute lhs.best) #,(attribute rhs.best))
+           #:attr all-machines
+           #`(machine-union #,(attribute lhs.all-machines) #,(attribute rhs.all-machines))
            #:attr best (or (attribute nfa) (attribute machine)))
   
   (pattern (~and op epsilon)
@@ -109,6 +121,7 @@
              #'(nfa* (start) ([start ()]) ()))
            #:attr machine
            #'machine-epsilon
+           #:attr all-machines (attribute machine)
            #:attr best (attribute machine))
   
   (pattern (~and op nullset)
@@ -118,14 +131,16 @@
              #'(nfa* (end) () ([end ()])))
            #:attr machine
            #'machine-null
+           #:attr all-machines (attribute machine)
            #:attr best (attribute machine))
            
   (pattern ((~and op dseq) pat:expr rhs:sre)
            #:do [(record-disappeared-uses (list #'op))]
            #:attr nfa #f
            #:attr machine
-           #`(machine (match-lambda [pat #,(attribute rhs.best)] [_ machine-null]))
-           #:attr best (or (attribute nfa) (attribute machine)))
+           #`(machine '(dseq pat) (match-lambda [pat #,(attribute rhs.best)] [_ machine-null]))
+           #:attr all-machines (attribute machine)
+           #:attr best (attribute machine))
   
   (pattern pat:expr
            #:attr nfa
@@ -133,7 +148,8 @@
                          [end (generate-temporary 'end)])
              #'(nfa* (start) ([end ()]) ([start ([pat (end)])])))
            #:attr machine
-           #'(machine (match-lambda [pat machine-epsilon] [_ machine-null]))
+           #'(machine 'pat (match-lambda [pat machine-epsilon] [_ machine-null]))
+           #:attr all-machines (attribute machine)
            #:attr best (attribute machine)))
 
 (provide sre)
