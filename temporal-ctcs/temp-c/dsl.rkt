@@ -7,6 +7,8 @@
          "../automata/re.rkt"
          "../automata/re-ext.rkt")
 (provide call ret with-monitor label
+         re->monitor-predicate/concurrent
+         re->monitor-predicate/serial
          (all-from-out
           "monitor.rkt"
           "../automata/re.rkt"
