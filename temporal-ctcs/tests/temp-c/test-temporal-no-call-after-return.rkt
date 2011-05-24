@@ -11,13 +11,11 @@ admin --------------------------------------------------------> player
        TEMPORAL: don't call bump on t after this call returns 
 
 |#
-
 (require errortrace)
 
 ;; -----------------------------------------------------------------------------
 ;; the interface module, defines turn% and how player is called via take-turn 
 (module player-admin-interface racket 
-  
   (require racket/require
            (path-up "temp-c/dsl.rkt")
            unstable/match)
@@ -29,27 +27,20 @@ admin --------------------------------------------------------> player
       (define/public (bump) (set! value (+ value 1)))
       (super-new)))
   
-  (define turn/c 
-    (with-monitor
-        (class/c [observe (label 'observe (-> natural-number/c))]
-                 [bump (label 'bump (-> any/c))])))
-  
   (define player/c
     (with-monitor
-        (class/c [take-turn (label 'take-turn (->m (lambda (x) (is-a? x turn%)) any/c))])
-      (seq/close
-       (monitor:proj 'take-turn _ _) (call 'take-turn _ ?t)
-       (star
-        (union
-         (seq/close (call 'observe t) (ret 'observe t))
-         (seq/close (call 'bump t) (ret 'bump t))))
-       (ret 'take-turn _)
-       (star
-        (union
-         (seq/close (call 'observe t) (ret 'observe t)))))))
+        (class/c [take-turn (label 'take-turn 
+                                   (->m 
+                                    (object/c [observe (label 'observe (->m natural-number/c))]
+                                              [bump (label 'bump (->m any/c))])
+                                    any/c))])
+      (complement
+       (seq (star _)
+            (dseq (monitor:return 'take-turn _ _ _ _ _ (list _ t) _)
+                  (seq (star _)
+                       (call 'bump (== t))))))))
   
-  (provide player/c turn%)
-  )
+  (provide player/c turn%))
 
 ;; -----------------------------------------------------------------------------
 ;; the player module defines a player and slabs on the requires player contract 

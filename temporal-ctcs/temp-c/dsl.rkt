@@ -57,6 +57,7 @@
 (define (re->monitor-predicate/serial m)
   (define current-re m)
   (λ (evt)
+    #;(printf "~v\n" evt)
     (set! current-re (current-re evt))
     (machine-accepting? current-re)))
 
