@@ -1,0 +1,105 @@
+#lang racket/load
+
+#| -----------------------------------------------------------------------------
+   testing temporal contracts: 
+
+   let t =  (new turn board player-tiles player-score tile-bag)
+   let t come with two methods: bump and observe 
+
+        (send . take-turn t)
+admin --------------------------------------------------------> player 
+       TEMPORAL: don't call bump on t after this call returns 
+
+|#
+
+(require errortrace)
+
+;; -----------------------------------------------------------------------------
+;; the interface module, defines turn% and how player is called via take-turn 
+(module player-admin-interface racket 
+  
+  (require racket/require
+           (path-up "temp-c/dsl.rkt")
+           unstable/match)
+  
+  (define turn%
+    (class object% 
+      (init-field value)
+      (define/public (observe) value)
+      (define/public (bump) (set! value (+ value 1)))
+      (super-new)))
+  
+  (define turn/c 
+    (with-monitor
+        (class/c [observe (label 'observe (-> natural-number/c))]
+                 [bump (label 'bump (-> any/c))])))
+  
+  (define player/c
+    (with-monitor
+        (class/c [take-turn (label 'take-turn (->m (lambda (x) (is-a? x turn%)) any/c))])
+      (seq/close
+       (monitor:proj 'take-turn _ _) (call 'take-turn _ ?t)
+       (star
+        (union
+         (seq/close (call 'observe t) (ret 'observe t))
+         (seq/close (call 'bump t) (ret 'bump t))))
+       (ret 'take-turn _)
+       (star
+        (union
+         (seq/close (call 'observe t) (ret 'observe t)))))))
+  
+  (provide player/c turn%)
+  )
+
+;; -----------------------------------------------------------------------------
+;; the player module defines a player and slabs on the requires player contract 
+
+(module player racket
+  (require 'player-admin-interface)
+  
+  (define player% 
+    (class object% 
+      (init-field name)
+      (define turn #false)
+      (define/public (take-turn t)
+        (if turn 
+            (send turn bump)
+            (send t bump))
+        (set! turn t))            
+      (super-new)))
+  
+  (provide/contract
+   [player% player/c]))
+
+;; -----------------------------------------------------------------------------
+;; the admin module creates player, admin, and has admin call player 
+
+(module admin racket
+  (require 'player-admin-interface 'player)
+  
+  (define admin%
+    (class object%
+      (init-field player)
+      
+      (define/public (run)
+        (define turn1 (new turn% [value 1]))
+        (send player take-turn turn1)
+        (define value1 (send turn1 observe))
+        ;; --- 
+        (define turn2 (new turn% [value 10]))
+        (send player take-turn turn2)
+        ;; --- 
+        (list 'bad-for-turn1: (not (= 2 (send turn1 observe)))
+              'bad-for-turn2: (= 10 (send turn2 observe))))
+      
+      (super-new)))
+  
+  ;; main
+  (define player (new player% [name "a"]))
+  (define admin (new admin% [player player]))
+  (displayln (send admin run)))
+
+;; -----------------------------------------------------------------------------
+;; run program run 
+
+(require 'admin)
