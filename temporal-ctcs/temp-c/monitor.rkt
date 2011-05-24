@@ -1,5 +1,6 @@
 #lang racket/base
-(require racket/contract)
+(require racket/list
+         racket/contract)
 
 (struct monitor (label) #:transparent)
 (struct monitor:proj monitor (proj-label v) #:transparent)
@@ -31,8 +32,11 @@
                          (if (monitor-allows? (monitor:return label proj-label proj-x app-label kws kw-args args rets))
                              (apply values rets)
                              (raise-blame-error b x "temporal monitor disallowed return of ~e" rets))))
-                      ; XXX Specialize this message for when there are no kws
-                      (raise-blame-error bs x "temporal monitor disallowed call with\n\tkeywords ~e\n\tkeyword arguments ~e\n\tnormal arguments ~e" kws kw-args args))))
+                      (cond
+                        [(and (empty? kws) (empty? kw-args))
+                         (raise-blame-error bs x "temporal monitor disallowed call with\n\targuments ~e" args)]
+                        [else
+                         (raise-blame-error bs x "temporal monitor disallowed call with\n\tkeywords ~e\n\tkeyword arguments ~e\n\tnormal arguments ~e" kws kw-args args)]))))
                proj-x)
            (raise-blame-error b x "temporal monitor disallowed projection of ~e" x))))))
 
