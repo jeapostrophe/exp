@@ -142,4 +142,15 @@
            (list 1 1 1 #f)]
           [(list 1)
            (list 2)
-           (list 1 1 2)]))
+           (list 1 1 2)])
+ 
+ (test-re (seq/close 1 2 3)
+          [(list)
+           (list 1)
+           (list 1 2)
+           (list 1 2 3)]
+          [(list 2)
+           (list 1 3)
+           (list 2 3)
+           (list 1 2 3 4)])
+ )

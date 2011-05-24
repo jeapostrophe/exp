@@ -3,6 +3,13 @@
          (for-syntax syntax/parse
                      racket/base))
 
+(define-re-transformer seq/close
+  (syntax-rules ()
+    [(_)
+     epsilon]
+    [(_ a b ...)
+     (opt (seq a (seq/close b ...)))]))
+
 (define-re-transformer opt
   (syntax-rules ()
     [(_ pat)
@@ -26,4 +33,4 @@
     [(_ A B)
      (complement (union (complement A) (complement B)))]))
 
-(provide opt plus rep difference intersection)
+(provide seq/close opt plus rep difference intersection)

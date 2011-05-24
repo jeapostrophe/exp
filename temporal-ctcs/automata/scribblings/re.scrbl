@@ -18,11 +18,11 @@
 
 This module provides a macro for regular expression compilation.
 
-@; XXX Document unquote and rec
-
-@defform/subs[#:literals (complement seq union star epsilon nullset dseq)
+@defform/subs[#:literals (complement seq union star epsilon nullset dseq rec unquote)
                          (re re-pat)
-                         ([re-pat (complement re-pat)
+                         ([re-pat (rec id re-pat)
+                                  (unquote expr)
+                                  (complement re-pat)
                                   (seq re-pat ...)
                                   (union re-pat ...)
                                   (star re-pat)
@@ -37,6 +37,9 @@ This module provides a macro for regular expression compilation.
  The interpretation of the pattern language is mostly intuitive. The pattern language may be extended
  with @racket[define-re-transformer]. @racket[dseq] allows bindings of the @racket[match] pattern to be
  used in the rest of the regular expression. (Thus, they are not @emph{really} regular expressions.)
+ @racket[unquote] escapes to Racket to evaluate an expression that evaluates to a regular expression (this happens
+ once, at compile time.) @racket[rec] binds a Racket identifier to a delayed version of the inner expression; even
+ if the expression is initially accepting, this delayed version is never accepting.
  
  The compiler will use an NFA, provided @racket[complement] and @racket[dseq] are not used. Otherwise, 
  many NFAs connected with the machine simulation functions from @racketmodname[automata/machine] are used.
@@ -66,6 +69,7 @@ This module provides a few transformers that extend the syntax of regular expres
 @defform[(rep re-pat num)]{ Matches @racket[re-pat] in sequence @racket[num] times, where @racket[num] must be syntactically a number. }
 @defform[(difference re-pat_0 re-pat_1)]{ Matches everything that @racket[re-pat_0] does, except what @racket[re-pat_1] matches. }
 @defform[(intersection re-pat_0 re-pat_1)]{ Matches the intersection of @racket[re-pat_0] and @racket[re-pat_1]. }
+@defform[(seq/close re-pat ...)]{ Matches the prefix closure of the sequence @racket[(seq re-pat ...)]. }
 
 @section[#:tag "re-ex"]{Examples}
 
