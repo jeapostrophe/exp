@@ -5,7 +5,7 @@
 
     ;; a keyed list of file suffix to comand-line program path/name
     (setq suffixMap 
-          '(("java" . "javai")))
+          '(("java" . "/Users/jay/Dev/scm/github.jeapostrophe/exp/bin/javai")))
 
     (save-buffer)
 
