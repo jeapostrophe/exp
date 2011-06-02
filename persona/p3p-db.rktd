@@ -1,4 +1,5 @@
-91 ("Odin" "Melchizedek" "Shiva" "Asura" "Loki" "Lucifer" "Messiah" "Thor" "Koumokuten" "Skadi" "Alilat")
+;91 ("Odin" "Melchizedek" "Shiva" "Asura" "Loki" "Lucifer" "Messiah" "Thor" "Koumokuten" "Skadi" "Alilat")
+95 ("Orpheus Telos" "Atavaka" "Norn" "Yurlungur" "Scathach")
 ("Fool"
  ("Orpheus" 1 4352)
  ("Slime" 12 9203)
@@ -8,7 +9,7 @@
  ("Decarabia" 50 75947)
  ("Loki" 58 113747)
  ("Susano-o" 76 233852)
- ("Orpheus Telos" 90 special))
+ ("Orpheus Telos" 90 479603))
 ("Magician"
  ("Nekomata" 5 3875)
  ("Jack Frost" 8 6107)
@@ -26,7 +27,7 @@
  ("Ganga" 35 39632)
  ("Parvati" 47 70403)
  ("Kikuri-hime" 53 87683)
- ("Scathach" 64 special))
+ ("Scathach" 64 170507))
 ("Empress"
  ("Leanan Sidhe" 33 40988)
  ("Yaksini" 50 75947)
@@ -99,7 +100,7 @@
  ("Clotho" 38 52700)
  ("Lachesis" 45 70403)
  ("Atropos" 54 87683)
- ("Norn" 62 special))
+ ("Norn" 62 162083))
 ("Strength"
  ("Valkyrie" 11 7547)
  ("Rakshasa" 16 12092)
@@ -134,7 +135,7 @@
  ("Okuninushi" 44 77843)
  ("Suzaku" 51 100283)
  ("Byakko" 57 131792)
- ("Yurlungur" 64 special))
+ ("Yurlungur" 64 159323))
 ("Devil"
  ("Lilim" 8 5267)
  ("Mokoi" 18 15467)
@@ -193,4 +194,4 @@
  ("Nidhogg" 69 167675)
  ("Ananta" 75 197075)
  ("Atavaka" 80 222323)
- ("Metatron" 87 special))
+ ("Metatron" 87 299675))
