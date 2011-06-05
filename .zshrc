@@ -32,8 +32,18 @@ export PS1="%S%~%s
 TPS1="%~ %# "
 RECENTFILES=8
 
-precmd () {print -Pn "\e]0;$TPS1\a"}
-preexec () {print -Pn "\e]0;$TPS1 $2\a"}
+# Interaction with Emacs:
+function set-eterm-dir {
+    echo -e "\033AnSiTc" "$(pwd)"
+}
+
+        # Track directory, username, and cwd for remote logons.
+if [ "$TERM" = "eterm-color" ]; then
+    precmd () { set-eterm-dir }
+else
+    precmd () {print -Pn "\e]0;$TPS1\a"}
+    preexec () {print -Pn "\e]0;$TPS1 $2\a"}
+fi
 
 ZDIR=~/.zdir
 
@@ -54,7 +64,9 @@ chpwd () {
     ls -t | head -$RECENTFILES | tr '\n' '\0' | xargs -0 ls -d
 }
 
-read_zdir
+if [ $(pwd) = ${HOME} ] ; then
+    read_zdir
+fi
 
 # Completions
 compctl -g '*(/)' rmdir dircmp

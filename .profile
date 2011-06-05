@@ -13,12 +13,16 @@ export COQ_ROOT=$DIST/coq/local
 export PATH=$COQ_ROOT/bin:$PATH
 export CVS_RSH=ssh
 export OCAMLRUNPARAM=b
-export EDITOR=vim
+export PATH=~/Applications/Emacs.app/Contents/MacOS/bin/:$PATH
+export EDITOR=emacsclient
 export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/collects/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
-alias opene='open -a ~/Applications/Aquamacs.app'
+alias oew=emacsclient
+alias oe='emacsclient -n'
+alias opene=oe
+alias o=open
 
 function teamtmp() {
     NAME=$(date +%Y%m%d%H%M-)$(basename $1)
@@ -31,23 +35,21 @@ function findss() {
 }
 
 function sto() {
+    mkdir -p $(dirname $1)
     touch $*
     git add $*
-    open $*
+    o $*
 }	
 
 function stoe() {
+    mkdir -p $(dirname $1)
     touch $*
     git add $*
-    opene $*
+    oe $*
 }	
 
 ##
 # Your previous /Users/jay/.profile file was backed up as /Users/jay/.profile.macports-saved_2009-09-09_at_10:16:30
 ##
-
-# MacPorts Installer addition on 2009-09-09_at_10:16:30: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
 
 #export LC_CTYPE=ja_JP.UTF-8

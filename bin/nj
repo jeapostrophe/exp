@@ -9,5 +9,5 @@ if [ -f ${FILE} ] ; then
 fi
 LANG=en date "+%A, %B %e %Y%n%n" > ${FILE}
 git add ${FILE}
-emacs -nw ${FILE}
+emacsclient ${FILE}
 git commit -m "New journal entry" ${FILE}
