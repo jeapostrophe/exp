@@ -1,12 +1,17 @@
-;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6ef690ca82e9dbdcc605/.emacs
+;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
 
 (add-to-list 'load-path "~/.emacs.d/")
 
+(byte-recompile-directory "~/.emacs.d/")
+
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
-(defvar emacs-has-x (fboundp 'tool-bar-mode))
+(defvar emacs-has-x
+  (fboundp 'tool-bar-mode))
 
 ;;;; Emacs' interface
+
+(setq initial-buffer-choice "~/.emacs.el")
 
 ;; Don't get weird properties when pasting
 (setq yank-excluded-properties t)
@@ -23,7 +28,8 @@
 (setq use-dialog-box nil)
 
 ;; Don't open new annoying windows under X, use the echo area
-(when emacs-has-x (tooltip-mode -1))
+(when emacs-has-x
+  (tooltip-mode -1))
 
 ;; Don't display the 'Welcome to GNU Emacs' buffer on startup
 (setq inhibit-startup-message t)
@@ -60,14 +66,14 @@
   (interactive)
   (if (not (minibuffer-prompt))
       (let ((matching-text nil))
-	;; Only call `blink-matching-open' if the character before point
-	;; is a close parentheses type character. Otherwise, there's not
-	;; really any point, and `blink-matching-open' would just echo
-	;; "Mismatched parentheses", which gets really annoying.
-	(if (char-equal (char-syntax (char-before (point))) ?\))
-	    (setq matching-text (blink-matching-open)))
-	(if (not (null matching-text))
-	    (message matching-text)))))
+        ;; Only call `blink-matching-open' if the character before point
+        ;; is a close parentheses type character. Otherwise, there's not
+        ;; really any point, and `blink-matching-open' would just echo
+        ;; "Mismatched parentheses", which gets really annoying.
+        (if (char-equal (char-syntax (char-before (point))) ?\))
+            (setq matching-text (blink-matching-open)))
+        (if (not (null matching-text))
+            (message matching-text)))))
 
 (set-face-background 'show-paren-match-face "lavender")
 
@@ -155,9 +161,9 @@
       ["black" "red4" "green4" "yellow4"
        "blue3" "magenta4" "cyan4" "white"])
 ;; http://emacsworld.blogspot.com/2009/02/setting-term-mode-colours.html
- (setq ansi-term-color-vector
-       [unspecified "#000000" "#963F3C" "#5FFB65" "#FFFD65"
-                    "#0082FF" "#FF2180" "#57DCDB" "#FFFFFF"])
+(setq ansi-term-color-vector
+      [unspecified "#000000" "#963F3C" "#5FFB65" "#FFFD65"
+                   "#0082FF" "#FF2180" "#57DCDB" "#FFFFFF"])
 
 ;;;;; conf-mode
 (add-to-list 'auto-mode-alist '("\\.gitconfig$" . conf-mode))
@@ -219,10 +225,10 @@
 (dolist (mode '(c-mode
                 java-mode
                 html-mode-hook
-                css-mode-hook 
+                css-mode-hook
                 emacs-lisp-mode))
   (font-lock-add-keywords mode
-                          '(("\\(XXX\\|FIXME\\|TODO\\)" 
+                          '(("\\(XXX\\|FIXME\\|TODO\\)"
                              1 font-lock-warning-face prepend))))
 
 ;;;;; shell-mode
@@ -244,7 +250,7 @@
   (interactive)
   (if current-prefix-arg
       (vc-push)
-      (vc-pull)))
+    (vc-pull)))
 
 (defun vc-push ()
   "Run git-push on the current repository, does a dry-run unless
@@ -270,13 +276,29 @@ given a prefix arg."
 ;;;;; line numbering
 (global-linum-mode 1)
 
+(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode))
+(defun linum-on ()
+  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
+    (linum-mode 1)))
+
 ;;;;; highlight current line
 (global-hl-line-mode 1)
 (set-face-background 'hl-line "#f5f5f5")
 
-;;;; multi-term
+;;;;; auto-fill
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+;;;; multi-term ()
 (require 'multi-term)
 (setq multi-term-program "/opt/local/bin/zsh")
+
+;;;;; quack
+(require 'quack)
+(add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
+(add-to-list 'auto-mode-alist '("\\.rktl$" . scheme-mode))
+(add-to-list 'auto-mode-alist '("\\.rktd$" . scheme-mode))
+(add-to-list 'auto-mode-alist '("\\.ss$" . scheme-mode))
+(add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
 
 ;;;; Platform specific settings
 
@@ -285,8 +307,8 @@ given a prefix arg."
 (when (eq window-system 'mac)
   (setq default-input-method "MacOSX")
   (mac-setup-inline-input-method)
-  ;(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
-)
+                                        ;(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
+  )
 
 (when (eq system-type 'darwin)
   ;; Use the default osx browser to browse urls since w3m isn't
@@ -297,9 +319,9 @@ given a prefix arg."
     (let ((url
            (if (aref (url-generic-parse-url url) 0)
                url
-               (concat "http://" url))))
+             (concat "http://" url))))
       (start-process (concat "open " url) nil "open" url)))
- 
+
   (setq browse-url-browser-function 'rcy-browse-url-default-macosx-browser))
 
 ;;;; global-set-key
@@ -319,25 +341,26 @@ given a prefix arg."
   (let (suffixMap fname suffix progName cmdStr)
 
     ;; a keyed list of file suffix to comand-line program path/name
-    (setq suffixMap 
-          '(("java" . "/Users/jay/Dev/scm/github.jeapostrophe/exp/bin/javai")
-	    ("rkt" . "/Users/jay/Dev/scm/plt/bin/racket -t")))
+    (setq suffixMap
+          '(("java" . "javai")
+            ("c" . "cci")
+            ("rkt" . "racket -t")))
 
     (save-buffer)
 
     (setq fname (buffer-file-name))
     (setq suffix (file-name-extension fname))
     (setq progName (cdr (assoc suffix suffixMap)))
-    (setq cmdStr (concat progName " \""   fname "\""))
+    (setq cmdStr (concat "zsh -i -c \'" progName " \""   fname "\"\'"))
 
     (if (string-equal suffix "el") ; special case for emacs lisp
-        (load-file fname) 
+        (load-file fname)
       (if progName
-	  (progn
-	    (message "Running...")
-	    (compile cmdStr))
-	(progn
-	  (message "No recognized program file suffix for this file."))))))
+          (progn
+            (message "Running...")
+            (compile cmdStr))
+        (progn
+          (message "No recognized program file suffix for this file."))))))
 
 (global-set-key (kbd "C-t") 'run-current-file)
 
@@ -353,6 +376,17 @@ given a prefix arg."
   (global-set-key (kbd "C-c f") 'find-dired)
   (global-set-key (kbd "C-c g") 'grep))
 
+(defun indent-buffer ()
+  "Indent the buffer"
+  (interactive)
+
+  (save-excursion
+    (delete-trailing-whitespace)
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max))))
+
+(global-set-key (kbd "C-i") 'indent-buffer)
+
 (progn
   (global-set-key (kbd "C-h F") 'find-function-at-point))
 
@@ -364,40 +398,72 @@ given a prefix arg."
 (global-set-key (kbd "C-1") 'multi-term-prev)
 (global-set-key (kbd "C-2") 'multi-term)
 (global-set-key (kbd "C-3") 'multi-term-next)
+(global-set-key (kbd "C-c l") 'term-char-mode)
+(global-set-key (kbd "C-c j") 'term-line-mode)
 
 ;; turn off the ability to kill
-(global-set-key (kbd "C-x C-c") 'kill-buffer)
+(defun custom-cxcc ()
+  "Kill the buffer and the frame"
+  (interactive)
+
+  (progn
+    (kill-buffer)
+    (delete-frame)))
+
+(global-set-key (kbd "C-x C-c") 'custom-cxcc)
+
+(global-set-key (kbd "<s-up>") 'beginning-of-buffer)
+(global-set-key (kbd "<s-down>") 'end-of-buffer)
+(global-set-key (kbd "<s-left>") 'move-beginning-of-line)
+(global-set-key (kbd "<s-right>") 'move-end-of-line)
+
+(global-set-key (kbd "<M-left>") 'backward-sexp)
+(global-set-key (kbd "<M-right>") 'forward-sexp)
+
+(normal-erase-is-backspace-mode 1)
+
+;; Eli Calc
+(if (locate-library "calculator")
+    (progn
+      (autoload 'calculator "calculator"
+        "Run the Emacs calculator." t)
+      (global-set-key [(control return)] 'calculator)))
 
 ;; TODO
-; bibtex database
-; grading?
-; Use japanese localization?
-; keybinding to run proc on my finance notes
-; make alt-arrows work on s-exp
-; auto reflow (or keybind)
-; auto line wrap at 80
-; make a custom cheat sheet for me
-; duplicate DrRacket's rainbow block highlighting (C, Java, and Racket)
-; get aspell setup and always on
-; setup tramp/ssh
-; always vertically center cursor?
-; change frame title format to show directory
-; experiment with org-mode rather than omnifocus
-; mobile org mode: http://mobileorg.ncogni.to/
-; setup emacs irc (in particular, how to get notifications and auto-reconnect)
-; break up frames
-; get rid of 0; artifact in ansi-term after pressing enter
-; jump to definition
-; etags
-; make some simple keybindings/commands for creating and editing journal entries, so I don't have to go to a terminal
-; can I get gmail in emacs?
-; can I get a calendar?
-; can I get I get gchat?
-; writing in Japanese (with OS X input method... switch charsets by shortcut doesn't work
-; (maybe some keybindings to look things up in jisho? for my dragon ball translation)
-; Can I write blogger blog posts?
-; Can I do my time tracking database?
-; Integration with git
-; Get racket all nice (quack?)
-; Look through https://github.com/technomancy/emacs-starter-kit
-
+;; On startup, open a new terminal frame
+;; https://github.com/elibarzilay/eliemacs
+;; http://barzilay.org/misc/interactive.rkt
+;; http://www.neilvandyke.org/scribble-emacs/
+;; http://www.neilvandyke.org/quack/quack.el
+;; http://www.rgrjr.com/emacs/emacs_cheat.html
+;; bibtex database
+;; grading?
+;; Use japanese localization?
+;; keybinding to run proc on my finance notes
+;; auto reflow (or keybind)
+;; auto line wrap at 80
+;; make a custom cheat sheet for me
+;; duplicate DrRacket's rainbow block highlighting (C, Java, and Racket)
+;; get aspell setup and always on
+;; setup tramp/ssh
+;; always vertically center cursor?
+;; change frame title format to show directory
+;; experiment with org-mode rather than omnifocus
+;; mobile org mode: http://mobileorg.ncogni.to/
+;; setup emacs irc (in particular, how to get notifications and auto-reconnect)
+;; break up frames
+;; jump to definition (in file)
+;; Etags
+;; some simple keybindings/commands for creating and editing journal entries, so I don't have to go to a terminal
+;; turn current line highlight and vertical center off in same modes that numbering is off
+;; can I get gmail in emacs?
+;; can I get a calendar?
+;; can I get I get gchat?
+;; writing in Japanese (with OS X input method... switch charsets by shortcut doesn't work
+;; (maybe some keybindings to look things up in jisho? for my dragon ball translation)
+;; Can I write blogger blog posts?
+;; Can I do my time tracking database?
+;; Integration with git
+;; Get racket all nice (quack?)
+;; Look through https://github.com/technomancy/emacs-starter-kit
+;; racket support is really busted: #; comments don't work and the indent is all wrong

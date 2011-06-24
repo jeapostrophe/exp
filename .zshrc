@@ -26,6 +26,7 @@ setopt autopushd pushdminus pushdsilent pushdtohome
 autoload -U zmv
 autoload -U compinit
 compinit 
+bindkey -e
 
 export PS1="%S%~%s
 %# "
@@ -34,7 +35,15 @@ RECENTFILES=8
 
 # Interaction with Emacs:
 function set-eterm-dir {
+    echo -e "\033AnSiTu" "$LOGNAME" # $LOGNAME is more portable than using whoami.
     echo -e "\033AnSiTc" "$(pwd)"
+    if [ $(uname) = "SunOS" ]; then
+	    # The -f option does something else on SunOS and is not needed anyway.
+       	hostname_options="";
+    else
+        hostname_options="-f";
+    fi
+    echo -e "\033AnSiTh" "$(hostname $hostname_options)" # Using the -f option can cause problems on some OSes.
 }
 
         # Track directory, username, and cwd for remote logons.
