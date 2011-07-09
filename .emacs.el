@@ -273,6 +273,10 @@ given a prefix arg."
 ;;;;; start server for emacsclient
 (server-start)
 
+;;;;; shift select
+(setq shift-select-mode 1)
+(delete-selection-mode 1)
+
 ;;;;; line numbering
 (global-linum-mode 1)
 
@@ -376,7 +380,7 @@ given a prefix arg."
   (global-set-key (kbd "C-c f") 'find-dired)
   (global-set-key (kbd "C-c g") 'grep))
 
-(defun indent-buffer ()
+(defun my-indent-buffer ()
   "Indent the buffer"
   (interactive)
 
@@ -385,7 +389,7 @@ given a prefix arg."
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
 
-(global-set-key (kbd "C-i") 'indent-buffer)
+(global-set-key (kbd "s-i") 'my-indent-buffer)
 
 (progn
   (global-set-key (kbd "C-h F") 'find-function-at-point))
@@ -440,7 +444,6 @@ given a prefix arg."
 ;; grading?
 ;; Use japanese localization?
 ;; keybinding to run proc on my finance notes
-;; auto reflow (or keybind)
 ;; auto line wrap at 80
 ;; make a custom cheat sheet for me
 ;; duplicate DrRacket's rainbow block highlighting (C, Java, and Racket)

@@ -24,8 +24,6 @@ export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 setopt autopushd pushdminus pushdsilent pushdtohome
 
 autoload -U zmv
-autoload -U compinit
-compinit 
 bindkey -e
 
 export PS1="%S%~%s

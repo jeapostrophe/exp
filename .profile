@@ -20,7 +20,7 @@ export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
 alias oew=emacsclient
-alias oe='emacsclient -n'
+alias oe='emacsclient -nc'
 alias opene=oe
 alias o=open
 
