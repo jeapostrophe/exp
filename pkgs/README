@@ -1,0 +1,60 @@
+Eli and I realized that the package system can be split into a few
+almost totally independent pieces.
+
+1. A more useful and simple package format
+
+.plt files are very strange and are too powerful in many ways. This
+prevents their use to provide some guarantees we'd like in the new
+package system, such as that packages can't install files outside the
+"package root".
+
+2. By analogy, packages are modules that 'require' other packages and
+   'provide' modules. The same identifier algebra that modules
+   allow---prefix-in, rename-out, etc---should apply to the modules
+   that packages export.
+
+The goal here is to identify the concepts behind the module system and
+the concepts behind the package system.
+
+The identifier algebra should have enough power to deal with things
+like multiple versions, but in such a way where those are "opt-in"
+complexity.
+
+3. A convention-based directory layout to deal with avoid conflicts.
+
+For example, 
+
+  <package-root> / <package-string> / <modules>
+
+where <package-string> may contain version information, but may not.
+
+4. A package manager that keeps track of which packages are installed
+   and how to update them.
+
+5. A package indexing site that helps users find out which packages
+   are available.
+
+This git repository contains a demonstration of how #2 can be
+implemented today.
+
+There are a few ugly things about it:
+
+- It is based on one-off #lang s-exp languages rather than as patches
+  to #lang racket/base, but clearly this could be done.
+
+- Package meta-data is split into two files "pkg-in.rkt" and
+  "pkg-out.rkt". I imagine that there would be a single "pkg.rkt"
+  with either two facets or more clever static communication.
+
+- As far as I can tell, there are no id-require-transformers, so I
+  can't disguise package-imported module references as normal module
+  references. (For example, the example has (racket/listy) rather than
+  racket/list.) I expect that we can easily add such things.
+
+- I intend there to be a simple explanation for the "virtual package"
+  that anonymous files belong to. (If you open a buffer in DrRacket,
+  it does not live on the filesystem, so it is unclear which package
+  it belongs to. Roughly there will be a top-level package metadata
+  file that requires the largest set of compatible packages,
+  preferring newer versions or something.) There's no inkling of that
+  in this example.
