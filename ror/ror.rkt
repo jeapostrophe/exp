@@ -20,7 +20,7 @@
 (define-syntax (define-defaults stx)
   (syntax-parse 
    stx
-   [(_ url:id schema:table-schema)
+   [(_ to-url:id schema:table-schema)
     (syntax/loc stx
       (begin
         (define-struct schema.struct-id (schema.field ...) #:prefab)
@@ -31,10 +31,10 @@
             (response/xexpr
              `(html (head (title ,(format "All ~a" schema.path)))
                     (body
-                     (p (a ([href ,(url schema.new-id)]) "new"))
+                     (p (a ([href ,(to-url schema.new-id)]) "new"))
                      (ul
                       ,@(for/list ([(id v) (in-hash schema.table-id)])
-                          `(li (a ([href ,(url schema.show-id id)])
+                          `(li (a ([href ,(to-url schema.show-id id)])
                                   ,(number->string id))))))))))
         (define (this-formlet schema.field ...)
           (formlet
@@ -60,7 +60,7 @@
             (hash-set! schema.table-id
                        new-id
                        (formlet-process new-formlet new-req))
-            (redirect-to (url schema.show-id new-id))))
+            (redirect-to (to-url schema.show-id new-id))))
         (begin-unless-defined
           schema.show-id
           (define (schema.show-id req id)
@@ -71,8 +71,8 @@
                      (p schema.field-string ": "
                         ,(schema.field-ref obj))
                      ...
-                     (p (a ([href ,(url schema.edit-id id)]) "Edit"))
-                     (p (a ([href ,(url schema.index-id)]) "Back to Index")))))))
+                     (p (a ([href ,(to-url schema.edit-id id)]) "Edit"))
+                     (p (a ([href ,(to-url schema.index-id)]) "Back to Index")))))))
         (begin-unless-defined
           schema.edit-id
           (define (schema.edit-id req id)
@@ -91,18 +91,18 @@
             (hash-set! schema.table-id
                        id
                        (formlet-process edit-formlet edit-req))
-            (redirect-to (url schema.show-id id))))))]))
+            (redirect-to (to-url schema.show-id id))))))]))
 
 (define-syntax (define-blast-off! stx)
   (syntax-parse 
    stx
-   [(_ (dispatch:id url:id) (index:id)
+   [(_ (dispatch:id to-url:id) (index:id)
        schema:table-schema ...)
     (syntax/loc stx
       (begin
-        (define-defaults url schema)
+        (define-defaults to-url schema)
         ...
-        (define-values (dispatch url)
+        (define-values (dispatch to-url)
           (dispatch-rules
            [() index]
            [("") index]
@@ -136,12 +136,13 @@
   (syntax-parse
    stx
    [(_ schema:table-schema ...)
-    (with-syntax ([index (datum->syntax stx 'index)])
+    (with-syntax ([index (datum->syntax stx 'index)]
+                  [to-url (datum->syntax stx 'to-url)])
       (syntax/loc stx
         (begin (begin-unless-defined 
                  index
                  (define-index index (schema ...)))
-               (define-blast-off! (start url) (index) schema ...)
+               (define-blast-off! (start to-url) (index) schema ...)
                (serve/servlet start
                               #:servlet-path ""
                               #:servlet-regexp #rx""))))]))
