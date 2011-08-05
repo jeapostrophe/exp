@@ -1,3 +1,4 @@
+#!/usr/bin/env racket
 #lang racket/base
 (require racket/cmdline
          xml
@@ -26,6 +27,9 @@
 (define tasks (make-hash))
 (struct task (parent context name start end repeat note))
 
+(define (delist l)
+  (apply string-append l))
+
 (define walk
   (match-lambda
     [(struct* document ([element e]))
@@ -44,7 +48,7 @@
           c)
      (define cx (xml->xexpr c))
      (define parent (se-path* '(context #:idref) cx))
-     (define name (se-path* '(name) cx))
+     (define name (delist (se-path*/list '(name) cx)))
      (hash-set! contexts id (context parent name))]
     [(and (struct* element
                    ([name 'folder]
@@ -55,7 +59,7 @@
           f)
      (define fx (xml->xexpr f))
      (define parent (se-path* '(folder #:idref) fx))
-     (define name (se-path* '(name) fx))
+     (define name (delist (se-path*/list '(name) fx)))
      (hash-set! tasks id (task parent #f name #f #f #f #f))]
     [(and (struct* element
                    ([name 'task]
@@ -73,11 +77,11 @@
                [(#f #f) #f]
                [(f #f) f]
                [(#f t) t]))
-     (define name (se-path* '(name) tx))
+     (define name (delist (se-path*/list '(name) tx)))
      (define start (se-path* '(start) tx))
      (define end (se-path* '(due) tx))
      (define repeat (se-path* '(repeat) tx))
-     (define note (se-path*/list '(note text p run lit) tx))
+     (define note (se-path*/list '(note) tx))
      (unless (se-path* '(completed) tx)
        (hash-set! tasks id 
                   (task parent context name start end repeat 
@@ -95,7 +99,7 @@
   (with-output-to-string
       (λ ()
         (printf ":")
-        (for-each printf 
+        (for-each (curry printf "~a") 
                   (add-between (parent->child-context c) ":"))
         (printf ":"))))
 
@@ -135,6 +139,36 @@
     [(regexp #rx"^~([0-9]+[dwmy])$" (list _ spec))
      (format "<~a ++~a>" o spec)]))
 
+(define print-lit
+  (match-lambda
+    [" " (void)]
+    [`(style . ,x) (void)]
+    [`(lit () ,@(list (? string? texts) ...))
+     (for-each display texts)]
+    [x (error 'print-lit "~v" x)]))
+(define print-run
+  (match-lambda
+    [" " (void)]
+    [`(run () . ,lits)
+     (for-each print-lit lits)]
+    [x (error 'print-run "~v" x)]))
+(define print-p
+  (match-lambda
+    [" " (void)]
+    [`(p () . ,runs)
+     (printf "\t")
+     (for-each print-run runs)
+     (newline)]
+    [x (error 'print-p "~v" x)]))
+(define print-text
+  (match-lambda
+    [" " (void)]
+    [`(text () . ,ps)
+     (for-each print-p ps)]
+    [x (error 'print-text "~v" x)]))
+(define (print-note n)
+  (for-each print-text n))
+
 (define (output-tasks/parent the-p)
   (for ([(id t) (in-hash tasks)])
     (match-define 
@@ -146,8 +180,8 @@
         (printf "SCHEDULED: ~a\n" (convert-time start repeat)))
       (when end
         (printf "DEADLINE: ~a\n" (convert-time end repeat)))
-      (unless (or (not note) (empty? note))
-        (for-each (curry printf "\t~a\n") note)
+      (when note
+        (print-note note)
         (newline))
       (parameterize ([depth (add1 (depth))])
         (output-tasks/parent id)))))
