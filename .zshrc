@@ -4,6 +4,7 @@ setopt printeightbit
 
 hash -d scm=$SVNROOT
 hash -d plt=$PLTHOME
+hash -d tests=~plt/collects/tests
 hash -d ws=~plt/collects/web-server
 hash -d drdr=~plt/collects/meta/drdr
 hash -d work=$PROJS
@@ -13,11 +14,15 @@ hash -d github=~scm/github.jeapostrophe
 hash -d gb=~github/get-bonus
 hash -d exp=~scm/github.jeapostrophe/exp
 hash -d fin=~scm/github.jeapostrophe/home/finance
+hash -d j=~github/home/journal
+
 hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
+
 hash -d courses=~work/courses
-hash -d 630=~courses/2011/winter/630
-hash -d j=~github/home/journal
+hash -d 630=~courses/2012/winter/630
+hash -d 142=~courses/2011/fall/142
+hash -d 330=~courses/2011/fall/330
 
 export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 
