@@ -426,6 +426,19 @@ given a prefix arg."
 
 (normal-erase-is-backspace-mode 1)
 
+;; Org Mode
+(setq load-path (cons "~/Dev/dist/org-mode/lisp" load-path))
+(setq load-path (cons "~/Dev/dist/org-mode/contrib/lisp" load-path))
+(add-to-list 'Info-default-directory-list
+             (expand-file-name "~/Dev/dist/org-mode/doc"))
+(require 'org-install)
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
 ;; Eli Calc
 (if (locate-library "calculator")
     (progn

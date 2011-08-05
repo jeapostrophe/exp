@@ -1,5 +1,29 @@
 #!/usr/bin/env racket
 #lang racket/base
+#|
+ How to use this to convert OmniFocus documents to org-mode
+
+ 0. View all your tasks in OmniFocus
+  
+    Best way to do this: Go into Planning Mode and click on
+    "Library"
+
+ 1. Click File > Export and choose OmniFocus document
+
+    I assume you save it as ~/Desktop/OmniFocus.ofocus
+
+ 2. Open a Terminal
+
+    cd ~/Desktop/OmniFocus.ofocus
+    ls
+    # There should be one Zip file
+    open ${TheZip}.zip
+    # There should now be one 'contents.xml' file
+    ./of2org.rkt contents.xml contents.org
+
+ 3. Now rejoice that contents.org is in org-mode
+
+|#
 (require racket/cmdline
          xml
          racket/match
