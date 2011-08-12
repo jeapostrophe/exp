@@ -348,6 +348,7 @@ given a prefix arg."
     (setq suffixMap
           '(("java" . "javai")
             ("c" . "cci")
+            ("cc" . "ccci")
             ("rkt" . "racket -t")))
 
     (save-buffer)

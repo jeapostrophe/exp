@@ -1,0 +1,15 @@
+#!/bin/bash
+FILE=$1
+
+cecho () {
+      echo $*
+}
+
+cd "$(dirname "$FILE")" && \
+cecho Compiling... && \
+g++ "$FILE" -o "$FILE.bin" && \
+cecho Running... && \
+"${FILE}.bin" && \
+cecho Returned $? && \
+cecho Cleaning up... && \
+rm "${FILE}.bin"
