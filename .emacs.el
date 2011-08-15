@@ -105,9 +105,6 @@
 ;; For C-u C-x v d. Probably a good idea for everything else too
 (setq completion-ignore-case t)
 
-;; I don't want stuff like git to start a pager in shell-mode
-(setenv "PAGER" "/bin/cat")
-
 ;; Ask me whether to add a final newline to files which don't have one
 (setq require-final-newline 'ask)
 
@@ -278,12 +275,12 @@ given a prefix arg."
 (delete-selection-mode 1)
 
 ;;;;; line numbering
-(global-linum-mode 1)
+;(global-linum-mode 1)
 
-(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode))
-(defun linum-on ()
-  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
-    (linum-mode 1)))
+;(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode org-mode))
+;(defun linum-on ()
+;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
+;    (linum-mode 1)))
 
 ;;;;; highlight current line
 (global-hl-line-mode 1)
@@ -398,13 +395,6 @@ given a prefix arg."
 ;; vc.el - add commands to push and pull with git
 (progn
   (define-key vc-prefix-map "p" 'vc-push-or-pull))
-
-;; some terminal manipulation
-(global-set-key (kbd "C-1") 'multi-term-prev)
-(global-set-key (kbd "C-2") 'multi-term)
-(global-set-key (kbd "C-3") 'multi-term-next)
-(global-set-key (kbd "C-c l") 'term-char-mode)
-(global-set-key (kbd "C-c j") 'term-line-mode)
 
 ;; turn off the ability to kill
 (defun custom-cxcc ()
