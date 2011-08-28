@@ -19,6 +19,8 @@ export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/collects/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
+export LANG=C
+
 alias r='racket -il xrepl'
 alias oew=emacsclient
 alias oe='emacsclient -nc'
