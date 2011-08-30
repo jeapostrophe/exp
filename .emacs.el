@@ -523,14 +523,14 @@ given a prefix arg."
 (make-face 'mode-line-process-face)
 (make-face 'mode-line-80col-face)
 
-(defvar light-text "") (setq light-text "gray40")
-(defvar background "gray20")
-(defvar light-text-inactive "gray80")
-(defvar background-inactive "gray40")
-(defvar foreground-warning "#c82829")
-(defvar background-warning "#ffffff")
-(defvar bright-text "#eab700")
-(defvar foreground-process "#718c00")
+(defvar light-text "") (setq light-text "black")
+(defvar background "") (setq background "gray95")
+(defvar light-text-inactive "") (setq light-text-inactive light-text)
+(defvar background-inactive "") (setq background-inactive background)
+(defvar foreground-warning "") (setq foreground-warning "#c82829")
+(defvar background-warning "") (setq background-warning background)
+(defvar bright-text "") (setq bright-text foreground-warning)
+(defvar foreground-process "") (setq foreground-process "#718c00")
 
 (set-face-attribute 'mode-line nil
     :foreground light-text :background background
