@@ -27,6 +27,9 @@ alias oe='emacsclient -nc'
 alias opene=oe
 alias o=open
 
+export EMACS_SERVER_PORT=50000
+export EMACS_SERVER_FILE=~/.emacs.d/server/lightning
+
 function teamtmp() {
     NAME=$(date +%Y%m%d%H%M-)$(basename $1)
     scp -r $1 weapons.cs.byu.edu:public_html/tmp/${NAME}

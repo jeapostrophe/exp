@@ -268,6 +268,15 @@ given a prefix arg."
 ;;;; Packages
 
 ;;;;; start server for emacsclient
+(setq server-use-tcp t)
+(setq server-host "localhost")
+(setq server-name "lightning")
+
+(defadvice make-network-process (before force-tcp-server-ipv4 activate)
+  "Monkey patch the server to force the port"
+  (if (string= "lightning" (plist-get (ad-get-args 0) :name))
+      (ad-set-args 0 (plist-put (ad-get-args 0) :service 50000))))
+
 (server-start)
 
 ;;;;; shift select
@@ -441,14 +450,18 @@ given a prefix arg."
 (setq load-path (cons "~/Dev/dist/nyan-mode" load-path))
 (require 'nyan-mode)
 (nyan-start-animation)
-(custom-set-variables
- '(nyan-wavy-trail t))
+(require 'mega-mode)
+(mega-start-animation)
+
+(defun cute-create ()
+;  (mega-create))
+  (nyan-create))
 
 ;; Mode line setup
 (setq-default
  mode-line-format
  '(; nyan-mode uses nyan cat as an alternative to %p
-   (:eval (list (nyan-create)))
+   (:eval (list (cute-create)))
    ; Position, including warning for 80 columns
    (:propertize "%4l:" face mode-line-position-face)
    (:eval (propertize "%3c" 'face
@@ -510,47 +523,57 @@ given a prefix arg."
 (make-face 'mode-line-process-face)
 (make-face 'mode-line-80col-face)
 
+(defvar light-text "") (setq light-text "gray40")
+(defvar background "gray20")
+(defvar light-text-inactive "gray80")
+(defvar background-inactive "gray40")
+(defvar foreground-warning "#c82829")
+(defvar background-warning "#ffffff")
+(defvar bright-text "#eab700")
+(defvar foreground-process "#718c00")
+
 (set-face-attribute 'mode-line nil
-    :foreground "gray60" :background "gray20"
+    :foreground light-text :background background
     :inverse-video nil
-    :box '(:line-width 6 :color "gray20" :style nil))
+    :box `(:line-width 6 :color ,background :style nil))
 (set-face-attribute 'mode-line-inactive nil
-    :foreground "gray80" :background "gray40"
+    :foreground light-text-inactive :background background-inactive
     :inverse-video nil
-    :box '(:line-width 6 :color "gray40" :style nil))
+    :box `(:line-width 6 :color ,background-inactive :style nil))
 
 (set-face-attribute 'mode-line-read-only-face nil
     :inherit 'mode-line-face
-    :foreground "#4271ae"
-    :box '(:line-width 2 :color "#4271ae"))
+    :foreground foreground-warning
+    :background background-warning
+    :box `(:line-width 2 :color ,foreground-warning))
 (set-face-attribute 'mode-line-modified-face nil
     :inherit 'mode-line-face
-    :foreground "#c82829"
-    :background "#ffffff"
-    :box '(:line-width 2 :color "#c82829"))
+    :foreground foreground-warning
+    :background background-warning
+    :box `(:line-width 2 :color ,foreground-warning))
 (set-face-attribute 'mode-line-folder-face nil
     :inherit 'mode-line-face
-    :foreground "gray60")
+    :foreground light-text)
 (set-face-attribute 'mode-line-filename-face nil
     :inherit 'mode-line-face
-    :foreground "#eab700"
+    :foreground bright-text
     :weight 'bold)
 (set-face-attribute 'mode-line-position-face nil
     :inherit 'mode-line-face
     :family "Menlo" :height 100)
 (set-face-attribute 'mode-line-mode-face nil
     :inherit 'mode-line-face
-    :foreground "gray80")
+    :foreground light-text-inactive)
 (set-face-attribute 'mode-line-minor-mode-face nil
     :inherit 'mode-line-mode-face
-    :foreground "gray40"
+    :foreground background-inactive
     :height 110)
 (set-face-attribute 'mode-line-process-face nil
     :inherit 'mode-line-face
-    :foreground "#718c00")
+    :foreground foreground-process)
 (set-face-attribute 'mode-line-80col-face nil
     :inherit 'mode-line-position-face
-    :foreground "black" :background "#eab700")
+    :foreground foreground-warning :background background-warning)
 
 ;; TODO
 ;; On startup, open a new terminal frame
