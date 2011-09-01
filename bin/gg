@@ -1,0 +1,9 @@
+#!/bin/sh
+
+CONTINUE=y
+
+while [ ${CONTINUE} = y ] ; do
+ if ! (g $* | grep "There are") ; then
+     CONTINUE=n
+ fi
+done
