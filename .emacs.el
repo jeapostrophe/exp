@@ -416,6 +416,9 @@ given a prefix arg."
 
 (global-set-key (kbd "C-x C-c") 'custom-cxcc)
 
+(global-set-key (kbd "s-r") 'revert-buffer)
+(global-set-key (kbd "M-r") 'replace-string)
+
 (global-set-key (kbd "<s-up>") 'beginning-of-buffer)
 (global-set-key (kbd "<s-down>") 'end-of-buffer)
 (global-set-key (kbd "<s-left>") 'move-beginning-of-line)
@@ -423,6 +426,26 @@ given a prefix arg."
 
 (global-set-key (kbd "<M-left>") 'backward-sexp)
 (global-set-key (kbd "<M-right>") 'forward-sexp)
+
+;; For grading
+
+(defun s4 () "s4" (interactive) (insert "// Grade 0, wrong contract\n")) (global-set-key (kbd "s-4") 's4)
+(defun s5 () "s5" (interactive) (insert "// Grade 0, missing tests (either not enough or examples used in function development not match in main)\n")) (global-set-key (kbd "s-5") 's5)
+(defun s6 () "s6" (interactive) (insert "// Grade 1, This is like so totally awesome!!!!!!!111\n")) (global-set-key (kbd "s-6") 's6)
+(defun s7 () "s7" (interactive) (insert "// Grade 0, wrong/missing template\n")) (global-set-key (kbd "s-7") 's7)
+(defun s8 () "s8" (interactive) (insert "// Grade 0, no generalization/distinguishing explanation\n")) (global-set-key (kbd "s-8") 's8)
+(defun s9 () "s9" (interactive) (insert "// Grade 0, no substitution\n")) (global-set-key (kbd "s-9") 's9)
+(defun s0 () "s0" (interactive) (insert "// Grade 0, used un-covered C++ features\n")) (global-set-key (kbd "s-0") 's0)
+
+(defun custom-sl ()
+  "Submit grade"
+  (interactive)
+
+  (progn
+    (save-buffer)
+    (server-edit)))
+
+(global-set-key (kbd "s-l") 'custom-sl)
 
 (normal-erase-is-backspace-mode 1)
 
@@ -575,7 +598,34 @@ given a prefix arg."
     :inherit 'mode-line-position-face
     :foreground foreground-warning :background background-warning)
 
+;; Desktop
+;; save a list of open files in ~/.emacs.desktop
+;; save the desktop file automatically if it already exists
+(setq desktop-path '("~/.emacs.d/"))
+(setq desktop-dirname "~/.emacs.d/")
+(setq desktop-base-file-name "emacs-desktop")
+(setq desktop-save 'if-exists)
+(desktop-save-mode 1)
+
+;; save a bunch of variables to the desktop file
+;; for lists specify the len of the maximal saved data also
+(setq desktop-globals-to-save
+      (append '((extended-command-history . 30)
+                (file-name-history        . 100)
+                (grep-history             . 30)
+                (compile-history          . 30)
+                (minibuffer-history       . 50)
+                (query-replace-history    . 60)
+                (read-expression-history  . 60)
+                (regexp-history           . 60)
+                (regexp-search-ring       . 20)
+                (search-ring              . 20)
+                (shell-command-history    . 50)
+                tags-file-name
+                register-alist)))
+
 ;; TODO
+;; look into saving more about my emacs setup, like the size and position of frames
 ;; On startup, open a new terminal frame
 ;; https://github.com/elibarzilay/eliemacs
 ;; http://barzilay.org/misc/interactive.rkt
@@ -612,3 +662,4 @@ given a prefix arg."
 ;; Get racket all nice (quack?)
 ;; Look through https://github.com/technomancy/emacs-starter-kit
 ;; racket support is really busted: #; comments don't work and the indent is all wrong
+;; setup w3m

@@ -21,4 +21,4 @@ if [ ${COPY} = "y" ] ; then
 fi
 
 # Actually start up the server
-ssh -t -x -R ${EMACS_SERVER_PORT}:localhost:${EMACS_SERVER_PORT} ${HOST} '~/bin/remote-g'
+ssh -t -x -R ${EMACS_SERVER_PORT}:localhost:${EMACS_SERVER_PORT} ${HOST} '~/bin/remote-gg'
