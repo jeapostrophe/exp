@@ -12,6 +12,7 @@ hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
 hash -d github=~scm/github.jeapostrophe
 hash -d gb=~github/get-bonus
+hash -d lll=~github/lll
 hash -d exp=~scm/github.jeapostrophe/exp
 hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d j=~github/home/journal
