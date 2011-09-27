@@ -12,12 +12,10 @@
 
 ;; seq (list) -> seq (list)
 (define (seq-of-n-to-seq-of-add1n s-of-s)
-  (for/fold
-      ([more empty])
-      ([str s-of-s])
-    (append more
-            (for/list ([ext (extend str)])
-                      ext))))
+  (in-generator
+   (for* ([str s-of-s]
+          [ext (extend str)])
+         (yield ext))))
 
 (define (extend str)
    (for/list ([i (in-range start (add1 end))])
@@ -38,14 +36,11 @@
 (define all-of-them
   (in-generator
    (let loop ([orig (list empty)])
-     (define l-o-l
-       (seq-of-n-to-seq-of-add1n orig))
-
-     (for ([str l-o-l])
-          (yield str))
-     
-     (loop l-o-l))))
+     (loop
+      (for/list ([str (seq-of-n-to-seq-of-add1n orig)])
+                (yield str)
+                str)))))
 
 (for ([s all-of-them]
-      [i (in-range 20000)])
+      [i (in-range 2000)])
      (printf "~a: ~a\n" i (list->string (map integer->char s))))
