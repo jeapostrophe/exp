@@ -355,7 +355,7 @@ given a prefix arg."
           '(("java" . "javai")
             ("c" . "cci")
             ("cc" . "ccci")
-            ("rkt" . "racket -t")))
+            ("rkt" . "rk")))
 
     (save-buffer)
 
@@ -428,15 +428,6 @@ given a prefix arg."
 (global-set-key (kbd "<M-right>") 'forward-sexp)
 
 ;; For grading
-
-(defun s4 () "s4" (interactive) (insert "// Grade 0, wrong contract\n")) (global-set-key (kbd "s-4") 's4)
-(defun s5 () "s5" (interactive) (insert "// Grade 0, missing tests (either not enough or examples used in function development not match in main)\n")) (global-set-key (kbd "s-5") 's5)
-(defun s6 () "s6" (interactive) (insert "// Grade 1, This is like so totally awesome!!!!!!!111\n")) (global-set-key (kbd "s-6") 's6)
-(defun s7 () "s7" (interactive) (insert "// Grade 0, wrong/missing template\n")) (global-set-key (kbd "s-7") 's7)
-(defun s8 () "s8" (interactive) (insert "// Grade 0, no generalization/distinguishing explanation\n")) (global-set-key (kbd "s-8") 's8)
-(defun s9 () "s9" (interactive) (insert "// Grade 0, no substitution\n")) (global-set-key (kbd "s-9") 's9)
-(defun s0 () "s0" (interactive) (insert "// Grade 0, used un-covered C++ features\n")) (global-set-key (kbd "s-0") 's0)
-
 (defun custom-sl ()
   "Submit grade"
   (interactive)
@@ -624,6 +615,10 @@ given a prefix arg."
                 tags-file-name
                 register-alist)))
 
+;; Twelf
+;;(setq twelf-root "/Users/jay/Dev/dist/Twelf/")
+;;(load (concat twelf-root "emacs/twelf-init.el"))
+
 ;; TODO
 ;; look into saving more about my emacs setup, like the size and position of frames
 ;; On startup, open a new terminal frame
@@ -633,7 +628,6 @@ given a prefix arg."
 ;; http://www.neilvandyke.org/quack/quack.el
 ;; http://www.rgrjr.com/emacs/emacs_cheat.html
 ;; bibtex database
-;; grading?
 ;; Use japanese localization?
 ;; keybinding to run proc on my finance notes
 ;; auto line wrap at 80
@@ -663,3 +657,4 @@ given a prefix arg."
 ;; Look through https://github.com/technomancy/emacs-starter-kit
 ;; racket support is really busted: #; comments don't work and the indent is all wrong
 ;; setup w3m
+;; growl integration (or growly thing for linux)
