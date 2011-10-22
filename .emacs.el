@@ -620,6 +620,7 @@ given a prefix arg."
 ;;(load (concat twelf-root "emacs/twelf-init.el"))
 
 ;; TODO
+;; XXX type in compilation mode
 ;; look into saving more about my emacs setup, like the size and position of frames
 ;; On startup, open a new terminal frame
 ;; https://github.com/elibarzilay/eliemacs
