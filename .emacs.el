@@ -303,7 +303,7 @@ given a prefix arg."
 (setq multi-term-program "/opt/local/bin/zsh")
 
 ;;;;; quack
-(require 'quack)
+;;(require 'quack)
 (add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.rktl$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.rktd$" . scheme-mode))
@@ -345,7 +345,7 @@ given a prefix arg."
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
 ;; DrRacket-like compiler
-(defun run-current-file ()
+(defun run-current-file (writep)
   "Execute or compile the current file."
   (interactive)
   (let (suffixMap fname suffix progName cmdStr)
@@ -362,18 +362,31 @@ given a prefix arg."
     (setq fname (buffer-file-name))
     (setq suffix (file-name-extension fname))
     (setq progName (cdr (assoc suffix suffixMap)))
-    (setq cmdStr (concat "zsh -i -c \'" progName " \""   fname "\"\'"))
+    (setq cmdStr (concat "-i -c \'" progName " \""   fname "\"\'"))
 
     (if (string-equal suffix "el") ; special case for emacs lisp
         (load-file fname)
       (if progName
           (progn
             (message "Running...")
-            (compile cmdStr))
+            (if (not writep)
+                (compile (concat "zsh " cmdStr))
+              (let ((multi-term-program-switches 
+                     (list "-i" "-c" (concat progName " \"" fname "\""))))
+                (multi-term-dedicated-open))))
         (progn
           (message "No recognized program file suffix for this file."))))))
+(defun run-current-file-ro () 
+  "Execute or compile the current file."
+  (interactive)
+  (run-current-file nil))
+(defun run-current-file-wr () 
+  "Execute or compile the current file."
+  (interactive)
+  (run-current-file t))
 
-(global-set-key (kbd "C-t") 'run-current-file)
+(global-set-key (kbd "C-t") 'run-current-file-ro)
+(global-set-key (kbd "C-M-t") 'run-current-file-wr)
 
 ;; A few editing things
 (progn
@@ -615,12 +628,32 @@ given a prefix arg."
                 tags-file-name
                 register-alist)))
 
+;; Auto pair
+(add-to-list 'load-path "~/Dev/dist/autopair-read-only")
+(require 'autopair)
+(autopair-global-mode 1)  
+
+(add-hook 'term-mode-hook
+  #'(lambda () (setq autopair-dont-activate t)))
+
+(put 'autopair-insert-opening 'delete-selection t)
+(put 'autopair-skip-close-maybe 'delete-selection t)
+(put 'autopair-insert-or-skip-quote 'delete-selection t)
+(put 'autopair-extra-insert-opening 'delete-selection t)
+(put 'autopair-extra-skip-close-maybe 'delete-selection t)
+(put 'autopair-backspace 'delete-selection 'supersede)
+(put 'autopair-newline 'delete-selection t)
+
+;; Rainbow delimiters
+(add-to-list 'load-path "~/Dev/dist/rainbow-delimiters")
+(require 'rainbow-delimiters)
+(global-rainbow-delimiters-mode)
+
 ;; Twelf
 ;;(setq twelf-root "/Users/jay/Dev/dist/Twelf/")
 ;;(load (concat twelf-root "emacs/twelf-init.el"))
 
 ;; TODO
-;; XXX type in compilation mode
 ;; look into saving more about my emacs setup, like the size and position of frames
 ;; On startup, open a new terminal frame
 ;; https://github.com/elibarzilay/eliemacs

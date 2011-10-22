@@ -246,7 +246,7 @@ If this is nil, setup to environment variable of `SHELL'."
 
 (defcustom multi-term-program-switches nil
   "The command-line switches to pass to the term program."
-  :type 'string
+  :type 'list
   :group 'multi-term)
 
 (defcustom multi-term-try-create t
@@ -401,7 +401,8 @@ If OFFSET is `non-nil', will goto previous term buffer with OFFSET."
   "Open dedicated `multi-term' window.
 Will prompt you shell name when you type `C-u' before this command."
   (interactive)
-  (if (not (multi-term-dedicated-exist-p))
+  (if (or (not multi-term-dedicated-buffer)
+          (not (buffer-live-p multi-term-dedicated-buffer)))
       (let ((current-window (selected-window)))
         (if (multi-term-buffer-exist-p multi-term-dedicated-buffer)
             (unless (multi-term-window-exist-p multi-term-dedicated-window)
@@ -409,6 +410,7 @@ Will prompt you shell name when you type `C-u' before this command."
           ;; Set buffer.
           (setq multi-term-dedicated-buffer (multi-term-get-buffer current-prefix-arg t))
           (set-buffer (multi-term-dedicated-get-buffer-name))
+          (compilation-minor-mode)
           ;; Get dedicate window.
           (multi-term-dedicated-get-window)
           ;; Whether skip `other-window'.
@@ -424,7 +426,10 @@ Will prompt you shell name when you type `C-u' before this command."
              multi-term-dedicated-window
            ;; Otherwise focus current window.
            current-window)))
-    (message "`multi-term' dedicated window has exist.")))
+    (let ()
+      (multi-term-dedicated-close)
+      (kill-buffer multi-term-dedicated-buffer)      
+      (multi-term-dedicated-open))))
 
 (defun multi-term-dedicated-close ()
   "Close dedicated `multi-term' window."
@@ -540,13 +545,13 @@ If option DEDICATED-WINDOW is `non-nil' will create dedicated `multi-term' windo
           (setq shell-name (read-from-minibuffer "Run program: " shell-name)))
       ;; Make term, details to see function `make-term' in `term.el'.
       (if multi-term-program-switches
-          (make-term term-name shell-name nil multi-term-program-switches)
+          (apply 'make-term term-name shell-name nil multi-term-program-switches)
           (make-term term-name shell-name)))))
 
 
 (defun multi-term-handle-close ()
   "Close current term buffer when `exit' from term buffer."
-  (when (ignore-errors (get-buffer-process (current-buffer)))
+  (when nil ;(ignore-errors (get-buffer-process (current-buffer)))
     (set-process-sentinel (get-buffer-process (current-buffer))
                           (lambda (proc change)
                             (when (string-match "\\(finished\\|exited\\)" change)
