@@ -647,13 +647,14 @@ given a prefix arg."
 ;; Rainbow delimiters
 (add-to-list 'load-path "~/Dev/dist/rainbow-delimiters")
 (require 'rainbow-delimiters)
-(global-rainbow-delimiters-mode)
+(global-rainbow-delimiters-mode t)
 
 ;; Twelf
 ;;(setq twelf-root "/Users/jay/Dev/dist/Twelf/")
 ;;(load (concat twelf-root "emacs/twelf-init.el"))
 
 ;; TODO
+;; unify C-t and C-M-t
 ;; look into saving more about my emacs setup, like the size and position of frames
 ;; On startup, open a new terminal frame
 ;; https://github.com/elibarzilay/eliemacs
