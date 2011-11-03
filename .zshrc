@@ -11,6 +11,7 @@ hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
 hash -d github=~scm/github.jeapostrophe
+hash -d home=~github/home
 hash -d gb=~github/get-bonus
 hash -d lll=~github/lll
 hash -d exp=~scm/github.jeapostrophe/exp

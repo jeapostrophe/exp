@@ -686,10 +686,9 @@ given a prefix arg."
 ;; writing in Japanese (with OS X input method... switch charsets by shortcut doesn't work
 ;; (maybe some keybindings to look things up in jisho? for my dragon ball translation)
 ;; Can I write blogger blog posts?
-;; Can I do my time tracking database?
 ;; Integration with git
 ;; Get racket all nice (quack?)
 ;; Look through https://github.com/technomancy/emacs-starter-kit
 ;; racket support is really busted: #; comments don't work and the indent is all wrong
-;; setup w3m
+;; setup emacs-w3m
 ;; growl integration (or growly thing for linux)
