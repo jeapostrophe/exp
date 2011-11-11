@@ -24,6 +24,18 @@
  3. Now rejoice that contents.org is in org-mode
 
 |#
+
+
+#|
+
+Add support for
+
+:PROPERTIES:
+:ORDERED: t
+:END:
+
+|#
+
 (require racket/cmdline
          xml
          racket/match
@@ -60,9 +72,6 @@
      (walk e)]
     [(struct* element ([name 'omnifocus] [content c]))
      (for-each walk c)]
-    ; XXX Fix handling of & everywhere
-    ;     It is broken in task/folder names
-    ;     It is broken in the note contents
     [(and (struct* element 
                    ([name 'context]
                     [attributes (list-no-order 
@@ -199,7 +208,9 @@
      (struct task (parent context name start end repeat note))
      t)
     (when (equal? the-p parent)
-      (printf "~a ~a\t~a\n" (*s) name (context-output context))
+      (printf "~a ~a~a\t~a\n" (*s)
+              (if (or start end) "TODO  " "")
+              name (context-output context))
       (when start
         (printf "SCHEDULED: ~a\n" (convert-time start repeat)))
       (when end

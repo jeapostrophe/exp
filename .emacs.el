@@ -461,10 +461,74 @@ given a prefix arg."
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
+(setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/")
+(setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/notes.org")
+(setq org-agenda-files (list org-directory))
+
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+(setq org-hide-leading-stars t)
+(setq org-return-follows-link t)
+(setq org-completion-use-ido t)
+(setq org-log-done t)
+(setq org-clock-modeline-total 'current)
+(setq org-support-shift-select t)
+(setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-start-on-weekday nil)
+(setq org-agenda-include-diary nil)
+(setq org-agenda-remove-tags t)
+(setq org-agenda-restore-windows-after-quit t)
+(setq org-enforce-todo-dependencies t)
+(setq org-agenda-dim-blocked-tasks t)
+(setq org-agenda-repeating-timestamp-show-all t)
+(setq org-agenda-show-all-dates t)
+(setq org-timeline-show-empty-dates nil)
+
+(setq org-agenda-todo-ignore-scheduled 'future)
+(setq org-agenda-prefix-format
+      '((agenda  . " %i %-12:c%?-12t% s")
+        (timeline  . "  % s")
+        (todo  . "  %-10T%?-16t% s")
+        (tags  . " %i %-12:c")
+        (search . " %i %-12:c")))
+
+(setq org-agenda-cmp-user-defined 'je/agenda-sort)
+(setq org-agenda-sorting-strategy '(user-defined-up))
+
+(setq org-agenda-overriding-columns-format "%72ITEM %DEADLINE")
+(setq org-agenda-overriding-header "Herr Professor, tear down this TODO list!")
+
+(setq org-agenda-custom-commands '())
+
+;; XXX color column view differently (red/yellow/gray-ed out based on nearness to now)
+(defun je/todo-list ()
+  "Open up the org-mode todo list"
+  (interactive)
+
+  (progn
+    (org-agenda "" "t")
+    (org-agenda-columns)))
+
+(global-set-key (kbd "s-o") 'je/todo-list)
+
+(defun je/agenda-sort (a b)
+  "Sorting strategy for agenda items."
+  (let* ((ma (or (get-text-property 1 'org-marker a)
+                 (get-text-property 1 'org-hd-marker a)))
+         (mb (or (get-text-property 1 'org-marker b)
+                 (get-text-property 1 'org-hd-marker b)))
+         (def 1.0e+INF)
+         (da (org-entry-get ma "DEADLINE"))
+         (ta (if da (org-time-string-to-seconds da) def))
+         (db (org-entry-get mb "DEADLINE"))
+         (tb (if db (org-time-string-to-seconds db) def)))
+    (cond ((< ta tb) -1)
+          ((< tb ta) +1)
+          (t nil))))
 
 ;; Eli Calc
 (if (locate-library "calculator")
@@ -692,3 +756,8 @@ given a prefix arg."
 ;; racket support is really busted: #; comments don't work and the indent is all wrong
 ;; setup emacs-w3m
 ;; growl integration (or growly thing for linux)
+;; http://www.mostlymaths.net/2010/12/emacs-30-day-challenge.html
+;; http://www.mostlymaths.net/2010/12/emacs-30-day-challenge-update-1-writing.html
+;; http://emacs-fu.blogspot.com/2010/12/conkeror-web-browsing-emacs-way.html
+;; https://github.com/mooz/keysnail/wiki/
+;; http://babbagefiles.blogspot.com/2011/01/conkeror-browsing-web-emacs-style.html

@@ -1,4 +1,6 @@
 #lang racket
+;; Look at
+;; http://planet.racket-lang.org/package-source/neil/protobj.plt/1/2/planet-docs/protobj/index.html
 (require tests/eli-tester
          "foo.rkt")
 
