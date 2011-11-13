@@ -28,7 +28,9 @@
 
 #|
 
-Add support for
+XXXX remove spaces from tags
+
+XXXX Add support for
 
 :PROPERTIES:
 :ORDERED: t

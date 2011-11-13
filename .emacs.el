@@ -487,24 +487,80 @@ given a prefix arg."
 (setq org-agenda-repeating-timestamp-show-all t)
 (setq org-agenda-show-all-dates t)
 (setq org-timeline-show-empty-dates nil)
+(setq org-ctrl-k-protect-subtree t) 
 
 (setq org-agenda-todo-ignore-scheduled 'future)
-(setq org-agenda-prefix-format
-      '((agenda  . " %i %-12:c%?-12t% s")
-        (timeline  . "  % s")
-        (todo  . "  %-10T%?-16t% s")
-        (tags  . " %i %-12:c")
-        (search . " %i %-12:c")))
-
+;; Doesn't have an effect in todo mode
+;;(setq org-agenda-ndays 365)
 (setq org-agenda-cmp-user-defined 'je/agenda-sort)
 (setq org-agenda-sorting-strategy '(user-defined-up))
-
 (setq org-agenda-overriding-columns-format "%72ITEM %DEADLINE")
 (setq org-agenda-overriding-header "Herr Professor, tear down this TODO list!")
 
 (setq org-agenda-custom-commands '())
 
-;; XXX color column view differently (red/yellow/gray-ed out based on nearness to now)
+(add-hook 'org-finalize-agenda-hook
+    (lambda () 
+      (remove-text-properties
+       (point-min) (point-max) '(mouse-face t))))
+
+(setq org-agenda-before-sorting-filter-function 'je/todo-color)
+
+;;; These are the default colours from OmniFocus
+(defface je/due
+  (org-compatible-face nil
+    '((t (:foreground "#d0000f"))))
+  "Face for due items"
+  :group 'org-faces)
+(defface je/soon
+  (org-compatible-face nil
+    '((t (:foreground "#dd6e0d"))))
+  "Face for soon items"
+  :group 'org-faces)
+(defface je/near
+  (org-compatible-face nil
+    '((t (:foreground "#7f007f"))))
+  "Face for near items"
+  :group 'org-faces)
+(defface je/distant
+  (org-compatible-face nil
+    '((t (:foreground "#595959"))))
+  "Face for distant items"
+  :group 'org-faces)
+
+(defun je/todo-color (a)
+  "Color things in the column view differently based on deadline"
+  (let* ((ma (or (get-text-property 1 'org-marker a)
+                 (get-text-property 1 'org-hd-marker a)))
+         (def 1.0e+INF)
+         (da (org-entry-get ma "DEADLINE"))
+         (tn (org-float-time (org-current-time)))
+         (ta (if da (org-time-string-to-seconds da) def)))
+    ;; Remove the TODO
+    (put-text-property 0 (length a)
+                       'txt
+                       (substring (get-text-property 0 'txt a) 6)
+                       a)
+
+    (put-text-property
+     0 (length a)
+     'face
+     (cond
+      ((< ta tn)
+       ;; The deadline has passed
+       'je/due)
+      ((< ta (+ tn (* 60 60 24)))
+       ;; The deadline is in the next day
+       'je/soon)
+      ((< ta (+ tn (* 60 60 24 7)))
+       ;; The deadline is in the next week
+       'je/near)
+      (t 
+       'je/distant))
+     a)
+
+    a))
+
 (defun je/todo-list ()
   "Open up the org-mode todo list"
   (interactive)
@@ -761,3 +817,16 @@ given a prefix arg."
 ;; http://emacs-fu.blogspot.com/2010/12/conkeror-web-browsing-emacs-way.html
 ;; https://github.com/mooz/keysnail/wiki/
 ;; http://babbagefiles.blogspot.com/2011/01/conkeror-browsing-web-emacs-style.html
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(org-column ((t (:background "white" :foreground "black" :strike-through nil :underline nil :slant normal :weight normal :height 120 :family "Monaco")))))
