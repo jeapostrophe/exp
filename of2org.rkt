@@ -25,19 +25,6 @@
 
 |#
 
-
-#|
-
-XXXX remove spaces from tags
-
-XXXX Add support for
-
-:PROPERTIES:
-:ORDERED: t
-:END:
-
-|#
-
 (require racket/cmdline
          xml
          racket/match
@@ -60,13 +47,16 @@ XXXX Add support for
       read-xml)))
 
 (define contexts (make-hash))
-(struct context (parent name))
+(struct context (parent rank name))
 
 (define tasks (make-hash))
-(struct task (parent context name start end repeat note))
+(struct task (parent context rank name start end repeat note))
 
 (define (delist l)
   (apply string-append l))
+
+(define (despace s)
+  (regexp-replace* " " s ""))
 
 (define walk
   (match-lambda
@@ -83,8 +73,9 @@ XXXX Add support for
           c)
      (define cx (xml->xexpr c))
      (define parent (se-path* '(context #:idref) cx))
-     (define name (delist (se-path*/list '(name) cx)))
-     (hash-set! contexts id (context parent name))]
+     (define rank (string->number (se-path* '(rank) cx)))
+     (define name (despace (delist (se-path*/list '(name) cx))))
+     (hash-set! contexts id (context parent rank name))]
     [(and (struct* element
                    ([name 'folder]
                     [attributes (list-no-order 
@@ -94,8 +85,9 @@ XXXX Add support for
           f)
      (define fx (xml->xexpr f))
      (define parent (se-path* '(folder #:idref) fx))
+     (define rank (string->number (se-path* '(rank) fx)))
      (define name (delist (se-path*/list '(name) fx)))
-     (hash-set! tasks id (task parent #f name #f #f #f #f))]
+     (hash-set! tasks id (task parent #f rank name #f #f #f #f))]
     [(and (struct* element
                    ([name 'task]
                     [attributes (list-no-order 
@@ -113,13 +105,14 @@ XXXX Add support for
                [(f #f) f]
                [(#f t) t]))
      (define name (delist (se-path*/list '(name) tx)))
+     (define rank (string->number (se-path* '(rank) tx)))
      (define start (se-path* '(start) tx))
      (define end (se-path* '(due) tx))
      (define repeat (se-path* '(repeat) tx))
      (define note (se-path*/list '(note) tx))
      (unless (se-path* '(completed) tx)
        (hash-set! tasks id 
-                  (task parent context name start end repeat 
+                  (task parent context rank name start end repeat 
                         note)))]
     [(or (struct* pcdata ([string " "]))
          (struct* element ([name 'setting]))
@@ -165,7 +158,7 @@ XXXX Add support for
                       (19:date-month d)
                       (19:date-year d)
                       0)))))
-  (define o (19:date->string d "~Y-~m-~d ~H:~M"))
+  (define o (19:date->string d "~Y-~m-~d ~a ~H:~M"))
   (match r
     [#f 
      (format "<~a>" o)]
@@ -205,23 +198,27 @@ XXXX Add support for
   (for-each print-text n))
 
 (define (output-tasks/parent the-p)
-  (for ([(id t) (in-hash tasks)])
-    (match-define 
-     (struct task (parent context name start end repeat note))
-     t)
-    (when (equal? the-p parent)
-      (printf "~a ~a~a\t~a\n" (*s)
-              (if (or start end) "TODO  " "")
-              name (context-output context))
-      (when start
-        (printf "SCHEDULED: ~a\n" (convert-time start repeat)))
-      (when end
-        (printf "DEADLINE: ~a\n" (convert-time end repeat)))
-      (when note
-        (print-note note)
-        (newline))
-      (parameterize ([depth (add1 (depth))])
-        (output-tasks/parent id)))))
+  (define these-tasks
+    (for/list ([(id t) (in-hash tasks)]
+               #:when (equal? the-p (task-parent t)))
+              (cons id t)))
+  (for ([id*t (in-list (sort these-tasks <= #:key (compose task-rank cdr)))])
+       (match-define 
+        (cons id 
+              (and t (struct task (parent context rank name start end repeat note))))
+        id*t)
+       (printf "~a ~a~a\t~a\n" (*s)
+               (if (or start end) "TODO  " "")
+               name (context-output context))
+       (when start
+             (printf "SCHEDULED: ~a\n" (convert-time start repeat)))
+       (when end
+             (printf "DEADLINE: ~a\n" (convert-time end repeat)))
+       (when note
+             (print-note note)
+             (newline))
+       (parameterize ([depth (add1 (depth))])
+                     (output-tasks/parent id))))
 
 (with-output-to-file
     output

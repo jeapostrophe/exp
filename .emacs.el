@@ -106,7 +106,7 @@
 (setq completion-ignore-case t)
 
 ;; Ask me whether to add a final newline to files which don't have one
-(setq require-final-newline 'ask)
+(setq require-final-newline t)
 
 ;;;; User info
 (setq user-full-name "Jay McCarthy")
@@ -279,10 +279,6 @@ given a prefix arg."
 
 (server-start)
 
-;;;;; shift select
-(setq shift-select-mode 1)
-(delete-selection-mode 1)
-
 ;;;;; line numbering
 ;(global-linum-mode 1)
 
@@ -355,7 +351,8 @@ given a prefix arg."
           '(("java" . "javai")
             ("c" . "cci")
             ("cc" . "ccci")
-            ("rkt" . "rk")))
+            ("rkt" . "rk")
+            ("tex" . "pdflatex")))
 
     (save-buffer)
 
@@ -453,22 +450,35 @@ given a prefix arg."
 
 (normal-erase-is-backspace-mode 1)
 
+;; Auto saving
+(defun je/save-all ()
+  "Save all buffers"
+  (interactive)
+  (save-some-buffers t))
+
+(run-with-idle-timer 60 t 'je/save-all)
+(global-set-key (kbd "s-S") 'je/save-all)
+
 ;; Org Mode
 (setq load-path (cons "~/Dev/dist/org-mode/lisp" load-path))
 (setq load-path (cons "~/Dev/dist/org-mode/contrib/lisp" load-path))
 (add-to-list 'Info-default-directory-list
              (expand-file-name "~/Dev/dist/org-mode/doc"))
 (require 'org-install)
+(require 'org-faces)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 (setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/")
 (setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/notes.org")
 (setq org-agenda-files (list org-directory))
 
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+;; XXX change line to gray/italics/crossed out (if the change to white does not persist)
+(global-set-key (kbd "s-t")
+                (lambda () 
+                  (interactive)
+                  (if (eq major-mode 'org-mode)
+                      (org-todo)
+                    (org-agenda-todo))))
 
 (setq org-hide-leading-stars t)
 (setq org-return-follows-link t)
@@ -488,6 +498,7 @@ given a prefix arg."
 (setq org-agenda-show-all-dates t)
 (setq org-timeline-show-empty-dates nil)
 (setq org-ctrl-k-protect-subtree t) 
+(setq org-use-property-inheritance nil)
 
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
@@ -496,6 +507,12 @@ given a prefix arg."
 (setq org-agenda-sorting-strategy '(user-defined-up))
 (setq org-agenda-overriding-columns-format "%72ITEM %DEADLINE")
 (setq org-agenda-overriding-header "Herr Professor, tear down this TODO list!")
+
+;; XXX Make some more for getting %x, %a, and %i
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
+         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")))
+(global-set-key (kbd "s-p") (lambda () (interactive) (org-capture nil "t")))
 
 (setq org-agenda-custom-commands '())
 
@@ -509,37 +526,62 @@ given a prefix arg."
 ;;; These are the default colours from OmniFocus
 (defface je/due
   (org-compatible-face nil
-    '((t (:foreground "#d0000f"))))
+    '((t (:foreground "#000000"))))
   "Face for due items"
   :group 'org-faces)
+(set-face-foreground 'je/due "#d0000f")
+
+(defface je/today
+  (org-compatible-face nil
+    '((t (:foreground "#000000"))))
+  "Face for today items"
+  :group 'org-faces)
+(set-face-foreground 'je/today "#dd6e0d")
+
 (defface je/soon
   (org-compatible-face nil
-    '((t (:foreground "#dd6e0d"))))
+    '((t (:foreground "#000000"))))
   "Face for soon items"
   :group 'org-faces)
+(set-face-foreground 'je/soon "#006633")
+
 (defface je/near
   (org-compatible-face nil
-    '((t (:foreground "#7f007f"))))
+    '((t (:foreground "#000000"))))
   "Face for near items"
   :group 'org-faces)
+(set-face-foreground 'je/near "#7f007f")
+
+(defface je/normal
+  (org-compatible-face nil
+    '((t (:foreground "#000000"))))
+  "Face for normal items"
+  :group 'org-faces)
+(set-face-foreground 'je/normal "#000000")
+
 (defface je/distant
   (org-compatible-face nil
-    '((t (:foreground "#595959"))))
+    '((t (:foreground "#000000"))))
   "Face for distant items"
   :group 'org-faces)
+(set-face-foreground 'je/distant "#595959")
 
 (defun je/todo-color (a)
   "Color things in the column view differently based on deadline"
   (let* ((ma (or (get-text-property 1 'org-marker a)
                  (get-text-property 1 'org-hd-marker a)))
-         (def 1.0e+INF)
-         (da (org-entry-get ma "DEADLINE"))
          (tn (org-float-time (org-current-time)))
-         (ta (if da (org-time-string-to-seconds da) def)))
+         
+         (sa (org-entry-get ma "SCHEDULED"))
+         (da (org-entry-get ma "DEADLINE"))
+
+         (ta (if da (org-time-string-to-seconds da) 1.0e+INF))
+         (a-day (if da (time-to-days (seconds-to-time ta)) 0))
+         (sta (if sa (org-time-string-to-seconds sa) 0)))
     ;; Remove the TODO
     (put-text-property 0 (length a)
                        'txt
-                       (substring (get-text-property 0 'txt a) 6)
+                       (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
                        a)
 
     (put-text-property
@@ -549,17 +591,25 @@ given a prefix arg."
       ((< ta tn)
        ;; The deadline has passed
        'je/due)
+      ((= a-day (org-today))
+       ;; The deadline is today
+       'je/today)
       ((< ta (+ tn (* 60 60 24)))
        ;; The deadline is in the next day
        'je/soon)
       ((< ta (+ tn (* 60 60 24 7)))
        ;; The deadline is in the next week
        'je/near)
+      ((< ta (+ tn (* 60 60 24 7 4 )))
+       ;; The deadline is in the next four weeks
+       'je/normal)
       (t 
        'je/distant))
      a)
 
-    a))
+    (if (< tn sta)
+        nil
+      a)))
 
 (defun je/todo-list ()
   "Open up the org-mode todo list"
@@ -594,11 +644,11 @@ given a prefix arg."
       (global-set-key [(control return)] 'calculator)))
 
 ;; Customized mode line
-(setq load-path (cons "~/Dev/dist/nyan-mode" load-path))
-(require 'nyan-mode)
-(nyan-start-animation)
-(require 'mega-mode)
-(mega-start-animation)
+;(setq load-path (cons "~/Dev/dist/nyan-mode" load-path))
+;(require 'nyan-mode)
+;(nyan-start-animation)
+;(require 'mega-mode)
+;(mega-start-animation)
 
 (defun cute-create ()
 ;  (mega-create))
@@ -608,7 +658,9 @@ given a prefix arg."
 (setq-default
  mode-line-format
  '(; nyan-mode uses nyan cat as an alternative to %p
-   (:eval (list (cute-create)))
+   ;(:eval (list (cute-create)))
+   (:propertize "%p" face mode-line-folder-face)
+   " "
    ; Position, including warning for 80 columns
    (:propertize "%4l:" face mode-line-position-face)
    (:eval (propertize "%3c" 'face
@@ -748,10 +800,20 @@ given a prefix arg."
                 tags-file-name
                 register-alist)))
 
+;;;;; shift select
+(setq shift-select-mode 1)
+(delete-selection-mode 1)
+
 ;; Auto pair
 (add-to-list 'load-path "~/Dev/dist/autopair-read-only")
 (require 'autopair)
-(autopair-global-mode 1)  
+
+(add-hook 'scheme-mode-hook #'(lambda () (autopair-mode)))
+(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode)))
+
+;; CUA
+(setq cua-enable-cua-keys nil)           ;; don't add C-x,C-c,C-v
+(cua-mode t)                             ;; for rectangles, CUA is nice
 
 (add-hook 'term-mode-hook
   #'(lambda () (setq autopair-dont-activate t)))
@@ -773,6 +835,45 @@ given a prefix arg."
 ;;(setq twelf-root "/Users/jay/Dev/dist/Twelf/")
 ;;(load (concat twelf-root "emacs/twelf-init.el"))
 
+;; dynamic abbreviations
+(setq dabbrev-case-fold-search nil)
+;; XXX make this play nicer with C++
+;; maybe try auto-complete-mode
+
+;; Auto saving
+;(autoload 'paredit-mode "paredit"
+;  "Minor mode for pseudo-structurally editing Lisp code." t)
+;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
+;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
+;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+;(add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
+
+;; Insert lambda
+(global-set-key (kbd "s-\\")
+                (lambda () (interactive nil) (insert "λ")))
+
+;; GNUS
+(setq gnus-select-method
+      '(nnimap "gmail"
+               (nnimap-address "imap.gmail.com")
+               (nnimap-server-port 993)
+               (nnimap-stream ssl)))
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "jay.mccarthy@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-local-domain "gmail.com")
+;;; Make Gnus NOT ignore [Gmail] mailboxes
+(setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+;;; Update mail every 60 minutes? (I don't know if this works)
+(gnus-demon-add-handler 'gnus-demon-scan-news 60 t)
+;;; XXX setup signing
+;;; XXX setup RSS feeds?
+;;; XXX setup the summary window to display differently: http://www.emacswiki.org/emacs/GnusFormatting
+
+
 ;; TODO
 ;; unify C-t and C-M-t
 ;; look into saving more about my emacs setup, like the size and position of frames
@@ -792,8 +893,6 @@ given a prefix arg."
 ;; setup tramp/ssh
 ;; always vertically center cursor?
 ;; change frame title format to show directory
-;; experiment with org-mode rather than omnifocus
-;; mobile org mode: http://mobileorg.ncogni.to/
 ;; setup emacs irc (in particular, how to get notifications and auto-reconnect)
 ;; break up frames
 ;; jump to definition (in file)
@@ -817,6 +916,12 @@ given a prefix arg."
 ;; http://emacs-fu.blogspot.com/2010/12/conkeror-web-browsing-emacs-way.html
 ;; https://github.com/mooz/keysnail/wiki/
 ;; http://babbagefiles.blogspot.com/2011/01/conkeror-browsing-web-emacs-style.html
+;; learn about paredit
+;; http://www.emacswiki.org/emacs/CategoryCryptography
+;; http://doc.norang.ca/org-mode.html
+;; setup gnus signing
+;; setup encryption of password file
+
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
