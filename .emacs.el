@@ -17,7 +17,9 @@
 (setq yank-excluded-properties t)
 
 ;; Kill menu, tool and scrollbars with fire!
-(when emacs-has-x
+(when t
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
   (scroll-bar-mode -1))
 
 ;; Bell
@@ -28,7 +30,7 @@
 (setq use-dialog-box nil)
 
 ;; Don't open new annoying windows under X, use the echo area
-(when emacs-has-x
+(when t
   (tooltip-mode -1))
 
 ;; Don't display the 'Welcome to GNU Emacs' buffer on startup
@@ -310,13 +312,13 @@ given a prefix arg."
 
 ;;;;; Mac OS X
 
-(when (eq window-system 'mac)
+(when t
   (setq default-input-method "MacOSX")
-  (mac-setup-inline-input-method)
+  ;;(mac-setup-inline-input-method)
   ;;(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
   )
 
-(when (eq system-type 'darwin)
+(when t
   ;; Use the default osx browser to browse urls since w3m isn't
   ;; installed on osx.
   ;; From: http://www.emacswiki.org/cgi-bin/wiki/osx_browse-url-browser-function
@@ -331,6 +333,25 @@ given a prefix arg."
   (setq browse-url-browser-function 'rcy-browse-url-default-macosx-browser))
 
 ;;;; global-set-key
+
+(global-set-key (kbd "s-S-t") 'eval-region)
+(global-set-key (kbd "s-q") 'kill-emacs)
+(global-set-key (kbd "s-c") 'kill-ring-save)
+(global-set-key (kbd "s-x") 'kill-region)
+(global-set-key (kbd "s-v") 'yank)
+(global-set-key (kbd "s-n") 'new-frame)
+(global-set-key (kbd "s-s") 'save-buffer)
+(global-set-key (kbd "s-f") 'isearch-forward)
+(global-set-key (kbd "s-g") 'isearch-repeat-forward)
+
+(defun je/delete-window ()
+  "Remove window or frame"
+  (interactive)
+  (save-current-buffer
+    (if (one-window-p 1)
+        (delete-frame)
+      (delete-window))))
+(global-set-key (kbd "s-w") 'je/delete-window)
 
 ;; Replace the standard way of looking through buffers
 (progn
@@ -466,19 +487,38 @@ given a prefix arg."
              (expand-file-name "~/Dev/dist/org-mode/doc"))
 (require 'org-install)
 (require 'org-faces)
+(require 'org)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 (setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/")
 (setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/notes.org")
 (setq org-agenda-files (list org-directory))
 
-;; XXX change line to gray/italics/crossed out (if the change to white does not persist)
 (global-set-key (kbd "s-t")
                 (lambda () 
                   (interactive)
                   (if (eq major-mode 'org-mode)
                       (org-todo)
-                    (org-agenda-todo))))
+                    (progn
+                      (org-agenda-todo)
+                      ;; XXX I added this because sometimes it would
+                      ;; check the same one twice, but this feels slow
+                      ;; and hacky
+                      (je/todo-list)))))
+
+(org-defkey org-mode-map (kbd "s-[") 'org-metaleft)
+(org-defkey org-mode-map (kbd "s-]") 'org-metaright)
+(org-defkey org-mode-map (kbd "s-{") 'org-shiftleft)
+(org-defkey org-mode-map (kbd "s-}") 'org-shiftright)
+
+(org-defkey org-mode-map [(meta left)]  nil)
+(org-defkey org-mode-map [(meta right)] nil)
+(org-defkey org-mode-map [(shift meta left)]  nil)
+(org-defkey org-mode-map [(shift meta right)] nil)
+(org-defkey org-mode-map [(shift up)]          nil)
+(org-defkey org-mode-map [(shift down)]        nil)
+(org-defkey org-mode-map [(shift left)]        nil)
+(org-defkey org-mode-map [(shift right)]       nil)
 
 (setq org-hide-leading-stars t)
 (setq org-return-follows-link t)
@@ -499,20 +539,24 @@ given a prefix arg."
 (setq org-timeline-show-empty-dates nil)
 (setq org-ctrl-k-protect-subtree t) 
 (setq org-use-property-inheritance nil)
+;; XXX If this is not nil, then I can't use column mode on the Todo list
+(setq org-agenda-columns-compute-summary-properties nil)
 
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
 ;;(setq org-agenda-ndays 365)
 (setq org-agenda-cmp-user-defined 'je/agenda-sort)
 (setq org-agenda-sorting-strategy '(user-defined-up))
-(setq org-agenda-overriding-columns-format "%72ITEM %DEADLINE")
+(setq org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
 (setq org-agenda-overriding-header "Herr Professor, tear down this TODO list!")
 
 ;; XXX Make some more for getting %x, %a, and %i
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
          "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")))
-(global-set-key (kbd "s-p") (lambda () (interactive) (org-capture nil "t")))
+(global-set-key 
+ (kbd "<s-XF86MonBrightnessDown>")
+ (lambda () (interactive) (org-capture nil "t")))
 
 (setq org-agenda-custom-commands '())
 
@@ -525,42 +569,42 @@ given a prefix arg."
 
 ;;; These are the default colours from OmniFocus
 (defface je/due
-  (org-compatible-face nil
+  (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for due items"
   :group 'org-faces)
 (set-face-foreground 'je/due "#d0000f")
 
 (defface je/today
-  (org-compatible-face nil
+  (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for today items"
   :group 'org-faces)
 (set-face-foreground 'je/today "#dd6e0d")
 
 (defface je/soon
-  (org-compatible-face nil
+  (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for soon items"
   :group 'org-faces)
 (set-face-foreground 'je/soon "#006633")
 
 (defface je/near
-  (org-compatible-face nil
+  (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for near items"
   :group 'org-faces)
 (set-face-foreground 'je/near "#7f007f")
 
 (defface je/normal
-  (org-compatible-face nil
+  (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for normal items"
   :group 'org-faces)
 (set-face-foreground 'je/normal "#000000")
 
 (defface je/distant
-  (org-compatible-face nil
+  (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for distant items"
   :group 'org-faces)
@@ -757,9 +801,6 @@ given a prefix arg."
     :inherit 'mode-line-face
     :foreground bright-text
     :weight 'bold)
-(set-face-attribute 'mode-line-position-face nil
-    :inherit 'mode-line-face
-    :family "Menlo" :height 100)
 (set-face-attribute 'mode-line-mode-face nil
     :inherit 'mode-line-face
     :foreground light-text-inactive)
@@ -853,25 +894,26 @@ given a prefix arg."
                 (lambda () (interactive nil) (insert "λ")))
 
 ;; GNUS
-(setq gnus-select-method
-      '(nnimap "gmail"
-               (nnimap-address "imap.gmail.com")
-               (nnimap-server-port 993)
-               (nnimap-stream ssl)))
-(setq message-send-mail-function 'smtpmail-send-it
-      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "jay.mccarthy@gmail.com" nil))
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587
-      smtpmail-local-domain "gmail.com")
-;;; Make Gnus NOT ignore [Gmail] mailboxes
-(setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
-;;; Update mail every 60 minutes? (I don't know if this works)
-(gnus-demon-add-handler 'gnus-demon-scan-news 60 t)
-;;; XXX setup signing
-;;; XXX setup RSS feeds?
-;;; XXX setup the summary window to display differently: http://www.emacswiki.org/emacs/GnusFormatting
+;; XXX Lots of HTML mail didn't work :(
+;; (setq gnus-select-method
+;;       '(nnimap "gmail"
+;;                (nnimap-address "imap.gmail.com")
+;;                (nnimap-server-port 993)
+;;                (nnimap-stream ssl)))
+;; (setq message-send-mail-function 'smtpmail-send-it
+;;       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+;;       smtpmail-auth-credentials '(("smtp.gmail.com" 587 "jay.mccarthy@gmail.com" nil))
+;;       smtpmail-default-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-service 587
+;;       smtpmail-local-domain "gmail.com")
+;; ;;; Make Gnus NOT ignore [Gmail] mailboxes
+;; (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+;; ;;; Update mail every 60 minutes? (I don't know if this works)
+;; (gnus-demon-add-handler 'gnus-demon-scan-news 60 t)
+;; ;;; XXX setup signing
+;; ;;; XXX setup RSS feeds?
+;; ;;; XXX setup the summary window to display differently: http://www.emacswiki.org/emacs/GnusFormatting
 
 
 ;; TODO
@@ -934,4 +976,4 @@ given a prefix arg."
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(org-column ((t (:background "white" :foreground "black" :strike-through nil :underline nil :slant normal :weight normal :height 120 :family "Monaco")))))
+ '(org-column ((t (:background "white" :foreground "black")))))
