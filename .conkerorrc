@@ -101,5 +101,56 @@ define_key(content_buffer_normal_keymap, "b", "org-bookmark");
 define_key(content_buffer_normal_keymap, "M-b", "org-open-bookmarks");
 
 // Little guys
+define_key(content_buffer_normal_keymap, "G", "find-url-new-buffer");
+define_key(content_buffer_normal_keymap, "M-g", "find-alternate-url");
+define_key(content_buffer_normal_keymap, "F", "follow-new-buffer");
+define_key(content_buffer_normal_keymap, "M-f", "follow-new-buffer-background");
+define_key(content_buffer_normal_keymap, "[", "back");
+define_key(content_buffer_normal_keymap, "]", "forward");
 define_key(content_buffer_normal_keymap, "D", "kill-current-buffer");
 define_key(content_buffer_normal_keymap, "C-`", "switch-to-buffer");
+
+// Flash killer
+require("content-policy.js");
+
+function block_flash (content_type, content_location) {
+    var Y = content_policy_accept, N = content_policy_reject;
+    var action = ([content_location.host] || N);
+    if (action == N)
+        dumpln("blocked flash: "+content_location.spec);
+    return action;
+}
+content_policy_bytype_table.object = block_flash;
+add_hook("content_policy_hook", content_policy_bytype);
+
+interactive("je/toggle-flash", "Toggles the content filter and reloads the page",
+            function (I) {
+                yield co_call(call_interactively(I, "content-policy-toggle"));
+                yield co_call(call_interactively(I, "reload"));
+            });
+define_key(content_buffer_normal_keymap, "C-f", "je/toggle-flash");
+
+// Bind number keys to switch buffers
+function define_switch_buffer_key (key, buf_num) {
+    define_key(default_global_keymap, key,
+               function (I) {
+                   switch_to_buffer(I.window,
+                                    I.window.buffers.get_buffer(buf_num));
+               });
+}
+for (let i = 0; i < 10; ++i) {
+    define_switch_buffer_key(String((i+1)%10), i);
+}
+
+// Switch to last buffer
+interactive("switch-to-other-buffer",
+            "Switch to the previously open buffer",
+            function (I) {
+                var blist = I.window.buffers.buffer_list;
+                if (blist.length > 1)
+                    switch_to_buffer(I.window, blist[1]);
+            });
+define_key(content_buffer_normal_keymap, "M-tab", "switch-to-other-buffer");
+
+// Set char set
+user_pref("intl.charset.default", "utf8");
