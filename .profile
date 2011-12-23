@@ -14,44 +14,18 @@ export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/collects/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
-export LANG=C
+. /etc/default/locale
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
 
+alias ls='ls --color=auto'
 alias r='racket -il xrepl'
 alias oew=emacsclient
 alias oe='emacsclient -nc'
 alias opene=oe
 alias o=open
 
-#function oes() {
-#    for i in $* ; do
-#        oe $i
-#    done
-#}
-
 export EMACS_SERVER_PORT=50000
 export EMACS_SERVER_FILE=~/.emacs.d/server/lightning
-
-#function teamtmp() {
-#    NAME=$(date +%Y%m%d%H%M-)$(basename $1)
-#    scp -r $1 weapons.cs.byu.edu:public_html/tmp/${NAME}
-#    echo http://faculty.cs.byu.edu/~jay/tmp/${NAME}
-#}
-
-#function findss() {
-#    find . -name '*.ss' -o -name '*.scm' -o -name '*.rkt' -o -name '*.scrbl' | xargs grep -e $*
-#}
-
-#function sto() {
-#    mkdir -p $(dirname $1)
-#    touch $*
-#    git add $*
-#    o $*
-#}	
-
-#function stoe() {
-#    mkdir -p $(dirname $1)
-#    touch $*
-#    git add $*
-#    oe $*
-#}	
 

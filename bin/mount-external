@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DEV=$1
+if [ "x$DEV" = "x" ] ; then
+    DEV=sdc3
+fi
+
+if [ "x$DEV" = "xu" ] ; then
+    sudo umount /media/external
+else
+    sudo mount /dev/${DEV} /media/external -o uid=1000,gid=1000 
+fi

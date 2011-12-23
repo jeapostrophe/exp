@@ -310,35 +310,17 @@ given a prefix arg."
 
 ;;;; Platform specific settings
 
-;;;;; Mac OS X
-
-(when t
-  (setq default-input-method "MacOSX")
-  ;;(mac-setup-inline-input-method)
-  ;;(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
-  )
-
-(when t
-  ;; Use the default osx browser to browse urls since w3m isn't
-  ;; installed on osx.
-  ;; From: http://www.emacswiki.org/cgi-bin/wiki/osx_browse-url-browser-function
-  (defun rcy-browse-url-default-macosx-browser (url &optional new-window)
-    (interactive (browse-url-interactive-arg "URL: "))
-    (let ((url
-           (if (aref (url-generic-parse-url url) 0)
-               url
-             (concat "http://" url))))
-      (start-process (concat "open " url) nil "open" url)))
-
-  (setq browse-url-browser-function 'rcy-browse-url-default-macosx-browser))
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "conkeror")
 
 ;;;; global-set-key
 
 (global-set-key (kbd "s-S-t") 'eval-region)
+(global-set-key (kbd "s-a") 'mark-whole-buffer)
 (global-set-key (kbd "s-q") 'kill-emacs)
-(global-set-key (kbd "s-c") 'kill-ring-save)
-(global-set-key (kbd "s-x") 'kill-region)
-(global-set-key (kbd "s-v") 'yank)
+(global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
+(global-set-key (kbd "s-x") 'clipboard-kill-region)
+(global-set-key (kbd "s-v") 'clipboard-yank)
 (global-set-key (kbd "s-n") 'new-frame)
 (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "s-f") 'isearch-forward)
@@ -356,6 +338,7 @@ given a prefix arg."
 ;; Replace the standard way of looking through buffers
 (progn
   (global-set-key (kbd "C-x C-b") 'ibuffer))
+(define-key global-map (kbd "C-`") 'ibuffer)
 
 ;; Setup some font size changers
 (define-key global-map (kbd "C-=") 'text-scale-increase)
@@ -486,13 +469,20 @@ given a prefix arg."
 (add-to-list 'Info-default-directory-list
              (expand-file-name "~/Dev/dist/org-mode/doc"))
 (require 'org-install)
-(require 'org-faces)
 (require 'org)
+(require 'org-faces)
+(require 'org-protocol)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 (setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/")
+(setq org-bookmarks-file "~/Dev/scm/github.jeapostrophe/home/etc/bookmarks.org")
 (setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/notes.org")
 (setq org-agenda-files (list org-directory))
+
+(defun je/org-open-bookmarks ()
+  "Open bookmark file"
+  (interactive)
+  (find-file org-bookmarks-file))
 
 (global-set-key (kbd "s-t")
                 (lambda () 
@@ -553,7 +543,13 @@ given a prefix arg."
 ;; XXX Make some more for getting %x, %a, and %i
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
-         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")))
+         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")
+        ("u" "URL" entry (file+headline org-default-notes-file "Tasks")
+         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n  %a\n %i")
+        ("b" "Bookmark" entry (file+headline org-bookmarks-file "To Parse")
+         "* %a\n  %i"
+         :immediate-finish t)))
+
 (global-set-key 
  (kbd "<s-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
@@ -892,6 +888,17 @@ given a prefix arg."
 ;; Insert lambda
 (global-set-key (kbd "s-\\")
                 (lambda () (interactive nil) (insert "λ")))
+
+;; iBus
+(require 'ibus)
+(add-hook 'after-init-hook 'ibus-mode-on)
+(setq ibus-cursor-color '("red" "blue" "limegreen"))
+(add-hook 'after-make-frame-functions
+          (lambda (new-frame)
+            (select-frame new-frame)
+            (or ibus-mode (ibus-mode-on))))
+(ibus-define-common-key ?\S-\s nil)
+(global-set-key (kbd "M-s-;") 'ibus-toggle)
 
 ;; GNUS
 ;; XXX Lots of HTML mail didn't work :(

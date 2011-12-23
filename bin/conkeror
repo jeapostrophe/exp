@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ROOT=~/Dev/dist/conkeror
+
+exec ${ROOT}/xulrunner/xulrunner ${ROOT}/conkeror/application.ini "$@"

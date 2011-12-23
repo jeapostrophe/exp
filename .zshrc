@@ -75,7 +75,7 @@ chpwd () {
     # Save what directory we are in for the future
     write_zdir
     # Show recently modified files
-    ls -t | head -$RECENTFILES | tr '\n' '\0' | xargs -0 ls -d
+    ls -t | head -$RECENTFILES | tr '\n' '\0' | xargs -0 ls -d --color=auto
 }
 
 if [ $(pwd) = ${HOME} ] ; then
@@ -102,3 +102,34 @@ compctl -g '*(-/)' cd chdir dirs pushd
 
 # Ignore what's in the line
 #zstyle ':completion:*:(rm|kill|diff):*' ignore-line yes
+
+function oes() {
+    for i in $* ; do
+        oe $i
+    done
+}
+
+function teamtmp() {
+    NAME=$(date +%Y%m%d%H%M-)$(basename $1)
+    scp -r $1 weapons.cs.byu.edu:public_html/tmp/${NAME}
+    echo http://faculty.cs.byu.edu/~jay/tmp/${NAME}
+}
+
+function findss() {
+    find . -name '*.ss' -o -name '*.scm' -o -name '*.rkt' -o -name '*.scrbl' | xargs grep -e $*
+}
+
+function sto() {
+    mkdir -p $(dirname $1)
+    touch $*
+    git add $*
+    o $*
+}	
+
+function stoe() {
+    mkdir -p $(dirname $1)
+    touch $*
+    git add $*
+    oe $*
+}	
+
