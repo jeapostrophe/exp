@@ -1,0 +1,105 @@
+// Load modules
+require("page-modes/gmail.js");
+
+session_pref("xpinstall.whitelist.required", false);
+
+// Sessions
+require("session.js");
+session_auto_save_auto_load = true;
+
+// Open URLs from other places in a new buffer
+url_remoting_fn = load_url_in_new_buffer;
+
+// Don't open a new window or take over the buffer when downloading
+download_buffer_automatic_open_target = OPEN_NEW_BUFFER_BACKGROUND;
+
+// Show history in goto-url minibuffer
+url_completion_use_history = true;
+
+// Expire history in X days
+session_pref('browser.history_expire_days', 365);
+
+// Be able to edit in external places
+editor_shell_command = "emacsclient -c";
+view_source_use_external_editor = true;
+
+// Customize mode-line
+add_hook("mode_line_hook", mode_line_adder(buffer_count_widget), true);
+add_hook("mode_line_hook", mode_line_adder(loading_count_widget), true);
+remove_hook("mode_line_hook", mode_line_adder(clock_widget));
+mode_line_mode(false);
+mode_line_mode(true);
+
+// Setup some web jumps
+define_webjump("m", "https://mail.google.com/mail/u/",
+               $description = "GMail");
+define_webjump("y", "http://www.youtube.com/results?search_query=%s&search=Search",
+               $description = "YouTube");
+define_webjump("j", "http://jisho.org/words?jap=&eng=%s&dict=edict",
+               $description = "Jisho");
+define_webjump("r", "file:///home/jay/Dev/scm/plt/doc/search/index.html?q=%s",
+               $description = "Racket search");
+define_webjump("g", "http://www.google.com/search?q=%s&ie=utf-8&oe=utf-8&aq=t",
+               $description = "Google search");
+
+require("page-modes/wikipedia.js");
+wikipedia_webjumps_format = "w";
+define_wikipedia_webjumps("en");
+
+define_webjump("ubuntupkg", "http://packages.ubuntu.com/%s");
+define_webjump("ubuntufile", "http://packages.ubuntu.com/search?searchon=contents&keywords=%s&mode=path&arch=any");
+define_webjump("ubuntubugs", "http://bugs.launchpad.net/ubuntu/+source/%s");
+define_webjump("launchpad", "https://launchpad.net/+search?field.text=%s");
+
+// Send mailto to gmail
+set_protocol_handler("mailto", "https://mail.google.com/mail/?extsrc=mailto&url=%s");
+
+// Blocks focus requests most of the time see http://conkeror.org/Focus for other options
+require("block-content-focus-change.js");
+
+// Set default download directory
+cwd = make_file("~/Downloads");
+
+// Add xkcd text
+xkcd_add_title = true;
+
+// Org-mode
+function org_capture(type, url, title, text, window) {
+    var eurl = encodeURIComponent(url);
+    var etitle = encodeURIComponent(title);
+    var etext = encodeURIComponent(text);
+    var cmd_str = "emacsclient org-protocol:/capture:/" + type + "/" + eurl + "/" + etitle + "/" + etext;
+    window.minibuffer.message("Issuing " + cmd_str);
+    shell_command_blind(cmd_str);
+};
+
+interactive("org-capture", "Remember the current url with org-capture",
+            function (I) {
+            org_capture("u",
+                         I.buffer.display_uri_string,
+                         I.buffer.document.title,
+                         I.buffer.top_frame.getSelection(),
+                         I.window);
+        });
+interactive("org-bookmark", "Bookmark the current url with org-capture",
+            function (I) {
+            org_capture("b",
+                         I.buffer.display_uri_string,
+                         I.buffer.document.title,
+                         I.buffer.top_frame.getSelection(),
+                         I.window);
+        });
+interactive("org-open-bookmarks", "Open bookmark file",
+            function (I) {
+                var cmd_str = "emacsclient -c -e '(je/org-open-bookmarks)'";
+                I.window.minibuffer.message("Issuing " + cmd_str);
+                shell_command_blind(cmd_str);
+            });
+
+define_key(content_buffer_normal_keymap, "!", "org-capture");
+define_key(content_buffer_normal_keymap, "b", "org-bookmark");
+define_key(content_buffer_normal_keymap, "M-b", "org-open-bookmarks");
+
+// Little guys
+define_key(content_buffer_normal_keymap, "D", "kill-current-buffer");
+define_key(content_buffer_normal_keymap, "C-`", "switch-to-buffer");

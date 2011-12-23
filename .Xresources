@@ -1,0 +1,8 @@
+URxvt.saveLines: 1000
+URxvt.scrollBar: off
+URxvt.font: xft:DejaVu Sans Mono:pixelsize=12:spacing=100
+URxvt.perl-ext-common:  default,matcher
+URxvt.urlLauncher:      firefox
+URxvt.matcher.button:   1 
+URxvt.inputMethod: ibus  
+URxvt.preeditType: OnTheSpot,None

@@ -339,6 +339,7 @@ given a prefix arg."
 (progn
   (global-set-key (kbd "C-x C-b") 'ibuffer))
 (define-key global-map (kbd "C-`") 'ibuffer)
+(define-key global-map (kbd "M-<tab>") 'other-window)
 
 ;; Setup some font size changers
 (define-key global-map (kbd "C-=") 'text-scale-increase)
@@ -495,6 +496,8 @@ given a prefix arg."
                       ;; check the same one twice, but this feels slow
                       ;; and hacky
                       (je/todo-list)))))
+
+(org-defkey org-mode-map [(meta tab)]  nil)
 
 (org-defkey org-mode-map (kbd "s-[") 'org-metaleft)
 (org-defkey org-mode-map (kbd "s-]") 'org-metaright)

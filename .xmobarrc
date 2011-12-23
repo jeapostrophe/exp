@@ -1,0 +1,10 @@
+Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*",
+         bgColor = "black",
+         fgColor = "grey",
+         position = TopW L 90,
+         commands = [ Run Date "%a %H:%M" "date" 60,
+                      Run StdinReader ],
+         sepChar = "%",         
+         alignSep = "}{",
+         template = "%StdinReader% }{ <fc=grey>%date%</fc>"
+       }

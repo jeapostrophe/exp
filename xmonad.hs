@@ -1,0 +1,31 @@
+import XMonad
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageDocks
+import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.EZConfig
+import System.IO
+import qualified XMonad.StackSet as W
+
+main = do
+  xmproc <- spawnPipe "xmobar ~/.xmobarrc"
+  xmonad $ defaultConfig
+       { manageHook = manageDocks <+> manageHook defaultConfig,
+         layoutHook = avoidStruts $ layoutHook defaultConfig,
+         logHook = dynamicLogWithPP xmobarPP
+                   { ppOutput = hPutStrLn xmproc,
+                     ppTitle = xmobarColor "white" "" . shorten 50 },
+         modMask = mod4Mask,
+         borderWidth = 2,
+         terminal = "urxvtc",
+         normalBorderColor = "#cccccc",
+         focusedBorderColor = "#cd8b00" }
+       `additionalKeysP`
+       [ ("M4-S-z", spawn "gnome-screensaver-command --lock"),
+         ("M4-<Space>", spawn "dmenu_run"),
+         ("M4-`", sendMessage NextLayout),
+         ("M4-S-t", withFocused $ windows . W.sink),
+         ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart")
+       ]
+       `removeKeysP`
+       [ "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h" ]
+                                          
