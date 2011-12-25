@@ -7,7 +7,7 @@ import System.IO
 import qualified XMonad.StackSet as W
 
 main = do
-  xmproc <- spawnPipe "xmobar ~/.xmobarrc"
+  xmproc <- spawnPipe "exec xmobar ~/.xmobarrc"
   xmonad $ defaultConfig
        { manageHook = manageDocks <+> manageHook defaultConfig,
          layoutHook = avoidStruts $ layoutHook defaultConfig,
@@ -16,12 +16,12 @@ main = do
                      ppTitle = xmobarColor "white" "" . shorten 50 },
          modMask = mod4Mask,
          borderWidth = 2,
-         terminal = "urxvtc",
+         terminal = "urxvtc -e screen -UxS lightning",
          normalBorderColor = "#cccccc",
          focusedBorderColor = "#cd8b00" }
        `additionalKeysP`
        [ ("M4-S-z", spawn "gnome-screensaver-command --lock"),
-         ("M4-<Space>", spawn "dmenu_run"),
+         ("M4-<Space>", spawn "exec dmenu_run"),
          ("M4-`", sendMessage NextLayout),
          ("M4-S-t", withFocused $ windows . W.sink),
          ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart")

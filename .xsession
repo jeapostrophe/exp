@@ -24,6 +24,10 @@ ibus-daemon --xim &
 
 # XXX Do I need to run bluetooth and sound?
 
+screen -UdmS lightning &
+
 emacs &
+
+conkeror &
 
 exec ~/.cabal/bin/xmonad

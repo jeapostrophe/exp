@@ -904,7 +904,6 @@ given a prefix arg."
 (global-set-key (kbd "M-s-;") 'ibus-toggle)
 
 ;; GNUS
-;; XXX Lots of HTML mail didn't work :(
 ;; (setq gnus-select-method
 ;;       '(nnimap "gmail"
 ;;                (nnimap-address "imap.gmail.com")
@@ -921,59 +920,6 @@ given a prefix arg."
 ;; (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 ;; ;;; Update mail every 60 minutes? (I don't know if this works)
 ;; (gnus-demon-add-handler 'gnus-demon-scan-news 60 t)
-;; ;;; XXX setup signing
-;; ;;; XXX setup RSS feeds?
-;; ;;; XXX setup the summary window to display differently: http://www.emacswiki.org/emacs/GnusFormatting
-
-
-;; TODO
-;; unify C-t and C-M-t
-;; look into saving more about my emacs setup, like the size and position of frames
-;; On startup, open a new terminal frame
-;; https://github.com/elibarzilay/eliemacs
-;; http://barzilay.org/misc/interactive.rkt
-;; http://www.neilvandyke.org/scribble-emacs/
-;; http://www.neilvandyke.org/quack/quack.el
-;; http://www.rgrjr.com/emacs/emacs_cheat.html
-;; bibtex database
-;; Use japanese localization?
-;; keybinding to run proc on my finance notes
-;; auto line wrap at 80
-;; make a custom cheat sheet for me
-;; duplicate DrRacket's rainbow block highlighting (C, Java, and Racket)
-;; get aspell setup and always on
-;; setup tramp/ssh
-;; always vertically center cursor?
-;; change frame title format to show directory
-;; setup emacs irc (in particular, how to get notifications and auto-reconnect)
-;; break up frames
-;; jump to definition (in file)
-;; Etags
-;; some simple keybindings/commands for creating and editing journal entries, so I don't have to go to a terminal
-;; turn current line highlight and vertical center off in same modes that numbering is off
-;; can I get gmail in emacs?
-;; can I get a calendar?
-;; can I get I get gchat?
-;; writing in Japanese (with OS X input method... switch charsets by shortcut doesn't work
-;; (maybe some keybindings to look things up in jisho? for my dragon ball translation)
-;; Can I write blogger blog posts?
-;; Integration with git
-;; Get racket all nice (quack?)
-;; Look through https://github.com/technomancy/emacs-starter-kit
-;; racket support is really busted: #; comments don't work and the indent is all wrong
-;; setup emacs-w3m
-;; growl integration (or growly thing for linux)
-;; http://www.mostlymaths.net/2010/12/emacs-30-day-challenge.html
-;; http://www.mostlymaths.net/2010/12/emacs-30-day-challenge-update-1-writing.html
-;; http://emacs-fu.blogspot.com/2010/12/conkeror-web-browsing-emacs-way.html
-;; https://github.com/mooz/keysnail/wiki/
-;; http://babbagefiles.blogspot.com/2011/01/conkeror-browsing-web-emacs-style.html
-;; learn about paredit
-;; http://www.emacswiki.org/emacs/CategoryCryptography
-;; http://doc.norang.ca/org-mode.html
-;; setup gnus signing
-;; setup encryption of password file
-
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
