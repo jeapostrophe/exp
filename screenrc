@@ -94,5 +94,7 @@ bindkey ^j prev
 bindkey ^k next
 # XXX alt-tab
 # bindkey ... other
+bindkey ^d kill
+bindkey ^n screen
 
 screen -t irc 0 irssi

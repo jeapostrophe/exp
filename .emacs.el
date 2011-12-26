@@ -1,7 +1,6 @@
 ;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
 
 (add-to-list 'load-path "~/.emacs.d/")
-
 (byte-recompile-directory "~/.emacs.d/")
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
@@ -298,7 +297,7 @@ given a prefix arg."
 
 ;;;; multi-term ()
 (require 'multi-term)
-(setq multi-term-program "/opt/local/bin/zsh")
+(setq multi-term-program "/usr/bin/zsh")
 
 ;;;;; quack
 ;;(require 'quack)
@@ -532,8 +531,6 @@ given a prefix arg."
 (setq org-timeline-show-empty-dates nil)
 (setq org-ctrl-k-protect-subtree t) 
 (setq org-use-property-inheritance nil)
-;; XXX If this is not nil, then I can't use column mode on the Todo list
-(setq org-agenda-columns-compute-summary-properties nil)
 
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
@@ -679,30 +676,10 @@ given a prefix arg."
           ((< tb ta) +1)
           (t nil))))
 
-;; Eli Calc
-(if (locate-library "calculator")
-    (progn
-      (autoload 'calculator "calculator"
-        "Run the Emacs calculator." t)
-      (global-set-key [(control return)] 'calculator)))
-
 ;; Customized mode line
-;(setq load-path (cons "~/Dev/dist/nyan-mode" load-path))
-;(require 'nyan-mode)
-;(nyan-start-animation)
-;(require 'mega-mode)
-;(mega-start-animation)
-
-(defun cute-create ()
-;  (mega-create))
-  (nyan-create))
-
-;; Mode line setup
 (setq-default
  mode-line-format
- '(; nyan-mode uses nyan cat as an alternative to %p
-   ;(:eval (list (cute-create)))
-   (:propertize "%p" face mode-line-folder-face)
+ '((:propertize "%p" face mode-line-folder-face)
    " "
    ; Position, including warning for 80 columns
    (:propertize "%4l:" face mode-line-position-face)
@@ -895,13 +872,19 @@ given a prefix arg."
 ;; iBus
 (require 'ibus)
 (add-hook 'after-init-hook 'ibus-mode-on)
-(setq ibus-cursor-color '("red" "blue" "limegreen"))
+(setq ibus-cursor-color 
+      '("red" "blue" "limegreen"))
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
             (select-frame new-frame)
             (or ibus-mode (ibus-mode-on))))
 (ibus-define-common-key ?\S-\s nil)
 (global-set-key (kbd "M-s-;") 'ibus-toggle)
+
+;; Eli Calc
+(autoload 'calculator "calculator"
+  "Run the Emacs calculator." t)
+(global-set-key [(control return)] 'calculator)
 
 ;; GNUS
 ;; (setq gnus-select-method
@@ -921,12 +904,17 @@ given a prefix arg."
 ;; ;;; Update mail every 60 minutes? (I don't know if this works)
 ;; (gnus-demon-add-handler 'gnus-demon-scan-news 60 t)
 
+;; W3M
+(require 'w3m-load)
+(require 'mime-w3m)
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- )
+ '(ibuffer-default-sorting-mode (quote alphabetic))
+ '(ibuffer-display-summary nil))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.

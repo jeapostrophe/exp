@@ -1,4 +1,5 @@
 // Load modules
+require("content-delay.js");
 require("page-modes/gmail.js");
 
 session_pref("xpinstall.whitelist.required", false);

@@ -24,7 +24,9 @@ ibus-daemon --xim &
 
 # XXX Do I need to run bluetooth and sound?
 
-screen -UdmS lightning &
+if ! screen -S lightning -list | grep "No Sockets" ; then
+    screen -UdmS lightning &
+fi
 
 emacs &
 

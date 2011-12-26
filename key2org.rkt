@@ -21,8 +21,9 @@
   (match-define "data:" (read-line))
   (define data (parse-data-segment))
   (list class attrs 
-        (format "~a ~a"
-                (hash-ref attrs "svce" #f)
+        (format "~a (~a)"
+                (or (hash-ref attrs "svce" #f)
+                    (hash-ref attrs "srvr" #f))
                 (hash-ref attrs "acct" #f))
         data))
 
@@ -74,7 +75,7 @@
 (for ([e (in-list (sort es string-ci<=? #:key third))])
      (match-define (list class attrs label data) e)
      (match class
-            ["genp"
+            [(or "inet" "genp")
              (printf "** ~a\n  ~a\n"
                      label
                      data)]
