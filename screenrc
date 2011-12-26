@@ -88,5 +88,11 @@ defnonblock 5
 # screen -t mail 8 mutt
 # screen -t daemon 9 tail -f /var/log/daemon.log
 
-screen -t top 0 top
-screen -t irc 1 irssi
+bindkey ^` windowlist
+# ^[ is special in a terminal, so it can't work, but maybe it's okay because it's not really "back/forward
+bindkey ^j prev
+bindkey ^k next
+# XXX alt-tab
+# bindkey ... other
+
+screen -t irc 0 irssi
