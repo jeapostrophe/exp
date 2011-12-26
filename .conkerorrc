@@ -33,6 +33,10 @@ mode_line_mode(true);
 // Setup some web jumps
 define_webjump("m", "https://mail.google.com/mail/u/",
                $description = "GMail");
+define_webjump("r", "https://www.google.com/reader",
+               $description = "Google Reader");
+define_webjump("c", "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to&su&body&shva=1",
+               $description = "Compose email");
 define_webjump("y", "http://www.youtube.com/results?search_query=%s&search=Search",
                $description = "YouTube");
 define_webjump("j", "http://jisho.org/words?jap=&eng=%s&dict=edict",
@@ -138,7 +142,7 @@ function define_switch_buffer_key (key, buf_num) {
                                     I.window.buffers.get_buffer(buf_num));
                });
 }
-for (let i = 0; i < 10; ++i) {
+for (let i = 0; i < 10; ++i) { 
     define_switch_buffer_key(String((i+1)%10), i);
 }
 

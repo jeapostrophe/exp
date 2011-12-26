@@ -23,6 +23,7 @@ main = do
        [ ("M4-S-z", spawn "gnome-screensaver-command --lock"),
          ("M4-<Space>", spawn "exec dmenu_run"),
          ("M4-`", sendMessage NextLayout),
+         ("M4-S-e", spawn "exec emacsclient -nc"),
          ("M4-S-t", withFocused $ windows . W.sink),
          ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart")
        ]
