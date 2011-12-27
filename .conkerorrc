@@ -40,7 +40,7 @@ mode_line_mode(true);
 // Setup some web jumps
 define_webjump("m", "https://mail.google.com/mail/u/",
                $description = "GMail");
-define_webjump("r", "https://www.google.com/reader",
+define_webjump("gr", "https://www.google.com/reader",
                $description = "Google Reader");
 define_webjump("c", "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to&su&body&shva=1",
                $description = "Compose email");
