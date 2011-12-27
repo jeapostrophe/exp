@@ -109,7 +109,7 @@ interactive("org-open-bookmarks", "Open bookmark file",
 
 define_key(content_buffer_normal_keymap, "!", "org-capture");
 define_key(content_buffer_normal_keymap, "b", "org-bookmark");
-define_key(content_buffer_normal_keymap, "M-b", "org-open-bookmarks");
+define_key(default_base_keymap, "M-b", "org-open-bookmarks");
 
 // Little guys
 define_key(content_buffer_normal_keymap, "G", "find-url-new-buffer");
@@ -118,8 +118,8 @@ define_key(content_buffer_normal_keymap, "F", "follow-new-buffer");
 define_key(content_buffer_normal_keymap, "M-f", "follow-new-buffer-background");
 define_key(content_buffer_normal_keymap, "[", "back");
 define_key(content_buffer_normal_keymap, "]", "forward");
-define_key(content_buffer_normal_keymap, "D", "kill-current-buffer");
-define_key(content_buffer_normal_keymap, "C-`", "switch-to-buffer");
+define_key(default_global_keymap, "D", "kill-current-buffer");
+define_key(default_global_keymap, "C-`", "switch-to-buffer");
 
 // Flash killer
 require("content-policy.js");
@@ -161,7 +161,7 @@ interactive("switch-to-other-buffer",
                 if (blist.length > 1)
                     switch_to_buffer(I.window, blist[1]);
             });
-define_key(content_buffer_normal_keymap, "M-tab", "switch-to-other-buffer");
+define_key(default_global_keymap, "M-tab", "switch-to-other-buffer");
 
 // Set char set
 user_pref("intl.charset.default", "utf8");

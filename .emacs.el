@@ -288,10 +288,6 @@ given a prefix arg."
 ;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
 ;    (linum-mode 1)))
 
-;;;;; highlight current line
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#f5f5f5")
-
 ;;;;; auto-fill
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -338,7 +334,18 @@ given a prefix arg."
 (progn
   (global-set-key (kbd "C-x C-b") 'ibuffer))
 (define-key global-map (kbd "C-`") 'ibuffer)
+(define-key global-map (kbd "M-`") 'iswitchb-buffer)
 (define-key global-map (kbd "M-<tab>") 'other-window)
+
+;; ibuffer
+(setq ibuffer-use-header-line nil)
+(setq ibuffer-formats
+	'((mark modified read-only " "
+		(name 18 18 :left :elide)
+		" "
+		(filename-and-process 45 45 :left :elide)
+        " "
+		(mode 16 16 :left :elide))))
 
 ;; Setup some font size changers
 (define-key global-map (kbd "C-=") 'text-scale-increase)
@@ -458,6 +465,7 @@ given a prefix arg."
 (defun je/save-all ()
   "Save all buffers"
   (interactive)
+  (desktop-save-in-desktop-dir)
   (save-some-buffers t))
 
 (run-with-idle-timer 60 t 'je/save-all)
@@ -907,6 +915,32 @@ given a prefix arg."
 ;; W3M
 (require 'w3m-load)
 (require 'mime-w3m)
+
+;; v-center
+(require 'centered-cursor-mode)
+(global-centered-cursor-mode +1)
+
+;; highlight current line (needs to be after v-center)
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "#f5f5f5")
+
+;; spelling
+(require 'ispell)
+(setq ispell-process-directory (expand-file-name "~/"))
+(setq ispell-program-name "aspell")
+(setq ispell-list-command "list")
+(setq ispell-extra-args '("--sug-mode=ultra"))
+
+(require 'flyspell)
+(setq flyspell-issue-message-flag nil)
+(dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(c++-mode-hook elisp-mode-hook scheme-mode-hook))
+  (add-hook hook (lambda () (flyspell-prog-mode 1))))
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode -1))))
+
+;; customs
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
