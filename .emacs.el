@@ -935,7 +935,7 @@ given a prefix arg."
 (setq flyspell-issue-message-flag nil)
 (dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(c++-mode-hook elisp-mode-hook scheme-mode-hook))
+(dolist (hook '(c++-mode-hook elisp-mode-hook))
   (add-hook hook (lambda () (flyspell-prog-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
