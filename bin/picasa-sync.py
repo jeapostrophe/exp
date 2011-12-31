@@ -8,6 +8,7 @@ import gdata.geo
 import urllib
 import os
 import sys
+import re
 
 URL_TO_GET_PHOTOS 	= '/data/feed/api/user/default/albumid/%s?kind=photo'
 URL_TO_GET_TAGS 	= '/data/feed/api/user/default/albumid/%s/photoid/%s?kind=tag' 
@@ -16,13 +17,15 @@ URL_TO_GET_COMMENTS	= '/data/feed/api/user/default/albumid/%s/photoid/%s?kind=co
 USER_ID			= os.environ['GOOGLE_USER_ID']
 USER_PASSWORD		= os.environ['GOOGLE_USER_PASSWORD']
 
+def sanitize ( path ) :
+        return re.sub("/", "-", path)
 
 def download_file( url, dir_name ):
 	"Download the data at URL to the current directory"
 	basename = url[url.rindex('/') + 1:] # figure out a good name for the downloaded file.
 	url = url.replace(basename, "d/"+basename)
 
-        new_file = dir_name+"/"+basename
+        new_file = dir_name+"/"+sanitize(basename)
 
         get = False
 
@@ -59,13 +62,14 @@ def print_photo_list( albums ):
 		downloaded_photos = 0
 		print 'Album: %s (%s)' % (album.title.text, album.numphotos.text)
 
-		if not os.path.exists(album.title.text) :
-			os.mkdir(album.title.text)
+                album_dir = sanitize(album.title.text)
+		if not os.path.exists(album_dir) :
+			os.mkdir(album_dir)
 
 		photos = gd_client.GetFeed(URL_TO_GET_PHOTOS % (album.gphoto_id.text))
 
 		for photo in photos.entry:
-			download_file( photo.content.src, album.title.text )
+			download_file( photo.content.src, album_dir )
 			downloaded_photos += 1
 
 			sys.stdout.write("\t%d/%s  %.1f %%\r" %(downloaded_photos, album.numphotos.text, 100.0*downloaded_photos/eval(album.numphotos.text)))
