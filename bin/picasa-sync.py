@@ -32,15 +32,17 @@ def download_file( url, dir_name ):
         if not os.path.exists( new_file ) :
                 get = True
         else :
-                site = urllib.urlopen(url)
-                meta = site.info()
-                web_len = int(meta.getheaders("Content-Length")[0])
-                f = open(new_file, "rb")
-                here_len = len(f.read())
-                f.close()
-                if web_len != here_len :
-                        print '\tFile size mismatch: %d vs %d\n' % (web_len, here_len) 
-                        get = True
+                # Turn this to True to enable file size checking
+                if False :
+                        site = urllib.urlopen(url)
+                        meta = site.info()
+                        web_len = int(meta.getheaders("Content-Length")[0])
+                        f = open(new_file, "rb")
+                        here_len = len(f.read())
+                        f.close()
+                        if web_len != here_len :
+                                print '\tFile size mismatch: %d vs %d\n' % (web_len, here_len) 
+                                get = True
 
         if get : 
                 urllib.urlretrieve(url, new_file)

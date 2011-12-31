@@ -924,6 +924,12 @@ given a prefix arg."
 (global-hl-line-mode 1)
 (set-face-background 'hl-line "#f5f5f5")
 
+;; mark down
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+   (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
 ;; spelling
 (require 'ispell)
 (setq ispell-process-directory (expand-file-name "~/"))
@@ -933,7 +939,7 @@ given a prefix arg."
 
 (require 'flyspell)
 (setq flyspell-issue-message-flag nil)
-(dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook))
+(dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(c++-mode-hook elisp-mode-hook))
   (add-hook hook (lambda () (flyspell-prog-mode 1))))
@@ -955,6 +961,12 @@ given a prefix arg."
       'wl-draft-send
       'wl-draft-kill
       'mail-send-hook))
+
+(setq-default mime-transfer-level 8)
+
+;; transparent encryption/decryption
+(require 'epa-file)
+(epa-file-enable)
 
 ;; customs
 
