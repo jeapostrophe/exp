@@ -1,3 +1,11 @@
+Xft.dpi: 96
+Xft.lcdfilter: lcddefault
+Xft.antialias: true
+Xft.hinting:true
+Xft.hintstyle: hintfull
+Xft.rgba: rgb
+*customization: -color
+
 URxvt.saveLines: 1000
 URxvt.scrollBar: off
 URxvt.font: xft:DejaVu Sans Mono:pixelsize=12:spacing=100
