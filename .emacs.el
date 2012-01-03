@@ -968,6 +968,10 @@ given a prefix arg."
 (require 'epa-file)
 (epa-file-enable)
 
+;; icicles
+(require 'icicles)
+(icy-mode 1)
+
 ;; customs
 
 (custom-set-variables
