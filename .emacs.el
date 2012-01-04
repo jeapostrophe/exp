@@ -559,6 +559,9 @@ given a prefix arg."
          :immediate-finish t)))
 
 (global-set-key 
+ (kbd "<s-f1>")
+ (lambda () (interactive) (org-capture nil "t")))
+(global-set-key 
  (kbd "<s-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
 
