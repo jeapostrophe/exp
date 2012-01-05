@@ -363,6 +363,7 @@ given a prefix arg."
             ("c" . "cci")
             ("cc" . "ccci")
             ("rkt" . "rk")
+            ("scrbl" . "scribble --pdf")
             ("tex" . "pdflatex")))
 
     (save-buffer)
