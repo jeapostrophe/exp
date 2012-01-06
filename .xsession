@@ -12,8 +12,6 @@ start-trayer.sh &
 
 nm-applet &
 
-/usr/bin/xcalib /etc/xcalib/profile.icc
-
 workrave &
 
 ~/.dropbox-dist/dropboxd &
