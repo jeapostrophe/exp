@@ -898,24 +898,6 @@ given a prefix arg."
   "Run the Emacs calculator." t)
 (global-set-key [(control return)] 'calculator)
 
-;; GNUS
-;; (setq gnus-select-method
-;;       '(nnimap "gmail"
-;;                (nnimap-address "imap.gmail.com")
-;;                (nnimap-server-port 993)
-;;                (nnimap-stream ssl)))
-;; (setq message-send-mail-function 'smtpmail-send-it
-;;       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-;;       smtpmail-auth-credentials '(("smtp.gmail.com" 587 "jay.mccarthy@gmail.com" nil))
-;;       smtpmail-default-smtp-server "smtp.gmail.com"
-;;       smtpmail-smtp-server "smtp.gmail.com"
-;;       smtpmail-smtp-service 587
-;;       smtpmail-local-domain "gmail.com")
-;; ;;; Make Gnus NOT ignore [Gmail] mailboxes
-;; (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
-;; ;;; Update mail every 60 minutes? (I don't know if this works)
-;; (gnus-demon-add-handler 'gnus-demon-scan-news 60 t)
-
 ;; W3M
 (require 'w3m-load)
 (require 'mime-w3m)
@@ -950,24 +932,6 @@ given a prefix arg."
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
 
-;; wanderlust
-;; (autoload 'wl "wl" "Wanderlust" t)
-;; (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
-;; (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
-;; (autoload 'wl-user-agent-compose "wl-draft" nil t)
-
-;; (if (boundp 'mail-user-agent)
-;;     (setq mail-user-agent 'wl-user-agent))
-;; (if (fboundp 'define-mail-user-agent)
-;;     (define-mail-user-agent
-;;       'wl-user-agent
-;;       'wl-user-agent-compose
-;;       'wl-draft-send
-;;       'wl-draft-kill
-;;       'mail-send-hook))
-
-;; (setq-default mime-transfer-level 8)
-
 ;; transparent encryption/decryption
 (require 'epa-file)
 (epa-file-enable)
@@ -975,6 +939,26 @@ given a prefix arg."
 ;; icicles
 (require 'icicles)
 (icy-mode 1)
+
+;; Weblogger mode
+
+;; thanks to “Pascal J Bourguignon” and “TheFlyingDutchman <zzbba...@aol.com>”. 2010-09-02
+(defun get-string-from-file (filePath)
+  "Return FILEPATH's file content."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (buffer-string)))
+
+(add-to-list 'load-path "~/Dev/dist/weblogger-el")
+(require 'weblogger)
+(defvar weblogger-password (get-string-from-file "~/.weblogger-password"))
+(setq 
+ weblogger-blogger-firstline-title t
+ weblogger-config-alist 
+ `(("old" "http://www.blogger.com/api" 
+    "jay.mccarthy@gmail.com" ,weblogger-password "232724754995675289")
+   ("new" "http://www.blogger.com/api"
+    "jay.mccarthy@gmail.com" ,weblogger-password "5541671642109358760")))
 
 ;; customs
 
@@ -984,7 +968,7 @@ given a prefix arg."
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(ibuffer-default-sorting-mode (quote alphabetic))
- '(ibuffer-display-summary nil))
+ '(ibuffer-display-summary nil)
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
