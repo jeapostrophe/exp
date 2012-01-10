@@ -711,8 +711,8 @@ given a prefix arg."
           (t "      ")))
    " "
    ; directory and buffer/file name
-   (:propertize (:eval (shorten-directory default-directory 5))
-                face mode-line-folder-face)
+   ;;(:propertize (:eval (shorten-directory default-directory 5))
+   ;;             face mode-line-folder-face)
    (:propertize "%b"
                 face mode-line-filename-face)
    ; narrow [default -- keep?]
@@ -940,25 +940,10 @@ given a prefix arg."
 (require 'icicles)
 (icy-mode 1)
 
-;; Weblogger mode
-
-;; thanks to “Pascal J Bourguignon” and “TheFlyingDutchman <zzbba...@aol.com>”. 2010-09-02
-(defun get-string-from-file (filePath)
-  "Return FILEPATH's file content."
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (buffer-string)))
-
-(add-to-list 'load-path "~/Dev/dist/weblogger-el")
-(require 'weblogger)
-(defvar weblogger-password (get-string-from-file "~/.weblogger-password"))
-(setq 
- weblogger-blogger-firstline-title t
- weblogger-config-alist 
- `(("old" "http://www.blogger.com/api" 
-    "jay.mccarthy@gmail.com" ,weblogger-password "232724754995675289")
-   ("new" "http://www.blogger.com/api"
-    "jay.mccarthy@gmail.com" ,weblogger-password "5541671642109358760")))
+;; buffer names
+(require 'uniquify)
+(setq uniquify-min-dir-content 3
+      uniquify-buffer-name-style 'forward)
 
 ;; customs
 

@@ -55,8 +55,8 @@ function set-eterm-dir {
 if [ "$TERM" = "eterm-color" ]; then
     precmd () { set-eterm-dir }
 else
-    precmd () {print -Pn "\e]0;$TPS1\a"}
-    preexec () {print -Pn "\e]0;$TPS1 $2\a"}
+    precmd () {print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\"}
+    preexec () {print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\"}
 fi
 
 ZDIR=~/.zdir
