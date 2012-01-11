@@ -14,8 +14,18 @@ Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager); // init
 require("session.js");
 session_auto_save_auto_load = true;
 
-// Open URLs from other places in a new buffer
-url_remoting_fn = load_url_in_new_buffer;
+// Open URLs from other places in a new buffer, unless -new is passed
+command_line_handler("new", true, function (ctx) {
+    ctx.je_new = true;
+});
+function je_url_remote (url, ctx) {
+    if ( ctx.je_new ) {
+        load_url_in_new_window(url, ctx);
+    } else {
+        load_url_in_new_buffer(url, ctx);
+    }
+}
+url_remoting_fn = je_url_remote;
 
 // Don't open a new window or take over the buffer when downloading
 download_buffer_automatic_open_target = OPEN_NEW_BUFFER_BACKGROUND;

@@ -341,9 +341,9 @@ given a prefix arg."
 (setq ibuffer-use-header-line nil)
 (setq ibuffer-formats
 	'((mark modified read-only " "
-		(name 18 18 :left :elide)
+		(name 45 45 :left :elide)
 		" "
-		(filename-and-process 45 45 :left :elide)
+		(filename-and-process 18 18 :left :elide)
         " "
 		(mode 16 16 :left :elide))))
 
@@ -356,7 +356,6 @@ given a prefix arg."
   "Execute or compile the current file."
   (interactive)
   (let (suffixMap fname suffix progName cmdStr)
-
     ;; a keyed list of file suffix to comand-line program path/name
     (setq suffixMap
           '(("java" . "javai")
@@ -378,11 +377,14 @@ given a prefix arg."
       (if progName
           (progn
             (message "Running...")
-            (if (not writep)
+            
+            (if (file-exists-p (concat default-directory "/Makefile"))
+                (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
+              (if (not writep)
                 (compile (concat "zsh " cmdStr))
               (let ((multi-term-program-switches 
                      (list "-i" "-c" (concat progName " \"" fname "\""))))
-                (multi-term-dedicated-open))))
+                (multi-term-dedicated-open)))))
         (progn
           (message "No recognized program file suffix for this file."))))))
 (defun run-current-file-ro () 
@@ -953,7 +955,7 @@ given a prefix arg."
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(ibuffer-default-sorting-mode (quote alphabetic))
- '(ibuffer-display-summary nil)
+ '(ibuffer-display-summary nil))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.

@@ -26,6 +26,6 @@ END
      (mprintf "  :Completed:\t~a\n" done?)
      (mprintf "  :PlayAgain:\t~a\n" again?)
      (mprintf "  :Reviewed:\t~a\n" blog?)
-     (printf "  :END:\n\n")
-     (mprintf "  ~a\n\n" comments))
+     (printf "  :END:\n")
+     (mprintf "\n  ~a\n\n" comments))
 
