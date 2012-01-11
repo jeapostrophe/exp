@@ -944,7 +944,7 @@ given a prefix arg."
 
 ;; buffer names
 (require 'uniquify)
-(setq uniquify-min-dir-content 3
+(setq uniquify-min-dir-content 90
       uniquify-buffer-name-style 'forward)
 
 ;; games.org sorting
