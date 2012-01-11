@@ -947,6 +947,10 @@ given a prefix arg."
 (setq uniquify-min-dir-content 3
       uniquify-buffer-name-style 'forward)
 
+;; games.org sorting
+(load-file "games.org.el")
+(global-set-key (kbd "s-<f2>") 'je/games/sort)
+
 ;; customs
 
 (custom-set-variables
