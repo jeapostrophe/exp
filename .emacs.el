@@ -948,7 +948,7 @@ given a prefix arg."
       uniquify-buffer-name-style 'forward)
 
 ;; games.org sorting
-(load-file "games.org.el")
+(load-file "~/.emacs.d/games.org.el")
 (global-set-key (kbd "s-<f2>") 'je/games/sort)
 
 ;; customs
