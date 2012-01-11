@@ -25,14 +25,45 @@
         (y-completed (nth 2 y))
         (y-play-again (nth 3 y))
         (y-reviewed (nth 4 y)))    
-    ;; I would like everything that has not been reviewed (i.e. is N) to
-    ;; be first.
     (cond
-     ((and (equal x-reviewed "N")
-           (not (equal x-reviewed y-reviewed)))
+     ;; Active is first
+     ((and (string= x-completed "Active")
+           (not (string= x-completed y-completed)))
       t)
+     ((and (string= y-completed "Active")
+           (not (string= x-completed y-completed)))
+      nil)
+     ;; Not reviewed (i.e. is N) is first.
+     ((and (stringp x-reviewed) (string= x-reviewed "N")
+           (not (string= x-reviewed y-reviewed)))
+      t)
+     ((and (stringp y-reviewed) (string= y-reviewed "N")
+           (not (string= x-reviewed y-reviewed)))
+      nil)
+     ;; Don't play again is last
+     ((and (stringp x-play-again)
+           (string-match "N" x-play-again)
+           (not (string= x-play-again y-play-again)))
+      nil)
+     ((and (stringp y-play-again)
+           (string-match "N" y-play-again)
+           (not (string= x-play-again y-play-again)))
+      t)     
+     ;; Completed is last
+     ((and (stringp x-completed)
+           (string-match "Y" x-completed)
+           (not (string= x-completed y-completed)))
+      nil)
+     ((and (stringp y-completed)
+           (string-match "Y" y-completed)
+           (not (string= x-completed y-completed)))
+      t)
+     ;; Sort by year
+     ((and (stringp x-year) (stringp y-year) (not (string= x-year y-year)))
+      (string< x-year y-year))
+     ;; Sort by name
      (t
-      nil))))
+      (string< x-name y-name)))))
 (defun je/games/sort ()
   "Sort my games database"
   (interactive)

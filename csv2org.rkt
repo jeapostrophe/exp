@@ -11,11 +11,6 @@
   (unless (string=? "" arg)
           (printf fmt arg)))
 
-(printf #<<END
-#+COLUMNS: %25ITEM %System %Year %Completed %PlayAgain %Reviewed
-
-END
-)
 (printf "* Games\n")
 (for ([entry (in-list games)])
      (match-define (list system year game/en game/jp can-play? last-price paid recv done? comments again? blog?) (extend-l entry))
@@ -28,4 +23,9 @@ END
      (mprintf "  :Reviewed:\t~a\n" blog?)
      (printf "  :END:\n")
      (mprintf "\n  ~a\n\n" comments))
+(printf #<<END
+* Settings
+#+COLUMNS: %25ITEM %System %Year %Completed %PlayAgain %Reviewed
 
+END
+)
