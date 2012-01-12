@@ -329,6 +329,7 @@ given a prefix arg."
         (delete-frame)
       (delete-window))))
 (global-set-key (kbd "s-w") 'je/delete-window)
+(global-set-key (kbd "M-w") 'delete-other-windows)
 
 ;; Replace the standard way of looking through buffers
 (progn
