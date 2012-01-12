@@ -340,26 +340,32 @@ given a prefix arg."
 ;; ibuffer
 (setq ibuffer-use-header-line nil)
 (setq directory-abbrev-alist
-      '(("^/home/jay" . "~")
-        ("^/Users/jay" . "~")
-        ("^~/Dev/scm" . "~scm")
-        ("^~scm/plt" . "~plt")
-        ("^~plt/collects" . "~collects")
-        ("^~collects/web-server" . "~ws")
-        ("^~scm/github.jeapostrophe" . "~github")
-        ("^~github/exp" . "~exp")
-        ("^~github/work" . "~work")
-        ("^~work/papers" . "~papers")
-        ("^~work/courses" . "~courses")
-        ("^~github/home" . "~home")
-        ("^~home/etc" . "~etc")
-        ("^~home/finance" . "~fin")
-        ("^~home/journal" . "~j")
-        ("^~github/get-bonus" . "~gb")))
+      '())
+
+(defun je/abbreviate-file-name (name)
+  (let ((directory-abbrev-alist         
+         '(("^/home/jay" . "~")
+           ("^/Users/jay" . "~")
+           ("^~/Dev/scm" . "~scm")
+           ("^~scm/plt" . "~plt")
+           ("^~plt/collects" . "~collects")
+           ("^~collects/web-server" . "~ws")
+           ("^~scm/github.jeapostrophe" . "~github")
+           ("^~github/exp" . "~exp")
+           ("^~github/work" . "~work")
+           ("^~work/papers" . "~papers")
+           ("^~work/courses" . "~courses")
+           ("^~github/home" . "~home")
+           ("^~home/etc" . "~etc")
+           ("^~home/finance" . "~fin")
+           ("^~home/journal" . "~j")
+           ("^~github/get-bonus" . "~gb"))))
+    (abbreviate-file-name name)))
+
 (define-ibuffer-column je/name ()
   (cond
    ((buffer-file-name buffer)
-    (abbreviate-file-name (buffer-file-name buffer)))
+    (je/abbreviate-file-name (buffer-file-name buffer)))
    (t
     (buffer-name buffer))))
 (setq ibuffer-formats
@@ -736,7 +742,7 @@ given a prefix arg."
    ; directory and buffer/file name
    ;;(:propertize (:eval (shorten-directory default-directory 5))
    ;;             face mode-line-folder-face)
-   (:propertize (:eval (abbreviate-file-name (buffer-name)))
+   (:propertize (:eval (je/abbreviate-file-name (buffer-name)))
                 face mode-line-filename-face)
    ; narrow [default -- keep?]
    ;" %n "
