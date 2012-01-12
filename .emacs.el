@@ -339,12 +339,33 @@ given a prefix arg."
 
 ;; ibuffer
 (setq ibuffer-use-header-line nil)
+(setq directory-abbrev-alist
+      '(("^/home/jay" . "~")
+        ("^/Users/jay" . "~")
+        ("^~/Dev/scm" . "~scm")
+        ("^~scm/plt" . "~plt")
+        ("^~plt/collects" . "~collects")
+        ("^~collects/web-server" . "~ws")
+        ("^~scm/github.jeapostrophe" . "~github")
+        ("^~github/exp" . "~exp")
+        ("^~github/work" . "~work")
+        ("^~work/papers" . "~papers")
+        ("^~work/courses" . "~courses")
+        ("^~github/home" . "~home")
+        ("^~home/etc" . "~etc")
+        ("^~home/finance" . "~fin")
+        ("^~home/journal" . "~j")
+        ("^~github/get-bonus" . "~gb")))
+(define-ibuffer-column je/name ()
+  (cond
+   ((buffer-file-name buffer)
+    (abbreviate-file-name (buffer-file-name buffer)))
+   (t
+    (buffer-name buffer))))
 (setq ibuffer-formats
-	'((mark modified read-only " "
-		(name 45 45 :left :elide)
+	'((mark modified " "
+		(je/name 65 65 :left :elide)
 		" "
-		(filename-and-process 18 18 :left :elide)
-        " "
 		(mode 16 16 :left :elide))))
 
 ;; Setup some font size changers
@@ -715,7 +736,7 @@ given a prefix arg."
    ; directory and buffer/file name
    ;;(:propertize (:eval (shorten-directory default-directory 5))
    ;;             face mode-line-folder-face)
-   (:propertize "%b"
+   (:propertize (:eval (abbreviate-file-name (buffer-name)))
                 face mode-line-filename-face)
    ; narrow [default -- keep?]
    ;" %n "
@@ -949,6 +970,7 @@ given a prefix arg."
 
 ;; games.org sorting
 (load-file "~/.emacs.d/games.org.el")
+(global-set-key (kbd "s-<XF86MonBrightnessUp>") 'je/games/sort)
 (global-set-key (kbd "s-<f2>") 'je/games/sort)
 
 ;; customs
@@ -958,7 +980,7 @@ given a prefix arg."
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(ibuffer-default-sorting-mode (quote alphabetic))
+ '(ibuffer-default-sorting-mode (quote filename/process))
  '(ibuffer-display-summary nil))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
