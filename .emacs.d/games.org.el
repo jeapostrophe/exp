@@ -33,6 +33,20 @@
      ((and (string= y-completed "Active")
            (not (string= x-completed y-completed)))
       nil)
+     ;; Scheduled next
+     ((and (string= x-completed "Scheduled")
+           (not (string= x-completed y-completed)))
+      t)
+     ((and (string= y-completed "Scheduled")
+           (not (string= x-completed y-completed)))
+      nil)
+     ;; Queue next
+     ((and (string= x-completed "Queue")
+           (not (string= x-completed y-completed)))
+      t)
+     ((and (string= y-completed "Queue")
+           (not (string= x-completed y-completed)))
+      nil)
      ;; Not reviewed (i.e. is N) is first.
      ((and (stringp x-reviewed) (string= x-reviewed "N")
            (not (string= x-reviewed y-reviewed)))
