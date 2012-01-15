@@ -840,7 +840,7 @@ given a prefix arg."
 (setq desktop-dirname "~/.emacs.d/")
 (setq desktop-base-file-name "emacs-desktop")
 (setq desktop-save 'if-exists)
-(desktop-save-mode 1)
+(setq desktop-load-locked-desktop t)
 
 ;; save a bunch of variables to the desktop file
 ;; for lists specify the len of the maximal saved data also
@@ -858,6 +858,14 @@ given a prefix arg."
                 (shell-command-history    . 50)
                 tags-file-name
                 register-alist)))
+
+(desktop-save-mode 1)
+
+(add-to-list 'load-path "~/Dev/dist/nxhtml/util")
+(require 'winsav)
+(setq winsav-save t)
+(setq winsav-dirname "~/.emacs.d/")
+(winsav-save-mode 1)
 
 ;;;;; shift select
 (setq shift-select-mode 1)
