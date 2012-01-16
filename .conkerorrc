@@ -1,7 +1,7 @@
 // Load modules
 require("content-delay.js");
 require("page-modes/mini-gcal.js");
-require("page-modes/gmail.js");
+require("page-modes/mini-gmail.js");
 
 session_pref("xpinstall.whitelist.required", false);
 
