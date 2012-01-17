@@ -10,6 +10,8 @@ gnome-settings-daemon &
 
 start-trayer.sh &
 
+color-correct.sh
+
 nm-applet &
 
 workrave &
