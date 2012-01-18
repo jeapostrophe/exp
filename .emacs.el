@@ -312,7 +312,7 @@ given a prefix arg."
 
 (global-set-key (kbd "s-S-t") 'eval-region)
 (global-set-key (kbd "s-a") 'mark-whole-buffer)
-(global-set-key (kbd "s-q") 'kill-emacs)
+;;(global-set-key (kbd "s-q") 'kill-emacs)
 (global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
 (global-set-key (kbd "s-x") 'clipboard-kill-region)
 (global-set-key (kbd "s-v") 'clipboard-yank)
