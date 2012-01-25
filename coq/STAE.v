@@ -147,6 +147,35 @@ Proof.
   inversion_clear HT; inversion_clear HV; eauto.
 Qed.
 
+Lemma val_uniq :
+ forall (t:term) (v1 v2:val),
+  HasVal t v1 ->
+  HasVal t v2 ->
+  v1 = v2.
+Proof.
+ intros t. induction t; intros v1 v2;
+  intros Hv1; inversion_clear Hv1; 
+  intros Hv2; inversion_clear Hv2; eauto.
+
+ eapply IHt2; eauto.
+ Ltac val_uniq_kill := 
+  absurd ( val_Bool true = val_Bool false ); eauto;
+  intros X; inversion X.
+ val_uniq_kill. val_uniq_kill.
+
+ Ltac val_uniq_skill val_Num n1 n0 :=
+  assert (n1 = n0) as Veq; 
+   [ assert ((val_Num n1) = (val_Num n0)) as val_eq; eauto; 
+     inversion_clear val_eq; eauto
+   | rewrite Veq; clear Veq; eauto ].
+
+ val_uniq_skill val_Num n1 n0.
+ val_uniq_skill val_Num n2 n3.
+ val_uniq_skill val_Bool b b0.
+ val_uniq_skill val_Num n n0.
+Qed.
+Hint Resolve val_uniq.
+
 Theorem val_dec :
        forall t:term,
         { v:val | HasVal t v } + { forall v:val, ~ HasVal t v }.
@@ -154,25 +183,58 @@ Proof.
  intros t. induction t; eauto.
 
  Ltac ChooseFalse' :=
-  right; intros ty0; intro HT; inversion_clear HT; eauto.
+  right; intros v0 HV; inversion_clear HV; eauto.
  Ltac IH_Split' IH ty :=
   case IH; [ clear IH; intros IH; case IH; clear IH;
-             intros ty; case ty; clear ty; intros ty IH
-           | clear IH; intros ty IH; ChooseFalse'; eapply IH; eauto ].
- Ltac BeAbsurd' :=
-  absurd (ty_Bool = ty_Num); eauto; intros H3; inversion H3.
+             intros ty; case ty; clear ty;
+              [ intros ty; case ty; clear ty | intros ty ];
+             intros IH
+           | clear IH; intros IH; ChooseFalse'; eapply IH; eauto ].
+ Ltac IH_Split'' IH ty :=
+  case IH; [ clear IH; intros IH; case IH; clear IH;
+             intros ty; case ty; clear ty;
+              [ intros ty; case ty; clear ty | intros ty ];
+             intros IH
+           | clear IH; intros IH; ChooseFalse'; eauto ].
+ Ltac BeAbsurd' lhs rhs :=
+  absurd ( lhs = rhs); eauto; intros X; inversion X.
 
+ IH_Split' IHt1 v1; eauto.
 
- case IHt1. clear IHt1. intros IHt1. case IHt1; clear IHt1;
- intros v; case v; clear v; intros v IHt1; eauto.
+ IH_Split'' IHt2 v2; eauto.
+ eapply IHt2; eauto.
+ BeAbsurd' (val_Bool true) (val_Bool false).
 
- IH_Split IHt1 v1; eauto.
+ IH_Split'' IHt3 v3; eauto.
+ BeAbsurd' (val_Bool true) (val_Bool false).
+ eapply IHt3; eauto.
 
- case IHt1. clear IHt1. intros IHt1. case IHt1; clear IHt1;
- intros v; case v; clear v; intros v IHt1; eauto.
+ ChooseFalse'.
+ BeAbsurd' (val_Num v1) (val_Bool true).
+ BeAbsurd' (val_Num v1) (val_Bool false).
 
+ IH_Split' IHt1 v1; eauto.
+ ChooseFalse'.
+ BeAbsurd' (val_Num n1) (val_Bool true).
+ ChooseFalse'.
+ BeAbsurd' (val_Num n1) (val_Bool false).
 
- IH_Split IHt1 v1; eauto.
+ IH_Split' IHt2 v2; eauto.
+ ChooseFalse'.
+ BeAbsurd' (val_Num n2) (val_Bool true).
+ ChooseFalse'.
+ BeAbsurd' (val_Num n2) (val_Bool false).
+
+ IH_Split' IHt v; eauto.
+ ChooseFalse'.
+ BeAbsurd' (val_Num v) (val_Bool b).
+
+ IH_Split' IHt v; eauto.
+ ChooseFalse'.
+ BeAbsurd' (val_Num n) (val_Bool true).
+ ChooseFalse'.
+ BeAbsurd' (val_Num n) (val_Bool false).
+Qed.
 
 Theorem eval :
  forall (t0:term),
