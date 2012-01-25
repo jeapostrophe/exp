@@ -95,33 +95,94 @@ Proof.
  (* val *)
  case v; eauto.
  (* if *)
- Ltac DefFalse :=
+ Ltac ChooseFalse :=
   right; intros ty0; intro HT; inversion_clear HT; eauto.
  Ltac IH_Split IH ty :=
   case IH; [ clear IH; intros IH; case IH; clear IH;
              intros ty; case ty; clear ty; intros IH
-           | clear IH; intros IH; DefFalse ].
+           | clear IH; intros IH; ChooseFalse; eapply IH; eauto ].
+ Ltac BeAbsurd :=
+  absurd (ty_Bool = ty_Num); eauto; intros H3; inversion H3.
 
  IH_Split IHt1 ty1; eauto.
  IH_Split IHt2 ty2; eauto.
  IH_Split IHt3 ty3; eauto.
 
- DefFalse. rewrite (ty_uniq t2 ty0 ty_Bool H0 IHt2) in *.
- absurd (ty_Bool = ty_Num); eauto. intros H3. inversion H3.
+ ChooseFalse.
+ rewrite (ty_uniq t2 ty0 ty_Bool H0 IHt2) in H1.
+ BeAbsurd.
 
  IH_Split IHt3 ty3; eauto.
 
- right; intros ty0; intro HT; inversion_clear HT; eauto.
- rewrite (ty_uniq t3 ty0 ty_Bool H1 IHt3) in *.
- absurd (ty_Bool = ty_Num); eauto. intros H3. inversion H3.
+ ChooseFalse.
+ rewrite (ty_uniq t3 ty0 ty_Bool H1 IHt3) in H0.
+ BeAbsurd.
 
- right; intros ty0; intro HT; inversion_clear HT; eauto.
- absurd (ty_Bool = ty_Num); eauto. intros H3. inversion H3.
- 
- 
+ ChooseFalse. BeAbsurd.
+ (* add *)
+ IH_Split IHt1 ty1; eauto.
+ IH_Split IHt2 ty2; eauto.
+
+ ChooseFalse. BeAbsurd.
+ ChooseFalse. BeAbsurd.
+ IH_Split IHt2 ty2; eauto.
+ ChooseFalse. BeAbsurd.
+ (* not *)
+ IH_Split IHt ty1; eauto.
+ ChooseFalse. BeAbsurd.
+ (* iszero *)
+ IH_Split IHt ty1; eauto.
+ ChooseFalse. BeAbsurd.
+Qed.
+
+Theorem soundness :
+ forall (t0:term) (T0:ty) (v0:val),
+   HasType t0 T0 ->
+   HasVal t0 v0 ->
+   HasType (term_Val v0) T0.
+Proof.
+ intros t0.
+
+ induction t0; [ case v; intros vv | | | | ]; intros T0 v0 HT HV; 
+  inversion_clear HT; inversion_clear HV; eauto.
+Qed.
+
+Theorem val_dec :
+       forall t:term,
+        { v:val | HasVal t v } + { forall v:val, ~ HasVal t v }.
+Proof.
+ intros t. induction t; eauto.
+
+ Ltac ChooseFalse' :=
+  right; intros ty0; intro HT; inversion_clear HT; eauto.
+ Ltac IH_Split' IH ty :=
+  case IH; [ clear IH; intros IH; case IH; clear IH;
+             intros ty; case ty; clear ty; intros ty IH
+           | clear IH; intros ty IH; ChooseFalse'; eapply IH; eauto ].
+ Ltac BeAbsurd' :=
+  absurd (ty_Bool = ty_Num); eauto; intros H3; inversion H3.
+
+
+ case IHt1. clear IHt1. intros IHt1. case IHt1; clear IHt1;
+ intros v; case v; clear v; intros v IHt1; eauto.
+
+ IH_Split IHt1 v1; eauto.
+
+ case IHt1. clear IHt1. intros IHt1. case IHt1; clear IHt1;
+ intros v; case v; clear v; intros v IHt1; eauto.
+
+
+ IH_Split IHt1 v1; eauto.
 
 Theorem eval :
-       forall t:term, T:ty,
-        HasType t ty ->
-        { v | HasVal t v /\ HasType (Val v) ty } .
+ forall (t0:term),
+  { v0:val | HasVal t0 v0 } + { forall (T0:ty), ~ HasType t0 T0 }.
+Proof.
+ intros t0.
+ induction t0; eauto.
 
+ IH_Split IHt0_1 v0_1; eauto.
+ IH_Split IHt0_2 v0_2; eauto.
+ IH_Split IHt0_3 v0_3; eauto.
+
+ intros HV_3 HV_2 HV_1; eauto.
