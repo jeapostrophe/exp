@@ -236,7 +236,7 @@ Lemma soundlike :
    HasVal t0 v0.
 Proof.
  intros t0.
-
+ (* XXX This might be nicer with induction on HT. *)
  induction t0; [ case v; intros vv | | | | ]; intros T0 HT;
   inversion_clear HT; eauto.
 
