@@ -119,7 +119,10 @@
   (define last 
     (or (with-handlers ([exn? (λ (x) #f)])
                        (file->value last-request-secs-path))
-        (current-seconds)))
+        ;; We don't know how long it has been since you last made a
+        ;; request, or if you've been banned. So, we'll wait a long
+        ;; time and try then. (long time = 15 minutes)
+        (+ (current-seconds) #;(* 60 15))))
   (sync (alarm-evt (* 1000
                       (+ last
                          ;; No more than 1 request per minute
@@ -135,7 +138,8 @@
   (build-path *output-dir* "results"))
 (make-directory* result-root)
 
-(for ([step (in-range (add1 *steps*))])
+(for ([step (in-range 1 (add1 *steps*))])
+     (printf "Step ~a\n" step)
      (define u (jdict-url (step-start step)))
      (define cache-path
        (build-path cache-root (format "~a.html" step)))
@@ -147,4 +151,4 @@
            (read-url/string/slow u)))
      (display-to-file s cache-path #:exists 'replace)
      ;; XXX Get all the images / sound files
-     (write-to-file (parse-step s) result-path #:exists 'replace))
+     #;(write-to-file (parse-step s) result-path #:exists 'replace))
