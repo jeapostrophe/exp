@@ -1,5 +1,6 @@
 #lang racket/base
-(require racket/list
+(require racket/function
+         racket/list
          racket/port
          racket/file
          net/url
@@ -8,7 +9,7 @@
          (planet neil/html-parsing/html-parsing)
          (planet clements/sxml2))
 
-(define *output-dir* "/tmp/kdict")
+(define *output-dir* "/home/jay/Downloads/kdict")
 (define *max* 3232)
 (define *steps* (ceiling (/ *max* 10)))
 
@@ -25,11 +26,12 @@
        (list (cons 'm "view")
              (cons 'start (number->string start)))
        #f))
+(define jdict-base (jdict-url 0))
 
-(define (read-url/string u)
+(define (read-url/bytes u)
   (define ans
     (call/input-url u get-pure-port
-                    port->string))
+                    port->bytes))
   (when (regexp-match #rx"403 Forbidden" ans)
         (error 'jdictate "You've been banned. :("))
   ans)
@@ -112,11 +114,32 @@
          radical-img-url radical-string meanings readings
          examples irregular)))
 
+(define (extract-url-paths ks)
+  (append-map
+   (λ (k)
+      (match-define
+       (list 'kanji
+             grade kanji stroke stroke-order-url
+             radical-img-url radical-string meanings readings
+             examples irregular)
+       k)
+      (filter-map identity
+                  (list* stroke-order-url
+                         radical-img-url
+                         (append (map second readings)
+                                 (map second examples)
+                                 (map second irregular)))))
+   ks))
+(define (extract-urls ks)
+  (for/list
+   ([p (in-list (extract-url-paths ks))])
+   (combine-url/relative jdict-base p)))
+
 (define last-request-secs-path
   (build-path *output-dir* "last-request-secs.rktd"))
 (make-directory* *output-dir*)
-(define (read-url/string/slow u)
-  (define last 
+(define (read-url/bytes/slow u)
+  (define last
     (or (with-handlers ([exn? (λ (x) #f)])
                        (file->value last-request-secs-path))
         ;; We don't know how long it has been since you last made a
@@ -125,18 +148,32 @@
         (+ (current-seconds) #;(* 60 15))))
   (sync (alarm-evt (* 1000
                       (+ last
-                         ;; No more than 1 request per minute
-                         60))))
-  (begin0 (read-url/string u)
+                         ;; No more than 2 requests per minute
+                         30))))
+  (begin0 (read-url/bytes u)
           (write-to-file (current-seconds) last-request-secs-path #:exists 'replace)))
 
 (define cache-root
   (build-path *output-dir* "cache"))
 (make-directory* cache-root)
+(make-directory* (build-path cache-root "static"))
 
 (define result-root
   (build-path *output-dir* "results"))
 (make-directory* result-root)
+
+(define (cache-url-to-file! u cache-path)
+  (unless
+   (file-exists? cache-path)
+   (printf "  Caching ~a -> ~a\n" (url->string u) cache-path)
+   (define bs (read-url/bytes/slow u))
+   (display-to-file bs cache-path #:exists 'replace)))
+(define (cache-static-url! u)
+  (define cache-path
+    (build-path cache-root "static"
+                (apply string-append
+                       (add-between (map path/param-path (url-path u)) "."))))
+  (cache-url-to-file! u cache-path))
 
 (for ([step (in-range 1 (add1 *steps*))])
      (printf "Step ~a\n" step)
@@ -145,10 +182,13 @@
        (build-path cache-root (format "~a.html" step)))
      (define result-path
        (build-path result-root (format "~a.rktd" step)))
-     (define s
-       (if (file-exists? cache-path)
-           (file->string cache-path)
-           (read-url/string/slow u)))
-     (display-to-file s cache-path #:exists 'replace)
-     ;; XXX Get all the images / sound files
-     #;(write-to-file (parse-step s) result-path #:exists 'replace))
+     (cache-url-to-file! u cache-path)
+     ;; XXX Not sure if the parser is robust enough yet
+     (when #f
+           (define s (file->string cache-path))
+           (define res (parse-step s))
+           (write-to-file res result-path #:exists 'replace)
+           ;; XXX I want to get the metadata before getting the static
+           ;; content; since I need to wait anyways, these can wait.
+           (when #f
+                 (for-each cache-static-url! (extract-urls res)))))
