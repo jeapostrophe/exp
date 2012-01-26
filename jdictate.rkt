@@ -24,14 +24,26 @@
        (list (path/param "cgi-bin" empty)
              (path/param "dic.cgi" empty))
        (list (cons 'm "view")
-             (cons 'start (number->string start)))
+             (cons 'sc "0")
+             (cons 'f "0")
+             (cons 'j "")
+             (cons 'g "")
+             (cons 'e "")
+             (cons 's "")
+             (cons 'rt "0")
+             (cons 'start (number->string start))
+             (cons 'sid "1327593805_50151"))
        #f))
+
+;; http://www.saiga-jp.com/cgi-bin/dic.cgi?m=search&sc=0&f=0&j=&g=&e=&s=&rt=0&start=1&sid=1327593805_50151
+
 (define jdict-base (jdict-url 0))
 
 (define (read-url/bytes u)
   (define ans
     (call/input-url u get-pure-port
-                    port->bytes))
+                    port->bytes
+                    (list "Referer: http://www.saiga-jp.com/cgi-bin/dic.cgi")))
   (when (regexp-match #rx"403 Forbidden" ans)
         (error 'jdictate "You've been banned. :("))
   ans)
@@ -182,6 +194,8 @@
        (build-path cache-root (format "~a.html" step)))
      (define result-path
        (build-path result-root (format "~a.rktd" step)))
+     ;; XXX Can't get this step to work. I think it is looking at a
+     ;; cookie or something like that
      (cache-url-to-file! u cache-path)
      ;; XXX Not sure if the parser is robust enough yet
      (when #f
