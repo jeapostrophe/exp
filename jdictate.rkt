@@ -148,8 +148,8 @@
         (+ (current-seconds) #;(* 60 15))))
   (sync (alarm-evt (* 1000
                       (+ last
-                         ;; No more than 2 requests per minute
-                         30))))
+                         ;; No more than 1 request per minute
+                         60))))
   (begin0 (read-url/bytes u)
           (write-to-file (current-seconds) last-request-secs-path #:exists 'replace)))
 
