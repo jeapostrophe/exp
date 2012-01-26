@@ -28,7 +28,14 @@
  (! (<= ff7 ff6))
  (! (<= ff7 ff13))
  (! (<= smb1 smb2))
- (! (<= ff4 smb3)))
+ (! (<= ff4 smb3))
+
+ (! (<= smb2 smb3))
+ (! (<= ff7 ff4))
+ (! (<= ff13 ff6))
+ (! (<= ff4 ff13))
+ (! (<= smb2 ff7))
+ (! (<= smb3 ff13)))
 
 (define (lift-<= x y)
   (not
@@ -48,3 +55,6 @@
     #f]))
 
 (sort space inspect-<=)
+
+(write-theory ranking)
+
