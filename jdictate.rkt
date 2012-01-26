@@ -32,7 +32,7 @@
              (cons 's "")
              (cons 'rt "0")
              (cons 'start (number->string start))
-             (cons 'sid "1327593805_50151"))
+             (cons 'sid "1327595084_68489"))
        #f))
 
 ;; http://www.saiga-jp.com/cgi-bin/dic.cgi?m=search&sc=0&f=0&j=&g=&e=&s=&rt=0&start=1&sid=1327593805_50151
@@ -43,7 +43,8 @@
   (define ans
     (call/input-url u get-pure-port
                     port->bytes
-                    (list "Referer: http://www.saiga-jp.com/cgi-bin/dic.cgi")))
+                    (list "Cookie: kanji_dictionary=1327595084_68489:1327595084_68489:1"
+                          "User-Agent: Mozilla/5.0 (Ubuntu; X11; Linux x86_64; rv:8.0) Gecko/20100101 Firefox/8.0")))
   (when (regexp-match #rx"403 Forbidden" ans)
         (error 'jdictate "You've been banned. :("))
   ans)
@@ -160,8 +161,8 @@
         (+ (current-seconds) #;(* 60 15))))
   (sync (alarm-evt (* 1000
                       (+ last
-                         ;; No more than 1 request per minute
-                         60))))
+                         ;; Wait between each request
+                         90))))
   (begin0 (read-url/bytes u)
           (write-to-file (current-seconds) last-request-secs-path #:exists 'replace)))
 
