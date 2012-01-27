@@ -18,6 +18,8 @@ workrave &
 
 ~/.dropbox-dist/dropboxd &
 
+~/Dev/dist/qjoypad-4.1.0/local/bin/qjoypad &
+
 urxvtd &
 
 ibus-daemon --xim &
