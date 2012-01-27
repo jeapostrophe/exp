@@ -33,5 +33,11 @@ type term =
 
 val val_dec : term -> val0 sumor
 
+type ty =
+| Ty_Bool
+| Ty_Num
+
+val ty_dec : term -> ty sumor
+
 val eval : term -> val0 sumor
 

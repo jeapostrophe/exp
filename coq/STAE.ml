@@ -86,6 +86,70 @@ let rec val_dec = function
       | Val_Num v -> Inleft (Val_Bool (zerob v)))
    | Inright -> Inright)
 
+type ty =
+| Ty_Bool
+| Ty_Num
+
+(** val ty_dec : term -> ty sumor **)
+
+let rec ty_dec = function
+| Term_Val v ->
+  (match v with
+   | Val_Bool b -> Inleft Ty_Bool
+   | Val_Num n -> Inleft Ty_Num)
+| Term_If (t0, t1, t2) ->
+  (match ty_dec t0 with
+   | Inleft iHt1 ->
+     (match iHt1 with
+      | Ty_Bool ->
+        (match ty_dec t1 with
+         | Inleft iHt2 ->
+           (match iHt2 with
+            | Ty_Bool ->
+              (match ty_dec t2 with
+               | Inleft iHt3 ->
+                 (match iHt3 with
+                  | Ty_Bool -> Inleft Ty_Bool
+                  | Ty_Num -> Inright)
+               | Inright -> Inright)
+            | Ty_Num ->
+              (match ty_dec t2 with
+               | Inleft iHt3 ->
+                 (match iHt3 with
+                  | Ty_Bool -> Inright
+                  | Ty_Num -> Inleft Ty_Num)
+               | Inright -> Inright))
+         | Inright -> Inright)
+      | Ty_Num -> Inright)
+   | Inright -> Inright)
+| Term_Add (t0, t1) ->
+  (match ty_dec t0 with
+   | Inleft iHt1 ->
+     (match iHt1 with
+      | Ty_Bool -> Inright
+      | Ty_Num ->
+        (match ty_dec t1 with
+         | Inleft iHt2 ->
+           (match iHt2 with
+            | Ty_Bool -> Inright
+            | Ty_Num -> Inleft Ty_Num)
+         | Inright -> Inright))
+   | Inright -> Inright)
+| Term_Not t0 ->
+  (match ty_dec t0 with
+   | Inleft iHt ->
+     (match iHt with
+      | Ty_Bool -> Inleft Ty_Bool
+      | Ty_Num -> Inright)
+   | Inright -> Inright)
+| Term_IsZero t0 ->
+  (match ty_dec t0 with
+   | Inleft iHt ->
+     (match iHt with
+      | Ty_Bool -> Inright
+      | Ty_Num -> Inleft Ty_Bool)
+   | Inright -> Inright)
+
 (** val eval : term -> val0 sumor **)
 
 let eval t0 =

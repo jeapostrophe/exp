@@ -49,10 +49,9 @@ Lemma val_uniq :
   v1 = v2.
 Proof.
  intros t. induction t; intros v1 v2;
-  intros Hv1; inversion_clear Hv1; 
+  intros Hv1; inversion_clear Hv1;
   intros Hv2; inversion_clear Hv2; eauto.
 
- eapply IHt2; eauto.
  Ltac val_uniq_kill := 
   absurd ( val_Bool true = val_Bool false ); eauto;
   intros X; inversion X.
@@ -282,7 +281,7 @@ Proof.
 
  case HT. clear HT. intros T0 HT.
  right. intros T1 HT'.
- case (soundlike t0 T0); eauto.
+ case (soundlike t0 T0 HT). eauto.
 Qed.
 
-Extraction "STAE.ml" eval.
+Extraction "STAE.ml" eval ty_dec.
