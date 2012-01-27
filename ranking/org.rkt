@@ -87,14 +87,15 @@
                (printf "~a:~a:\t~a\n" indent k v))
           (printf "~a:END:\n" indent))
   (for ([c (in-list content)])
-       (printf "~a~a\n" indent c))
+       (if (regexp-match #rx"^#\\+" c)
+           (printf "~a\n" c)
+           (printf "~a~a\n" indent c)))
   (for-each (curry write-node (add1 i)) children))
 
 (define (write-org ns)
   (for-each (curry write-node 1) ns))
 
-;; Test
-(define ex "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
-(require racket/pretty)
-(write-org
- (with-input-from-file ex read-org))
+;; XXX contracts
+(provide read-org
+         write-org
+         (struct-out node))
