@@ -197,13 +197,12 @@
        (build-path result-root (format "~a.rktd" step)))
      ;; XXX Can't get this step to work. I think it is looking at a
      ;; cookie or something like that
-     (cache-url-to-file! u cache-path)
+     #;(cache-url-to-file! u cache-path)
      ;; XXX Not sure if the parser is robust enough yet
-     (when #f
+     (when (file-exists? cache-path)
            (define s (file->string cache-path))
            (define res (parse-step s))
            (write-to-file res result-path #:exists 'replace)
            ;; XXX I want to get the metadata before getting the static
            ;; content; since I need to wait anyways, these can wait.
-           (when #f
-                 (for-each cache-static-url! (extract-urls res)))))
+           (for-each cache-static-url! (extract-urls res))))
