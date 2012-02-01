@@ -22,30 +22,35 @@
 
   (define next-id
     (add1 max-id))
-  (define id->node (make-hasheq))
+  (define-values (new-children id->node)
+    (for/fold
+     ([new-children empty]
+      [id->node (hasheq)])
+     ([c (in-list (node-children games))])
+     (define cp (node-props c))
+     (define nc
+       (struct-copy
+        node c
+        [props
+         (hash-set cp "ID"
+                   (or (hash-ref cp "ID" #f)
+                       (begin0 (number->string next-id)
+                               (set! next-id (add1 next-id)))))]))
+     (values (list* nc new-children)
+             (hash-set id->node (node-id nc) nc))))
   (define new-games
-    (struct-copy
-     node games
-     [children
-      (for/list
-       ([c (in-list (node-children games))])
-       (define cp (node-props c))
-       (define nc
-         (struct-copy
-          node c
-          [props
-           (hash-set cp "ID"
-                     (or (hash-ref cp "ID" #f)
-                         (begin0 (number->string next-id)
-                                 (set! next-id (add1 next-id)))))]))
-       (hash-set! id->node (node-id nc) nc)
-       nc)]))
+    (struct-copy node games [children new-children]))
 
   (values id->node
           new-games))
 
 ;; Sort by ranking
-(define (sort-by-ranking games-node ranking-db key)
+(require racket/gui)
+(define (id->info id)
+  (node-label (hash-ref id->game id)))
+
+(define (sort-by-ranking games-node ranking-db aspect)
+  (define key (format "Sort~a" aspect))
   (define all-games (node-children games-node))
   (define games (filter game-completed? all-games))
   (local-require datalog)
@@ -63,6 +68,10 @@
   (for ([order (in-list ranking-db)])
        (match-define `(<= ,lhs ,rhs) order)
        (datalog! ranking-thy (! (<= lhs rhs))))
+  (define (add! fact)
+    (match-define `(<= ,lhs ,rhs) fact)
+    (set! ranking-db (list* fact ranking-db))
+    (datalog! ranking-thy (! (<= lhs rhs))))
 
   (define (lift-<= x y)
     (not
@@ -70,21 +79,42 @@
       (datalog ranking-thy
                (? (<= x y))))))
 
-  (define *unknowns* empty)
+  (define ask? #t)
+  (define (unknown-<= x y)
+    (cond
+     [ask?
+      (match
+       (message-box/custom "Game Ranking"
+                           (format "Better ~a" aspect)
+                           (id->info x)
+                           (id->info y)
+                           "Stop Asking")
+       [1
+        (add! `(<= ,y ,x))]
+       [2
+        (add! `(<= ,x ,y))]
+       [(or 3 #f)
+        (set! ask? #f)])
+      (inspect-<= x y)]
+     [else
+      #f]))
+
+  (define mentioned? (make-hasheq))
   (define (inspect-<= x y)
     (cond
      [(lift-<= x y)
+      (hash-set! mentioned? x #t)
+      (hash-set! mentioned? y #t)
       #t]
      ;; By anti-symmetry
      [(lift-<= y x)
+      (hash-set! mentioned? x #t)
+      (hash-set! mentioned? y #t)
       #f]
      [else
-      (set! *unknowns*
-            (list* (cons x y)
-                   *unknowns*))
-      #f]))
+      (unknown-<= x y)]))
   (define sorted-children
-    (sort (shuffle games) inspect-<= #:key node-id))
+    (sort (shuffle games) (negate inspect-<=) #:key node-id))
 
   (define new-children
     (for/list
@@ -97,10 +127,9 @@
                  key
                  i)])))
 
-  (values *unknowns*
+  (values ranking-db
           (struct-copy node games-node [children new-children])))
 
-(define how-many-to-query 5)
 (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
 (match-define (list games ranking meta) (with-input-from-file path read-org))
 
@@ -109,24 +138,15 @@
  (list overall-ranking story-ranking mechanic-ranking)
  (with-input-from-string (apply string-append (node-content ranking))
    read))
-(define-values (unknown-overall games**)
-  (sort-by-ranking games* overall-ranking "OverallRanking"))
+(define-values (overall-ranking* games**)
+  (sort-by-ranking games* overall-ranking "Overall"))
+(define ranking*
+  (struct-copy node ranking
+               [content
+                (list
+                 (with-output-to-string
+                   (λ ()
+                      (write
+                       (list overall-ranking* story-ranking mechanic-ranking)))))]))
 
-(require racket/gui)
-#;(for ([i (in-range how-many-to-query)]
-[x*y (in-list unknown-overall)])
-(match-define (cons x y) x*y)
-(define (id->info id)
-  (node-label (hash-ref id->game id)))
-
-(message-box/custom "Game Ranking"
-                    "Which game is better, overall?"
-                    (id->info x)
-                    (id->info y)
-                    #f))
-
-(write-org (list games** ranking meta))
-
-;; XXX Store a database of <= elements
-;; XXX Request X of them when run
-;; XXX Produce sorted list
+(write-org (list games** ranking* meta))
