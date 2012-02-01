@@ -166,4 +166,5 @@
                        (write
                         (list overall-ranking story-ranking mechanic-ranking)))))]))
 
- (write-org (list games ranking meta)))
+ (with-output-to-file path (λ () (write-org (list games ranking meta)))
+                      #:exists 'replace))
