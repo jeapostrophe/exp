@@ -75,7 +75,8 @@
   (define (add! fact)
     (match-define `(<= ,lhs ,rhs) fact)
     (set! ranking-db (list* fact ranking-db))
-    (datalog! ranking-thy (! (<= lhs rhs))))
+    (datalog! ranking-thy (! (<= lhs rhs)))
+    (go-back!))
 
   (define (lift-<= x y)
     (not
