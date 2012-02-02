@@ -48,7 +48,12 @@
 (require racket/gui)
 (define (sort-by-ranking id->game games-node ranking-db aspect)
   (define (id->info id)
-    (node-label (hash-ref id->game id)))
+    (define n (hash-ref id->game id))
+    (define p (node-props n))
+    (format "~a (~a, ~a)"
+            (node-label n)
+            (hash-ref p "Year" "")
+            (hash-ref p "System" "")))
   (define key (format "Sort~a" aspect))
   (define all-games (node-children games-node))
   (define completed-games (filter game-completed? all-games))
@@ -114,8 +119,17 @@
       #f]
      [else
       (unknown-<= x y)]))
-  (define sorted-completed-games
+
+  (define *done* #f)
+  (define (compute-sort!)
     (sort (shuffle completed-games) inspect-<= #:key node-id))
+  (define (go-back!)
+    (*done* compute-sort!))
+
+  (define sorted-completed-games
+    ((let/cc done
+             (set! *done* done)
+             (go-back!))))
 
   (define id->order (make-hasheq))
   (for
@@ -167,4 +181,5 @@
                         (list overall-ranking story-ranking mechanic-ranking)))))]))
 
  (with-output-to-file path (λ () (write-org (list games ranking meta)))
-                      #:exists 'replace))
+                      #:exists 'replace)
+ (message-box "Game Ranking" "Done!"))
