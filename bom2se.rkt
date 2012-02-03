@@ -82,3 +82,8 @@
 
 "http://www.lds.org/scriptures/bofm/1-ne/1?lang=en"
 
+;; DONE Parse a Japanese page
+;; TODO Parse an English page
+;; TODO Parse a book TOC
+;; TODO Parse a volume TOC
+;; TODO Parse the list of volumes TOC
