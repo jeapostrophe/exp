@@ -57,32 +57,11 @@
   (define key (format "Sort~a" aspect))
   (define all-games (node-children games-node))
   (define completed-games (filter game-completed? all-games))
-  (local-require datalog)
-  (define ranking-thy (make-theory))
-  (datalog!
-   ranking-thy
-   ;; Transitivity
-   (! (:- (<= A C)
-          (<= A B)
-          (<= B C)))
-   ;; Reflexivity
-   (! (:- (<= A B)
-          (= A B))))
-  ;; Knowledge
-  (for ([order (in-list ranking-db)])
-       (match-define `(<= ,lhs ,rhs) order)
-       (datalog! ranking-thy (! (<= lhs rhs))))
+  
   (define (add! fact)
     (match-define `(<= ,lhs ,rhs) fact)
     (set! ranking-db (list* fact ranking-db))
-    (datalog! ranking-thy (! (<= lhs rhs)))
     (go-back!))
-
-  (define (lift-<= x y)
-    (not
-     (empty?
-      (datalog ranking-thy
-               (? (<= x y))))))
 
   (define ask? #t)
   (define (unknown-<= x y)
@@ -109,17 +88,31 @@
     (unless (= x y)
             (hash-set! mentioned? x #t)
             (hash-set! mentioned? y #t)))
-  (define (inspect-<= x y)
+
+  (define (inspect-<= x y #:recur? [recur? #t])
     (cond
-     [(lift-<= x y)
-      (mentioned! x y)
+     ;; Reflexivity
+     [(equal? x y)
       #t]
-     ;; By anti-symmetry
-     [(lift-<= y x)
+     ;; Knowledge
+     [(member `(<= ,x ,y) ranking-db)
       (mentioned! x y)
-      #f]
+      #t]     
+     ;; XXX Transitivity
      [else
-      (unknown-<= x y)]))
+      (cond
+       ;; Transitivity
+       [(for/or 
+         ([fact (in-list ranking-db)]
+          #:when (equal? x (second fact)))
+         (inspect-<= (third fact) y #:recur? #f))
+        #t]
+       ;; Anti-Symmetry
+       [recur?
+        (not (inspect-<= y x #:recur? #f))]
+       ;; Ask
+       [else
+        (unknown-<= x y)])]))
 
   (define *done* #f)
   (define (compute-sort!)
