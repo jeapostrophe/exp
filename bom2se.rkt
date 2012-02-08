@@ -4,6 +4,14 @@
          (planet neil/html-parsing/html-parsing)
          (planet clements/sxml2))
 
+(define (los->s los)
+   (regexp-replace*
+    #rx"^ +"
+    (regexp-replace* #rx" +$"
+                     (regexp-replace* #rx"\u200B" (apply string-append los) "")
+                     "")
+    ""))
+
 (package-begin
  (define u "http://www.lds.org/scriptures/bofm/1-ne/1?lang=jpn")
  (define xe (call/input-url (string->url u) get-pure-port html->xexp))
@@ -53,13 +61,6 @@
          [`(ruby ,kanji (rp "(") (rt ,reading) (rp ")"))
           (format "~a「~a」" kanji reading)])
         l))
- (define (los->s los)
-   (regexp-replace*
-    #rx"^ +"
-    (regexp-replace* #rx" +$"
-                     (regexp-replace* #rx"\u200B" (apply string-append los) "")
-                     "")
-    ""))
 
  (define (prep-verse v)
    (list-tail v 2))
@@ -78,9 +79,42 @@
  (define verses (map (compose combine-verse clip-verse simpl-verse prep-verse)
                      ((sxpath "//p") verses-xe)))
 
- (void))
+ (printf "\n\nJPN\n\n")
+ (pretty-print (list* subtitle intro summary verses)))
 
-"http://www.lds.org/scriptures/bofm/1-ne/1?lang=en"
+(package-begin
+ (define u "http://www.lds.org/scriptures/bofm/1-ne/1?lang=eng")
+ (define xe (call/input-url (string->url u) get-pure-port html->xexp))
+ (define (get-div class)
+   (first ((sxpath (format "//div[@class=~s]" class)) xe)))
+
+ (define subtitle-raw (list-tail (get-div "subtitle") 2))
+ (define intro-raw (list-tail (get-div "intro") 2))
+ (define summary-raw (rest (first (list-tail (get-div "summary") 2))))
+ (define verses-xe (list '*TOP* (get-div "verses")))
+
+ (define (prep-verse v)
+   (list-tail v 2))
+ (define simpl-verse
+   (match-lambda
+    [(? string? s)
+     (list s)]
+    [`(span (@ (class "small")) . ,inside)
+     (append-map simpl-verse inside)]))
+ (define (parse-verse v)
+   (append-map simpl-verse v))
+
+ (define subtitle (los->s (parse-verse subtitle-raw)))
+ (define intro (los->s (parse-verse intro-raw)))
+ (define summary (los->s (parse-verse summary-raw)))
+ (define verses (map (compose simpl-verse prep-verse)
+                     ((sxpath "//p") verses-xe)))
+
+ (printf "\n\nDEBUG\n\n")
+ (pretty-print verses)
+
+ (printf "\n\nENG\n\n")
+ (pretty-print (list* subtitle intro summary verses)))
 
 ;; DONE Parse a Japanese page
 ;; TODO Parse an English page
