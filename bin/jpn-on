@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CALLED_AS=$(basename $0)
+if [ "$CALLED_AS" = "jpn-on" ] ; then
+    MODE=enable
+else
+    MODE=disable
+fi
+
+/usr/lib/ibus-el/ibus-el-agent <<END &
+create_imcontext()
+focus_out(0)
+focus_in(0)
+${MODE}(0)
+END
+
+ibus_pid=$!
+sleep 1
+kill -9 ${ibus_pid}
+
+xdotool key super+j super+k

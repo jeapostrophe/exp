@@ -20,7 +20,9 @@ main = do
          normalBorderColor = "#cccccc",
          focusedBorderColor = "#cd8b00" }
        `additionalKeysP`
-       [ ("M4-S-z", spawn "gnome-screensaver-command --lock"),
+       [ ("M4-;", spawn "jpn-on"),
+         ("M4-'", spawn "jpn-off"),
+         ("M4-S-z", spawn "gnome-screensaver-command --lock"),
          ("M4-<Space>", spawn "exec dmenu_run"),
          ("M4-`", sendMessage NextLayout),
          ("M4-S-w", spawn "exec conkeror -new chrome://"),
