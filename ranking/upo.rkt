@@ -1,5 +1,6 @@
 #lang racket
-(require rackunit)
+(require racket/package
+         rackunit)
 
 ;; Sort by an partial order that is incompletely specified.
 
@@ -59,88 +60,116 @@
                 (transitivity b c c)
                 (transitivity a b c)))
 
-;; (A A -> Bool u 'Unknown) -> (A A -> Bool)
-(define (partial-fun->partial-order f)
-  (define x-is-less-than-these (make-hasheq))
+;; (A -> (listof A) (A A -> Bool u 'Unknown) -> (A A -> Bool)
+(define (partial-fun->partial-order x-is-less-than f)
+  (define faked (make-hash))
+  (define (fake-f x y)
+    (if (hash-has-key? faked (cons x y))
+        #t
+        (f x y)))
   (define (new-f x y)
-    (define final-answer
-      (match
-       (f x y)
-       [(? boolean? x) x]
-       ['unknown
-        (cond
-         [(equal? x y)
-          #t]
-         ;; Look for anti-symmetry
-         [(boolean? (f y x))
-          (not (f y x))]
-         [else
-          ;; Look for transitivity
-          (define trans-ans
-            (for/fold ([ans 'unknown])
-                      ([z (in-list (hash-ref x-is-less-than-these x empty))])
-                      (cond
-                       [(and (boolean? ans) ans)
-                        ans]
-                       [else
-                        (define inner (f z y))
-                        (if (equal? inner 'unknown)
-                            ans
-                            inner)])))
-          (if (eq? trans-ans 'unknown)
-              #f
-              trans-ans)])]))
-    (if final-answer
-        (hash-update! x-is-less-than-these x (curry cons y) empty)
-        (hash-update! x-is-less-than-these y (curry cons x) empty))
-    final-answer)
+    (match
+     (fake-f x y)
+     [(? boolean? x) x]
+     ['unknown
+      (cond
+       [(equal? x y)
+        #t]
+       ;; Look for anti-symmetry
+       [(boolean? (fake-f y x))
+        (not (fake-f y x))]
+       [else
+        ;; Look for transitivity
+        (define trans-ans
+          (for/fold ([ans 'unknown])
+                    ([z (in-list (x-is-less-than x))])
+                    (cond
+                     [(and (boolean? ans) ans)
+                      ans]
+                     [else
+                      (define inner (new-f z y))
+                      (if (equal? inner 'unknown)
+                          ans
+                          inner)])))
+        (if (eq? trans-ans 'unknown)
+            (begin #;(printf "decided ~a <= ~a\n" y x)
+              (hash-set! faked (cons y x) #t)
+              #f)
+            trans-ans)])]))
   new-f)
 
-(define (check-partial-fun->partial-order l f)
-  (check-pred empty?
-              (partial-order-violations l
-                                        (partial-fun->partial-order f))))
+(define (check-partial-fun->partial-order l x-> f)
+  (test-pred (format "~a ~a ~a" l x-> f)
+             empty?
+             (partial-order-violations l
+                                       (partial-fun->partial-order x-> f))))
 
 (check-partial-fun->partial-order
  '(a)
+ (λ (x) empty)
  (λ (x y) 'unknown))
 (check-partial-fun->partial-order
  '(a b)
+ (λ (x) empty)
  (λ (x y) 'unknown))
 (check-partial-fun->partial-order
  '(a b c)
+ (λ (x) empty)
  (λ (x y) 'unknown))
 (check-partial-fun->partial-order
  '(a b c)
+ (λ (x) (match x
+               ['a '(b)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('a 'b) #t]
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a b c)
+ (λ (x) (match x
+               ['a '(b)]
+               ['b '(c)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('a 'b) #t]
                   [('b 'c) #t]
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a b c d)
+ (λ (x) (match x
+               ['a '(b)]
+               ['c '(d)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('a 'b) #t]
                   [('c 'd) #t]
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a b c d)
+ (λ (x) (match x
+               ['b '(d)]
+               ['c '(d)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('b 'd) #t]
                   [('c 'd) #t]
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a b c d)
+ (λ (x) (match x
+               ['a '(c)]
+               ['c '(d)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('a 'c) #t]
                   [('c 'd) #t]
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a b c d)
+ (λ (x) (match x
+               ['a '(c)]
+               ['c '(b)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('a 'c) #t]
                   [('c 'b) #t]
@@ -148,14 +177,22 @@
 
 (check-partial-fun->partial-order
  '(a c b)
+ (λ (x) (match x
+               ['a '(b)]
+               ['b '(c)]
+               [_ empty]))
  (λ (x y) (match* (x y)
                   [('a 'b) #t]
                   [('b 'c) #t]
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a c b d)
+ (λ (x) (match x
+               ['a '(b)]
+               ['b '(c)]
+               ['c '(d)]
+               [_ empty]))
  (λ (x y)
-    (printf "~a ~a\n" x y)
     (match* (x y)
             [('a 'b) #t]
             [('b 'c) #t]
@@ -163,3 +200,63 @@
             [(_ _) 'unknown])))
 
 
+(check-partial-fun->partial-order
+ '(a d b c)
+ (λ (x) (match x
+               ['a '(b)]
+               ['b '(c)]
+               ['c '(d)]
+               [_ empty]))
+ (λ (x y)
+    (match* (x y)
+            [('a 'b) #t]
+            [('b 'c) #t]
+            [('c 'd) #t]
+            [(_ _) 'unknown])))
+
+(check-partial-fun->partial-order
+ '(a b d c)
+ (λ (x) (match x
+               ['a '(b)]
+               ['b '(c)]
+               ['c '(d)]
+               [_ empty]))
+ (λ (x y)
+    (match* (x y)
+            [('a 'b) #t]
+            [('b 'c) #t]
+            [('c 'd) #t]
+            [(_ _) 'unknown])))
+
+(check-partial-fun->partial-order
+ '(b d a c)
+ (λ (x) (match x
+               ['a '(b)]
+               ['b '(c)]
+               ['c '(d)]
+               [_ empty]))
+ (λ (x y)
+    (match* (x y)
+            [('a 'b) #t]
+            [('b 'c) #t]
+            [('c 'd) #t]
+            [(_ _) 'unknown])))
+
+;; (-> (listof (cons A A))) -> (A -> (listof A) x (A A -> Bool u 'Unknown)
+(define (observations->partial-fun get-obvs)
+  (define (x-is-less-than x)
+    (filter-map (λ (a*b) (and (eq? (car a*b) x)
+                              (cdr a*b)))
+                (get-obvs)))
+  (define (<= x y)
+    (or (and (member (cons x y) (get-obvs)) #t)
+        'unknown))
+  (values x-is-less-than
+          <=))
+
+(package-begin
+  (define-values (x-is-less-than <=) (observations->partial-fun (λ () '((a . b) (b . c) (c . d)))))
+  (check-partial-fun->partial-order
+   '(a b c d) x-is-less-than <=))
+
+(provide (all-defined-out))
