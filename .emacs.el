@@ -522,6 +522,10 @@ given a prefix arg."
   "Open bookmark file"
   (interactive)
   (find-file org-bookmarks-file))
+(defun je/org-archive-all ()
+  "Archive everything that is done"
+  (interactive)
+  (org-map-entries 'org-archive-subtree "/DONE" 'agenda))
 
 (global-set-key (kbd "s-t")
                 (lambda () 

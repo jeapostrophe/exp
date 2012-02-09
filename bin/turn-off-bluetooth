@@ -1,0 +1,2 @@
+#!/bin/sh
+gksu hciconfig hci0 down
