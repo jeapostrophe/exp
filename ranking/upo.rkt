@@ -60,65 +60,13 @@
                 (transitivity a b c)))
 
 ;; (A A -> Bool u 'Unknown) -> (A A -> Bool)
-(define-syntax while
-  (syntax-rules ()
-    [(_ cond body ...)
-     ; =>
-     (letrec ((lp (lambda () (when cond body ... (lp)))))
-       (lp))]))
-
-(define-syntax define/fix
-  (syntax-rules ()
-    [(_ (f x) #:bottom bottom body ...)
-     ; =>
-     (define f (let ((cache     (make-weak-hasheq))
-                     (changed?  (make-parameter 'error-changed))
-                     (running?  (make-parameter #f))
-                     (visited   (make-parameter 'error-visited)))
-                 (lambda (x)
-                   (let ((cached? (hash-has-key? cache x))
-                         (cached  (hash-ref cache x (lambda () bottom)))
-                         (run?    (running?)))
-                     (cond
-                       [(and cached? (not run?))
-                        ; =>
-                        cached]
-                       
-                       [(and run? (hash-has-key? (unbox (visited)) x))
-                        ; =>
-                        (if cached? cached bottom)]
-                       
-                       [run? 
-                        ; =>
-                        (hash-set! (unbox (visited)) x #t)
-                        (let ((new-val (begin body ...)))
-                          (when (not (equal? new-val cached))
-                            (set-box! (changed?) #t)
-                            (hash-set! cache x new-val))
-                          new-val)]
-                       
-                       [(and (not cached?) (not run?))
-                        ; =>
-                        (parameterize ([changed? (box #t)]
-                                       [running? #t]
-                                       [visited (box (make-weak-hasheq))])
-                          (let ([v bottom])
-                            (while (unbox (changed?))
-                                   (set-box! (changed?) #f)
-                                   (set-box! (visited) (make-weak-hasheq))
-                                   (set! v (f x)))
-                            v))])))))]))
-
 (define (partial-fun->partial-order f)
   (define x-is-less-than-these (make-hasheq))
   (define (new-f x y)
     (define final-answer
       (match
        (f x y)
-       [#f
-        #f]
-       [#t
-        #t]
+       [(? boolean? x) x]
        ['unknown
         (cond
          [(equal? x y)
@@ -135,8 +83,7 @@
                        [(and (boolean? ans) ans)
                         ans]
                        [else
-                        (define inner
-                          (f z y))
+                        (define inner (f z y))
                         (if (equal? inner 'unknown)
                             ans
                             inner)])))
@@ -207,10 +154,12 @@
                   [(_ _) 'unknown])))
 (check-partial-fun->partial-order
  '(a c b d)
- (λ (x y) (match* (x y)
-                  [('a 'b) #t]
-                  [('b 'c) #t]
-                  [('c 'd) #t]
-                  [(_ _) 'unknown])))
+ (λ (x y)
+    (printf "~a ~a\n" x y)
+    (match* (x y)
+            [('a 'b) #t]
+            [('b 'c) #t]
+            [('c 'd) #t]
+            [(_ _) 'unknown])))
 
 
