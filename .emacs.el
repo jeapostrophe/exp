@@ -391,6 +391,7 @@ given a prefix arg."
             ("cc" . "ccci")
             ("rkt" . "rk")
             ("scrbl" . "scribble --pdf")
+            ("dot" . "dot -Tpdf -O")
             ("tex" . "pdflatex")))
 
     (save-buffer)
