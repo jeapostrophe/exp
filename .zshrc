@@ -83,8 +83,10 @@ if [ $(pwd) = ${HOME} ] ; then
 fi
 
 # Completions
-compdef -d git
-compdef -d svn
+if which compdef &>/dev/null ; then
+    compdef -d git
+    compdef -d svn
+fi
 compctl -g '*(/)' rmdir dircmp
 compctl -g '*(-/)' cd chdir dirs pushd
 #compctl -z -P '%' bg

@@ -60,7 +60,6 @@
   (define completed-games (filter game-completed? all-games))
   
   (define (add! fact)
-    (match-define `(<= ,lhs ,rhs) fact)
     (set! ranking-db (list* fact ranking-db))
     (go-back!))
 
@@ -82,38 +81,20 @@
         (set! ask? #f)])
       (inspect-<= x y)]
      [else
-      #f]))
+      'unknown]))
 
-  (define mentioned? (make-hasheq))
-  (define (mentioned! x y)
-    (unless (= x y)
-            (hash-set! mentioned? x #t)
-            (hash-set! mentioned? y #t)))
-
-  (define (inspect-<= x y #:recur? [recur? #t])
-    (cond
-     ;; Reflexivity
-     [(equal? x y)
-      #t]
-     ;; Knowledge
-     [(member `(<= ,x ,y) ranking-db)
-      (mentioned! x y)
-      #t]     
-     ;; XXX Transitivity
-     [else
-      (cond
-       ;; Transitivity
-       [(for/or 
-         ([fact (in-list ranking-db)]
-          #:when (equal? x (second fact)))
-         (inspect-<= (third fact) y #:recur? #f))
-        #t]
-       ;; Anti-Symmetry
-       [recur?
-        (not (inspect-<= y x #:recur? #f))]
-       ;; Ask
-       [else
-        (unknown-<= x y)])]))
+  (define-values (partial-order:x-is-less-than partial-order:<=)
+    (observations->partial-fun
+     (λ () (for/list ([fact (in-list ranking-db)])
+                     (cons (first fact) (second fact))))))
+  (define (asking-<= x y)
+    (define ans (partial-order:<= x y))
+    (if (equal? 'unknown ans)
+        (unknown-<= x y)
+        ans))
+  (define inspect-<= 
+    (partial-fun->partial-order
+     partial-order:x-is-less-than asking-<=))
 
   (define *done* #f)
   (define (compute-sort!)
@@ -126,12 +107,20 @@
              (set! *done* done)
              (go-back!))))
 
+  (define mentioned-games
+    (remove-duplicates (append-map rest ranking-db)))
+  (define (mentioned? x)
+    (member x mentioned-games))
+  
+  (unless (empty? (partial-order-violations mentioned-games inspect-<=))
+          (error 'game-rank "Not a partial order any longer!"))
+
   (define id->order (make-hasheq))
   (for
    ([i (in-naturals)]
     [n (in-list sorted-completed-games)])
    (define id (node-id n))
-   (when (hash-has-key? mentioned? id)
+   (when (mentioned? id)
          (hash-set! id->order id i)))
 
   (define new-all-games
