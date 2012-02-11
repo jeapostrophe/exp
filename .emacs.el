@@ -991,6 +991,9 @@ given a prefix arg."
 (global-set-key (kbd "s-<XF86LaunchA>") 'org-columns-remove-overlays)
 (global-set-key (kbd "s-<f3>") 'org-columns-remove-overlays)
 
+;; use tex input mode all the time
+(set-input-method "TeX")
+
 ;; customs
 
 (custom-set-variables
