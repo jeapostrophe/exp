@@ -1,6 +1,6 @@
 #lang racket
 
-(define vals (list 1 2 4 4 2 3 1 3 1 5))
+(define vals (list 1 3 2 1 4 2 1 4 2))
 (define how-many (length vals))
 (define node->node
   (for/fold
