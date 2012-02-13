@@ -576,6 +576,9 @@ given a prefix arg."
 (setq org-ctrl-k-protect-subtree t) 
 (setq org-use-property-inheritance nil)
 
+(setq org-refile-use-outline-path t)
+(setq org-outline-path-complete-in-steps t)
+
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
 ;;(setq org-agenda-ndays 365)
