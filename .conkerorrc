@@ -55,6 +55,10 @@ define_webjump("gr", "https://www.google.com/reader",
                $description = "Google Reader");
 define_webjump("c", "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to&su&body&shva=1",
                $description = "Compose email");
+
+define_webjump("a", "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s&x=0&y=0",
+               $description = "Amazon");
+
 define_webjump("y", "http://www.youtube.com/results?search_query=%s&search=Search",
                $description = "YouTube");
 define_webjump("j", "http://jisho.org/words?jap=&eng=%s&dict=edict",
