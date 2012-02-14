@@ -995,7 +995,13 @@ given a prefix arg."
 (global-set-key (kbd "s-<f3>") 'org-columns-remove-overlays)
 
 ;; use tex input mode all the time
+;;; XXX doesn't work?
 (set-input-method "TeX")
+
+;; forth
+(autoload 'forth-mode "gforth.el")
+(autoload 'forth-block-mode "gforth.el")
+(add-to-list 'auto-mode-alist '("\\.fs$" . forth-mode))
 
 ;; customs
 
