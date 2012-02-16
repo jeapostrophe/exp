@@ -12,7 +12,7 @@
                     "")
    ""))
 
-(define (u->jpn u-base)
+(define (u->jpn u-base first?)
   (define u (format "~a?lang=jpn" u-base))
   (define xe (call/input-url (string->url u) get-pure-port html->xexp))
   (define (get-div class)
@@ -20,8 +20,6 @@
 
   #;(pretty-print xe)
 
-  (define subtitle-raw (list-tail (get-div "subtitle") 2))
-  (define intro-raw (list-tail (get-div "intro") 2))
   (define summary-raw (rest (first (list-tail (get-div "summary") 2))))
   (define verses-xe (list '*TOP* (get-div "verses")))
 
@@ -73,22 +71,27 @@
 
   (define parse-verse (compose combine-verse simpl-verse))
 
-  (define subtitle (parse-verse subtitle-raw))
-  (define intro (parse-verse intro-raw))
   (define summary (parse-verse summary-raw))
   (define verses (map (compose combine-verse clip-verse simpl-verse prep-verse)
                       ((sxpath "//p") verses-xe)))
 
-  (list* subtitle intro summary verses))
+  (cond
+   [first?
+    (define subtitle-raw (list-tail (get-div "subtitle") 2))
+    (define intro-raw (list-tail (get-div "intro") 2))
+    (define subtitle (parse-verse subtitle-raw))
+    (define intro (parse-verse intro-raw))
 
-(define (u->eng u-base)
+    (list* subtitle intro summary verses)]
+   [else
+    (list* summary verses)]))
+
+(define (u->eng u-base first?)
   (define u (format "~a?lang=eng" u-base))
   (define xe (call/input-url (string->url u) get-pure-port html->xexp))
   (define (get-div class)
     (first ((sxpath (format "//div[@class=~s]" class)) xe)))
 
-  (define subtitle-raw (list-tail (get-div "subtitle") 2))
-  (define intro-raw (list-tail (get-div "intro") 2))
   (define summary-raw (rest (first (list-tail (get-div "summary") 2))))
   (define verses-xe (list '*TOP* (get-div "verses")))
 
@@ -109,44 +112,57 @@
   (define (parse-verse v)
     (append-map simpl-verse v))
 
-  (define subtitle (los->s (parse-verse subtitle-raw)))
-  (define intro (los->s (parse-verse intro-raw)))
   (define summary (los->s (parse-verse summary-raw)))
   (define verses (map (compose los->s parse-verse prep-verse)
                       ((sxpath "//p") verses-xe)))
 
-  (list* subtitle intro summary verses))
+  (cond
+   [first?
+    (define subtitle-raw (list-tail (get-div "subtitle") 2))
+    (define intro-raw (list-tail (get-div "intro") 2))
+    (define subtitle (los->s (parse-verse subtitle-raw)))
+    (define intro (los->s (parse-verse intro-raw)))
+
+    (list* subtitle intro summary verses)]
+   [else
+    (list* summary verses)]))
 
 (struct card (volume book chapter verse kanji reading meaning)
         #:transparent)
 
-(define u "http://www.lds.org/scriptures/bofm/1-ne?lang=eng")
-(define xe (call/input-url (string->url u) get-pure-port html->xexp))
-(define chs 
-  (map string->number
-       ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe)))
+(define (parse-chapter volume book chapter)
+  (printf "Parsing ~a > ~a > ~a\n" volume book chapter)
+  (define u (format "http://www.lds.org/scriptures/~a/~a/~a" volume book chapter))
+  (define jpn (u->jpn u (string=? chapter "1")))
+  (define eng (u->eng u (string=? chapter "1")))
+  (unless (= (length jpn) (length eng))
+          (error 'bom2se "Japanese and English are different lengths! ~a" u))
 
-(pretty-print chs)
+  (define cards
+    (for/list
+     ([k*r (in-list jpn)]
+      [m (in-list eng)]
+      [verse (in-sequences (in-list (list "Subtitle" "Introduction" "Summary"))
+                           (in-naturals 1))])
+     (match-define (cons k r) k*r)
+     (card volume book chapter verse k r m)))
 
-#;(package-begin
- (define u "http://www.lds.org/scriptures/bofm/1-ne/1")
- (define jpn (u->jpn u))
- (define eng (u->eng u))
- (unless (= (length jpn) (length eng))
-         (error 'bom2se "Japanese and English are different lengths! ~a" u))
+  cards)
 
- (define cards
-   (for/list ([k*r (in-list jpn)]
-              [m (in-list eng)]
-              [verse (in-sequences (in-list (list "Subtitle" "Introduction" "Summary"))
-                                   (in-naturals 1))])
-             (match-define (cons k r) k*r)
-             (card "bofm" "1-ne" "1" verse k r m)))
+(define (parse-book volume book)
+  (printf "Parsing ~a > ~a\n" volume book)
+  (define u (format "http://www.lds.org/scriptures/~a/~a?lang=eng" volume book))
+  (define xe (call/input-url (string->url u) get-pure-port html->xexp))
+  (define chs
+    ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe))
 
- (pretty-print cards))
+  (append-map (curry parse-chapter volume book) chs))
+
+(pretty-print (parse-book "bofm" "1-ne"))
 
 ;; DONE Parse a Japanese page
 ;; DONE Parse an English page
-;; TODO Parse a book TOC
+;; DONE Parse a book TOC
 ;; TODO Parse a volume TOC
 ;; TODO Parse the list of volumes TOC
+;; TODO Caching system?
