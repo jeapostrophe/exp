@@ -83,7 +83,7 @@
   (interactive)
 
   (save-excursion
-    (org-columns-remove-overlays)
+    (org-columns-quit)
     ;; Goto the top of the buffer
     (goto-char (point-min))
     ;; Sort

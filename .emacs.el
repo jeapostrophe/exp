@@ -992,8 +992,6 @@ given a prefix arg."
 (load-file "~/.emacs.d/games.org.el")
 (global-set-key (kbd "s-<XF86MonBrightnessUp>") 'je/games/sort)
 (global-set-key (kbd "s-<f2>") 'je/games/sort)
-(global-set-key (kbd "s-<XF86LaunchA>") 'org-columns-remove-overlays)
-(global-set-key (kbd "s-<f3>") 'org-columns-remove-overlays)
 
 ;; use tex input mode all the time
 ;;; XXX doesn't work?
