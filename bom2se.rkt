@@ -120,21 +120,30 @@
 (struct card (volume book chapter verse kanji reading meaning)
         #:transparent)
 
-(define u "http://www.lds.org/scriptures/bofm/1-ne/1")
-(define jpn (u->jpn u))
-(define eng (u->eng u))
-(unless (= (length jpn) (length eng))
-        (error 'bom2se "Japanese and English are different lengths! ~a" u))
+(define u "http://www.lds.org/scriptures/bofm/1-ne?lang=eng")
+(define xe (call/input-url (string->url u) get-pure-port html->xexp))
+(define chs 
+  (map string->number
+       ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe)))
 
-(define cards
-  (for/list ([k*r (in-list jpn)]
-             [m (in-list eng)]
-             [verse (in-sequences (in-list (list "Subtitle" "Introduction" "Summary"))
-                                  (in-naturals 1))])
-            (match-define (cons k r) k*r)
-            (card "bofm" "1-ne" "1" verse k r m)))
+(pretty-print chs)
 
-(pretty-print cards)
+#;(package-begin
+ (define u "http://www.lds.org/scriptures/bofm/1-ne/1")
+ (define jpn (u->jpn u))
+ (define eng (u->eng u))
+ (unless (= (length jpn) (length eng))
+         (error 'bom2se "Japanese and English are different lengths! ~a" u))
+
+ (define cards
+   (for/list ([k*r (in-list jpn)]
+              [m (in-list eng)]
+              [verse (in-sequences (in-list (list "Subtitle" "Introduction" "Summary"))
+                                   (in-naturals 1))])
+             (match-define (cons k r) k*r)
+             (card "bofm" "1-ne" "1" verse k r m)))
+
+ (pretty-print cards))
 
 ;; DONE Parse a Japanese page
 ;; DONE Parse an English page
