@@ -582,10 +582,6 @@ given a prefix arg."
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
 ;;(setq org-agenda-ndays 365)
-(setq org-agenda-cmp-user-defined 'je/agenda-sort)
-(setq org-agenda-sorting-strategy '(user-defined-up))
-(setq org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
-(setq org-agenda-overriding-header "Herr Professor, tear down this TODO list!")
 
 ;; XXX Make some more for getting %x, %a, and %i
 (setq org-capture-templates
@@ -604,14 +600,19 @@ given a prefix arg."
  (kbd "<s-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
 
-(setq org-agenda-custom-commands '())
+(setq org-agenda-custom-commands 
+      '(("t" "Todo list" todo "TODO"
+         ((org-agenda-before-sorting-filter-function 'je/todo-color)
+          (org-agenda-cmp-user-defined 'je/agenda-sort)
+          (org-agenda-sorting-strategy '(user-defined-up))
+          (org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
+          (org-agenda-overriding-header
+           "Herr Professor, tear down this TODO list!")))))
 
 (add-hook 'org-finalize-agenda-hook
     (lambda () 
       (remove-text-properties
        (point-min) (point-max) '(mouse-face t))))
-
-(setq org-agenda-before-sorting-filter-function 'je/todo-color)
 
 ;;; These are the default colours from OmniFocus
 (defface je/due
