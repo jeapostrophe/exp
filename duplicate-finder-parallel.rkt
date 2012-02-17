@@ -7,7 +7,6 @@
 (provide main)
 
 (define (find-duplicates directory)
-  (printf "Finding in ~a\n" directory)
   (define compute-file-hash
     (for/fold
      ([cfh (λ (file-hash) file-hash)])
