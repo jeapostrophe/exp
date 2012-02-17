@@ -1,5 +1,8 @@
-#lang racket
-(require openssl/sha1)
+#lang racket/base
+(require racket/place
+         racket/list
+         racket/dict
+         openssl/sha1)
 
 (provide main)
 
@@ -32,7 +35,7 @@
   (compute-file-hash (hash)))
 
 (define (print-duplicates file-hash)
-  (for ([l (hash-values file-hash)]
+  (for ([l (in-dict-values file-hash)]
         #:when (> (length l) 1))
        (printf "duplicates:~n")
        (for ([p l])
@@ -40,14 +43,16 @@
        (newline)))
 
 (define (hash-cons h k v)
-  (hash-update h k (curry cons v) empty))
+  (hash-update h k (λ (old) (cons v old)) empty))
 
-(define (hash-append h k val-list)
-  (hash-update h k (curry append val-list) empty))
+(define (hash-append h k vs)
+  (hash-update h k (λ (old) (append vs old)) empty))
+
+(define (hash-append* k*vs h)
+  (hash-append h (car k*vs) (cdr k*vs)))
 
 (define (combine-hash h assocs)
-  (for/fold ([h h]) ([(k vs) (in-dict assocs)])
-            (hash-append h k vs)))
+  (foldl hash-append* h assocs))
 
 (define (place-find-duplicates-spawn pth)
   (define p (place ch (place-find-duplicates ch)))
@@ -62,5 +67,5 @@
 (define (main)
   (time
    (define p (place-find-duplicates-spawn "/home/jay/Downloads/kdict"))
-   (print-duplicates (make-hash (place-channel-get p)))))
+   (print-duplicates (place-channel-get p))))
 
