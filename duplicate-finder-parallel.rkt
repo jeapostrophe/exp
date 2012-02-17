@@ -16,10 +16,15 @@
        (cons (place-find-duplicates-spawn full-path)
              ps)]
       [else
-       (add-or-append! file-hash
-                       (file-size full-path)
-                       #;(call-with-input-file full-path sha1)
-                       (list full-path))
+       (hash-cons! file-hash
+                   ;; I had an idea to first find out the things
+                   ;; that are the same size and then go back and
+                   ;; in parallel check each of their sha1
+                   ;; checksums, but just changing this line only
+                   ;; save 30 ms, so it probably isn't worth it.
+                   #;(file-size full-path)
+                   (call-with-input-file full-path sha1)
+                   full-path)
        ps])))
   (for ([p place-list])
        (combine-hash! file-hash
@@ -34,12 +39,15 @@
             (printf "\t~a~n" p))
        (newline)))
 
-(define (add-or-append! h k val-list)
+(define (hash-cons! h k v)
+  (hash-update! h k (curry cons v) empty))
+
+(define (hash-append! h k val-list)
   (hash-update! h k (curry append val-list) empty))
 
 (define (combine-hash! h assocs)
-  (for ([p assocs])
-       (add-or-append! h (first p) (rest p))))
+  (for ([(k vs) (in-dict assocs)])
+       (hash-append! h k vs)))
 
 (define (place-find-duplicates-spawn pth)
   (define p (place ch (place-find-duplicates ch)))
