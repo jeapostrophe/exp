@@ -17,7 +17,8 @@
              ps)]
       [else
        (add-or-append! file-hash
-                       (call-with-input-file full-path sha1)
+                       (file-size full-path)
+                       #;(call-with-input-file full-path sha1)
                        (list full-path))
        ps])))
   (for ([p place-list])
