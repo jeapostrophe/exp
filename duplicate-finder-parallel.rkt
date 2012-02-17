@@ -29,7 +29,7 @@
           (hash-cons (cfh fh)
                      stamp
                      full-path))])))
-  (compute-file-hash (make-hash)))
+  (compute-file-hash (hash)))
 
 (define (print-duplicates file-hash)
   (for ([l (hash-values file-hash)]
@@ -39,15 +39,15 @@
             (printf "\t~a~n" p))
        (newline)))
 
-(define (hash-cons! h k v)
-  (hash-update! h k (curry cons v) empty))
+(define (hash-cons h k v)
+  (hash-update h k (curry cons v) empty))
 
-(define (hash-append! h k val-list)
-  (hash-update! h k (curry append val-list) empty))
+(define (hash-append h k val-list)
+  (hash-update h k (curry append val-list) empty))
 
-(define (combine-hash! h assocs)
-  (for ([(k vs) (in-dict assocs)])
-       (hash-append! h k vs)))
+(define (combine-hash h assocs)
+  (for/fold ([h h]) ([(k vs) (in-dict assocs)])
+            (hash-append h k vs)))
 
 (define (place-find-duplicates-spawn pth)
   (define p (place ch (place-find-duplicates ch)))
