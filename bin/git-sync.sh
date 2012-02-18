@@ -11,7 +11,7 @@ for REPO in ~exp ~home ~work ; do
     git ls-files --deleted -z | xargs -0 git rm >/dev/null 2>&1
     # Add new files
     git add . >/dev/null 2>&1
-    git commit -m "Automatic commit at $(date)"
+    git commit --quiet -m "Automatic commit at $(date)"
     git push --quiet
 done
 
