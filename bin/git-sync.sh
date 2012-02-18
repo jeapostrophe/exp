@@ -13,4 +13,3 @@ for REPO in ~exp ~home ~work ; do
     git push
 done
 
-notify-send -t 0 -u normal "Git" "Git synchronization complete"
