@@ -12,6 +12,6 @@ for REPO in ~exp ~home ~work ; do
     # Add new files
     git add . >/dev/null 2>&1
     git commit -m "Automatic commit at $(date)"
-    git push
+    git push --quiet
 done
 
