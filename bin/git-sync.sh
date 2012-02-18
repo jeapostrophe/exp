@@ -3,6 +3,8 @@
 export DISPLAY=0.0
 export XAUTHORITY=~/.Xauthority
 
+chpwd () {}
+
 for REPO in ~exp ~home ~work ; do
     cd $REPO
     # Remove deleted files
