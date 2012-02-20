@@ -578,6 +578,7 @@ given a prefix arg."
 
 (setq org-refile-use-outline-path t)
 (setq org-outline-path-complete-in-steps t)
+(setq org-refile-targets `((nil . (:maxlevel . 20))))
 
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
