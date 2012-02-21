@@ -14,6 +14,15 @@
 (define (length&list-ref k l)
   (list-ref l (- (length l) k 1)))
 
+(define (unsafe-length l)
+  (unsafe-length/tr l 0))
+
+(define (unsafe-length/tr l i)
+  (if (null? l)
+    i
+    (unsafe-length/tr (unsafe-cdr l)
+                      (unsafe-fx+ 1 i))))
+
 (define (unsafe-length&list-ref k l)
   (unsafe-list-ref l (unsafe-fx- (length l) (unsafe-fx+ k 1))))
 
@@ -22,42 +31,42 @@
              [k-down
               (list-tail l (+ k 1))])
     (if (empty? k-down)
-        (first l)
-        (loop (rest l)
-              (rest k-down)))))
+      (first l)
+      (loop (rest l)
+            (rest k-down)))))
 
 (define (unsafe-double-walk k l)
   (let loop ([l l]
              [k-down
               (unsafe-list-tail l (unsafe-fx+ k 1))])
     (if (null? k-down)
-        (unsafe-car l)
-        (loop (unsafe-cdr l)
-              (unsafe-cdr k-down)))))
+      (unsafe-car l)
+      (loop (unsafe-cdr l)
+            (unsafe-cdr k-down)))))
 
 (define (fuse-length+list-ref k l)
   (let/ec
-   esc
-   (let loop ([l l])
-     (if (empty? l)
-         0
-         (let ()
-           (define n (loop (rest l)))
-           (if (= n k)
-               (esc (first l))
-               (add1 n)))))))
+      esc
+    (let loop ([l l])
+      (if (empty? l)
+        0
+        (let ()
+          (define n (loop (rest l)))
+          (if (= n k)
+            (esc (first l))
+            (add1 n)))))))
 
 (define (unsafe-fuse-length+list-ref k l)
   (let/ec
-   esc
-   (let loop ([l l])
-     (if (null? l)
-         0
-         (let ()
-           (define n (loop (unsafe-cdr l)))
-           (if (= n k)
-               (esc (unsafe-car l))
-               (unsafe-fx+ n 1)))))))
+      esc
+    (let loop ([l l])
+      (if (null? l)
+        0
+        (let ()
+          (define n (loop (unsafe-cdr l)))
+          (if (= n k)
+            (esc (unsafe-car l))
+            (unsafe-fx+ n 1)))))))
 
 (define (ring-buffer k+ l)
   (define next 0)
@@ -65,10 +74,10 @@
   (define rb (make-vector k #f))
   (let loop ([l l])
     (if (empty? l)
-        (vector-ref rb (modulo (- next k) k))
-        (begin (vector-set! rb next (first l))
-               (set! next (modulo (add1 next) k))
-               (loop (rest l))))))
+      (vector-ref rb (modulo (- next k) k))
+      (begin (vector-set! rb next (first l))
+             (set! next (modulo (add1 next) k))
+             (loop (rest l))))))
 
 (define (unsafe-ring-buffer k+ l)
   (define next 0)
@@ -76,10 +85,10 @@
   (define rb (make-vector k #f))
   (let loop ([l l])
     (if (null? l)
-        (unsafe-vector-ref rb (unsafe-fxmodulo (unsafe-fx- next k) k))
-        (begin (unsafe-vector-set! rb next (unsafe-car l))
-               (set! next (unsafe-fxmodulo (unsafe-fx+ next 1) k))
-               (loop (unsafe-cdr l))))))
+      (unsafe-vector-ref rb (unsafe-fxmodulo (unsafe-fx- next k) k))
+      (begin (unsafe-vector-set! rb next (unsafe-car l))
+             (set! next (unsafe-fxmodulo (unsafe-fx+ next 1) k))
+             (loop (unsafe-cdr l))))))
 
 (require rackunit)
 (define (test-it list-size k%)
@@ -87,9 +96,9 @@
   (define k (random (inexact->exact (round (* k% list-size)))))
   (printf "\n\nList is ~a long, k is ~a\n" list-size k)
   (λ (label f)
-     (test-equal? (symbol->string label)
-                  (f k l)
-                  k)))
+    (test-equal? (symbol->string label)
+                 (f k l)
+                 k)))
 
 (require tests/stress)
 (define-syntax-rule (stress* make-test-it n id ...)
