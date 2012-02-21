@@ -188,6 +188,9 @@
                        (add-between (map path/param-path (url-path u)) "."))))
   (cache-url-to-file! u cache-path))
 
+;; XXX There may be some duplication since I can't get steps above 100
+;; without filtering by grades above 6
+
 (for ([step (in-range 1 (add1 *steps*))])
      (printf "Step ~a\n" step)
      (define u (jdict-url (step-start step)))
