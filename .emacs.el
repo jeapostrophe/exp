@@ -994,6 +994,9 @@ given a prefix arg."
 (global-set-key (kbd "s-<XF86MonBrightnessUp>") 'je/games/sort)
 (global-set-key (kbd "s-<f2>") 'je/games/sort)
 
+;; scheme
+(load-file "~/.emacs.d/scheme-indent.el")
+
 ;; use tex input mode all the time
 ;;; XXX doesn't work?
 (set-input-method "TeX")
