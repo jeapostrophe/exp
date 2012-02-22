@@ -4,9 +4,6 @@
 
 ;; Sort by an partial order that is incompletely specified.
 
-(define (implies p q)
-  (or (not p) q))
-
 (define (partial-order-violations universe <=)
   (for/fold
    ([errors empty])

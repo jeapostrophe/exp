@@ -67,6 +67,7 @@
   (define (unknown-<= x y)
     (cond
      [ask?
+      (set! ask? #f)
       (match
        (message-box/custom "Game Ranking"
                            (format "Better ~a" aspect)
@@ -78,7 +79,7 @@
        [2
         (add! `(<= ,x ,y))]
        [(or 3 #f)
-        (set! ask? #f)])
+        (set! ask? #f)])      
       (inspect-<= x y)]
      [else
       'unknown]))

@@ -1,8 +1,23 @@
 #lang racket
 (require racket/package
+         openssl/sha1
          net/url
          (planet neil/html-parsing/html-parsing)
          (planet clements/sxml2))
+
+(define *cache-directory* "/tmp/bom2se.cache")
+(make-directory* *cache-directory*)
+(define (call/input-url/cache u y z)
+  (define s (url->string u))
+  (define tag (sha1 (open-input-string s)))
+  (define pth (build-path *cache-directory* tag))
+  (cond
+    [(file-exists? pth)
+     (file->value pth)]
+    [else
+     (define v (call/input-url u y z))
+     (write-to-file v pth)
+     v]))
 
 (define (los->s los)
   (regexp-replace*
@@ -14,7 +29,7 @@
 
 (define (u->jpn u-base first?)
   (define u (format "~a?lang=jpn" u-base))
-  (define xe (call/input-url (string->url u) get-pure-port html->xexp))
+  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
   (define (get-div class)
     (first ((sxpath (format "//div[@class=~s]" class)) xe)))
 
@@ -32,7 +47,7 @@
        (list e)]
       [(list 'a @s rest ...)
        rest]
-      [(list-rest (or 'sup 'span) _)
+      #;[(list-rest (or 'sup 'span) _)
        empty])
      p))
 
@@ -88,7 +103,7 @@
 
 (define (u->eng u-base first?)
   (define u (format "~a?lang=eng" u-base))
-  (define xe (call/input-url (string->url u) get-pure-port html->xexp))
+  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
   (define (get-div class)
     (first ((sxpath (format "//div[@class=~s]" class)) xe)))
 
@@ -152,17 +167,30 @@
 (define (parse-book volume book)
   (printf "Parsing ~a > ~a\n" volume book)
   (define u (format "http://www.lds.org/scriptures/~a/~a?lang=eng" volume book))
-  (define xe (call/input-url (string->url u) get-pure-port html->xexp))
+  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
   (define chs
     ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe))
 
   (append-map (curry parse-chapter volume book) chs))
 
-(pretty-print (parse-book "bofm" "1-ne"))
+(define (parse-volume volume)
+  (printf "Parsing ~a\n" volume)
+  (define u (format "http://www.lds.org/scriptures/~a?lang=eng" volume))
+  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
+
+  (define bs
+    ((sxpath "//ul[@class=\"books\"]/li/@id/text()") xe))  
+
+  (append-map (curry parse-book volume) bs))
+
+(define volumes (list "bofm" "dc-testament" "pgp" "study-helps"))
+(define all (append-map parse-volume volumes))
+
+(pretty-print (take all 5))
 
 ;; DONE Parse a Japanese page
 ;; DONE Parse an English page
 ;; DONE Parse a book TOC
-;; TODO Parse a volume TOC
+;; DONE Parse a volume TOC
 ;; TODO Parse the list of volumes TOC
 ;; TODO Caching system?
