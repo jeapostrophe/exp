@@ -98,3 +98,4 @@ bindkey ^d kill
 bindkey ^n screen
 
 screen -t irc 0 irssi
+screen -t alsa 1 alsamixer
