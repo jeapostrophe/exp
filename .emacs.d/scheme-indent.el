@@ -40,7 +40,7 @@
 (put 'with-slots 'scheme-indent-function 2)
 (put 'with-accessors 'scheme-indent-function 2)
 (put 'call-with-values 'scheme-indent-function 2)
-(put 'dynamic-wind 'scheme-indent-function 'defun)
+(put 'dynamic-wind 'scheme-indent-function 0)
 
 (put 'if 'scheme-indent-function 1)
 (put 'method 'scheme-indent-function 1)
@@ -57,7 +57,7 @@
 (put 'syntax-parameterize 'scheme-indent-function 1)
 (put 'with-handlers 'scheme-indent-function 1)
 (put 'with-handlers* 'scheme-indent-function 1)
-(put 'begin0 'scheme-indent-function 1)
+(put 'begin0 'scheme-indent-function 0)
 (put 'with-output-to-string 'scheme-indent-function 0)
 (put 'ignore-errors 'scheme-indent-function 0)
 (put 'no-errors 'scheme-indent-function 0)
