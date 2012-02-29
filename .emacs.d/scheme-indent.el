@@ -26,6 +26,7 @@
 (put 'letsyntax 'scheme-indent-function 1)
 (put 'let-syntax 'scheme-indent-function 1)
 (put 'letrec-syntax 'scheme-indent-function 1)
+(put 'syntax-parse 'scheme-indent-function 1)
 (put 'syntax-rules 'scheme-indent-function 1)
 (put 'syntax-id-rules 'scheme-indent-function 1)
 
@@ -63,6 +64,7 @@
 (put 'no-errors 'scheme-indent-function 0)
 (put 'matcher 'scheme-indent-function 1)
 (put 'match 'scheme-indent-function 1)
+(put 'match* 'scheme-indent-function 1)
 (put 'regexp-case 'scheme-indent-function 1)
 (put 'dotimes 'scheme-indent-function 1)
 (put 'dolist 'scheme-indent-function 1)

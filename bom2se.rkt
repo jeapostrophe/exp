@@ -1,11 +1,13 @@
 #lang racket
 (require racket/package
+         (for-syntax racket/syntax
+                     syntax/parse)
          openssl/sha1
          net/url
          (planet neil/html-parsing/html-parsing)
          (planet clements/sxml2))
 
-(define *cache-directory* "/tmp/bom2se.cache")
+(define *cache-directory* "/Users/jay/Downloads/bom2se.cache")
 (make-directory* *cache-directory*)
 (define (call/input-url/cache u y z)
   (define s (url->string u))
@@ -30,16 +32,37 @@
 (define (snoc l x)
   (append l (list x)))
 
-(define (u->jpn u-base first?)
+(define-syntax (define-protected stx)
+  (syntax-parse stx
+    [(_ x:id ...)
+     (with-syntax ([(x* ...)
+                    (for/list ([x (in-list (syntax->list #'(x ...)))])
+                      (format-id x "~a*" x))])
+       (syntax/loc stx
+         (begin (define (x* . args)
+                  (and (andmap (λ (a) a) args)
+                       (apply x args)))
+                ...)))]))
+(define-protected list-tail los->s)
+
+(define (get-div xe class)
+  (match ((sxpath (format "//div[@class=~s]" class)) xe)
+    [(list x) x]
+    [x
+     (cond
+       [(or (string=? class "subtitle")
+            (string=? class "intro"))
+        #f]
+       [else
+        (pretty-print xe)
+        (error 'get-div "Failed on ~e with ~e" class x)])]))
+
+(define (u->jpn u-base)
   (define u (format "~a?lang=jpn" u-base))
   (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
-  (define (get-div class)
-    (first ((sxpath (format "//div[@class=~s]" class)) xe)))
 
-  #;(pretty-print xe)
-
-  (define summary-raw (rest (first (list-tail (get-div "summary") 2))))
-  (define verses-xe (list '*TOP* (get-div "verses")))
+  (define summary-raw (rest (first (list-tail (get-div xe "summary") 2))))
+  (define verses-xe (list '*TOP* (get-div xe "verses")))
 
   (define (simpl-verse p)
     (append-map
@@ -57,7 +80,13 @@
        (simpl-verse rest)]
       [`(span (@ (class "small")) . ,rest)
        (simpl-verse rest)]
+      [`(div (@ (class "signature")) . ,rest)
+       (simpl-verse rest)]
+      [`(div (@ (class "preface")) . ,rest)
+       (simpl-verse rest)]
       [`(span (@ (class "verse")) ,_)
+       empty]
+      [`(br)
        empty]
       [`(sup (@ (class "studyNoteMarker")) ,_)
        empty]
@@ -93,30 +122,27 @@
   (define clip-verse prep-verse)
 
   (define parse-verse (compose combine-verse simpl-verse))
+  (define-protected parse-verse)
 
   (define summary (parse-verse summary-raw))
-  (define verses (map (compose combine-verse clip-verse simpl-verse prep-verse)
-                      ((sxpath "//p") verses-xe)))
+  (define verses
+    (filter (λ (x) (not (string=? "" (car x))))
+            (map (compose combine-verse clip-verse simpl-verse prep-verse)
+                 ((sxpath "//p") verses-xe))))
 
-  (cond
-    [first?
-     (define subtitle-raw (list-tail (get-div "subtitle") 2))
-     (define intro-raw (list-tail (get-div "intro") 2))
-     (define subtitle (parse-verse subtitle-raw))
-     (define intro (parse-verse intro-raw))
+  (define subtitle-raw (list-tail* (get-div xe "subtitle")  2))
+  (define intro-raw (list-tail* (get-div xe "intro") 2))
+  (define subtitle (parse-verse* subtitle-raw))
+  (define intro (parse-verse* intro-raw))
 
-     (list* subtitle intro summary verses)]
-    [else
-     (list* summary verses)]))
+  (list* subtitle intro summary verses))
 
-(define (u->eng u-base first?)
+(define (u->eng u-base)
   (define u (format "~a?lang=eng" u-base))
   (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
-  (define (get-div class)
-    (first ((sxpath (format "//div[@class=~s]" class)) xe)))
 
-  (define summary-raw (rest (first (list-tail (get-div "summary") 2))))
-  (define verses-xe (list '*TOP* (get-div "verses")))
+  (define summary-raw (rest (first (list-tail (get-div xe "summary") 2))))
+  (define verses-xe (list '*TOP* (get-div xe "verses")))
 
   (define (prep-verse v)
     (list-tail v 3))
@@ -129,6 +155,10 @@
        empty]
       [`(span (@ (class "small")) . ,inside)
        (parse-verse inside)]
+      [`(span (@ (class "deitySmallCaps")) . ,inside)
+       (parse-verse inside)]
+      [`(span (@ (class "smallCaps")) . ,inside)
+       (parse-verse inside)]
       [`(a (@ (class "footnote") . ,more) . ,inside)
        (parse-verse inside)]
       [`(sup . ,inside)
@@ -138,20 +168,17 @@
       [x (error 'parse-verse "Can't handle ~v in ~v" x v)])
      v))
 
+  (define-protected parse-verse)
   (define summary (los->s (parse-verse summary-raw)))
   (define verses (map (compose los->s parse-verse prep-verse)
                       ((sxpath "//p") verses-xe)))
 
-  (cond
-    [first?
-     (define subtitle-raw (list-tail (get-div "subtitle") 2))
-     (define intro-raw (list-tail (get-div "intro") 2))
-     (define subtitle (los->s (parse-verse subtitle-raw)))
-     (define intro (los->s (parse-verse intro-raw)))
+  (define subtitle-raw (list-tail* (get-div xe "subtitle")  2))
+  (define intro-raw (list-tail* (get-div xe "intro") 2))
+  (define subtitle (los->s* (parse-verse* subtitle-raw)))
+  (define intro (los->s* (parse-verse* intro-raw)))
 
-     (list* subtitle intro summary verses)]
-    [else
-     (list* summary verses)]))
+  (list* subtitle intro summary verses))
 
 (struct card (volume book chapter verse kanji reading meaning)
         #:transparent)
@@ -159,10 +186,13 @@
 (define (parse-chapter volume book chapter)
   (printf "Parsing ~a > ~a > ~a\n" volume book chapter)
   (define u (format "http://www.lds.org/scriptures/~a/~a/~a" volume book chapter))
-  (define jpn (u->jpn u (string=? chapter "1")))
-  (define eng (u->eng u (string=? chapter "1")))
+  (define jpn (u->jpn u))
+  (define eng (u->eng u))
   (unless (= (length jpn) (length eng))
-    (error 'bom2se "Japanese and English are different lengths! ~a" u))
+    (pretty-print jpn)
+    (pretty-print eng)
+    (error 'bom2se "Japanese and English are different lengths! ~a, ~a vs ~a"
+           u (length jpn) (length eng)))
 
   (define cards
     (for/list
@@ -170,8 +200,11 @@
          [m (in-list eng)]
          [verse (in-sequences (in-list (list "Subtitle" "Introduction" "Summary"))
                               (in-naturals 1))])
-      (match-define (cons k r) k*r)
-      (card volume book chapter verse k r m)))
+      (match* (k*r m)
+        [((cons k r) m)
+         (card volume book chapter verse k r m)]
+        [(#f #f)
+         #f])))
 
   cards)
 
@@ -205,5 +238,5 @@
 ;; DONE Parse a volume TOC
 ;; DONE Parse the list of volumes TOC
 ;; DONE Caching system?
-;; TODO Make sure it works on all the volumes/books/chapters
+;; TODO Make sure it works on all the volumes/books/chapters (in particular, I'm worried about how the subtitle/intro/summary works for other volumes than the bofm)
 ;; TODO Output to Anki input file
