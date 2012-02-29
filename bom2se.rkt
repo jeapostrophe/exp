@@ -238,5 +238,8 @@
 ;; DONE Parse a volume TOC
 ;; DONE Parse the list of volumes TOC
 ;; DONE Caching system?
-;; TODO Make sure it works on all the volumes/books/chapters (in particular, I'm worried about how the subtitle/intro/summary works for other volumes than the bofm)
+;; DONE Make it work for all of bofm
+;; TODO Make it work for dc-testament
+;; TODO Make it work for pgp
+;; TODO Make it work for study-helps
 ;; TODO Output to Anki input file
