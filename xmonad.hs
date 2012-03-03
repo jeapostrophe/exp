@@ -31,5 +31,5 @@ main = do
          ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart")
        ]
        `removeKeysP`
-       [ "M4-r", "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h" ]
+       [ "M4-r", "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h", "M4-S-q" ]
                                           
