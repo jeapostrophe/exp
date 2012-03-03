@@ -172,7 +172,7 @@ for (let i = 0; i < 10; ++i) {
 interactive("switch-to-other-buffer",
             "Switch to the previously open buffer",
             function (I) {
-                var blist = I.window.buffers.buffer_list;
+                var blist = I.window.buffers.buffer_history;
                 if (blist.length > 1)
                     switch_to_buffer(I.window, blist[1]);
             });
