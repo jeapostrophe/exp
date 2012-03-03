@@ -321,6 +321,8 @@ given a prefix arg."
 (global-set-key (kbd "s-f") 'isearch-forward)
 (global-set-key (kbd "s-g") 'isearch-repeat-forward)
 
+
+
 (defun je/delete-window ()
   "Remove window or frame"
   (interactive)
@@ -1005,6 +1007,14 @@ given a prefix arg."
 (autoload 'forth-mode "gforth.el")
 (autoload 'forth-block-mode "gforth.el")
 (add-to-list 'auto-mode-alist '("\\.fs$" . forth-mode))
+
+;; search is case insensitive
+(setq case-fold-search t)
+;; XXX I don't know why this works
+(setq isearch-mode-hook
+      (function (lambda () 
+                  (isearch-toggle-case-fold)
+                  (isearch-toggle-case-fold))))
 
 ;; customs
 
