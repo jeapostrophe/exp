@@ -1,7 +1,7 @@
-#lang scheme
+#lang racket
 (require tests/eli-tester
-         scheme/struct-info
-         "sstruct.ss")
+         racket/struct-info
+         "sstruct.rkt")
 
 (test
  (local [(define-sstruct a ())]

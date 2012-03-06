@@ -1,12 +1,13 @@
-#lang scheme
+#lang racket
 (require (for-syntax syntax/parse
-                     scheme/match
-                     scheme/list
-                     scheme/local
-                     scheme/dict
+                     racket/match
+                     racket/list
+                     racket/local
+                     racket/dict
                      syntax/id-table
+                     racket/syntax
                      unstable/syntax
-                     "sstruct-syn.ss"))
+                     "sstruct-syn.rkt"))
 
 (define-syntax (define-sstruct stx)
   (syntax-parse
@@ -185,7 +186,6 @@
             (define-syntax constructor
               (make-sstruct-description 
                ; Match expander fields
-               
                (lambda (stx)
                 (syntax-case stx ()
                   [(_ . content)
@@ -207,14 +207,12 @@
                                    ...
                                    (app f:accessor f.name)
                                    ...))))]))]))
-               #f 
                (lambda (stx)
                   (syntax-case stx (set!)
                     [(nm . args) #'(the-constructor . args)]
                     [nm (identifier? #'nm) #'the-constructor]
                     [(set! nm v)
                      (raise-syntax-error #f "struct description cannot be target of a set!" stx)]))
-               (syntax-local-certifier)
                
                ; Our fields
                

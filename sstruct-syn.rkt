@@ -1,7 +1,7 @@
-#lang scheme
+#lang racket
 (require syntax/parse
-         scheme/struct-info
-         scheme/match/patterns)
+         racket/struct-info
+         racket/match/patterns)
 
 (define (separate-keywords stx)
   (let loop ([ids empty]
@@ -16,14 +16,17 @@
      [()
       (values (reverse ids) kws)])))
 
-(define-struct (sstruct-description match-expander) 
-  (struct-type-id super-type-desc
+(define-struct sstruct-description 
+  (match-xform set-xform 
+   struct-type-id super-type-desc
    constructor-id predicate-id
    field-names 
    field-accessors field-mutators
    by-pos-field-names
    by-kw-fields
-   formals)
+  formals)
+  #:property prop:set!-transformer (struct-field-index set-xform)
+  #:property prop:match-expander (struct-field-index match-xform)
   #:property prop:struct-info
   (lambda (sd)
     (define super-type-desc
