@@ -1,8 +1,6 @@
 ### News source
 class NewsSource(object):
-    def __init__(self):
-
-    def login(config, section):
+    def login(self, config, section):
         the_app_key = config.get(section, "app_key")
         the_app_secret = config.get(section, "app_secret")
 
@@ -35,8 +33,6 @@ class NewsSource(object):
                 oauth_token_secret = config.get(section, "oauth_token_secret") )
 
 class TumblrNewsSource(NewsSource):
-    def __init__(self):
-
     def connect(self, app_key = None, app_secret = None, oauth_token = None, oauth_token_secret = None):
         return Tumblpy(app_key = app_key,
                        app_secret = app_secret,
@@ -44,8 +40,6 @@ class TumblrNewsSource(NewsSource):
                        oauth_token_secret = oauth_token_secret )
 
 class TwitterNewsSource(NewsSource):
-    def __init__(self):
-
     def connect(self, app_key = None, app_secret = None, oauth_token = None, oauth_token_secret = None):
         return Twython(twitter_token = app_key,
                        twitter_secret = app_secret,
