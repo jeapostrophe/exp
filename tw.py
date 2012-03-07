@@ -106,7 +106,8 @@ xml_path = "%s/example.rss" % expanduser(config.get("general", "output_dir"))
 rss.write_xml(open(xml_path, "w"))
 
 tu = TumblrNewsSource(config, "tumblr").login()
-print len(tu.get('user/dashboard', params = {'offset': 20})['posts'])
+posts = tu.get('user/dashboard', params = {'offset': 20})['posts']
+print len(posts)
 
 # XXX Both:
 # XXXX Remember last entry, get them all since then, produce an rss feed
