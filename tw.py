@@ -28,15 +28,15 @@ class NewsSource(object):
                 save_config()
                 exit(0)
 
-                t = self.connect(
-                    app_key = the_app_key,
-                    app_secret = the_app_secret,
-                    oauth_token = config.get(section, "auth_token"),
-                    oauth_token_secret = config.get(section, "auth_token_secret") )
-                authorized_tokens = t.get_access_token(config.get(section, "auth_verifier"))
-                config.set(section, "auth_token", authorized_tokens['oauth_token'])
-                config.set(section, "auth_token_secret", authorized_tokens['oauth_token_secret'])
-                save_config()
+            t = self.connect(
+                app_key = the_app_key,
+                app_secret = the_app_secret,
+                oauth_token = config.get(section, "auth_token"),
+                oauth_token_secret = config.get(section, "auth_token_secret") )
+            authorized_tokens = t.get_access_token(config.get(section, "auth_verifier"))
+            config.set(section, "oauth_token", authorized_tokens['oauth_token'])
+            config.set(section, "oauth_token_secret", authorized_tokens['oauth_token_secret'])
+            save_config()
 
         return self.connect(
             app_key = the_app_key,
@@ -65,7 +65,7 @@ def create_NewsSource(kind,config,section):
         return TumblrNewsSource(config, section)
     else:
         return None
-        
+
 ### Configuration
 config_path = expanduser("~/.tw.ini")
 def save_config ():
@@ -89,11 +89,11 @@ results = tw1.getHomeTimeline(count = 20)
 def tweet2rss(t):
     tweet_body = "@%s: %s" % (t['user']['screen_name'], t['text'])
     return PyRSS2Gen.RSSItem(
-             title = tweet_body,
-             link = "http://www.twitter.com/%s/status/%s" % (t['user']['screen_name'], t['id']),
-             description = tweet_body,
-             guid = str(t['id']),
-             pubDate = t['created_at'])
+        title = tweet_body,
+        link = "http://www.twitter.com/%s/status/%s" % (t['user']['screen_name'], t['id']),
+        description = tweet_body,
+        guid = str(t['id']),
+        pubDate = t['created_at'])
 
 rss = PyRSS2Gen.RSS2(
     title = "@%s/following" % (config.get("twitter1", "user")),
