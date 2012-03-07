@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Winsav File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Thu Mar  1 16:40:34 2012
+;; Created Tue Mar  6 22:02:06 2012
 ;; Winsav file format version 1
 ;; Emacs version 23.3.1
 (if
@@ -15,14 +15,14 @@
   ;; ---- before winsav-before-save-configuration-hook ------------------------
   ;; ---- after winsav-before-save-configuration-hook  ------------------------
   (winsav-restore-frame
-   '((icon-name)
+   '((visibility . t)
+     (icon-name)
      (top . 17)
      (left . 0)
      (unsplittable)
+     (modeline . t)
      (width . 177)
      (height . 51)
-     (visibility . t)
-     (modeline . t)
      (background-mode . light)
      (alpha)
      (scroll-bar-width . 0)
@@ -49,12 +49,12 @@
      (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
      (font-backend xft x))
    '(0
-     (buffer "/home/jay/Dev/scm/github.jeapostrophe/work/notebook/2012/history.tex" "/home/jay/Dev/scm/github.jeapostrophe/work/notebook/2012/history.tex" 82
+     (buffer "*Ibuffer*" nil 4313
              (0 0 179 50)
-             (0 0 t nil)
+             (16 0 t nil)
              (8 8 nil)
              (nil)
-             0 nil nil 1 nil))
+             0 nil nil 959 nil))
    nil nil t )
   ;; ---- before after-save-frame-hook ----
   ;; ---- after after-save-frame-hook  ----
