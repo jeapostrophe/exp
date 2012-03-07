@@ -390,6 +390,7 @@ given a prefix arg."
     (setq suffixMap
           '(("java" . "javai")
             ("c" . "cci")
+            ("py" . "python")
             ("cc" . "ccci")
             ("rkt" . "rk")
             ("scrbl" . "scribble --pdf")
