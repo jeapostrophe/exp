@@ -7,7 +7,7 @@ cecho () {
 
 cd "$(dirname "$FILE")" && \
 cecho Compiling... && \
-g++ "$FILE" -o "$FILE.bin" && \
+g++ -fpermissive "$FILE" -o "$FILE.bin" && \
 cecho Running... && \
 "${FILE}.bin" && \
 cecho Returned $? && \
