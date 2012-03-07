@@ -28,18 +28,18 @@ from tumblpy import Tumblpy
 the_app_key = config.get("tumblr", "app_key")
 the_app_secret = config.get("tumblr", "app_secret")
 
-if not config.has_option("tumblr", "auth_verifier"):
-    t = Tumblpy(app_key = the_app_key,
-                app_secret = the_app_secret )
-    auth_props = t.get_authentication_tokens()
-    print "Got to this URL: %s" % auth_props['auth_url']
-    print "Then, add the verifier to the config file as the option auth_verifier"
-    config.set("tumblr", "auth_token", auth_props['oauth_token'])
-    config.set("tumblr", "auth_token_secret", auth_props['oauth_token_secret'])
-    save_config()
-    exit(0)
-
 if not config.has_option("tumblr", "oauth_token"):
+    if not config.has_option("tumblr", "auth_verifier"):
+        t = Tumblpy(app_key = the_app_key,
+                    app_secret = the_app_secret )
+        auth_props = t.get_authentication_tokens()
+        print "Go to this URL: %s" % auth_props['auth_url']
+        print "Then, add the verifier to the config file as the option auth_verifier"
+        config.set("tumblr", "auth_token", auth_props['oauth_token'])
+        config.set("tumblr", "auth_token_secret", auth_props['oauth_token_secret'])
+        save_config()
+        exit(0)
+
     t = Tumblpy(app_key = the_app_key,
                 app_secret = the_app_secret,
                 oauth_token = config.get("tumblr", "auth_token"),
