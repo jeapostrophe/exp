@@ -73,8 +73,11 @@
        (simpl-verse (list kanji))]
       [(and x `(ruby (rp "(") (rt ,reading) (rp ")")))
        (list x)]
-      [(and x (list 'ruby kanji ... `(rp "(") `(rt ,reading) `(rp ")")))
+      [(and x (list 'ruby kanji ...`(rp "(") `(rt ,reading) `(rp ")")))
        (snoc (simpl-verse kanji)
+             `(ruby (rp "(") (rt ,reading) (rp ")")))]
+      [(and x `(ruby "                 " ,kanji "                 " (rp "(") "                 " (rt ,reading) "                 " (rp ")") "               "))
+       (snoc (simpl-verse (list kanji))
              `(ruby (rp "(") (rt ,reading) (rp ")")))]
       [(list 'a `(@ . ,_) rest ...)
        (simpl-verse rest)]
@@ -83,6 +86,10 @@
       [`(div (@ (class "signature")) . ,rest)
        (simpl-verse rest)]
       [`(div (@ (class "preface")) . ,rest)
+       (simpl-verse rest)]
+      [`(b . ,rest)
+       (simpl-verse rest)]
+      [`(em . ,rest)
        (simpl-verse rest)]
       [`(span (@ (class "verse")) ,_)
        empty]
@@ -157,6 +164,10 @@
        (parse-verse inside)]
       [`(span (@ (class "deitySmallCaps")) . ,inside)
        (parse-verse inside)]
+      [`(b . ,inside)
+       (parse-verse inside)]
+      [`(em . ,inside)
+       (parse-verse inside)]
       [`(span (@ (class "smallCaps")) . ,inside)
        (parse-verse inside)]
       [`(a (@ (class "footnote") . ,more) . ,inside)
@@ -185,7 +196,8 @@
 
 (define (parse-chapter volume book chapter)
   (printf "Parsing ~a > ~a > ~a\n" volume book chapter)
-  (define u (format "http://www.lds.org/scriptures/~a/~a/~a" volume book chapter))
+  (define u (format "http://www.lds.org/scriptures/~a~a/~a" volume
+                    (if book (format "/~a" book) "") chapter))
   (define jpn (u->jpn u))
   (define eng (u->eng u))
   (unless (= (length jpn) (length eng))
@@ -210,12 +222,13 @@
 
 (define (parse-book volume book)
   (printf "Parsing ~a > ~a\n" volume book)
-  (define u (format "http://www.lds.org/scriptures/~a/~a?lang=eng" volume book))
+  (define u (format "http://www.lds.org/scriptures/~a~a?lang=eng" volume
+                    (if book (format "/~a" book) "")))
   (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
   (define chs
     ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe))
 
-  (append-map (curry parse-chapter volume book) chs))
+  (append-map (curry parse-chapter volume (or book "dc")) chs))
 
 (define (parse-bom-volume volume)
   (printf "Parsing ~a\n" volume)
@@ -227,20 +240,12 @@
 
   (append-map (curry parse-book volume) bs))
 
-(define (parse-dc-volume volume)
-  (printf "Parsing ~a\n" volume)
-  (define u (format "http://www.lds.org/scriptures/~a?lang=eng" volume))
-  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
-  (define chs
-    ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe))
-
-  (append-map (curry parse-chapter volume volume) chs))
-
-(parse-dc-volume "dc-testament")
-(exit 0)
-
-(define volumes (list "bofm" "dc-testament" "pgp" "study-helps"))
-(define all (append-map parse-bom-volume volumes))
+(define volumes (list "pgp" "study-helps"))
+(define all
+  (append
+   (parse-bom-volume "bofm")
+   (parse-book "dc-testament" #f)
+   (append-map parse-bom-volume volumes)))
 
 (pretty-print (take all 5))
 
