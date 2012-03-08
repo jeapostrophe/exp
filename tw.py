@@ -1,8 +1,6 @@
 from os.path import expanduser
 from twython import Twython
 from tumblpy import Tumblpy
-import time
-import calendar
 import ConfigParser
 import datetime
 import PyRSS2Gen
@@ -41,6 +39,12 @@ class NewsSource(object):
             oauth_token = config.get(section, "oauth_token"),
             oauth_token_secret = config.get(section, "oauth_token_secret") )
 
+def append_map(f, l):
+    out = []
+    for e in l:
+        out = out + f(e)
+    return out
+
 class Tumblr(NewsSource):
     def connect(self, app_key = None, app_secret = None, oauth_token = None, oauth_token_secret = None):
         return Tumblpy(app_key = app_key,
@@ -50,8 +54,10 @@ class Tumblr(NewsSource):
 
     def rss(self, config, section):
         t = self.login(config, section)
-        # XXX Get all
-        results = t.get('user/dashboard', params = {'offset': 20})['posts']
+        def inner(page_n):
+            print "\tDownloading page %d" % page_n
+            return t.get('user/dashboard', params = {'limit': 20, 'offset': page_n * 20})['posts']
+        results = append_map(inner, range(4))
         return PyRSS2Gen.RSS2(
             title = "%s dashboard" % (config.get(section, "user")),
             description = "%s dashboard" % (config.get(section, "user")),
@@ -68,19 +74,10 @@ class Twitter(NewsSource):
 
     def rss(self, config, section):
         t = self.login(config, section)
-        # XXX get all
-        results = []
-        page_n = 0
-        target_time = calendar.timegm(time.gmtime()) - 60*60*24*7
-        done = False
-        while not done:
-            print "\tGetting page %d" % page_n
-            new_results = t.getHomeTimeline(count = 20, page = page_n)
-            results += new_results
-            for tw in new_results:
-                if calendar.timegm(time.strptime(tw['created_at'], "%a %b %d %H:%M:%S +0000 %Y")) <= target_time:
-                    done = True
-            page_n = page_n + 1
+        def inner(page_n):
+            print "\tDownloading page %d" % page_n
+            return t.getHomeTimeline(count = 200, page = page_n)
+        results = append_map(inner, range(4))
         return PyRSS2Gen.RSS2(
             title = "@%s/following" % (config.get(section, "user")),
             description = "@%s following timeline" % (config.get(section, "user")),
@@ -105,6 +102,24 @@ def tumblr2rss(t):
             description = 
              """<p><a href="%s">%s</a>: %s</p><p>%s</p>""" %
              (t['asking_name'], t['asking_url'], t['question'], t['answer']),
+            guid = str(t['id']),
+            pubDate = t['date'])
+    elif t['type'] == 'audio':
+        return PyRSS2Gen.RSSItem(
+            title = t['caption'],
+            author = t['blog_name'],
+            link = t['post_url'],
+            description = "",
+            guid = str(t['id']),
+            pubDate = t['date'])
+    elif t['type'] == 'link':
+        return PyRSS2Gen.RSSItem(
+            title = t['title'],
+            author = t['blog_name'],
+            link = t['post_url'],
+            description = 
+             """<p><a href="%s">%s</a></p><p>%s</p>""" %
+             (t['url'], t['title'], t['description']),
             guid = str(t['id']),
             pubDate = t['date'])
     elif t['type'] == 'photo':
