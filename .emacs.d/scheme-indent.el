@@ -73,6 +73,7 @@
 (put 'syntax-case 'scheme-indent-function 2)
 (put 'syntax-case* 'scheme-indent-function 3)
 (put 'module 'scheme-indent-function 2)
+(put 'module* 'scheme-indent-function 2)
 
 (put 'syntax 'scheme-indent-function 0)
 (put 'quasisyntax 'scheme-indent-function 0)
