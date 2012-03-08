@@ -1,6 +1,7 @@
 from os.path import expanduser
 from twython import Twython
 from tumblpy import Tumblpy
+import time
 import ConfigParser
 import datetime
 import PyRSS2Gen
@@ -42,6 +43,7 @@ class NewsSource(object):
 def append_map(f, l):
     out = []
     for e in l:
+        time.sleep(1)
         out = out + f(e)
     return out
 
@@ -161,9 +163,8 @@ config.read(config_path)
 for section, kind in config.items("sources"):
     print "Download source %s" % section
     ns = eval("%s()" % kind)
+    time.sleep(1)
     rss = ns.rss(config, section)
     xml_path = "%s/%s-%s.rss" % (expanduser(config.get("general", "output_dir")), section, (config.get(section, "user")))
     rss.write_xml(open(xml_path, "w"))
 
-# XXX Both:
-# XXXX Remember last entry, get them all since then, produce an rss feed
