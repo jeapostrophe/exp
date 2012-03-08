@@ -1,18 +1,15 @@
-import ConfigParser
 from os.path import expanduser
 from twython import Twython
 from tumblpy import Tumblpy
+import time
+import calendar
+import ConfigParser
+import datetime
+import PyRSS2Gen
 
 ### News source
 class NewsSource(object):
-    def __init__(self, config, section):
-        self.config = config
-        self.section = section
-
-    def login(self):
-        config = self.config
-        section = self.section
-
+    def login(self, config, section):
         the_app_key = config.get(section, "app_key")
         the_app_secret = config.get(section, "app_secret")
 
@@ -44,27 +41,97 @@ class NewsSource(object):
             oauth_token = config.get(section, "oauth_token"),
             oauth_token_secret = config.get(section, "oauth_token_secret") )
 
-class TumblrNewsSource(NewsSource):
+class Tumblr(NewsSource):
     def connect(self, app_key = None, app_secret = None, oauth_token = None, oauth_token_secret = None):
         return Tumblpy(app_key = app_key,
                        app_secret = app_secret,
                        oauth_token = oauth_token,
                        oauth_token_secret = oauth_token_secret )
 
-class TwitterNewsSource(NewsSource):
+    def rss(self, config, section):
+        t = self.login(config, section)
+        # XXX Get all
+        results = t.get('user/dashboard', params = {'offset': 20})['posts']
+        return PyRSS2Gen.RSS2(
+            title = "%s dashboard" % (config.get(section, "user")),
+            description = "%s dashboard" % (config.get(section, "user")),
+            link = "http://www.tumblr.com/dashboard",
+            lastBuildDate = datetime.datetime.utcnow(),
+            items = map(tumblr2rss, results))
+
+class Twitter(NewsSource):
     def connect(self, app_key = None, app_secret = None, oauth_token = None, oauth_token_secret = None):
         return Twython(twitter_token = app_key,
                        twitter_secret = app_secret,
                        oauth_token = oauth_token,
                        oauth_token_secret = oauth_token_secret )
 
-def create_NewsSource(kind,config,section):
-    if kind == 'Twitter':
-        return TwitterNewsSource(config, section)
-    elif kind == 'Tumblr':
-        return TumblrNewsSource(config, section)
+    def rss(self, config, section):
+        t = self.login(config, section)
+        # XXX get all
+        results = []
+        page_n = 0
+        target_time = calendar.timegm(time.gmtime()) - 60*60*24*7
+        done = False
+        while not done:
+            print "\tGetting page %d" % page_n
+            new_results = t.getHomeTimeline(count = 20, page = page_n)
+            results += new_results
+            for tw in new_results:
+                if calendar.timegm(time.strptime(tw['created_at'], "%a %b %d %H:%M:%S +0000 %Y")) <= target_time:
+                    done = True
+            page_n = page_n + 1
+        return PyRSS2Gen.RSS2(
+            title = "@%s/following" % (config.get(section, "user")),
+            description = "@%s following timeline" % (config.get(section, "user")),
+            link = "http://www.twitter.com/%s" % (config.get(section, "user")),
+            lastBuildDate = datetime.datetime.utcnow(),
+            items = map(tweet2rss, results))
+
+def tumblr2rss(t):
+    if t['type'] == 'text':
+        return PyRSS2Gen.RSSItem(
+            title = t['title'],
+            author = t['blog_name'],
+            link = t['post_url'],
+            description = t['body'],
+            guid = str(t['id']),
+            pubDate = t['date'])
+    elif t['type'] == 'answer':
+        return PyRSS2Gen.RSSItem(
+            title = "%s: %s" % (t['asking_name'], t['question']),
+            author = t['blog_name'],
+            link = t['post_url'],
+            description = 
+             """<p><a href="%s">%s</a>: %s</p><p>%s</p>""" %
+             (t['asking_name'], t['asking_url'], t['question'], t['answer']),
+            guid = str(t['id']),
+            pubDate = t['date'])
+    elif t['type'] == 'photo':
+        return PyRSS2Gen.RSSItem(
+            title = t['caption'],
+            author = t['blog_name'],
+            link = t['post_url'],
+            description = 
+             "<br/>".join(map((lambda photo:
+                                   """<img src="%s" /> %s""" % 
+                               (photo['alt_sizes'][0]['url'],
+                                photo['caption'])),
+                              t['photos'])),
+            guid = str(t['id']),
+            pubDate = t['date'])
     else:
-        return None
+        raise ValueError("Cannot RSS-ify Tumblr type %s" % t['type'])
+
+def tweet2rss(t):
+    tweet_body = "@%s: %s" % (t['user']['screen_name'], t['text'])
+    return PyRSS2Gen.RSSItem(
+        title = tweet_body,
+        author = t['user']['screen_name'],
+        link = "http://www.twitter.com/%s/status/%s" % (t['user']['screen_name'], t['id']),
+        description = tweet_body,
+        guid = str(t['id']),
+        pubDate = t['created_at'])
 
 ### Configuration
 config_path = expanduser("~/.tw.ini")
@@ -76,38 +143,12 @@ config = ConfigParser.RawConfigParser()
 config.read(config_path)
 
 ### GO!
-import datetime
-import PyRSS2Gen
-
-sources = [ create_NewsSource(kind,config,section) for section, kind in config.items("sources")]
-
-tw1 = TwitterNewsSource(config, "twitter1").login()
-tw2 = TwitterNewsSource(config, "twitter2").login()
-
-results = tw1.getHomeTimeline(count = 20)
-
-def tweet2rss(t):
-    tweet_body = "@%s: %s" % (t['user']['screen_name'], t['text'])
-    return PyRSS2Gen.RSSItem(
-        title = tweet_body,
-        link = "http://www.twitter.com/%s/status/%s" % (t['user']['screen_name'], t['id']),
-        description = tweet_body,
-        guid = str(t['id']),
-        pubDate = t['created_at'])
-
-rss = PyRSS2Gen.RSS2(
-    title = "@%s/following" % (config.get("twitter1", "user")),
-    description = "@%s following timeline" % (config.get("twitter1", "user")),
-    link = "http://www.twitter.com/%s" % (config.get("twitter1", "user")),
-    lastBuildDate = datetime.datetime.utcnow(),
-    items = map(tweet2rss, results))
-
-xml_path = "%s/example.rss" % expanduser(config.get("general", "output_dir"))
-rss.write_xml(open(xml_path, "w"))
-
-tu = TumblrNewsSource(config, "tumblr").login()
-posts = tu.get('user/dashboard', params = {'offset': 20})['posts']
-print len(posts)
+for section, kind in config.items("sources"):
+    print "Download source %s" % section
+    ns = eval("%s()" % kind)
+    rss = ns.rss(config, section)
+    xml_path = "%s/%s-%s.rss" % (expanduser(config.get("general", "output_dir")), section, (config.get(section, "user")))
+    rss.write_xml(open(xml_path, "w"))
 
 # XXX Both:
 # XXXX Remember last entry, get them all since then, produce an rss feed
