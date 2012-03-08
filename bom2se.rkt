@@ -217,7 +217,7 @@
 
   (append-map (curry parse-chapter volume book) chs))
 
-(define (parse-volume volume)
+(define (parse-bom-volume volume)
   (printf "Parsing ~a\n" volume)
   (define u (format "http://www.lds.org/scriptures/~a?lang=eng" volume))
   (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
@@ -227,8 +227,20 @@
 
   (append-map (curry parse-book volume) bs))
 
+(define (parse-dc-volume volume)
+  (printf "Parsing ~a\n" volume)
+  (define u (format "http://www.lds.org/scriptures/~a?lang=eng" volume))
+  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
+  (define chs
+    ((sxpath "//ul[@class=\"jump-to-chapter\"]/li/a/text()") xe))
+
+  (append-map (curry parse-chapter volume volume) chs))
+
+(parse-dc-volume "dc-testament")
+(exit 0)
+
 (define volumes (list "bofm" "dc-testament" "pgp" "study-helps"))
-(define all (append-map parse-volume volumes))
+(define all (append-map parse-bom-volume volumes))
 
 (pretty-print (take all 5))
 
