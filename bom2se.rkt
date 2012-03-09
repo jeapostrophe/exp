@@ -43,7 +43,7 @@
                   (and (andmap (λ (a) a) args)
                        (apply x args)))
                 ...)))]))
-(define-protected list-tail los->s)
+(define-protected list-tail los->s rest first)
 
 (define (get-div xe class)
   (match ((sxpath (format "//div[@class=~s]" class)) xe)
@@ -51,17 +51,21 @@
     [x
      (cond
        [(or (string=? class "subtitle")
-            (string=? class "intro"))
+            (string=? class "intro")
+            (string=? class "summary")
+            (string=? class "studyIntro"))
         #f]
        [else
         (pretty-print xe)
         (error 'get-div "Failed on ~e with ~e" class x)])]))
 
+(define (space-string? s)
+  (regexp-match #rx" *" s))
+
 (define (u->jpn u-base)
   (define u (format "~a?lang=jpn" u-base))
   (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
 
-  (define summary-raw (rest (first (list-tail (get-div xe "summary") 2))))
   (define verses-xe (list '*TOP* (get-div xe "verses")))
 
   (define (simpl-verse p)
@@ -76,7 +80,7 @@
       [(and x (list 'ruby kanji ...`(rp "(") `(rt ,reading) `(rp ")")))
        (snoc (simpl-verse kanji)
              `(ruby (rp "(") (rt ,reading) (rp ")")))]
-      [(and x `(ruby "                 " ,kanji "                 " (rp "(") "                 " (rt ,reading) "                 " (rp ")") "               "))
+      [(and x `(ruby ,(? space-string?) ,kanji ,(? space-string?) (rp "(") ,(? space-string?) (rt ,reading) ,(? space-string?) (rp ")") ,(? space-string?)))
        (snoc (simpl-verse (list kanji))
              `(ruby (rp "(") (rt ,reading) (rp ")")))]
       [(list 'a `(@ . ,_) rest ...)
@@ -131,7 +135,10 @@
   (define parse-verse (compose combine-verse simpl-verse))
   (define-protected parse-verse)
 
-  (define summary (parse-verse summary-raw))
+  (define studyIntro-raw (list-tail* (get-div xe "studyIntro") 2))
+  (define studyIntro (parse-verse* studyIntro-raw))
+  (define summary-raw (rest* (first* (list-tail* (get-div xe "summary") 2))))
+  (define summary (parse-verse* summary-raw))
   (define verses
     (filter (λ (x) (not (string=? "" (car x))))
             (map (compose combine-verse clip-verse simpl-verse prep-verse)
@@ -142,13 +149,12 @@
   (define subtitle (parse-verse* subtitle-raw))
   (define intro (parse-verse* intro-raw))
 
-  (list* subtitle intro summary verses))
+  (list* subtitle intro studyIntro summary verses))
 
 (define (u->eng u-base)
   (define u (format "~a?lang=eng" u-base))
   (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
 
-  (define summary-raw (rest (first (list-tail (get-div xe "summary") 2))))
   (define verses-xe (list '*TOP* (get-div xe "verses")))
 
   (define (prep-verse v)
@@ -164,11 +170,23 @@
        (parse-verse inside)]
       [`(span (@ (class "deitySmallCaps")) . ,inside)
        (parse-verse inside)]
+      [`(span (@ (class "language") . ,_) . ,inside)
+       (parse-verse inside)]
       [`(b . ,inside)
        (parse-verse inside)]
       [`(em . ,inside)
        (parse-verse inside)]
       [`(span (@ (class "smallCaps")) . ,inside)
+       (parse-verse inside)]
+      [`(div (@ (class "question")) . ,inside)
+       (parse-verse inside)]
+      [`(div (@ (class "answer")) . ,inside)
+       (parse-verse inside)]
+      [`(div (@ (class "line")) . ,inside)
+       (parse-verse inside)]
+      [`(div (@ (class "signature")) . ,inside)
+       (parse-verse inside)]
+      [`(div (@ (class "office")) . ,inside)
        (parse-verse inside)]
       [`(a (@ (class "footnote") . ,more) . ,inside)
        (parse-verse inside)]
@@ -180,16 +198,19 @@
      v))
 
   (define-protected parse-verse)
-  (define summary (los->s (parse-verse summary-raw)))
+  (define studyIntro-raw (list-tail* (get-div xe "studyIntro") 2))
+  (define studyIntro (los->s* (parse-verse* studyIntro-raw)))
+  (define summary-raw (rest* (first* (list-tail* (get-div xe "summary") 2))))
+  (define summary (los->s* (parse-verse* summary-raw)))
   (define verses (map (compose los->s parse-verse prep-verse)
                       ((sxpath "//p") verses-xe)))
 
-  (define subtitle-raw (list-tail* (get-div xe "subtitle")  2))
+  (define subtitle-raw (list-tail* (get-div xe "subtitle") 2))
   (define intro-raw (list-tail* (get-div xe "intro") 2))
   (define subtitle (los->s* (parse-verse* subtitle-raw)))
   (define intro (los->s* (parse-verse* intro-raw)))
 
-  (list* subtitle intro summary verses))
+  (list* subtitle intro studyIntro summary verses))
 
 (struct card (volume book chapter verse kanji reading meaning)
         #:transparent)
@@ -213,9 +234,9 @@
          [verse (in-sequences (in-list (list "Subtitle" "Introduction" "Summary"))
                               (in-naturals 1))])
       (match* (k*r m)
-        [((cons k r) m)
+        [((cons k r) (and m (not #f)))
          (card volume book chapter verse k r m)]
-        [(#f #f)
+        [(#f _)
          #f])))
 
   cards)
@@ -243,8 +264,8 @@
 (define volumes (list "pgp" "study-helps"))
 (define all
   (append
-   (parse-bom-volume "bofm")
    (parse-book "dc-testament" #f)
+   (parse-bom-volume "bofm")
    (append-map parse-bom-volume volumes)))
 
 (pretty-print (take all 5))
