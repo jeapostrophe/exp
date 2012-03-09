@@ -114,6 +114,14 @@ def tumblr2rss(t):
             description = "",
             guid = str(t['id']),
             pubDate = t['date'])
+    elif t['type'] == 'video':
+        return PyRSS2Gen.RSSItem(
+            title = t['caption'],
+            author = t['blog_name'],
+            link = t['post_url'],
+            description = "",
+            guid = str(t['id']),
+            pubDate = t['date'])
     elif t['type'] == 'link':
         return PyRSS2Gen.RSSItem(
             title = t['title'],
