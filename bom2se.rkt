@@ -60,7 +60,7 @@
         (error 'get-div "Failed on ~e with ~e" class x)])]))
 
 (define (space-string? s)
-  (regexp-match #rx" *" s))
+  (regexp-match #rx"^ *$" s))
 
 (define (u->jpn u-base)
   (define u (format "~a?lang=jpn" u-base))
@@ -89,11 +89,15 @@
        (simpl-verse rest)]
       [`(div (@ (class "signature")) . ,rest)
        (simpl-verse rest)]
+      [`(span (@ (class "language emphasis") (xml:lang "en")) . ,rest)
+       (simpl-verse rest)]
       [`(div (@ (class "preface")) . ,rest)
        (simpl-verse rest)]
       [`(b . ,rest)
        (simpl-verse rest)]
       [`(em . ,rest)
+       (simpl-verse rest)]
+      [`(div (@ (class "comprising")) . ,rest)
        (simpl-verse rest)]
       [`(span (@ (class "verse")) ,_)
        empty]
@@ -123,14 +127,23 @@
       [x (error 'simpl-verse->reading "Can't handle ~v in ~v" x l)])
      l))
 
-  (define (prep-verse v)
-    (list-tail v 2))
+  (define prep-verse
+    (match-lambda
+     [`(p (@ (class "") (uri ,_)) . ,inside)
+      inside]
+     [`(p (a (@ (name "closing") (class "bookmark dontHighlight")) " ") . ,inside)
+      inside]
+     [`(" " . ,rest)
+      rest]
+     [`(,(? space-string?) . ,rest)
+      rest]
+     [v
+      (error 'prep-verse:jpn "Can't handle ~v" v)]))
   (define (combine-verse sv)
     (define kanji (simpl-verse->expression sv))
     (define reading (simpl-verse->reading sv))
     (cons (los->s kanji)
-          (los->s reading)))
-  (define clip-verse prep-verse)
+          (los->s reading)))  
 
   (define parse-verse (compose combine-verse simpl-verse))
   (define-protected parse-verse)
@@ -140,16 +153,15 @@
   (define summary-raw (rest* (first* (list-tail* (get-div xe "summary") 2))))
   (define summary (parse-verse* summary-raw))
   (define verses
-    (filter (λ (x) (not (string=? "" (car x))))
-            (map (compose combine-verse clip-verse simpl-verse prep-verse)
-                 ((sxpath "//p") verses-xe))))
+    (map (compose combine-verse prep-verse simpl-verse prep-verse)
+         ((sxpath "//p") verses-xe)))
 
   (define subtitle-raw (list-tail* (get-div xe "subtitle")  2))
   (define intro-raw (list-tail* (get-div xe "intro") 2))
   (define subtitle (parse-verse* subtitle-raw))
   (define intro (parse-verse* intro-raw))
 
-  (list* subtitle intro studyIntro summary verses))
+  (list* subtitle intro (or studyIntro summary) verses))
 
 (define (u->eng u-base)
   (define u (format "~a?lang=eng" u-base))
@@ -157,8 +169,14 @@
 
   (define verses-xe (list '*TOP* (get-div xe "verses")))
 
-  (define (prep-verse v)
-    (list-tail v 3))
+  (define prep-verse
+    (match-lambda
+     [`(p (@ (class "") (uri ,_)) . ,inside)
+      inside]
+     [`(p (a (@ (name "closing") (class "bookmark dontHighlight")) " ") . ,inside)
+      inside]
+     [v
+      (error 'prep-verse:eng "Can't handle ~v" v)]))
   (define (parse-verse v)
     (append-map
      (match-lambda
@@ -190,9 +208,11 @@
        (parse-verse inside)]
       [`(a (@ (class "footnote") . ,more) . ,inside)
        (parse-verse inside)]
-      [`(sup . ,inside)
+      [`(sup (@ (class "studyNoteMarker")) . ,inside)
        empty]
-      [`(a (@ (href ,_)) . ,inside)
+      [`(a (@ (class "bookmark-anchor dontHighlight") (name ,_)) " ")
+       empty]
+      [`(a (@ (href ,_) . ,_) . ,inside)
        (parse-verse inside)]
       [x (error 'parse-verse "Can't handle ~v in ~v" x v)])
      v))
@@ -210,7 +230,7 @@
   (define subtitle (los->s* (parse-verse* subtitle-raw)))
   (define intro (los->s* (parse-verse* intro-raw)))
 
-  (list* subtitle intro studyIntro summary verses))
+  (list* subtitle (or intro studyIntro) (or summary studyIntro) verses))
 
 (struct card (volume book chapter verse kanji reading meaning)
         #:transparent)
@@ -220,7 +240,14 @@
   (define u (format "http://www.lds.org/scriptures/~a~a/~a" volume
                     (if book (format "/~a" book) "") chapter))
   (define jpn (u->jpn u))
-  (define eng (u->eng u))
+  (define eng 
+    (let ()
+      (define e (u->eng u))
+      (if (and (equal? volume "bofm")
+               (equal? book "moro")
+               (equal? chapter "10"))
+        (snoc e "Moroni")
+        e)))
   (unless (= (length jpn) (length eng))
     (pretty-print jpn)
     (pretty-print eng)
@@ -237,7 +264,14 @@
         [((cons k r) (and m (not #f)))
          (card volume book chapter verse k r m)]
         [(#f _)
-         #f])))
+         #f]
+        [((cons "" "") #f)
+         #f]
+        [(j e)
+         (error 'parse-chapter "Failed with ~a and ~a on ~a: ~a"
+                j e
+                (list volume book chapter verse)
+                u)])))
 
   cards)
 
@@ -277,7 +311,7 @@
 ;; DONE Parse the list of volumes TOC
 ;; DONE Caching system?
 ;; DONE Make it work for all of bofm
-;; TODO Make it work for dc-testament
+;; DONE Make it work for dc-testament
 ;; TODO Make it work for pgp
 ;; TODO Make it work for study-helps
 ;; TODO Output to Anki input file

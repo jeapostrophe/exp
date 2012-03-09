@@ -32,6 +32,8 @@ emacs &
 
 conkeror &
 
+pidgin &
+
 #start-skype.sh &
 
 exec ~/.cabal/bin/xmonad
