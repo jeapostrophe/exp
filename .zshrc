@@ -1,5 +1,8 @@
 source ~/.profile
 
+setopt inc_append_history
+setopt share_history
+setopt auto_cd
 setopt printeightbit
 
 hash -d scm=$SVNROOT
