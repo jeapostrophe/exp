@@ -5,7 +5,7 @@ export XAUTHORITY=~/.Xauthority
 
 chpwd () {}
 
-for REPO in ~exp ~home ~work ; do
+for REPO in ~exp ~home ~work ~github/jpn ; do
     cd $REPO
     # Remove deleted files
     git ls-files --deleted -z | xargs -0 git rm >/dev/null 2>&1
