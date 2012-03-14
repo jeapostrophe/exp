@@ -13,6 +13,9 @@ main = do
          layoutHook = avoidStruts $ layoutHook defaultConfig,
          logHook = dynamicLogWithPP xmobarPP
                    { ppOutput = hPutStrLn xmproc,
+                     ppWsSep = "",
+                     ppLayout = take 1,
+                     ppCurrent = xmobarColor "#cd8b00" "",
                      ppTitle = xmobarColor "white" "" . shorten 70 },
          modMask = mod4Mask,
          borderWidth = 2,
@@ -23,7 +26,7 @@ main = do
        [ ("M4-;", spawn "jpn-on"),
          ("M4-'", spawn "jpn-off"),
          ("M4-S-z", spawn "gnome-screensaver-command --lock"),
-         ("M4-<Space>", spawn "exec dmenu_run"),
+         ("M4-<Space>", spawn "exec dmenu.sh"),
          ("M4-`", sendMessage NextLayout),
          ("M4-S-w", spawn "exec conkeror -new chrome://"),
          ("M4-S-e", spawn "exec emacsclient -nc"),

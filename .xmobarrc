@@ -1,4 +1,4 @@
-Config { font = "xft:Courier New-8:bold",
+Config { font = "xft:unifont-12:bold:antialias=true",
          bgColor = "black",
          fgColor = "grey",
          position = TopW L 90,
