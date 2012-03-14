@@ -1,5 +1,8 @@
 ;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
 
+;; font
+(set-default-font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
+
 (add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
 
@@ -1025,9 +1028,6 @@ given a prefix arg."
       (function (lambda () 
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
-
-;; font
-(set-default-font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
 
 ;; customs
 

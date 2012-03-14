@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Winsav File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Wed Mar 14 08:50:45 2012
+;; Created Wed Mar 14 09:17:24 2012
 ;; Winsav file format version 1
 ;; Emacs version 23.3.1
 (if
@@ -49,12 +49,56 @@
      (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
      (font-backend xft x))
    '(0
-     (buffer "*Org Agenda*" nil 454
+     (buffer "/home/jay/Dev/scm/github.jeapostrophe/exp/.emacs.el" "/home/jay/Dev/scm/github.jeapostrophe/exp/.emacs.el" 205
              (0 0 90 49)
              (0 0 t nil)
              (8 8 nil)
              (nil)
              0 nil nil 1 nil))
+   nil nil t )
+  ;; ---- before after-save-frame-hook ----
+  ;; ---- after after-save-frame-hook  ----
+  (winsav-restore-frame
+   '((icon-name)
+     (top . 21)
+     (left . 720)
+     (unsplittable)
+     (width . 88)
+     (height . 25)
+     (visibility . t)
+     (background-mode . light)
+     (modeline . t)
+     (alpha)
+     (scroll-bar-width . 0)
+     (cursor-type . box)
+     (auto-lower)
+     (auto-raise)
+     (icon-type . t)
+     (fullscreen)
+     (buffer-predicate)
+     (tool-bar-lines . 0)
+     (menu-bar-lines . 0)
+     (right-fringe . 8)
+     (left-fringe . 8)
+     (line-spacing)
+     (screen-gamma)
+     (border-color . "black")
+     (cursor-color . "black")
+     (mouse-color . "black")
+     (background-color . "white")
+     (foreground-color . "black")
+     (vertical-scroll-bars)
+     (internal-border-width . 0)
+     (border-width . 2)
+     (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+     (font-backend xft x))
+   '(nil
+     (buffer "/home/jay/Dev/dist/org-mode/lisp/org-colview.el" "/home/jay/Dev/dist/org-mode/lisp/org-colview.el" 51030
+             (0 0 90 24)
+             (0 0 nil nil)
+             (8 8 nil)
+             (nil)
+             0 nil nil 50628 nil))
    nil nil t )
   ;; ---- before after-save-frame-hook ----
   ;; ---- after after-save-frame-hook  ----
