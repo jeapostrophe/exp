@@ -71,7 +71,7 @@
    [(and url str)
     (list 'example/audio url (regexp-replace* #rx"^ +" str ""))]
    [(and img? str)
-    (list 'example (regexp-replace* #rx"^ +" str ""))]
+    (list 'example #f (regexp-replace* #rx"^ +" str ""))]
    [str
     (list 'cont str)]
    [else
@@ -157,7 +157,7 @@
                   (list* stroke-order-url
                          radical-img-url
                          (append (map second readings)
-                                 (map second examples)
+                                 (filter-map second examples)
                                  (map second irregular)))))
    ks))
 (define (extract-urls ks)

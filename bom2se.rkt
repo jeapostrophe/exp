@@ -60,7 +60,8 @@
         (error 'get-div "Failed on ~e with ~e" class x)])]))
 
 (define (space-string? s)
-  (regexp-match #rx"^ *$" s))
+  (and (string? s)
+       (regexp-match #rx"^ *$" s)))
 
 (define (u->jpn u-base)
   (define u (format "~a?lang=jpn" u-base))
@@ -86,6 +87,8 @@
       [(list 'a `(@ . ,_) rest ...)
        (simpl-verse rest)]
       [`(span (@ (class "small")) . ,rest)
+       (simpl-verse rest)]
+      [`(span (@ (class "center")) . ,rest)
        (simpl-verse rest)]
       [`(div (@ (class "signature")) . ,rest)
        (simpl-verse rest)]
@@ -129,10 +132,14 @@
 
   (define prep-verse
     (match-lambda
+     [`(p (a (@ (name ,_) (class "bookmark dontHighlight")) " ") (a (@ (name "note")) "*") . ,inside)
+      (list* " " inside)]
      [`(p (@ (class "") (uri ,_)) . ,inside)
       inside]
      [`(p (a (@ (name "closing") (class "bookmark dontHighlight")) " ") . ,inside)
       inside]
+     [`(p ,(? string? s) . ,inside)
+      (list* " " s inside)]
      [`(" " . ,rest)
       rest]
      [`(,(? space-string?) . ,rest)
@@ -171,10 +178,16 @@
 
   (define prep-verse
     (match-lambda
+     [`(p (a (@ (name ,_) (class "bookmark dontHighlight")) " ") (a (@ (name "*")) "*") . ,inside)
+      (list* " " inside)]
+     [`(p (a (@ (name ,_) (class "bookmark dontHighlight")) " ") . ,inside)
+      (list* " " inside)]
      [`(p (@ (class "") (uri ,_)) . ,inside)
       inside]
      [`(p (a (@ (name "closing") (class "bookmark dontHighlight")) " ") . ,inside)
       inside]
+     [`(p ,(? string? s) . ,inside)
+      (list* " " s inside)]
      [v
       (error 'prep-verse:eng "Can't handle ~v" v)]))
   (define (parse-verse v)
@@ -295,14 +308,24 @@
 
   (append-map (curry parse-book volume) bs))
 
-(define volumes (list "pgp" "study-helps"))
+(define (parse-pgp-volume volume)
+  (printf "Parsing ~a\n" volume)
+  (define u (format "http://www.lds.org/scriptures/~a?lang=eng" volume))
+  (define xe (call/input-url/cache (string->url u) get-pure-port html->xexp))
+
+  (define bs
+    ((sxpath "//ul[@class=\"frontmatter\"]/li/@id/text()") xe))
+
+  (append-map (curry parse-book volume) bs))
+
 (define all
   (append
+   #;(parse-pgp-volume "pgp")
    (parse-book "dc-testament" #f)
    (parse-bom-volume "bofm")
-   (append-map parse-bom-volume volumes)))
+   #;(parse-bom-volume "study-helps")))
 
-(pretty-print (take all 5))
+(length all)
 
 ;; DONE Parse a Japanese page
 ;; DONE Parse an English page
@@ -312,6 +335,6 @@
 ;; DONE Caching system?
 ;; DONE Make it work for all of bofm
 ;; DONE Make it work for dc-testament
-;; TODO Make it work for pgp
-;; TODO Make it work for study-helps
+;; CANCELLED Make it work for pgp (js-h is hard to parse)
+;; CANCELLED Make it work for study-helps
 ;; TODO Output to Anki input file
