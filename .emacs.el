@@ -519,7 +519,7 @@ given a prefix arg."
 
 (setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/")
 (setq org-bookmarks-file "~/Dev/scm/github.jeapostrophe/home/etc/bookmarks.org")
-(setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/notes.org")
+(setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/brain.org")
 (setq org-agenda-files (list org-directory))
 
 (defun je/org-open-bookmarks ()
@@ -582,6 +582,9 @@ given a prefix arg."
 (setq org-refile-use-outline-path t)
 (setq org-outline-path-complete-in-steps t)
 (setq org-refile-targets `((nil . (:maxlevel . 20))))
+(defun je/has-children ()
+  (org-list-has-child-p (point) struct))
+(setq org-refile-target-verify-function 'je/has-children)
 
 (setq org-agenda-todo-ignore-scheduled 'future)
 ;; Doesn't have an effect in todo mode
