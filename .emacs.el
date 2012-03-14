@@ -1026,6 +1026,9 @@ given a prefix arg."
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
 
+;; font
+(set-default-font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
+
 ;; customs
 
 (custom-set-variables
@@ -1041,4 +1044,5 @@ given a prefix arg."
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(fringe ((((class color) (background light)) nil)))
  '(org-column ((t (:background "white" :foreground "black")))))

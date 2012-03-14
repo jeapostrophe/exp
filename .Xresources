@@ -8,7 +8,8 @@ Xft.rgba: rgb
 
 URxvt.saveLines: 1000
 URxvt.scrollBar: off
-URxvt.font: xft:DejaVu Sans Mono:pixelsize=12:spacing=100
+URxvt.font: xft:Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true
+! xft:DejaVu Sans Mono:pixelsize=12:spacing=100
 URxvt.perl-ext-common:  default,matcher
 URxvt.urlLauncher:      conkeror
 URxvt.matcher.button:   1 
