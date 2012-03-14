@@ -1,4 +1,4 @@
-Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*",
+Config { font = "xft:Courier New-8:bold",
          bgColor = "black",
          fgColor = "grey",
          position = TopW L 90,

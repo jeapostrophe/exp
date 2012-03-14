@@ -1,0 +1,4 @@
+#!/bin/sh
+export LANG=ja_JP.utf8
+export LC_CTYPE=ja_JP.utf8
+exec xmobar $*

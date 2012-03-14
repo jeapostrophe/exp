@@ -30,6 +30,7 @@ url_remoting_fn = je_url_remote;
 
 // Don't open a new window or take over the buffer when downloading
 download_buffer_automatic_open_target = OPEN_NEW_BUFFER_BACKGROUND;
+remove_hook("download_added_hook", open_download_buffer_automatically);
 
 // Show history in goto-url minibuffer
 url_completion_use_history = true;

@@ -7,7 +7,7 @@ import System.IO
 import qualified XMonad.StackSet as W
 
 main = do
-  xmproc <- spawnPipe "exec xmobar ~/.xmobarrc"
+  xmproc <- spawnPipe "exec xmobarj ~/.xmobarrc"
   xmonad $ defaultConfig
        { manageHook = manageDocks <+> manageHook defaultConfig,
          layoutHook = avoidStruts $ layoutHook defaultConfig,

@@ -582,8 +582,14 @@ given a prefix arg."
 (setq org-refile-use-outline-path t)
 (setq org-outline-path-complete-in-steps t)
 (setq org-refile-targets `((nil . (:maxlevel . 20))))
+;; This ensures that headings are not refile targets if they do not
+;; already have children.
 (defun je/has-children ()
-  (org-list-has-child-p (point) struct))
+  (save-excursion
+    (let ((this-level (funcall outline-level)))
+      (outline-next-heading)
+      (let ((child-level (funcall outline-level)))
+        (> child-level this-level)))))
 (setq org-refile-target-verify-function 'je/has-children)
 
 (setq org-agenda-todo-ignore-scheduled 'future)
