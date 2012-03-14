@@ -13,13 +13,13 @@ main = do
          layoutHook = avoidStruts $ layoutHook defaultConfig,
          logHook = dynamicLogWithPP xmobarPP
                    { ppOutput = hPutStrLn xmproc,
-                     ppCurrent = xmobarColor "#cd8b00" "" . wrap "[" "]",
-                     ppTitle = xmobarColor "white" "" . shorten 70 },
+                     ppCurrent = xmobarColor "#cb4b16" "" . wrap "[" "]",
+                     ppTitle = xmobarColor "#93a1a1" "" . shorten 70 },
          modMask = mod4Mask,
-         borderWidth = 0,
+         borderWidth = 1,
          terminal = "urxvtc -e screen -UxS lightning",
-         normalBorderColor = "#cccccc",
-         focusedBorderColor = "#cd8b00" }
+         normalBorderColor = "#ffffff",
+         focusedBorderColor = "#073642" }
        `additionalKeysP`
        [ ("M4-;", spawn "jpn-on"),
          ("M4-'", spawn "jpn-off"),

@@ -1,10 +1,15 @@
 ;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
 
-;; font
-(set-default-font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
-
 (add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
+
+;; font & color
+(set-default-font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
+(require 'color-theme)
+(color-theme-initialize)
+(add-to-list 'load-path "~/Dev/dist/solarized/emacs-colors-solarized")
+(load "color-theme-solarized")
+(color-theme-solarized-light)
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
@@ -636,42 +641,42 @@ given a prefix arg."
     '((t (:foreground "#000000"))))
   "Face for due items"
   :group 'org-faces)
-(set-face-foreground 'je/due "#d0000f")
+(set-face-foreground 'je/due "#dc322f")
 
 (defface je/today
   (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for today items"
   :group 'org-faces)
-(set-face-foreground 'je/today "#dd6e0d")
+(set-face-foreground 'je/today "#cb4b16")
 
 (defface je/soon
   (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for soon items"
   :group 'org-faces)
-(set-face-foreground 'je/soon "#006633")
+(set-face-foreground 'je/soon "#859900")
 
 (defface je/near
   (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for near items"
   :group 'org-faces)
-(set-face-foreground 'je/near "#7f007f")
+(set-face-foreground 'je/near "#6c71c4")
 
 (defface je/normal
   (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for normal items"
   :group 'org-faces)
-(set-face-foreground 'je/normal "#000000")
+(set-face-foreground 'je/normal "#657b83")
 
 (defface je/distant
   (org-compatible-face 'default
     '((t (:foreground "#000000"))))
   "Face for distant items"
   :group 'org-faces)
-(set-face-foreground 'je/distant "#595959")
+(set-face-foreground 'je/distant "#93a1a1")
 
 (defun je/todo-color (a)
   "Color things in the column view differently based on deadline"
@@ -809,14 +814,14 @@ given a prefix arg."
 (make-face 'mode-line-process-face)
 (make-face 'mode-line-80col-face)
 
-(defvar light-text "") (setq light-text "black")
-(defvar background "") (setq background "gray95")
+(defvar light-text "") (setq light-text "#657b83")
+(defvar background "") (setq background "#eee8d5")
 (defvar light-text-inactive "") (setq light-text-inactive light-text)
 (defvar background-inactive "") (setq background-inactive background)
-(defvar foreground-warning "") (setq foreground-warning "#c82829")
+(defvar foreground-warning "") (setq foreground-warning "#dc322f")
 (defvar background-warning "") (setq background-warning background)
 (defvar bright-text "") (setq bright-text foreground-warning)
-(defvar foreground-process "") (setq foreground-process "#718c00")
+(defvar foreground-process "") (setq foreground-process "#dc322f")
 
 (set-face-attribute 'mode-line nil
     :foreground light-text :background background
@@ -970,8 +975,9 @@ given a prefix arg."
 (global-centered-cursor-mode +1)
 
 ;; highlight current line (needs to be after v-center)
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#f5f5f5")
+;; (global-hl-line-mode 1)
+;; Doesn't look good with solarized, because there aren't more background colors
+;; (set-face-background 'hl-line "#f5f5f5")
 
 ;; mark down
 (autoload 'markdown-mode "markdown-mode.el"
@@ -1044,5 +1050,5 @@ given a prefix arg."
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(fringe ((((class color) (background light)) nil)))
- '(org-column ((t (:background "white" :foreground "black")))))
+ '(fringe ((((class color) (background "#fdf6e3")) nil)))
+ '(org-column ((t (:background "#fdf6e3" :foreground  "#657b83")))))

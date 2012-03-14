@@ -14,3 +14,5 @@ URxvt.urlLauncher:      conkeror
 URxvt.matcher.button:   1 
 URxvt.inputMethod: ibus  
 URxvt.preeditType: OnTheSpot,None
+
+#include "/home/jay/Dev/dist/solarized/xresources-colors-solarized/Xresources"
