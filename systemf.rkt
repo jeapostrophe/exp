@@ -1,44 +1,31 @@
 #lang racket
 
-(define-syntax
-  (define-ast stx)
-  (syntax-case stx ()
-    [(_
-      [(parent its-parent) (child field ...)
-       ...])
-     (syntax/loc stx
-       (begin
-         (struct parent its-parent ()
-                 #:transparent)
-         (struct child parent (field ...)
-                 #:transparent)
-         ...))]
-    [(_
-      [parent (child field ...)
-              ...])
-     (syntax/loc stx
-       (begin
-         (struct parent ()
-                 #:transparent)
-         (struct child parent (field ...)
-                 #:transparent)
-         ...))]))
+(define-syntax-rule
+  (define-ast
+    [parent (its-parent ...) (child field ...)
+            ...])
+  (begin
+    (struct parent its-parent ... ()
+            #:transparent)
+    (struct child parent (field ...)
+            #:transparent)
+    ...))
 (define-syntax-rule (define-asts class ...)
   (begin (define-ast class) ...))
 
 (define-asts
-  [t
-   (app rator rand)
-   (tyapp t T)]
-  [(v t)
-   (num n)
-   (succ)
-   (abs T x->t)
-   (tyabs T->t)]
-  [T
-   (Nat)
-   (arr dom rng)
-   (tyall X->T)])
+  [t ()
+     (app rator rand)
+     (tyapp t T)]
+  [v (t)
+     (num n)
+     (succ)
+     (abs T x->t)
+     (tyabs T->t)]
+  [T ()
+     (Nat)
+     (arr dom rng)
+     (tyall X->T)])
 
 (define double
   (tyabs
@@ -129,7 +116,7 @@
 (test
  (run (tyapp (tyinst (tyall (λ (X) X)))
              (Nat)))
- => 
+ =>
  (num 0)
 
  (run (app (tyapp (tyinst (tyall (λ (X) X)))
@@ -138,8 +125,8 @@
  =>
  (num 0)
 
- (run (ex1 (num 3))) 
- => 
+ (run (ex1 (num 3)))
+ =>
  (num 7)
 
  (run (ex1 (abs (Nat) (λ (x) x))))
