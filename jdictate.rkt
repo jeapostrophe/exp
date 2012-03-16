@@ -48,7 +48,7 @@
                     (list "Cookie: kanji_dictionary=1327595084_68489:1327595084_68489:1"
                           "User-Agent: Mozilla/5.0 (Ubuntu; X11; Linux x86_64; rv:8.0) Gecko/20100101 Firefox/8.0")))
   (when (regexp-match #rx"403 Forbidden" ans)
-        (error 'jdictate "You've been banned. :("))
+    (error 'jdictate "You've been banned. :("))
   ans)
 
 (define (parse-js-call s)
@@ -68,28 +68,28 @@
   (define img? (cons? ((sxpath '(td img)) tx)))
   (define str (first* ((sxpath '(td *text*)) tx)))
   (cond
-   [(and url str)
-    (list 'example/audio url (regexp-replace* #rx"^ +" str ""))]
-   [(and img? str)
-    (list 'example #f (regexp-replace* #rx"^ +" str ""))]
-   [str
-    (list 'cont str)]
-   [else
-    #f]))
+    [(and url str)
+     (list 'example/audio url (regexp-replace* #rx"^ +" str ""))]
+    [(and img? str)
+     (list 'example #f (regexp-replace* #rx"^ +" str ""))]
+    [str
+     (list 'cont str)]
+    [else
+     #f]))
 
 (define (reflow-examples es)
   (debug (printf "\t\t\t\treflow: ~v\n" es))
   (reverse
    (for/fold
-    ([nes empty])
-    ([e (in-list es)])
-    (match
-     e
-     [(list-rest (or 'example/audio 'example) _)
-      (list* e nes)]
-     [(list 'cont str)
-      (list* (append (first nes) (list str))
-             (rest nes))]))))
+       ([nes empty])
+       ([e (in-list es)])
+     (match
+         e
+       [(list-rest (or 'example/audio 'example) _)
+        (list* e nes)]
+       [(list 'cont str)
+        (list* (append (first nes) (list str))
+               (rest nes))]))))
 
 (define (parse-step s)
   (define x (html->xexp s))
@@ -100,70 +100,70 @@
   (debug (printf "\tgot ~a results\n" (length real-results)))
 
   (for/list
-   ([tr (in-list real-results)]
-    [i (in-naturals 1)])
-   (define trx (list '*TOP* tr))
-   (debug (printf "\t\tresult ~a\n" i))
-   
-   (debug (pretty-print trx))
+      ([tr (in-list real-results)]
+       [i (in-naturals 1)])
+    (define trx (list '*TOP* tr))
+    (debug (printf "\t\tresult ~a\n" i))
 
-   (define-syntax-rule (show f)
-     (debug (printf (string-append "\t\t\t" (symbol->string 'f) ": ~v\n") f)))
-   (define-syntax-rule (show-define f e)
-     (begin (define f e) (show f)))
+    (debug (pretty-print trx))
 
-   (show-define grade
-     (string->number (first ((sxpath '(tr (td 1) *text*)) trx))))
-   (show-define kanji
-     (first ((sxpath '(tr (td 2) font *text*)) trx)))
-   (show-define stroke
-     (string->number (first ((sxpath '(tr (td 3) *text*)) trx))))
-   (show-define stroke-order-url
-     (parse-js-call (last ((sxpath '(tr (td 3) (img) @ onclick *text*)) trx))))
-   (show-define radical-img-url
-     (first* ((sxpath '(tr (td 4) img @ src *text*)) trx)))
-   (show-define radical-string
-     (and (not radical-img-url)
-          (last ((sxpath '(tr (td 4) *text*)) trx))))
-   (show-define meanings
-     ((sxpath '(tr (td 5) *text*)) trx))
-   (show-define readings
-     (filter-map parse-reading
-                 ((sxpath '(tr (td 6) table tbody tr td)) trx)))
-   (show-define examples
-     (reflow-examples
-      (filter-map parse-example
-                  ((sxpath '(tr (td 7) table tbody tr td)) trx))))
-   (show-define irregular
-     (reflow-examples
-      (filter-map parse-example
-                  ((sxpath '(tr (td 8) table tbody tr td)) trx))))
+    (define-syntax-rule (show f)
+      (debug (printf (string-append "\t\t\t" (symbol->string 'f) ": ~v\n") f)))
+    (define-syntax-rule (show-define f e)
+      (begin (define f e) (show f)))
 
-   (list 'kanji
-         grade kanji stroke stroke-order-url
-         radical-img-url radical-string meanings readings
-         examples irregular)))
+    (show-define grade
+                 (string->number (first ((sxpath '(tr (td 1) *text*)) trx))))
+    (show-define kanji
+                 (first ((sxpath '(tr (td 2) font *text*)) trx)))
+    (show-define stroke
+                 (string->number (first ((sxpath '(tr (td 3) *text*)) trx))))
+    (show-define stroke-order-url
+                 (parse-js-call (last ((sxpath '(tr (td 3) (img) @ onclick *text*)) trx))))
+    (show-define radical-img-url
+                 (first* ((sxpath '(tr (td 4) img @ src *text*)) trx)))
+    (show-define radical-string
+                 (and (not radical-img-url)
+                      (last ((sxpath '(tr (td 4) *text*)) trx))))
+    (show-define meanings
+                 ((sxpath '(tr (td 5) *text*)) trx))
+    (show-define readings
+                 (filter-map parse-reading
+                             ((sxpath '(tr (td 6) table tbody tr td)) trx)))
+    (show-define examples
+                 (reflow-examples
+                  (filter-map parse-example
+                              ((sxpath '(tr (td 7) table tbody tr td)) trx))))
+    (show-define irregular
+                 (reflow-examples
+                  (filter-map parse-example
+                              ((sxpath '(tr (td 8) table tbody tr td)) trx))))
+
+    (list 'kanji
+          grade kanji stroke stroke-order-url
+          radical-img-url radical-string meanings readings
+          examples irregular)))
 
 (define (extract-url-paths ks)
   (append-map
    (λ (k)
-      (match-define
-       (list 'kanji
-             grade kanji stroke stroke-order-url
-             radical-img-url radical-string meanings readings
-             examples irregular)
-       k)
-      (filter-map identity
-                  (list* stroke-order-url
-                         radical-img-url
-                         (append (map second readings)
-                                 (filter-map second examples)
-                                 (map second irregular)))))
+     (match-define
+      (list 'kanji
+            grade kanji stroke stroke-order-url
+            radical-img-url radical-string meanings readings
+            examples irregular)
+      k)
+     (filter-map identity
+                 (list* stroke-order-url
+                        radical-img-url
+                        (append (map second readings)
+                                (filter-map second examples)
+                                (map second irregular)))))
    ks))
 (define (extract-urls ks)
   (for/list
-   ([p (in-list (extract-url-paths ks))])
-   (combine-url/relative jdict-base p)))
+      ([p (in-list (extract-url-paths ks))])
+    (combine-url/relative jdict-base p)))
 
 (define last-request-secs-path
   (build-path *output-dir* "last-request-secs.rktd"))
@@ -171,7 +171,7 @@
 (define (read-url/bytes/slow u)
   (define last
     (or (with-handlers ([exn? (λ (x) #f)])
-                       (file->value last-request-secs-path))
+          (file->value last-request-secs-path))
         ;; We don't know how long it has been since you last made a
         ;; request, or if you've been banned. So, we'll wait a long
         ;; time and try then. (long time = 15 minutes)
@@ -194,10 +194,10 @@
 
 (define (cache-url-to-file! u cache-path)
   (unless
-   (file-exists? cache-path)
-   (printf "  Caching ~a -> ~a\n" (url->string u) cache-path)
-   (define bs (read-url/bytes/slow u))
-   (display-to-file bs cache-path #:exists 'replace)))
+      (file-exists? cache-path)
+    (printf "  Caching ~a -> ~a\n" (url->string u) cache-path)
+    (define bs (read-url/bytes/slow u))
+    (display-to-file bs cache-path #:exists 'replace)))
 (define (cache-static-url! u)
   (define cache-path
     (build-path cache-root "static"
@@ -220,8 +220,11 @@
     f))
 
 (parameterize ([current-directory cache-root])
-  (for ([p (in-list (sort (directory-files cache-root) <= #:key path->number))])
-    (debug (printf "~a\n" p))
+  (define ps
+    (sort (directory-files cache-root) <= #:key path->number))
+  (for ([p (in-list ps)]
+        [i (in-naturals 1)])
+    (printf "~a (~a/~a)\n" p i (length ps))
     (define result-path
       (build-path result-root (path-replace-suffix p #"rktd")))
     (unless (file-exists? result-path)
@@ -231,22 +234,3 @@
     (define res (file->value result-path))
     (for-each cache-static-url! (extract-urls res))))
 
-#;
-(for ([step (in-range 1 (add1 *steps*))])
-     (printf "Step ~a\n" step)
-     (define u (jdict-url (step-start step)))
-     (define cache-path
-       (build-path cache-root (format "~a.html" step)))
-     (define result-path
-       (build-path result-root (format "~a.rktd" step)))
-     ;; XXX Can't get this step to work. I think it is looking at a
-     ;; cookie or something like that
-     #;(cache-url-to-file! u cache-path)
-     ;; XXX Not sure if the parser is robust enough yet
-     (when (file-exists? cache-path)
-       (define s (file->string cache-path))
-           (define res (parse-step s))
-           (write-to-file res result-path #:exists 'replace)
-           ;; XXX I want to get the metadata before getting the static
-           ;; content; since I need to wait anyways, these can wait.
-           (for-each cache-static-url! (extract-urls res))))
