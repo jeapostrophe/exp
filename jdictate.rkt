@@ -179,7 +179,7 @@
   (sync (alarm-evt (* 1000
                       (+ last
                          ;; Wait between each request
-                         30))))
+                         10))))
   (begin0 (read-url/bytes u)
           (write-to-file (current-seconds) last-request-secs-path #:exists 'replace)))
 
