@@ -18,7 +18,7 @@
 ;; handlers, without using global mutation. Perhaps you'd reify the
 ;; kernel state in a structure and have the system call handlers be
 ;; State -> State functions and then you'd define a macro to add them
-;; to a dispatch table and create a user wrapper. 
+;; to a dispatch table and create a user wrapper.
 
 ;; I wonder if it would be fun/reasonable to design an OS class around
 ;; building a kernel like this. You'd combine it with some stuff like
@@ -32,22 +32,26 @@
        (printf "%: OS is done\n")]
       [(list* now future)
        (printf "%: Running thread: ~v\n" now)
-       (call-with-continuation-prompt
-        (λ ()
-          (now)
-          (error '% "Process run to completion without syscall: ~v" now))
-        kernel-prompt-tag
-        (λ (k call-sym args)
-          (match* (call-sym args)
-            [('exit (list code))
-             (printf "%:~v: Exiting ~v\n" now code)
-             (loop future)]
-            [('print (list string))
-             (display string)
-             (loop (snoc* future k))]
-            [('thread-create (list t))
-             (printf "%:~a: Creating new thread: ~v\n" now t)
-             (loop (snoc* future k t))])))])))
+       (define-values (k call-sym args)
+         (call-with-continuation-barrier
+          (λ ()
+            (call-with-continuation-prompt
+             (λ ()
+               (now)
+               (error '% "Process run to completion without syscall: ~v" now))
+             kernel-prompt-tag
+             values))))
+       (printf "%: Trapped sys-call: ~v\n" call-sym)
+       (match* (call-sym args)
+         [('exit (list code))
+          (printf "%:~v: Exiting ~v\n" now code)
+          (loop future)]
+         [('print (list string))
+          (display string)
+          (loop (snoc* future k))]
+         [('thread-create (list t))
+          (printf "%:~a: Creating new thread: ~v\n" now t)
+          (loop (snoc* future k t))])])))
 (define (syscall call-sym . args)
   ;; First we capture our context back to the OS
   (call-with-current-continuation
