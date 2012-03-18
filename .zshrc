@@ -20,6 +20,7 @@ hash -d lll=~github/lll
 hash -d exp=~scm/github.jeapostrophe/exp
 hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d j=~github/home/journal
+hash -d blogs=~scm/blogs
 
 hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
