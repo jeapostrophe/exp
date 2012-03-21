@@ -20,7 +20,12 @@
 (define (run-process-until-syscall p)
   (call-with-continuation-barrier
    (λ ()
-     (call-with-continuation-prompt p kernel-prompt-tag (λ (x) x)))))
+     (call-with-continuation-prompt
+      (λ ()
+        (p)
+        (error 'kernel "Process did not run to system call"))
+      kernel-prompt-tag
+      (λ (x) x)))))
 (define (trap-syscall k->syscall)
   ;; First we capture our context back to the OS
   (call-with-current-continuation
@@ -46,24 +51,34 @@
          (λ (k)
            (call k call-arg ...)))))))
 
+(define-syntax-rule
+  (define-syscalls state-args
+    [call-spec . body]
+    ...)
+  (begin
+    (define-syscall call-spec state-args
+      . body)
+    ...))
+
 ;; OS-SPECIFIC CODE
 (define (snoc* beginning . end)
   (append beginning end))
 
 (struct process (pid k) #:transparent)
 
-(define-syscall (exit k code) (pid future)
-  (printf "%:~a: Exiting ~v\n" pid code)
-  future)
-(define-syscall (print k string) (pid future)
-  (display string)
-  (snoc* future (process pid k)))
-(define-syscall (thread-create k t) (pid future)
-  (define t-pid (gensym 'pid))
-  (printf "%:~a: Creating new thread: ~a\n" pid t-pid)
-  (snoc* future
-         (process pid (λ () (k t-pid)))
-         (process t-pid t)))
+(define-syscalls (pid future)
+  [(exit k code)
+   (printf "%:~a: Exiting ~v\n" pid code)
+   future]
+  [(print k string)
+   (display string)
+   (snoc* future (process pid k))]
+  [(thread-create k t)
+   (define t-pid (gensym 'pid))
+   (printf "%:~a: Creating new thread: ~a\n" pid t-pid)
+   (snoc* future
+          (process pid (λ () (k t-pid)))
+          (process t-pid t))])
 
 (define (boot initial-k)
   (let loop ([ts (list (process (gensym 'pid) initial-k))])
