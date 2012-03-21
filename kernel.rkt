@@ -1,10 +1,3 @@
-#lang racket/base
-(require racket/list
-         racket/match)
-
-(define (snoc* beginning . end)
-  (append beginning end))
-
 ;; This shows the basic structure of an OS kernel.
 
 ;; Processes get to run, they have system calls that access special
@@ -14,63 +7,85 @@
 ;; event-based waiting facilities, rather than just blocking
 ;; primitives; etc.
 
-;; It would be nice to have a cleaner way of writing the system call
-;; handlers, without using global mutation. Perhaps you'd reify the
-;; kernel state in a structure and have the system call handlers be
-;; State -> State functions and then you'd define a macro to add them
-;; to a dispatch table and create a user wrapper.
-
 ;; I wonder if it would be fun/reasonable to design an OS class around
 ;; building a kernel like this. You'd combine it with some stuff like
 ;; the GC language to control what the student was allowed to do in
 ;; the user programs.
-(define kernel-prompt-tag (make-continuation-prompt-tag))
-(define (boot initial-process)
-  (let loop ([ts (list initial-process)])
-    (match ts
-      [(list)
-       (printf "%: OS is done\n")]
-      [(list* now future)
-       (printf "%: Running thread: ~v\n" now)
-       (define-values (k call-sym args)
-         (call-with-continuation-barrier
-          (λ ()
-            (call-with-continuation-prompt
-             (λ ()
-               (now)
-               (error '% "Process run to completion without syscall: ~v" now))
-             kernel-prompt-tag
-             values))))
-       (printf "%: Trapped sys-call: ~v\n" call-sym)
-       (match* (call-sym args)
-         [('exit (list code))
-          (printf "%:~v: Exiting ~v\n" now code)
-          (loop future)]
-         [('print (list string))
-          (display string)
-          (loop (snoc* future k))]
-         [('thread-create (list t))
-          (printf "%:~a: Creating new thread: ~v\n" now t)
-          (loop (snoc* future k t))])])))
-(define (syscall call-sym . args)
+#lang racket/base
+(require racket/list
+         racket/match)
+
+;; GENERAL CODE
+(define kernel-prompt-tag (make-continuation-prompt-tag 'kernel))
+(define (run-process-until-syscall p)
+  (call-with-continuation-barrier
+   (λ ()
+     (call-with-continuation-prompt p kernel-prompt-tag (λ (x) x)))))
+(define (trap-syscall k->syscall)
   ;; First we capture our context back to the OS
   (call-with-current-continuation
    (λ (k)
      ;; Then we abort, give it to the OS, along with a syscall
      ;; specification
-     (abort-current-continuation
-      kernel-prompt-tag
-      k call-sym args))
+     (abort-current-continuation kernel-prompt-tag (k->syscall k)))
    kernel-prompt-tag))
+
+(define-syntax-rule
+  (define-syscall (call k call-arg ...) state-args
+    body ...)
+  (define call
+    (let ()
+      (struct call (k call-arg ...)
+              #:property prop:procedure
+              (λ (the-struct . state-args)
+                (match-define (call k call-arg ...) the-struct)
+                body ...)
+              #:transparent)
+      (λ (call-arg ...)
+        (trap-syscall
+         (λ (k)
+           (call k call-arg ...)))))))
+
+;; OS-SPECIFIC CODE
+(define (snoc* beginning . end)
+  (append beginning end))
+
+(struct process (pid k) #:transparent)
+
+(define-syscall (exit k code) (pid future)
+  (printf "%:~a: Exiting ~v\n" pid code)
+  future)
+(define-syscall (print k string) (pid future)
+  (display string)
+  (snoc* future (process pid k)))
+(define-syscall (thread-create k t) (pid future)
+  (define t-pid (gensym 'pid))
+  (printf "%:~a: Creating new thread: ~a\n" pid t-pid)
+  (snoc* future
+         (process pid (λ () (k t-pid)))
+         (process t-pid t)))
+
+(define (boot initial-k)
+  (let loop ([ts (list (process (gensym 'pid) initial-k))])
+    (match ts
+      [(list)
+       (printf "%: OS is done\n")]
+      [(list* (process pid now) future)
+       (printf "%: Running thread: ~a\n" pid)
+       (define syscall (run-process-until-syscall now))
+       (printf "%:~a: Trapped sys-call: ~v\n" pid syscall)
+       (loop (syscall pid future))])))
 
 (define (printer i)
   (for ([j (in-range i)])
-    (syscall 'print (format "~a: ~a\n" i j)))
-  (syscall 'exit 0))
+    (print (format "~a: ~a\n" i j)))
+  (exit 0))
 
 (define (init)
   (for ([i (in-range 10)])
-    (syscall 'thread-create (λ () (printer i))))
-  (syscall 'exit 0))
+    (print
+     (format "created ~a\n"
+             (thread-create (λ () (printer i))))))
+  (exit 0))
 
 (boot init)
