@@ -217,24 +217,26 @@
            racket/match
            racket/list)
 
-  (define os-lock (make-semaphore 1))
-  (define os-value 0)
-  (define threads empty)
+  (define message-ch (make-channel))
 
-  (define (swap new-val)
-    (call-with-semaphore
-     os-lock
-     (λ ()
-       (define old-val os-value)
-       (printf "%:~a: Swapping: ~a -> ~a\n" (current-thread) old-val new-val)
-       (set! os-value new-val)
-       old-val)))
+  (define-syntax-rule
+    (define-syscall (call-struct call field ...))
+    (begin
+      (struct call-struct (ct reply-ch field ...))
+      (define (call field ...)
+        (define reply-ch (make-channel))
+        (channel-put message-ch
+                     (call-struct (current-thread) reply-ch field ...))
+        (channel-get reply-ch))))
+  (define-syntax-rule
+    (define-syscalls call ...)
+    (begin (define-syscall call) ...))
 
-  (define (exit code)
-    (call-with-semaphore
-     os-lock
-     (λ ()
-       )))
+  (define-syscalls
+    (swap* swap new-val)
+    (exit* exit code)
+    (print* print string)
+    (thread-create* thread-create t))
 
   (define (boot initial-k)
     (let loop ([value 0]
@@ -242,36 +244,24 @@
       (if (empty? threads)
         value
         (match (sync message-ch)
-          [(exit reply-ch code)
-           (printf "%:~a: Exiting ~v\n" reply-ch code)
-           (set! threads (remq (current-thread) threads))]
-          [(print reply-ch string)
+          [(swap* ct reply-ch new-val)
+           (define old-val value)
+           (printf "%:~a: Swapping: ~a -> ~a\n" ct old-val new-val)
+           (channel-put reply-ch old-val)
+           (loop new-val threads)]
+          [(exit* ct reply-ch code)
+           (printf "%:~a: Exiting ~v\n" ct code)
+           (channel-put reply-ch (void))
+           (loop value (remq ct threads))]
+          [(print* t reply-ch string)
            (display string)
            (channel-put reply-ch (void))
            (loop value threads)]
-          [(thread-create reply-ch t)
+          [(thread-create* ct reply-ch t)
            (define t-pid (thread t))
-           (printf "%:~a: Creating new thread: ~a\n" reply-ch t-pid)
+           (printf "%:~a: Creating new thread: ~a\n" ct t-pid)
            (channel-put reply-ch t-pid)
-           (loop value (list* t-pid threads))]))
-      )
-
-    (call-with-semaphore
-     os-lock
-     (λ ()
-       (define init-t
-         (thread (λ () (initial-k))))
-       (set! threads (list init-t))))
-    (let loop ()
-      (match
-          (call-with-semaphore
-           os-lock
-           (λ () threads))
-        [(list)
-         os-value]
-        [_
-         (sleep)
-         (loop)])))
+           (loop value (list* t-pid threads))]))))
 
   (define (printer i)
     (for ([j (in-range i)])
@@ -289,9 +279,8 @@
     (boot init))
   (provide go))
 
-(printf "Locking based\n")
-(require (prefix-in locking: 'locking))
-(locking:go)
+(printf "Messaging based\n")
+(require (prefix-in messaging: 'messaging))
+(messaging:go)
 
-;; XXX Show other synchronization techniques
 ;; XXX Interruptss, run in a thread, sync, return syscall with interrupt
