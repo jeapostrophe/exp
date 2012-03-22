@@ -126,9 +126,172 @@
                (thread-create (λ () (printer i))))))
     (exit (swap -1)))
 
-  (boot init))
+  (define (go)
+    (boot init))
+  (provide go))
 
-(require 'an-os)
+(printf "Kernel based\n")
+(require (prefix-in kernel: 'an-os))
+(kernel:go)
+
+(module locking racket/base
+  (require (prefix-in racket: racket/base)
+           racket/match
+           racket/list)
+
+  (define os-lock (make-semaphore 1))
+  (define os-value 0)
+  (define threads empty)
+
+  (define (swap new-val)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (define old-val os-value)
+       (printf "%:~a: Swapping: ~a -> ~a\n" (current-thread) old-val new-val)
+       (set! os-value new-val)
+       old-val)))
+
+  (define (exit code)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (printf "%:~a: Exiting ~v\n" (current-thread) code)
+       (set! threads (remq (current-thread) threads)))))
+
+  (define (print string)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (display string))))
+
+  (define (thread-create t)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (define t-pid (thread t))
+       (set! threads (list* t-pid threads))
+       (printf "%:~a: Creating new thread: ~a\n" (current-thread) t-pid)
+       t-pid)))
+
+  (define (boot initial-k)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (define init-t
+         (thread initial-k))
+       (set! threads (list init-t))))
+    (let loop ()
+      (match
+          (call-with-semaphore
+           os-lock
+           (λ () threads))
+        [(list)
+         os-value]
+        [_
+         (sleep)
+         (loop)])))
+
+  (define (printer i)
+    (for ([j (in-range i)])
+      (print (format "~a: ~a\n" i j)))
+    (exit (swap i)))
+
+  (define (init)
+    (for ([i (in-range 10)])
+      (print
+       (format "created ~a\n"
+               (thread-create (λ () (printer i))))))
+    (exit (swap -1)))
+
+  (define (go)
+    (boot init))
+  (provide go))
+
+(printf "Locking based\n")
+(require (prefix-in locking: 'locking))
+(locking:go)
+
+(module messaging racket/base
+  (require (prefix-in racket: racket/base)
+           racket/match
+           racket/list)
+
+  (define os-lock (make-semaphore 1))
+  (define os-value 0)
+  (define threads empty)
+
+  (define (swap new-val)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (define old-val os-value)
+       (printf "%:~a: Swapping: ~a -> ~a\n" (current-thread) old-val new-val)
+       (set! os-value new-val)
+       old-val)))
+
+  (define (exit code)
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       )))
+
+  (define (boot initial-k)
+    (let loop ([value 0]
+               [threads (list (thread initial-k))])
+      (if (empty? threads)
+        value
+        (match (sync message-ch)
+          [(exit reply-ch code)
+           (printf "%:~a: Exiting ~v\n" reply-ch code)
+           (set! threads (remq (current-thread) threads))]
+          [(print reply-ch string)
+           (display string)
+           (channel-put reply-ch (void))
+           (loop value threads)]
+          [(thread-create reply-ch t)
+           (define t-pid (thread t))
+           (printf "%:~a: Creating new thread: ~a\n" reply-ch t-pid)
+           (channel-put reply-ch t-pid)
+           (loop value (list* t-pid threads))]))
+      )
+
+    (call-with-semaphore
+     os-lock
+     (λ ()
+       (define init-t
+         (thread (λ () (initial-k))))
+       (set! threads (list init-t))))
+    (let loop ()
+      (match
+          (call-with-semaphore
+           os-lock
+           (λ () threads))
+        [(list)
+         os-value]
+        [_
+         (sleep)
+         (loop)])))
+
+  (define (printer i)
+    (for ([j (in-range i)])
+      (print (format "~a: ~a\n" i j)))
+    (exit (swap i)))
+
+  (define (init)
+    (for ([i (in-range 10)])
+      (print
+       (format "created ~a\n"
+               (thread-create (λ () (printer i))))))
+    (exit (swap -1)))
+
+  (define (go)
+    (boot init))
+  (provide go))
+
+(printf "Locking based\n")
+(require (prefix-in locking: 'locking))
+(locking:go)
 
 ;; XXX Show other synchronization techniques
 ;; XXX Interruptss, run in a thread, sync, return syscall with interrupt
