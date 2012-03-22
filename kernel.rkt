@@ -104,3 +104,6 @@
   (exit 0))
 
 (boot init)
+
+;; XXX Show other synchronization techniques
+;; XXX Interruptss, run in a thread, sync, return syscall with interrupt
