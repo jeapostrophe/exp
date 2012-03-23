@@ -12,14 +12,15 @@
   (let loop ()
     (define init-time
       (get))
-    (define server-t
-      (thread
-       (λ ()
-         (start->server (dynamic-require/no-attach `(file ,path) 'start)))))
+    (define server-cust
+      (let ([c (make-custodian)])
+        (parameterize ([current-custodian c])
+          (thread (lambda () (start->server (dynamic-require/no-attach `(file ,path) 'start)))))
+        c))
     (let wait ()
       (define now (get))
       (if (now . > . init-time)
-        (begin (kill-thread server-t)
+        (begin (custodian-shutdown-all server-cust)
                (loop))
         (begin (sleep 1)
                (wait))))))
