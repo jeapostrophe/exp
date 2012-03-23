@@ -9,6 +9,17 @@
          (planet neil/html-parsing/html-parsing)
          (planet clements/sxml2))
 
+(struct reading (sound-url reading-str) #:prefab)
+(struct example/audio (sound-url expression) #:prefab)
+(struct example (expression) #:prefab)
+(struct example-cont (expression) #:prefab)
+(define example-url
+  (match-lambda
+   [(example/audio url _)
+    url]
+   [_ #f]))
+(struct kanji (grade char stroke stroke-order-url radical-img-url radical-string meanings readings examples irregular) #:prefab)
+
 (define-syntax-rule (debug e) (void))
 
 (define *output-dir* "/home/jay/Downloads/kdict")
@@ -61,7 +72,7 @@
   (define url (first* ((sxpath '(td a @ href *text*)) tx)))
   (define str (first* ((sxpath '(td *text*)) tx)))
   (and url str
-       (list 'reading url (regexp-replace* #rx"^ +" str ""))))
+       (reading url (regexp-replace* #rx"^ +" str ""))))
 (define (parse-example t)
   (define tx (list '*TOP* t))
   (define url (first* ((sxpath '(td a @ href *text*)) tx)))
@@ -69,11 +80,11 @@
   (define str (first* ((sxpath '(td *text*)) tx)))
   (cond
     [(and url str)
-     (list 'example/audio url (regexp-replace* #rx"^ +" str ""))]
+     (example/audio url (regexp-replace* #rx"^ +" str ""))]
     [(and img? str)
-     (list 'example #f (regexp-replace* #rx"^ +" str ""))]
+     (example (regexp-replace* #rx"^ +" str ""))]
     [str
-     (list 'cont str)]
+     (example-cont str)]
     [else
      #f]))
 
@@ -85,9 +96,11 @@
        ([e (in-list es)])
      (match
          e
-       [(list-rest (or 'example/audio 'example) _)
+       [(and (or (? example/audio?)
+                 (? example?))
+             e)
         (list* e nes)]
-       [(list 'cont str)
+       [(example-cont str)
         (list* (append (first nes) (list str))
                (rest nes))]))))
 
@@ -114,7 +127,7 @@
 
     (show-define grade
                  (string->number (first ((sxpath '(tr (td 1) *text*)) trx))))
-    (show-define kanji
+    (show-define char
                  (first ((sxpath '(tr (td 2) font *text*)) trx)))
     (show-define stroke
                  (string->number (first ((sxpath '(tr (td 3) *text*)) trx))))
@@ -139,26 +152,30 @@
                   (filter-map parse-example
                               ((sxpath '(tr (td 8) table tbody tr td)) trx))))
 
-    (list 'kanji
-          grade kanji stroke stroke-order-url
-          radical-img-url radical-string meanings readings
-          examples irregular)))
+    (kanji
+     grade char stroke stroke-order-url
+     radical-img-url radical-string meanings readings
+     examples irregular)))
 
 (define (extract-url-paths ks)
   (append-map
    (λ (k)
-     (match-define
-      (list 'kanji
-            grade kanji stroke stroke-order-url
-            radical-img-url radical-string meanings readings
-            examples irregular)
-      k)
-     (filter-map identity
-                 (list* stroke-order-url
-                        radical-img-url
-                        (append (map second readings)
-                                (filter-map second examples)
-                                (map second irregular)))))
+     (match k
+       [(kanji grade char stroke stroke-order-url radical-img-url
+               radical-string meanings readings examples irregular)
+        (kanji
+         grade char stroke stroke-order-url
+         radical-img-url radical-string meanings readings
+         examples irregular)
+        (filter-map identity
+                    (list* stroke-order-url
+                           radical-img-url
+                           (append (map reading-sound-url readings)
+                                   (filter-map example-url examples)
+                                   (map example-url irregular))))]
+       [_
+        (pretty-print k)
+        (error 'bad)]))
    ks))
 (define (extract-urls ks)
   (for/list
@@ -219,18 +236,39 @@
              #:when (file-exists? f))
     f))
 
-(parameterize ([current-directory cache-root])
-  (define ps
-    (sort (directory-files cache-root) <= #:key path->number))
-  (for ([p (in-list ps)]
-        [i (in-naturals 1)])
-    (printf "~a (~a/~a)\n" p i (length ps))
-    (define result-path
-      (build-path result-root (path-replace-suffix p #"rktd")))
-    (unless (file-exists? result-path)
-      (define s (file->string p))
-      (define res (parse-step s))
-      (write-to-file res result-path #:exists 'replace))
-    (define res (file->value result-path))
-    (for-each cache-static-url! (extract-urls res))))
+(define results
+  (apply
+   append
+   (parameterize ([current-directory cache-root])
+     (define ps
+       (sort (directory-files cache-root) <= #:key path->number))
+     (for/list ([p (in-list ps)]
+                [i (in-naturals 1)])
+       #;(printf "~a (~a/~a)\n" p i (length ps))
+       (define result-path
+         (build-path result-root (path-replace-suffix p #"rktd")))
+       (unless (file-exists? result-path)
+         (define s (file->string p))
+         (define res (parse-step s))
+         (write-to-file res result-path #:exists 'replace))
+       (define res (file->value result-path))
+       (for-each cache-static-url! (extract-urls res))
+       res))))
 
+(define all-kanji (remove-duplicates results))
+
+(define kanji->csv-row
+  (match-lambda
+   [(kanji grade char stroke stroke-order-url radical-img-url radical-string meanings readings examples irregular)
+    (list grade char stroke stroke-order-url radical-img-url radical-string meanings readings)]))
+
+(define (write-csv l)
+  (for ([r (in-list l)])
+    (for ([e (in-list r)])
+      (display e)
+      (display #\tab))
+    (display #\newline)))
+
+(write-csv 
+ (map kanji->csv-row
+      (take all-kanji 15)))
