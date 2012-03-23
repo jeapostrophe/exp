@@ -346,7 +346,7 @@
   (match-lambda
    [(example/audio url (regexp #rx"^(.*?)（(.*?)） / (.*?)$"
                                (list _ expression reading meaning)))
-    (list expression (wrap 'sound url) reading meaning)]))
+    (list expression (wrap 'sound (kanji-url->path url)) reading meaning)]))
 
 (with-output-to-file
     (build-path *output-dir* "examples.csv")
