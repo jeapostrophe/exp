@@ -3,6 +3,7 @@
          racket/list
          racket/port
          racket/file
+         xml
          net/url
          racket/match
          racket/pretty
@@ -11,7 +12,6 @@
 
 (struct reading (sound-url reading-str) #:prefab)
 (struct example/audio (sound-url expression) #:prefab)
-(struct example (expression) #:prefab)
 (struct example-cont (expression) #:prefab)
 (define example-url
   (match-lambda
@@ -74,35 +74,43 @@
   (and url str
        (reading url (regexp-replace* #rx"^ +" str ""))))
 (define (parse-example t)
+  #;(pretty-print t)
   (define tx (list '*TOP* t))
   (define url (first* ((sxpath '(td a @ href *text*)) tx)))
   (define img? (cons? ((sxpath '(td img)) tx)))
   (define str (first* ((sxpath '(td *text*)) tx)))
+  #;(printf "~v\n" (list url img? str))
   (cond
     [(and url str)
      (example/audio url (regexp-replace* #rx"^ +" str ""))]
     [(and img? str)
-     (example (regexp-replace* #rx"^ +" str ""))]
+     (example-cont (regexp-replace* #rx"^ +" str ""))]
     [str
      (example-cont str)]
     [else
      #f]))
 
 (define (reflow-examples es)
+  #;(printf "reflow\n")
   (debug (printf "\t\t\t\treflow: ~v\n" es))
   (reverse
    (for/fold
        ([nes empty])
        ([e (in-list es)])
-     (match
-         e
-       [(and (or (? example/audio?)
-                 (? example?))
-             e)
+     (match e
+       [(? example/audio?)
         (list* e nes)]
        [(example-cont str)
-        (list* (append (first nes) (list str))
-               (rest nes))]))))
+        (if (empty? nes)
+          empty
+          (list*
+           (struct-copy
+            example/audio (first nes)
+            [expression
+             (string-append
+              (example/audio-expression (first nes))
+              str)])
+           (rest nes)))]))))
 
 (define (parse-step s)
   (define x (html->xexp s))
@@ -180,7 +188,10 @@
 (define (extract-urls ks)
   (for/list
       ([p (in-list (extract-url-paths ks))])
-    (combine-url/relative jdict-base p)))
+    (complete-jdict-url p)))
+
+(define (complete-jdict-url p)
+  (combine-url/relative jdict-base p))
 
 (define last-request-secs-path
   (build-path *output-dir* "last-request-secs.rktd"))
@@ -215,11 +226,13 @@
     (printf "  Caching ~a -> ~a\n" (url->string u) cache-path)
     (define bs (read-url/bytes/slow u))
     (display-to-file bs cache-path #:exists 'replace)))
+(define (url->cache-path u)
+  (apply string-append
+         (add-between (map path/param-path (url-path u)) ".")))
 (define (cache-static-url! u)
   (define cache-path
     (build-path cache-root "static"
-                (apply string-append
-                       (add-between (map path/param-path (url-path u)) "."))))
+                (url->cache-path u)))
   (cache-url-to-file! u cache-path))
 
 ;; XXX There may be some duplication since I can't get steps above 100
@@ -257,18 +270,90 @@
 
 (define all-kanji (remove-duplicates results))
 
+(printf "Pruned ~a down to ~a\n"
+        (length results)
+        (length all-kanji))
+
+(define (kanji<=? a b)
+  (define a_g (kanji-stroke a))
+  (define b_g (kanji-stroke b))
+  (if (= a_g b_g)
+    (<= (kanji-grade a)
+        (kanji-grade b))
+    (<= a_g b_g)))
+
+(define sorted-kanji
+  (sort all-kanji kanji<=?))
+
+(define (kanji-url->path p)
+  (if p
+    (url->cache-path (complete-jdict-url p))
+    ""))
+
+(define (wrap kind url)
+  (if (string=? url "")
+    ""
+    (match kind
+      ['img
+       `(img ([src ,url]))]
+      ['sound
+       (format "[sound:~a]" url)])))
+(define reading->xexpr
+  (match-lambda
+   [(reading url string)
+    `(span ,(wrap 'sound (kanji-url->path url)) nbsp ,string)]))
+
 (define kanji->csv-row
   (match-lambda
    [(kanji grade char stroke stroke-order-url radical-img-url radical-string meanings readings examples irregular)
-    (list grade char stroke stroke-order-url radical-img-url radical-string meanings readings)]))
+    (list (number->string grade)
+          char
+          (number->string stroke)
+          (wrap 'img (kanji-url->path stroke-order-url))
+          (wrap 'img (kanji-url->path radical-img-url))
+          (or radical-string "N/A")
+          `(p ,@(add-between meanings '(br)))
+          `(p ,@(add-between (map reading->xexpr readings) '(br))))]))
 
 (define (write-csv l)
   (for ([r (in-list l)])
     (for ([e (in-list r)])
-      (display e)
+      (display (xexpr->string e))
       (display #\tab))
     (display #\newline)))
 
-(write-csv 
- (map kanji->csv-row
-      (take all-kanji 15)))
+(with-output-to-file
+    (build-path *output-dir* "kanji.csv")
+  #:exists 'replace
+  (λ ()
+    (write-csv
+     (list* (list "Grade"
+                  "Kanji"
+                  "Strokes"
+                  "Stroke Order"
+                  "Radical Image"
+                  "Radical String"
+                  "Meanings"
+                  "Readings")
+            (map kanji->csv-row
+                 sorted-kanji)))))
+
+(define all-examples
+  (append-map (λ (k) (append (kanji-examples k) (kanji-irregular k)))
+              sorted-kanji))
+
+(define example->csv-row
+  (match-lambda
+   [(example/audio url (regexp #rx"^(.*?)（(.*?)） / (.*?)$"
+                               (list _ expression reading meaning)))
+    (list expression (wrap 'sound url) reading meaning)]))
+
+(with-output-to-file
+    (build-path *output-dir* "examples.csv")
+  #:exists 'replace
+  (λ ()
+    (write-csv
+     (list*
+      (list "Expression" "Sound" "Reading" "Meaning")
+      (map example->csv-row
+          all-examples)))))
