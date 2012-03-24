@@ -4,7 +4,7 @@ cd ~
 
 xrdb -merge ~/.Xresources
 
-xsetroot -solid white
+xsetroot -solid '#fdf6e3'
 
 gnome-settings-daemon &
 
