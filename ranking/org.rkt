@@ -4,7 +4,7 @@
          racket/function
          racket/port)
 
-(struct node (label props content children))
+(struct node (label props content children) #:transparent)
 
 ;; Reading
 (define (strip-stars s)
