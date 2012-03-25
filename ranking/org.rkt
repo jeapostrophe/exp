@@ -8,7 +8,7 @@
 
 ;; Reading
 (define (strip-stars s)
-  (regexp-replace #rx"^\\*+ " s ""))
+  (regexp-replace* #rx" +$" (regexp-replace #rx"^\\*+ " s "") ""))
 
 (define (read-content)
   (define c (peek-char))
