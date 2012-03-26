@@ -4,6 +4,7 @@
                      syntax/parse)
          openssl/sha1
          net/url
+         xml
          (planet neil/html-parsing/html-parsing)
          (planet clements/sxml2))
 
@@ -319,13 +320,45 @@
   (append-map (curry parse-book volume) bs))
 
 (define all
-  (append
-   #;(parse-pgp-volume "pgp")
-   (parse-book "dc-testament" #f)
-   (parse-bom-volume "bofm")
-   #;(parse-bom-volume "study-helps")))
+  (filter-map 
+   (λ (x) x)
+   (append
+    #;(parse-pgp-volume "pgp")
+    (parse-bom-volume "bofm")
+    (parse-book "dc-testament" #f)
+    #;(parse-bom-volume "study-helps"))))
 
-(length all)
+(define (write-csv l)
+  (for ([r (in-list l)])
+    (for ([e (in-list r)])
+      (define s 
+        (regexp-replace* #rx"[\t\n]" (xexpr->string e) " "))
+      (display s)
+      (display #\tab))
+    (display #\newline)))
+
+(define card->csv-row
+  (match-lambda
+   [(card volume book chapter verse kanji reading meaning)
+    (list volume
+          book
+          chapter 
+          (if (number? verse)
+            (number->string verse)
+            verse) 
+          kanji
+          reading
+          meaning)]))
+
+(with-output-to-file
+    "/Users/jay/Downloads/lds.csv"
+  #:exists 'replace
+  (λ ()
+    (write-csv
+      (map card->csv-row
+           all))))
+
+(printf "Should be ~a cards\n" (length all))
 
 ;; DONE Parse a Japanese page
 ;; DONE Parse an English page
