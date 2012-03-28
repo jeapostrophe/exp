@@ -1,10 +1,12 @@
 #lang scheme
 (require xml
+         (prefix-in 19: srfi/19)
          scheme/runtime-path
+         web-server/http/xexpr
          web-server/servlet
          web-server/servlet-env)
 
-(define-runtime-path the-dir "Retroforce GO!")
+(define-runtime-path the-dir "Retronauts")
 (define the-files
   (reverse
    (filter (lambda (p)
@@ -23,14 +25,11 @@
      (number->string i)]))
 
 (define (start req)
-  (list #"application/rss+xml"
-        #"<?xml version=\"1.0\"?>"
-        (string->bytes/utf-8
-         (xexpr->string
-          `(rss ([version "2.0"])
+  (response/xexpr
+   `(rss ([version "2.0"])
                 (channel
-                 (title "Retroforce GO! (Old)")
-                 (description "Old episodes of Retroforce Go!")
+                 (title "Retronauts (Old)")
+                 (description "Old episodes of Retronauts")
                  (language "en-us")
                  (copyright "")
                  (lastBuildDate "Fri, 14 Aug 2009 06:03:49 GMT")
@@ -38,12 +37,28 @@
                  (ttl "1")
                  ,@(for/list ([p (in-list the-files)]
                               [i (in-naturals)])
+                     (define-values (month-s day-s year-s)
+                       (match (path->string p)
+                         [(regexp #rx"^(..)(..)(..)\\.mp3$" (list _ month-s day-s year-s))
+                          (values month-s day-s year-s)]
+                         [(regexp #rx"^(..)(..)(..)_02\\.mp3$" (list _ month-s day-s year-s))
+                          (values month-s day-s year-s)]
+                         [(regexp #rx"^R(..)(..)(..)\\.mp3$" (list _ month-s day-s year-s))
+                          (values month-s day-s year-s)]))
+                     (define d
+                       (19:string->date (format "~a-~a-~a 12:00:00"
+                                                day-s month-s                                                 
+                                                (+ 2000 (string->number year-s)))
+                                        "~d-~m-~Y ~H:~M:~S"))
                      `(item (title ,(path->string p))
-                            (pubDate ,(format "Wed, 15 Jun ~a 19:00:00 GMT"
-                                              (pad (- 2000 i))))
+                            (pubDate 
+                             ,(19:date->string d "~a, ~d ~b ~Y ~T ~z"))
                             (description ,(path->string p))
                             (enclosure ([url ,(format "http://localhost:8080/~a" (path->string p))]
-                                        [type "audio/mpeg"]))))))))))
+                                        [type "audio/mpeg"]))))))
+   
+   #:mime-type #"application/rss+xml"
+   #:preamble #"<?xml version=\"1.0\"?>"))
 
 (serve/servlet start
                #:port 8080
