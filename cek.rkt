@@ -2,7 +2,7 @@
 (require racket/match)
 
 (struct pv () #:transparent)
-(struct add pv () #:transparent)
+(struct succ pv () #:transparent)
 (struct num pv (n) #:transparent)
 (struct clo pv (term env) #:transparent)
 
@@ -13,6 +13,9 @@
    [(vector (? pv? pv) E 
             `(,(clo `(λ (,x) ,e) Ep) * --> ,k))
     (vector e (hash-set Ep x pv) k)]
+   [(vector (num n) E 
+            `(,(succ) * --> ,k))
+    (vector (num (add1 n)) E k)]
    [(vector (? symbol? x) E k)
     (vector (hash-ref E x) E k)]
    [(vector `(,e ,ep) E k)
@@ -40,3 +43,27 @@
                            ((n s) ((m s) z))))))
          (λ (s) (λ (z) (s z))))
         (λ (s) (λ (z) (s z)))))
+(eval `(((((λ (n) (λ (m)
+                  (λ (s) (λ (z)
+                           ((n s) ((m s) z))))))
+         (λ (s) (λ (z) (s z))))
+        (λ (s) (λ (z) (s z))))
+        ,(succ)) ,(num 0)))
+(eval `(((((λ (n) (λ (m)
+                  (λ (s) (λ (z)
+                           ((n s) ((m s) z))))))
+         (λ (s) (λ (z) (s (s z)))))
+        (λ (s) (λ (z) (s (s z)))))
+        ,(succ)) ,(num 0)))
+(eval `(((((λ (n) (λ (m)
+                  (λ (s) (λ (z)
+                           ((n (m s)) z)))))
+         (λ (s) (λ (z) (s (s z)))))
+        (λ (s) (λ (z) (s (s z)))))
+        ,(succ)) ,(num 0)))
+(eval `(((((λ (n) (λ (m)
+                  (λ (s) (λ (z)
+                           ((n (m s)) z)))))
+         (λ (s) (λ (z) (s (s (s z))))))
+        (λ (s) (λ (z) (s (s z)))))
+        ,(succ)) ,(num 0)))
