@@ -2,7 +2,6 @@
 (require racket/list
          racket/port
          racket/match
-         "upo.rkt"
          "org.rkt")
 
 ;; Helpers
@@ -10,161 +9,120 @@
   (regexp-match #rx"^Y"
                 (hash-ref (node-props n) "Completed" "N")))
 
+(define (hash-remove* ht . ks)
+  (for/fold ([ht ht]) ([k (in-list ks)])
+    (hash-remove ht k)))
+
 ;; Go through and give everything an id
-(define (node-id n)
-  (string->number (hash-ref (node-props n) "ID")))
+(define (node-id n [def #f])
+  (string->number
+   (hash-ref (node-props n) "ID"
+             (or def
+                 (λ () (error 'node-id "Not present on ~e" n))))))
 (define (id-games games)
   (define max-id
     (for/fold
-     ([id -1])
-     ([c (in-list (node-children games))])
-     (max id
-          (string->number (hash-ref (node-props c) "ID" "-1")))))
-
+        ([id -1])
+        ([c (in-list (node-children games))])
+      (max id (node-id c "-1"))))
   (define next-id
     (add1 max-id))
-  (define-values (new-children id->node)
-    (for/fold
-     ([new-children empty]
-      [id->node (hasheq)])
-     ([c (in-list (node-children games))])
-     (define cp (node-props c))
-     (define nc
-       (struct-copy
-        node c
-        [props
-         (hash-set cp "ID"
-                   (or (hash-ref cp "ID" #f)
-                       (begin0 (number->string next-id)
-                               (set! next-id (add1 next-id)))))]))
-     (values (list* nc new-children)
-             (hash-set id->node (node-id nc) nc))))
+  (define new-children
+    (for/list ([c (in-list (node-children games))])
+      (define p (node-props c))
+      (define cp
+        (hash-set 
+         (hash-remove* p
+                       "Completed"
+                       "PlayAgain"
+                       "Reviewed"
+                       "SortOverall"
+                       "SortStory"
+                       "SortMechanic")
+         "Status"
+         (match* ((hash-ref p "Completed" #f) (hash-ref p "PlayAgain" #f))
+           [("Scheduled" _)
+            "Scheduled"]
+           [("Completed" #f)
+            "Done"]
+           [("Queue" _)
+            "Queue"]
+           [("N" "M")
+            #f]
+           [((or "Y" "Y*" "N") "N")
+            "Done-NeverAgain"]
+           [(#f #f)
+            #f]
+           [("Started" #f)
+            "InProgress"]
+           [("Y" "Y")
+            "Done-PlayAgain"]
+           [("Y" "M")
+            "Done-MaybeAgain"])))
+      (struct-copy
+       node c
+       [props
+        (hash-set p "ID"
+                  (or (hash-ref p "ID" #f)
+                      (begin0 (number->string next-id)
+                              (set! next-id (add1 next-id)))))])))
   (define new-games
     (struct-copy node games [children new-children]))
 
-  (values id->node
-          new-games))
+  new-games)
 
 ;; Sort by ranking
-(require racket/gui)
-(define (sort-by-ranking id->game games-node ranking-db aspect)
-  (define (id->info id)
-    (define n (hash-ref id->game id))
-    (define p (node-props n))
-    (format "~a (~a, ~a)"
-            (node-label n)
-            (hash-ref p "Year" "")
-            (hash-ref p "System" "")))
-  (define key (format "Sort~a" aspect))
-  (define all-games (node-children games-node))
-  (define completed-games (filter game-completed? all-games))
-  
-  (define (add! fact)
-    (set! ranking-db (list* fact ranking-db))
-    (go-back!))
+(define (cmp->lt cmp)
+  (λ (a b)
+    (eq? 'lt (cmp a b))))
+(define (cmp-null a b)
+  'eq)
+(define (cmp-then2 fst snd)
+  (λ (a b)
+    (match (fst a b)
+      ['eq (snd a b)]
+      [x x])))
+(define (cmp-then . cmps)
+  (foldr cmp-then2 cmp-null cmps))
+(define (2compose snd fst)
+  (λ (a b)
+    (snd (fst a) (fst b))))
 
-  (define ask? #t)
-  (define (unknown-<= x y)
-    (cond
-     [ask?
-      (set! ask? #f)
-      (match
-       (message-box/custom "Game Ranking"
-                           (format "Better ~a" aspect)
-                           (id->info x)
-                           (id->info y)
-                           "Stop Asking")
-       [1
-        (add! `(<= ,y ,x))]
-       [2
-        (add! `(<= ,x ,y))]
-       [(or 3 #f)
-        (set! ask? #f)])      
-      (inspect-<= x y)]
-     [else
-      'unknown]))
+(define (number-cmp a b)
+  (cond
+    [(= a b) 'eq]
+    [(< a b) 'lt]
+    [else 'gt]))
+(define (string-cmp a b)
+  (cond
+    [(string=? a b) 'eq]
+    [(string-ci<? a b) 'lt]
+    [else 'gt]))
 
-  (define-values (partial-order:x-is-less-than partial-order:<=)
-    (observations->partial-fun
-     (λ () (for/list ([fact (in-list ranking-db)])
-                     (cons (first fact) (second fact))))))
-  (define (asking-<= x y)
-    (define ans (partial-order:<= x y))
-    (if (equal? 'unknown ans)
-        (unknown-<= x y)
-        ans))
-  (define inspect-<= 
-    (partial-fun->partial-order
-     partial-order:x-is-less-than asking-<=))
+(define ((node-prop prop) node)
+  (hash-ref (node-props node) prop #f))
 
-  (define *done* #f)
-  (define (compute-sort!)
-    (sort (shuffle completed-games) inspect-<= #:key node-id))
-  (define (go-back!)
-    (*done* compute-sort!))
+(define status-cmp
+  (match-lambda*
+   [(#f #f) 'eq]))
 
-  (define sorted-completed-games
-    ((let/cc done
-             (set! *done* done)
-             (go-back!))))
-
-  (define mentioned-games
-    (remove-duplicates (append-map rest ranking-db)))
-  (define (mentioned? x)
-    (member x mentioned-games))
-  
-  (unless (empty? (partial-order-violations mentioned-games inspect-<=))
-          (error 'game-rank "Not a partial order any longer!"))
-
-  (define id->order (make-hasheq))
-  (for
-   ([i (in-naturals)]
-    [n (in-list sorted-completed-games)])
-   (define id (node-id n))
-   (when (mentioned? id)
-         (hash-set! id->order id i)))
-
-  (define new-all-games
-    (for/list
-     ([n (in-list all-games)])
-     (define sort-order (hash-ref id->order (node-id n) #f))
-     (if sort-order
-         (struct-copy
-          node n
-          [props
-           (hash-set (node-props n) key sort-order)])
-         n)))
-
-  (values ranking-db
-          (struct-copy node games-node [children new-all-games])))
+(define (node-sort n <)
+  (struct-copy node n [children (sort (node-children n) <)]))
 
 (require racket/package)
 (package-begin
  (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
- (match-define (list games ranking meta) (with-input-from-file path read-org))
+ (match-define (list games meta) (with-input-from-file path read-org))
 
  ;; XXX Gather more information from GiantBomb (like genre, etc)
- (define*-values (id->game games) (id-games games))
- (match-define
-  (list overall-ranking story-ranking mechanic-ranking)
-  (with-input-from-string (apply string-append (node-content ranking))
-    read))
- (define*-values (overall-ranking games)
-   (sort-by-ranking id->game games overall-ranking "Overall"))
- (define*-values (story-ranking games)
-   (sort-by-ranking id->game games story-ranking "Story"))
- (define*-values (mechanic-ranking games)
-   (sort-by-ranking id->game games mechanic-ranking "Mechanic"))
- ;; XXX Compute the default sort that emacs does
- (define* ranking
-   (struct-copy node ranking
-                [content
-                 (list
-                  (with-output-to-string
-                    (λ ()
-                       (write
-                        (list overall-ranking story-ranking mechanic-ranking)))))]))
+ (define* games (id-games games))
+ (define* games (node-sort games
+                      (cmp->lt
+                       (cmp-then
+                        (2compose status-cmp (node-prop "Status"))
+                        (2compose number-cmp (node-prop "Year"))
+                        (2compose string-cmp node-label)))))
 
- (with-output-to-file path (λ () (write-org (list games ranking meta)))
-                      #:exists 'replace)
- (message-box "Game Ranking" "Done!"))
+ ;; XXX Compute the default sort that emacs does
+
+ (write-org (list games meta)))

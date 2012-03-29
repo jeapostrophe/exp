@@ -7,8 +7,12 @@
 (struct node (label props content children) #:transparent)
 
 ;; Reading
+(define (trim-spaces s)
+  (regexp-replace* #rx" +$"
+                   (regexp-replace* #rx"^ +" s "")
+                   ""))
 (define (strip-stars s)
-  (regexp-replace* #rx" +$" (regexp-replace #rx"^\\*+ " s "") ""))
+  (trim-spaces (regexp-replace #rx"^\\*+ " s "")))
 
 (define (read-content)
   (define c (peek-char))
@@ -32,7 +36,7 @@
       [in-props?
        (match 
         l
-        [(regexp #rx"^:([^:]+):[ \t]+(.*)$" (list _ key val))
+        [(regexp #rx"^:([^:]+):[ \t]+(.*)$" (list _ key (app trim-spaces val)))
          (values content/rev
                  (if (string=? "" val)
                      props
