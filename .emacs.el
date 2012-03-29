@@ -1010,11 +1010,6 @@ given a prefix arg."
 (setq uniquify-min-dir-content 90
       uniquify-buffer-name-style 'forward)
 
-;; games.org sorting
-(load-file "~/.emacs.d/games.org.el")
-(global-set-key (kbd "s-<XF86MonBrightnessUp>") 'je/games/sort)
-(global-set-key (kbd "s-<f2>") 'je/games/sort)
-
 ;; scheme
 (load-file "~/.emacs.d/scheme-indent.el")
 

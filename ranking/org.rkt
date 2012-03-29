@@ -81,15 +81,20 @@
 
 ;; Write
 (define (write-node i n)
-  (match-define (node label props content children) n)
+  (match-define (node label props/null content children) n)
+  (define props
+    (for/fold ([ht (hasheq)])
+        ([(k v) (in-hash props/null)])
+      (if v
+        (hash-set ht k v)
+        ht)))
   (define indent (make-string (+ 1 i) #\space))
   (printf "~a~a\n" (stars i) label)
   (unless (zero? (hash-count props))
           (printf "~a:PROPERTIES:\n" indent)
           (for ([k (in-list (sort (hash-keys props) string<=?))])
                (define v (hash-ref props k))
-               (when v
-                 (printf "~a:~a:\t~a\n" indent k v)))
+               (printf "~a:~a:\t~a\n" indent k v))
           (printf "~a:END:\n" indent))
   (for ([c (in-list content)])
        (if (regexp-match #rx"^#\\+" c)

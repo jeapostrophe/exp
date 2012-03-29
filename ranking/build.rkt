@@ -2,13 +2,12 @@
 (require racket/list
          racket/port
          racket/match
+         racket/file
+         racket/system
+         racket/function
          "org.rkt")
 
 ;; Helpers
-(define (game-completed? n)
-  (regexp-match #rx"^Y"
-                (hash-ref (node-props n) "Completed" "N")))
-
 (define (hash-remove* ht . ks)
   (for/fold ([ht ht]) ([k (in-list ks)])
     (hash-remove ht k)))
@@ -134,8 +133,8 @@
   (or (string->number s)
       (error 'string->number/exn "Not a number string: ~e" s)))
 
-(define ((node-prop prop) node)
-  (hash-ref (node-props node) prop))
+(define ((node-prop prop . more) node)
+  (apply hash-ref (node-props node) prop more))
 
 (define (list-index e l)
   (cond
@@ -167,8 +166,71 @@
  ;; XXX Gather more information from GiantBomb (like genre, etc)
  (define* games
    (normalize-games games))
- ;; XXX Export the list of games to an org to have me re-arrange it
- ;; and then bring it back in and label them.
+
+ (define*
+   games
+   (let ()
+     (define (game-completed? n)
+       (regexp-match #rx"^Done"
+                     (or (hash-ref (node-props n) "Status" #f)
+                         "Queue")))
+     (define (sortable l)
+       (for/list ([n (in-list l)])
+         (node (format "~a (~a, ~a)"
+                       (node-label n)
+                       ((node-prop "System") n)
+                       ((node-prop "Year") n))
+               (hasheq "ID" ((node-prop "ID") n)
+                       "SortOverall" ((node-prop "SortOverall" #f) n))
+               empty
+               empty)))
+
+     (define the-games
+       (node-children (id-games games "ID")))
+     (define finished-games
+       (sortable
+        (sort (filter game-completed? the-games)
+              (2compose < (compose (λ (n)
+                                     (if (number? n)
+                                       n
+                                       (string->number n)))
+                                   (node-prop "SortOverall" +inf.0))))))
+     (define-values
+       (ranked unranked)
+       (partition (node-prop "SortOverall" #f) finished-games))
+
+     ;; XXX change this so that we do a binary insertion of each thing
+     ;; in unranked.
+     (define t (make-temporary-file "tmp~a.org"))
+     (with-output-to-file t
+       #:exists 'replace
+       (λ ()
+         (write-org (list (node "Ranked" (hasheq) empty
+                                ranked)
+                          (node "Unranked" (hasheq) empty
+                                unranked)))))
+     (system* "/usr/bin/emacsclient" "-c" t)
+     (match-define (list ranked* unranked*) (with-input-from-file t read-org))
+     (delete-file t)
+     (define ranked** (node-children (id-games ranked* "SortOverall")))
+     (define games/SortOverall
+       (for/list ([n (in-list (node-children games))]
+                  [i (in-naturals)])
+         (define ranked-n
+           (findf (compose (curry = i) string->number (node-prop "ID"))
+                  ranked**))
+         (if ranked-n
+           (struct-copy
+            node n
+            [props
+             (hash-set (node-props n) "SortOverall"
+                       ((node-prop "SortOverall" #f) ranked-n))])
+           n)))
+
+     (struct-copy
+      node games
+      [children games/SortOverall])))
+
  (define* games
    (id-games
     (node-sort
@@ -180,6 +242,7 @@
        (2compose number-cmp (compose string->number/exn (node-prop "Year")))
        (2compose wordy-cmp node-label))))
     "SortNormal"))
+
  (define* games
    (id-games
     (node-sort
@@ -188,4 +251,6 @@
       (2compose wordy-cmp node-label)))
     "SortAlpha"))
 
- (write-org (list games meta)))
+ (with-output-to-file path
+   #:exists 'replace
+   (λ () (write-org (list games meta)))))
