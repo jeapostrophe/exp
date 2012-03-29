@@ -88,7 +88,8 @@
           (printf "~a:PROPERTIES:\n" indent)
           (for ([k (in-list (sort (hash-keys props) string<=?))])
                (define v (hash-ref props k))
-               (printf "~a:~a:\t~a\n" indent k v))
+               (when v
+                 (printf "~a:~a:\t~a\n" indent k v)))
           (printf "~a:END:\n" indent))
   (for ([c (in-list content)])
        (if (regexp-match #rx"^#\\+" c)

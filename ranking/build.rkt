@@ -14,62 +14,64 @@
     (hash-remove ht k)))
 
 ;; Go through and give everything an id
-(define (node-id n [def #f])
-  (string->number
-   (hash-ref (node-props n) "ID"
-             (or def
-                 (λ () (error 'node-id "Not present on ~e" n))))))
-(define (id-games games)
-  (define max-id
-    (for/fold
-        ([id -1])
-        ([c (in-list (node-children games))])
-      (max id (node-id c "-1"))))
-  (define next-id
-    (add1 max-id))
+(define (number->string/padding n max)
+  (define ms-len (string-length (number->string max)))
+  (define s (number->string n))
+  (define s-len (string-length s))
+  (string-append (make-string (- ms-len s-len) #\0)
+                 s))
+(define (id-games games id)
+  (define how-many (length (node-children games)))
+  (define new-children
+    (for/list ([c (in-list (node-children games))]
+               [this-id (in-naturals)])
+      (define cp (node-props c))
+      (struct-copy
+       node c
+       [props
+        (hash-set cp id (number->string/padding this-id how-many))])))
+  (struct-copy node games [children new-children]))
+
+(define (normalize-games games)
   (define new-children
     (for/list ([c (in-list (node-children games))])
       (define p (node-props c))
       (define cp
-        (hash-set 
-         (hash-remove* p
-                       "Completed"
-                       "PlayAgain"
-                       "Reviewed"
-                       "SortOverall"
-                       "SortStory"
-                       "SortMechanic")
-         "Status"
-         (match* ((hash-ref p "Completed" #f) (hash-ref p "PlayAgain" #f))
-           [("Scheduled" _)
-            "Scheduled"]
-           [("Completed" #f)
-            "Done"]
-           [("Queue" _)
-            "Queue"]
-           [("N" "M")
-            #f]
-           [((or "Y" "Y*" "N") "N")
-            "Done-NeverAgain"]
-           [(#f #f)
-            #f]
-           [("Started" #f)
-            "InProgress"]
-           [("Y" "Y")
-            "Done-PlayAgain"]
-           [("Y" "M")
-            "Done-MaybeAgain"])))
+        (if (hash-has-key? p "Status")
+          p
+          (hash-set
+           (hash-remove* p
+                         "ID"
+                         "Completed"
+                         "PlayAgain"
+                         "Reviewed"
+                         "SortOverall"
+                         "SortStory"
+                         "SortMechanic")
+           "Status"
+           (match* ((hash-ref p "Completed" #f) (hash-ref p "PlayAgain" #f))
+             [("Scheduled" _)
+              "Scheduled"]
+             [("Completed" #f)
+              "Done"]
+             [("Queue" _)
+              "Queue"]
+             [("N" "M")
+              #f]
+             [((or "Y" "Y*" "N") "N")
+              "Done-NeverAgain"]
+             [(#f #f)
+              #f]
+             [("Started" #f)
+              #f]
+             [("Y" "Y")
+              "Done-PlayAgain"]
+             [("Y" "M")
+              "Done-MaybeAgain"]))))
       (struct-copy
        node c
-       [props
-        (hash-set p "ID"
-                  (or (hash-ref p "ID" #f)
-                      (begin0 (number->string next-id)
-                              (set! next-id (add1 next-id)))))])))
-  (define new-games
-    (struct-copy node games [children new-children]))
-
-  new-games)
+       [props cp])))
+  (struct-copy node games [children new-children]))
 
 ;; Sort by ranking
 (define (cmp->lt cmp)
@@ -99,12 +101,31 @@
     [(string-ci<? a b) 'lt]
     [else 'gt]))
 
-(define ((node-prop prop) node)
-  (hash-ref (node-props node) prop #f))
+(define (string->number/exn s)
+  (or (string->number s)
+      (error 'string->number/exn "Not a number string: ~e" s)))
 
+(define ((node-prop prop) node)
+  (hash-ref (node-props node) prop))
+
+(define (list-index e l)
+  (cond
+    [(empty? l)
+     (error 'list-index "Not in list: ~e" e)]
+    [(equal? e (first l))
+     0]
+    [else
+     (add1 (list-index e (rest l)))]))
+
+(define (list->cmp ordering)
+  (λ (a b)
+    (number-cmp (list-index a ordering)
+                (list-index b ordering))))
 (define status-cmp
-  (match-lambda*
-   [(#f #f) 'eq]))
+  (list->cmp
+   (list "Active" "Scheduled" "Queue"
+         #f
+         "Done-PlayAgain" "Done" "Done-MaybeAgain" "Done-NeverAgain")))
 
 (define (node-sort n <)
   (struct-copy node n [children (sort (node-children n) <)]))
@@ -115,14 +136,27 @@
  (match-define (list games meta) (with-input-from-file path read-org))
 
  ;; XXX Gather more information from GiantBomb (like genre, etc)
- (define* games (id-games games))
- (define* games (node-sort games
-                      (cmp->lt
-                       (cmp-then
-                        (2compose status-cmp (node-prop "Status"))
-                        (2compose number-cmp (node-prop "Year"))
-                        (2compose string-cmp node-label)))))
-
- ;; XXX Compute the default sort that emacs does
+ ;; XXX Add wordy-<? which sees when a word is really a number
+ (define* games
+   (normalize-games games))
+ ;; XXX Export the list of games to an org to have me re-arrange it
+ ;; and then bring it back in and label them.
+ (define* games
+   (id-games
+    (node-sort
+     games
+     (cmp->lt
+      (cmp-then
+       (2compose status-cmp (node-prop "Status"))
+       ;; XXX sort by when I last played the game
+       (2compose number-cmp (compose string->number/exn (node-prop "Year")))
+       (2compose string-cmp node-label))))
+    "SortNormal"))
+ (define* games
+   (id-games
+    (node-sort
+     games
+     (2compose string-ci<? node-label))
+    "SortAlpha"))
 
  (write-org (list games meta)))
