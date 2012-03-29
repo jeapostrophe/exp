@@ -101,6 +101,35 @@
     [(string-ci<? a b) 'lt]
     [else 'gt]))
 
+(define (string->words s)
+  (regexp-split #rx" " s))
+
+(define (point-list-cmp cmp)
+  (define loop
+    (match-lambda*
+     [(list (list* a as)
+            (list* b bs))
+      (match (cmp a b)
+        ['eq (loop as bs)]
+        [x x])]
+     [(list (list) (list))
+      'eq]
+     [(list (list* a as) (list))
+      'gt]
+     [_
+      'lt]))
+  loop)
+
+(define (word-cmp as bs)
+  (define an (string->number as))
+  (define bn (string->number bs))
+  (if (and (number? an) (number? bn))
+    (number-cmp an bn)
+    (string-cmp as bs)))
+
+(define wordy-cmp
+  (2compose (point-list-cmp word-cmp) string->words))
+
 (define (string->number/exn s)
   (or (string->number s)
       (error 'string->number/exn "Not a number string: ~e" s)))
@@ -136,7 +165,6 @@
  (match-define (list games meta) (with-input-from-file path read-org))
 
  ;; XXX Gather more information from GiantBomb (like genre, etc)
- ;; XXX Add wordy-<? which sees when a word is really a number
  (define* games
    (normalize-games games))
  ;; XXX Export the list of games to an org to have me re-arrange it
@@ -150,13 +178,14 @@
        (2compose status-cmp (node-prop "Status"))
        ;; XXX sort by when I last played the game
        (2compose number-cmp (compose string->number/exn (node-prop "Year")))
-       (2compose string-cmp node-label))))
+       (2compose wordy-cmp node-label))))
     "SortNormal"))
  (define* games
    (id-games
     (node-sort
      games
-     (2compose string-ci<? node-label))
+     (cmp->lt
+      (2compose wordy-cmp node-label)))
     "SortAlpha"))
 
  (write-org (list games meta)))
