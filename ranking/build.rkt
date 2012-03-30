@@ -293,40 +293,36 @@
    node games
    [children games/SortOverall]))
 
+;; XXX Gather more information from GiantBomb (like genre, etc)
 (module+ main
-  (require racket/package)
   (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
-  (package-begin
-   
-   (match-define (list games meta) (with-input-from-file path read-org))
+  (match-define (list games meta) (with-input-from-file path read-org))
+  (let*
+      ((games
+        (normalize-games games))
 
-   ;; XXX Gather more information from GiantBomb (like genre, etc)
-   (define* games
-     (normalize-games games))
+       (games
+        (perform-ranking "Overall" games))
 
-   (define* games
-     (perform-ranking "Overall" games))
+       (games
+        (id-games
+         (node-sort
+          games
+          (cmp->lt
+           (cmp-then
+            (2compose status-cmp (node-prop "Status"))
+            ;; XXX sort by when I last played the game
+            (2compose number-cmp (compose string->number/exn (node-prop "Year")))
+            (2compose wordy-cmp node-label))))
+         "SortNormal"))
 
-   (define* games
-     (id-games
-      (node-sort
-       games
-       (cmp->lt
-        (cmp-then
-         (2compose status-cmp (node-prop "Status"))
-         ;; XXX sort by when I last played the game
-         (2compose number-cmp (compose string->number/exn (node-prop "Year")))
-         (2compose wordy-cmp node-label))))
-      "SortNormal"))
-
-   (define* games
-     (id-games
-      (node-sort
-       games
-       (cmp->lt
-        (2compose wordy-cmp node-label)))
-      "SortAlpha"))
-
-   (with-output-to-file path
-     #:exists 'replace
-     (λ () (write-org (list games meta))))))
+       (games
+        (id-games
+         (node-sort
+          games
+          (cmp->lt
+           (2compose wordy-cmp node-label)))
+         "SortAlpha")))
+    (with-output-to-file path
+      #:exists 'replace
+      (λ () (write-org (list games meta))))))
