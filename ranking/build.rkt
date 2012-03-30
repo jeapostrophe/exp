@@ -5,7 +5,69 @@
          racket/file
          racket/system
          racket/function
+         racket/gui
          "org.rkt")
+
+(struct bst (left val right) #:prefab)
+(define sorted-list->binary-tree
+  (match-lambda
+   [(list)
+    #f]
+   [(list val)
+    (bst #f val #f)]
+   [l
+    (define-values (before after)
+      (split-at l (quotient (length l) 2)))
+    (bst (sorted-list->binary-tree before)
+         (first after)
+         (sorted-list->binary-tree (rest after)))]))
+
+(module+ test
+  (require rackunit)
+  (check-equal?
+   (sorted-list->binary-tree '(0))
+   (bst #f 0 #f))
+  (check-equal?
+   (sorted-list->binary-tree '(0 1))
+   (bst (bst #f 0 #f) 1 #f))
+  (check-equal?
+   (sorted-list->binary-tree '(-1 0 1))
+   (bst (bst #f -1 #f) 0 (bst #f 1 #f)))
+  (check-equal?
+   (sorted-list->binary-tree '(-3 -2 -1 0 1 2 3))
+   #s(bst #s(bst #s(bst #f -3 #f) -2 #s(bst #f -1 #f)) 0 #s(bst #s(bst #f 1 #f) 2 #s(bst #f 3 #f)))))
+
+(define binary-tree->sorted-list
+  (match-lambda
+   [#f
+    empty]
+   [(bst left v right)
+    (append (binary-tree->sorted-list left)
+            (list* v (binary-tree->sorted-list right)))]))
+
+(module+ test
+  (define (binary-tree-identity l)
+    (check-equal? (binary-tree->sorted-list (sorted-list->binary-tree l))
+                  l))
+
+  (for ([i (in-range 10)])
+    (binary-tree-identity (sort (build-list 10 (compose random add1)) <))))
+
+(define (binary-insert x < a-bst)
+  (match a-bst
+    [#f
+     (bst #f x #f)]
+    [(bst left y right)
+     (if (< x y)
+       (bst (binary-insert x < left) y right)
+       (bst left y (binary-insert x < right)))]))
+
+(module+ test
+  (check-equal?
+   (binary-tree->sorted-list
+    (binary-insert 5 <
+                   (sorted-list->binary-tree '(-3 -2 -1 0 1 2 3))))
+   '(-3 -2 -1 0 1 2 3 5)))
 
 ;; Helpers
 (define (hash-remove* ht . ks)
@@ -158,99 +220,113 @@
 (define (node-sort n <)
   (struct-copy node n [children (sort (node-children n) <)]))
 
-(require racket/package)
-(package-begin
- (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
- (match-define (list games meta) (with-input-from-file path read-org))
+(define (perform-ranking kind games)
+  (define key (format "Sort~a" kind))
+  (define (game-completed? n)
+    (regexp-match #rx"^Done"
+                  (or (hash-ref (node-props n) "Status" #f)
+                      "Queue")))
+  (define (sortable l)
+    (for/list ([n (in-list l)])
+      (node (format "~a (~a, ~a)"
+                    (node-label n)
+                    ((node-prop "System") n)
+                    ((node-prop "Year") n))
+            (hasheq "ID" ((node-prop "ID") n)
+                    key ((node-prop key #f) n))
+            empty
+            empty)))
 
- ;; XXX Gather more information from GiantBomb (like genre, etc)
- (define* games
-   (normalize-games games))
+  (define the-games
+    (node-children (id-games games "ID")))
+  (define finished-games
+    (sortable
+     (sort (filter game-completed? the-games)
+           (2compose < (compose (λ (n)
+                                  (if (number? n)
+                                    n
+                                    (string->number n)))
+                                (node-prop key +inf.0))))))
+  (define-values
+    (ranked unranked)
+    (partition (node-prop key #f) finished-games))
 
- (define*
-   games
-   (let ()
-     (define (game-completed? n)
-       (regexp-match #rx"^Done"
-                     (or (hash-ref (node-props n) "Status" #f)
-                         "Queue")))
-     (define (sortable l)
-       (for/list ([n (in-list l)])
-         (node (format "~a (~a, ~a)"
-                       (node-label n)
-                       ((node-prop "System") n)
-                       ((node-prop "Year") n))
-               (hasheq "ID" ((node-prop "ID") n)
-                       "SortOverall" ((node-prop "SortOverall" #f) n))
-               empty
-               empty)))
+  (define stop? #f)
+  (define (game< a b)
+    (match
+        (message-box/custom
+         "Ranking" (format "~a Which is better?" kind)
+         (node-label a) (node-label b)
+         "Stop Asking")
+      [1 #t]
+      [2 #f]
+      [x
+       (set! stop? #t)
+       (game< a b)]))
 
-     (define the-games
-       (node-children (id-games games "ID")))
-     (define finished-games
-       (sortable
-        (sort (filter game-completed? the-games)
-              (2compose < (compose (λ (n)
-                                     (if (number? n)
-                                       n
-                                       (string->number n)))
-                                   (node-prop "SortOverall" +inf.0))))))
-     (define-values
-       (ranked unranked)
-       (partition (node-prop "SortOverall" #f) finished-games))
+  (define ranked*
+    (node "Ranked" (hasheq) empty
+          (let/ec esc
+            (for/fold ([ranked ranked])
+                ([unranked-game (in-list unranked)])
+              (if stop?
+                (esc ranked)
+                (binary-tree->sorted-list
+                 (binary-insert unranked-game game<
+                                (sorted-list->binary-tree ranked))))))))
+  (define ranked** (node-children (id-games ranked* key)))
+  (define games/SortOverall
+    (for/list ([n (in-list (node-children games))]
+               [i (in-naturals)])
+      (define ranked-n
+        (findf (compose (curry = i) string->number (node-prop "ID"))
+               ranked**))
+      (if ranked-n
+        (struct-copy
+         node n
+         [props
+          (hash-set (node-props n) key
+                    ((node-prop key #f) ranked-n))])
+        n)))
 
-     ;; XXX change this so that we do a binary insertion of each thing
-     ;; in unranked.
-     (define t (make-temporary-file "tmp~a.org"))
-     (with-output-to-file t
-       #:exists 'replace
-       (λ ()
-         (write-org (list (node "Ranked" (hasheq) empty
-                                ranked)
-                          (node "Unranked" (hasheq) empty
-                                unranked)))))
-     (system* "/usr/bin/emacsclient" "-c" t)
-     (match-define (list ranked* unranked*) (with-input-from-file t read-org))
-     (delete-file t)
-     (define ranked** (node-children (id-games ranked* "SortOverall")))
-     (define games/SortOverall
-       (for/list ([n (in-list (node-children games))]
-                  [i (in-naturals)])
-         (define ranked-n
-           (findf (compose (curry = i) string->number (node-prop "ID"))
-                  ranked**))
-         (if ranked-n
-           (struct-copy
-            node n
-            [props
-             (hash-set (node-props n) "SortOverall"
-                       ((node-prop "SortOverall" #f) ranked-n))])
-           n)))
+  (struct-copy
+   node games
+   [children games/SortOverall]))
 
-     (struct-copy
-      node games
-      [children games/SortOverall])))
+(module+ main
+  (require racket/package)
+  (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
+  (package-begin
+   
+   (match-define (list games meta) (with-input-from-file path read-org))
 
- (define* games
-   (id-games
-    (node-sort
-     games
-     (cmp->lt
-      (cmp-then
-       (2compose status-cmp (node-prop "Status"))
-       ;; XXX sort by when I last played the game
-       (2compose number-cmp (compose string->number/exn (node-prop "Year")))
-       (2compose wordy-cmp node-label))))
-    "SortNormal"))
+   ;; XXX Gather more information from GiantBomb (like genre, etc)
+   (define* games
+     (normalize-games games))
 
- (define* games
-   (id-games
-    (node-sort
-     games
-     (cmp->lt
-      (2compose wordy-cmp node-label)))
-    "SortAlpha"))
+   (define* games
+     (perform-ranking "Overall" games))
 
- (with-output-to-file path
-   #:exists 'replace
-   (λ () (write-org (list games meta)))))
+   (define* games
+     (id-games
+      (node-sort
+       games
+       (cmp->lt
+        (cmp-then
+         (2compose status-cmp (node-prop "Status"))
+         ;; XXX sort by when I last played the game
+         (2compose number-cmp (compose string->number/exn (node-prop "Year")))
+         (2compose wordy-cmp node-label))))
+      "SortNormal"))
+
+   (define* games
+     (id-games
+      (node-sort
+       games
+       (cmp->lt
+        (2compose wordy-cmp node-label)))
+      "SortAlpha"))
+
+   (with-output-to-file path
+     #:exists 'replace
+     (λ () (write-org (list games meta))))))
