@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Winsav File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Fri Mar 16 08:29:07 2012
+;; Created Sat Mar 31 14:22:01 2012
 ;; Winsav file format version 1
 ;; Emacs version 23.3.1
 (if
@@ -49,12 +49,152 @@
      (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
      (font-backend xft x))
    '(0
-     (buffer "/home/jay/Dev/scm/github.jeapostrophe/exp/.emacs.el" "/home/jay/Dev/scm/github.jeapostrophe/exp/.emacs.el" 21985
+     (buffer "/home/jay/Dev/scm/blogs/jeapostrophe.github.com/source/build.rkt" "/home/jay/Dev/scm/blogs/jeapostrophe.github.com/source/build.rkt" 18
              (0 0 89 49)
              (16 0 t nil)
              (8 8 nil)
              (nil)
-             0 nil nil 21456 nil))
+             0 nil nil 1 nil))
+   nil nil t )
+  ;; ---- before after-save-frame-hook ----
+  ;; ---- after after-save-frame-hook  ----
+  (winsav-restore-frame
+   '((visibility . icon)
+     (icon-name)
+     (top . 21)
+     (left . 0)
+     (unsplittable)
+     (modeline . t)
+     (width . 87)
+     (height . 51)
+     (background-mode . light)
+     (alpha)
+     (scroll-bar-width . 0)
+     (cursor-type . box)
+     (auto-lower)
+     (auto-raise)
+     (icon-type . t)
+     (fullscreen)
+     (buffer-predicate)
+     (tool-bar-lines . 0)
+     (menu-bar-lines . 0)
+     (right-fringe . 8)
+     (left-fringe . 8)
+     (line-spacing)
+     (screen-gamma)
+     (border-color . "black")
+     (cursor-color . "#657b83")
+     (mouse-color . "black")
+     (background-color . "#fdf6e3")
+     (foreground-color . "#657b83")
+     (vertical-scroll-bars)
+     (internal-border-width . 0)
+     (border-width . 2)
+     (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+     (font-backend xft x))
+   '(nil
+     (buffer "/home/jay/Dev/scm/github.jeapostrophe/home/etc/time.org" "/home/jay/Dev/scm/github.jeapostrophe/home/etc/time.org" 67
+             (0 0 89 50)
+             (16 0 t nil)
+             (8 8 nil)
+             (nil)
+             0 nil nil 1 nil))
+   nil nil t )
+  ;; ---- before after-save-frame-hook ----
+  ;; ---- after after-save-frame-hook  ----
+  (winsav-restore-frame
+   '((visibility . icon)
+     (icon-name)
+     (top . 21)
+     (left . 720)
+     (unsplittable)
+     (modeline . t)
+     (width . 87)
+     (height . 51)
+     (background-mode . light)
+     (alpha)
+     (scroll-bar-width . 0)
+     (cursor-type . box)
+     (auto-lower)
+     (auto-raise)
+     (icon-type . t)
+     (fullscreen)
+     (buffer-predicate)
+     (tool-bar-lines . 0)
+     (menu-bar-lines . 0)
+     (right-fringe . 8)
+     (left-fringe . 8)
+     (line-spacing)
+     (screen-gamma)
+     (border-color . "black")
+     (cursor-color . "#657b83")
+     (mouse-color . "black")
+     (background-color . "#fdf6e3")
+     (foreground-color . "#657b83")
+     (vertical-scroll-bars)
+     (internal-border-width . 0)
+     (border-width . 2)
+     (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+     (font-backend xft x))
+   '(nil
+     (buffer "/home/jay/Dev/scm/github.jeapostrophe/home/etc/work.org" "/home/jay/Dev/scm/github.jeapostrophe/home/etc/work.org" 300
+             (0 0 89 50)
+             (16 0 t nil)
+             (8 8 nil)
+             (nil)
+             0 nil nil 1 nil))
+   nil nil t )
+  ;; ---- before after-save-frame-hook ----
+  ;; ---- after after-save-frame-hook  ----
+  (winsav-restore-frame
+   '((icon-name)
+     (top . 21)
+     (left . 0)
+     (unsplittable)
+     (width . 87)
+     (height . 51)
+     (visibility . icon)
+     (background-mode . light)
+     (modeline . t)
+     (alpha)
+     (scroll-bar-width . 0)
+     (cursor-type . box)
+     (auto-lower)
+     (auto-raise)
+     (icon-type . t)
+     (fullscreen)
+     (buffer-predicate)
+     (tool-bar-lines . 0)
+     (menu-bar-lines . 0)
+     (right-fringe . 8)
+     (left-fringe . 8)
+     (line-spacing)
+     (screen-gamma)
+     (border-color . "black")
+     (cursor-color . "#657b83")
+     (mouse-color . "black")
+     (background-color . "#fdf6e3")
+     (foreground-color . "#657b83")
+     (vertical-scroll-bars)
+     (internal-border-width . 0)
+     (border-width . 2)
+     (font . "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+     (font-backend xft x))
+   '(nil
+     (t
+      (0 0 89 50)
+      (buffer "*Org Agenda*" nil 1
+              (0 0 89 25)
+              (0 0 t nil)
+              (8 8 nil)
+              (nil)
+              0 nil nil 1 nil)
+      (buffer "/home/jay/Dev/scm/github.jeapostrophe/home/etc/brain.org" "/home/jay/Dev/scm/github.jeapostrophe/home/etc/brain.org" 23286
+              (0 25 89 50)
+              (0 0 t nil)
+              (8 8 nil)
+              (nil)
+              0 nil nil 14654 nil)))
    nil nil t )
   ;; ---- before after-save-frame-hook ----
   ;; ---- after after-save-frame-hook  ----
