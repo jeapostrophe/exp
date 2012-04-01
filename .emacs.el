@@ -537,7 +537,7 @@ given a prefix arg."
 (defun je/org-archive-all ()
   "Archive everything that is done"
   (interactive)
-  (org-map-entries 'org-archive-subtree "/DONE" 'agenda))
+  (org-map-entries 'org-archive-subtree "/DONE" 'file))
 
 (global-set-key (kbd "s-t")
                 (lambda () 
