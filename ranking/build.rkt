@@ -193,6 +193,7 @@
 
 (define (string->number/exn s)
   (or (string->number s)
+      (and (string=? s "TBA") +inf.0)
       (error 'string->number/exn "Not a number string: ~e" s)))
 
 (define ((node-prop prop . more) node)
