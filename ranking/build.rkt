@@ -296,8 +296,9 @@
    node games
    [children games/SortOverall]))
 
-;; XXX Gather more information from GiantBomb (like genre, etc)
 (module+ main
+  (define rank? (not (getenv "DONT_RANK")))
+
   (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
   (match-define (list games meta) (with-input-from-file path read-org))
   (let*
@@ -305,7 +306,9 @@
         (normalize-games games))
 
        (games
-        (perform-ranking "Overall" games))
+        (if rank?
+          (perform-ranking "Overall" games)
+          games))
 
        (games
         (id-games

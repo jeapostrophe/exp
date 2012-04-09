@@ -1,4 +1,4 @@
 #!/bin/zsh
 . ~/.zshrc
 
-raco test -s main -- ~exp/ranking/build.rkt
+raco test -s main ~exp/ranking/build.rkt
