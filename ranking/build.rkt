@@ -6,6 +6,7 @@
          racket/system
          racket/function
          racket/gui
+         racket/date
          "org.rkt")
 
 (struct bst (left val right) #:prefab)
@@ -218,6 +219,27 @@
          #f
          "Done-PlayAgain" "Done" "Done-MaybeAgain" "Done-NeverAgain")))
 
+(define (bloggable? n)
+  (match-define (node label props content children) n)
+  (not (equal? (hash-ref props "Blog" #f) "Ignore")))
+(define (node-label->time n)
+  (match (node-label n)
+    [(regexp #rx"^(....)/(..)/(..)$" (list _ y m d))
+     (find-seconds 0 0 0 
+                   (string->number d)
+                   (string->number m)
+                   (string->number y))]
+    [_
+     -inf.0]))
+(define (node-last-played n)
+  (match
+      (sort (map node-label->time (filter bloggable? (node-children n)))
+            >)
+    [(list)
+     -inf.0]
+    [(list* top _)
+     top]))
+
 (define (node-sort n <)
   (struct-copy node n [children (sort (node-children n) <)]))
 
@@ -317,7 +339,7 @@
           (cmp->lt
            (cmp-then
             (2compose status-cmp (node-prop "Status"))
-            ;; XXX sort by when I last played the game
+            (2compose number-cmp node-last-played)
             (2compose number-cmp (compose string->number/exn (node-prop "Year")))
             (2compose wordy-cmp node-label))))
          "SortNormal"))
