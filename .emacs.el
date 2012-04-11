@@ -418,7 +418,7 @@ given a prefix arg."
           (progn
             (message "Running...")
             
-            (if (file-exists-p (concat default-directory "/Makefile"))
+            (if (and nil (file-exists-p (concat default-directory "/Makefile")))
                 (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
               (if (not writep)
                 (compile (concat "zsh " cmdStr))
