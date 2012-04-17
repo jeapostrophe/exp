@@ -225,20 +225,22 @@
 (define (node-label->time n)
   (match (node-label n)
     [(regexp #rx"^(....)/(..)/(..)$" (list _ y m d))
-     (find-seconds 0 0 0 
+     (find-seconds 0 0 0
                    (string->number d)
                    (string->number m)
                    (string->number y))]
     [_
      -inf.0]))
 (define (node-last-played n)
-  (match
-      (sort (map node-label->time (filter bloggable? (node-children n)))
-            >)
-    [(list)
-     -inf.0]
-    [(list* top _)
-     top]))
+  (if (hash-ref (node-props n) "Status" #f)
+    (match
+        (sort (map node-label->time (filter bloggable? (node-children n)))
+              >)
+      [(list)
+       -inf.0]
+      [(list* top _)
+       top])
+    -inf.0))
 
 (define (node-sort n <)
   (struct-copy node n [children (sort (node-children n) <)]))
