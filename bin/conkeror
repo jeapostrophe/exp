@@ -2,4 +2,6 @@
 
 ROOT=~/Dev/dist/conkeror
 
-exec ${ROOT}/xulrunner/xulrunner ${ROOT}/conkeror/application.ini "$@"
+export LD_LIBRARY_PATH=~/Dev/dist/conkeror/xulrunner:${LD_LIBRARY_PATH}
+
+exec ${ROOT}/xulrunner/xulrunner-bin ${ROOT}/conkeror/application.ini "$@"

@@ -628,7 +628,7 @@ given a prefix arg."
           (org-agenda-sorting-strategy '(user-defined-up))
           (org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
           (org-agenda-overriding-header
-           "Herr Professor, tear down this TODO list!")))))
+           "")))))
 
 (add-hook 'org-finalize-agenda-hook
     (lambda () 
