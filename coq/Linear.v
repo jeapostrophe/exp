@@ -5,16 +5,9 @@ Variable atom : Set.
 Hypothesis atom_eq_dec : forall (x y:atom),
  { x = y } + { x <> y }.
 Hint Resolve atom_eq_dec.
-Variable universe : list atom.
-
-Hypothesis finite_universe :
- forall (a:atom),
-  In a universe.
 
 Inductive prop : Set :=
 | Atom : atom -> prop
-| Or : prop -> prop -> prop
-| And : prop -> prop -> prop
 | Implies : prop -> prop -> prop.
 Hint Constructors prop.
 
@@ -47,36 +40,6 @@ Inductive Proves : Gamma -> prop -> Prop :=
   forall (p:prop),
    Proves (gamma_single p) p
 
-| P_Or_Intro_Left :
-  forall (g:Gamma) (pa pb:prop),
-   Proves g pa ->
-   Proves g (Or pa pb)
-| P_Or_Intro_Right :
-  forall (g:Gamma) (pa pb:prop),
-   Proves g pb ->
-   Proves g (Or pa pb)
-| P_Or_Elim :
-  forall (g g' g'':Gamma) (pa pb pc:prop),
-   Proves g (Or pa pb) ->
-   Proves (gamma_add pa g') pc ->
-   Proves (gamma_add pb g'') pc ->
-   Proves (gamma_union g (gamma_union g' g'')) pc
-
-| P_And_Intro :
-  forall (g g':Gamma) (pa pb:prop),
-   Proves g pa ->
-   Proves g' pb ->
-   Proves (gamma_union g g') (And pa pb)
-| P_And_Elim :
-  forall (g g' g'':Gamma) (pa pb pc:prop),
-   Proves g (And pa pb) ->
-   Proves (gamma_add pa (gamma_add pb g')) pc ->
-   Proves (gamma_union g g') pc
-
-| P_Implies_Intro :
-  forall (g:Gamma) (pa pb:prop),
-   Proves (gamma_add pa g) pb ->
-   Proves g (Implies pa pb)
 | P_Implies_Elim :
   forall (g g':Gamma) (pa pb:prop),
    Proves g (Implies pa pb) ->
@@ -84,18 +47,18 @@ Inductive Proves : Gamma -> prop -> Prop :=
    Proves (gamma_union g g') pb.
 Hint Constructors Proves.
 
-Variable a : atom.
-
-Lemma Proves_not_nil :
- exists p:prop,
-  Proves empty_gamma p.
+Require Import Coq.Program.Equality.
+Lemma Proves_nil :
+ forall (p:prop),
+  ~ Proves empty_gamma p.
 Proof.
- exists (Implies (Atom a) (Atom a)).
- eapply P_Implies_Intro.
- eapply P_Assume.
-Qed.
+ intros p P. dependent induction P; eauto.
 
-(* There are, in fact, an infinite number of things. *)
+ eapply IHP; eapply Permutation_nil; eapply Permutation_sym; auto.
+
+ apply app_eq_nil in x; destruct x; auto.
+Qed.
+Hint Resolve Proves_nil.
 
 Lemma Proves_Weak_app :
  forall (gb g ga:Gamma) (p:prop),
@@ -105,12 +68,145 @@ Proof.
 Admitted.
 Hint Resolve Proves_Weak_app.
 
+Fixpoint list_splits (A:Type) (l:list A) :=
+ match l with
+  | nil =>
+    (nil,nil)::nil
+  | x :: l =>
+    (nil, x :: l) ::
+    (map (fun lhs_x_rhs:(list A * list A) =>
+           let (lhs,rhs) := lhs_x_rhs in
+           (x::lhs,rhs))
+         (list_splits A l))
+ end.
+
+Theorem list_splits_correct :
+ forall (A:Type) (l:list A),
+  forall (lhs rhs:list A),
+   In (lhs,rhs) (list_splits A l)
+   <->
+   l = lhs ++ rhs.
+Proof.
+ intros A l lhs rhs.
+ induction l as [ | a l ]; simpl.
+
+
+Theorem list_splits :
+ forall (A:Type) (l:list A),
+  { splits : list (list A * list A) |
+    forall (lhs rhs:list A),
+     In (lhs,rhs) splits <->
+     l = lhs ++ rhs }.
+Proof.
+ intros A l.
+
+ induction l as [ | a l ].
+ 
+ exists ((nil,nil)::nil). intros lhs rhs. split.
+ intros IN. eapply in_inv in IN.
+ destruct IN as [IN|IN]; inversion IN; auto.
+
+ intros EQ. symmetry in EQ. apply app_eq_nil in EQ.
+ destruct EQ. rewrite H. rewrite H0. eapply in_eq.
+
+ destruct IHl as [ splits IHl ].
+
+ exists ((nil,a::l)::(map (fun lhs_x_rhs =>
+          match lhs_x_rhs with
+           | (lhs, rhs) =>
+             ((a::lhs),rhs)
+          end) splits)).
+ intros lhs rhs. split; [ intros IN | intros EQ ].
+
+ apply in_inv in IN.
+ destruct IN as [ IN | IN ].
+ inversion IN. simpl. auto.
+ 
+ apply in_map_iff in IN.
+ destruct IN as [ lhs_x_rhs IN ].
+ destruct lhs_x_rhs as [ lhs_l rhs_l ].
+ destruct IN as [ EQ IN ].
+ rewrite IHl in IN. rewrite IN.
+ inversion EQ. simpl. auto. 
+
+ destruct lhs as [|x lhs]; simpl in EQ.
+
+ rewrite EQ. apply in_eq.
+
+ inversion EQ.
+ rewrite <- IHl in H1.
+ apply in_cons. apply in_map_iff.
+ exists (lhs,rhs). auto.
+Qed.
+
+Theorem list_ind_split :
+ forall (A:Type) (P:list A -> list A -> Prop),
+  (forall (lhs rhs:list A), { P lhs rhs } + { ~ P lhs rhs }) ->
+  forall (l:list A),
+   { lhs_x_rhs:(list A * list A) |
+     let (lhs,rhs) := lhs_x_rhs in l = lhs ++ rhs /\ P lhs rhs }
+   + { forall (lhs rhs:list A), l = lhs ++ rhs -> ~ P lhs rhs }.
+Proof.
+ intros A P P_dec l.
+
+ destruct (list_splits A l) as [ls lsP].
+ 
+ induction ls.
+
+ right. intros lhs rhs. rewrite <- lsP. intros IN.
+ inversion IN.
+
+ destruct a as [lhs rhs].
+ case (P_dec lhs rhs) as [Pa | NPa].
+ left. exists (lhs,rhs). rewrite <- lsP. split.
+ eapply in_eq. auto.
+
+ case (IHls).
+
+ intros lhs' rhs'. rewrite <- lsP. 
+ split; intros IN.
+ eapply in_cons. auto.
+ apply in_inv in IN. destruct IN as [EQ|IN].
+ inversion EQ. rewrite H0 in *. rewrite H1 in *.
+ clear EQ lhs rhs H0 H1.
+ rewrite lsP.
+
+
+  (exists (lhs rhs:list A), P (lhs ++ rhs))  
+
+  P nil ->
+  (forall (l l':list A), P l -> P l' -> P (l ++ l')) ->
+  forall l : list A, P l.
+Proof.
+ intros A P Pnil Psplit l.
+
+ destruct (list_splits A l) as [ ls lsP ].
+
+ generalize lsP. clear lsP.
+ case l; clear l.
+ auto.
+ intros a l lsP.
+
+ destruct ls.
+ absurd (a :: l = nil). discriminate.
+ rewrite lsP.
+
+ apply 
+ 
+ induction (list_splits l).
+
+fun (A : Type) (P : list A -> Prop) => list_rect P
+     : forall (A : Type) (P : list A -> Prop),
+       P nil ->
+       (forall (a : A) (l : list A), P l -> P (a :: l)) ->
+       forall l : list A, P l
+
+
 Theorem Proves_dec:
  forall (g:Gamma) (p:prop),
   { Proves g p } + { ~ Proves g p }.
 Proof.
- intros g p. generalize g. induction p; eauto.
-
+ (* XXX New idea: Consider every permutation and splitting of g *)
 
 
  (* We go by induction on the size of the assumption environment. *)
@@ -130,8 +226,24 @@ Proof.
  (* Is it trivially essential? *)
  case (prop_eq_dec gp p) as [ EQ | NEQ ]. subst.
  left. eapply (Proves_Weak_app nil (p::nil) g).
- eapply P_Atom_Intro.
+ eapply P_Assume.
 
+ case (IHg (Implies gp p)) as [ PI | NPI ].
+
+ left. assert (gp :: g = gamma_union (gamma_single gp) g).
+ auto. rewrite H. clear H.
+ eapply P_Exchange. eapply Permutation_app_comm.
+ eapply P_Implies_Elim. eapply PI.
+ eapply P_Assume.
+
+ right. intros P.
+ inversion P; auto.
+
+ clear H2 H1 g' a.
+
+ Focus 2.
+ clear pb H2.
+ 
  (* Now we know it is essential (or the prop is false) but we're not sure how. *)
  
  (* We'll do induction on p because then we'll know to use the introduction forms. *)
@@ -147,11 +259,11 @@ Proof.
  case (prop_eq_dec gp p1) as [EQ1 | NEQ1].
  left. eapply P_Or_Intro_Left.
  eapply (Proves_Weak_app nil (gp::nil) g).
- rewrite EQ1. eapply P_Atom_Intro.
+ rewrite EQ1. eapply P_Assume.
  case (prop_eq_dec gp p2) as [EQ2 | NEQ2].
  left. eapply P_Or_Intro_Right.
  eapply (Proves_Weak_app nil (gp::nil) g).
- rewrite EQ2. eapply P_Atom_Intro.
+ rewrite EQ2. eapply P_Assume.
  case (IHp1 NP1 NEQ1) as [IP1 | INP1].
  eauto.
  case (IHp2 NP2 NEQ2) as [IP2 | INP2].
