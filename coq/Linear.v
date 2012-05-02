@@ -2,8 +2,14 @@ Require Import List Permutation.
 Local Open Scope list_scope.
 
 Variable atom : Set.
-Hypothesis atom_eq_dec : forall (x y:atom), { x = y } + { x <> y }.
+Hypothesis atom_eq_dec : forall (x y:atom),
+ { x = y } + { x <> y }.
 Hint Resolve atom_eq_dec.
+Variable universe : list atom.
+
+Hypothesis finite_universe :
+ forall (a:atom),
+  In a universe.
 
 Inductive prop : Set :=
 | Atom : atom -> prop
@@ -15,7 +21,7 @@ Hint Constructors prop.
 Theorem prop_eq_dec:
  forall (x y:prop), { x = y } + { x <> y }.
 Proof.
- decide equality. 
+ decide equality.
 Qed.
 Hint Resolve prop_eq_dec.
  
@@ -37,7 +43,7 @@ Inductive Proves : Gamma -> prop -> Prop :=
    Proves g a ->
    Proves g' a
 
-| P_Atom_Intro :
+| P_Assume :
   forall (p:prop),
    Proves (gamma_single p) p
 
@@ -78,15 +84,18 @@ Inductive Proves : Gamma -> prop -> Prop :=
    Proves (gamma_union g g') pb.
 Hint Constructors Proves.
 
-Lemma Proves_nil :
- forall (p:prop),
-  ~ Proves empty_gamma p.
+Variable a : atom.
+
+Lemma Proves_not_nil :
+ exists p:prop,
+  Proves empty_gamma p.
 Proof.
- intros p P. induction P; eauto.
+ exists (Implies (Atom a) (Atom a)).
+ eapply P_Implies_Intro.
+ eapply P_Assume.
+Qed.
 
-
-Admitted.
-Hint Resolve Proves_nil.
+(* There are, in fact, an infinite number of things. *)
 
 Lemma Proves_Weak_app :
  forall (gb g ga:Gamma) (p:prop),
@@ -107,7 +116,7 @@ Proof.
  (* We go by induction on the size of the assumption environment. *)
  induction g as [ | gp g ]; intros p.
 
- (* The empty env can't prove anything. *)
+ (* The empty env can't prove anything. WRONG!! *)
  right. eauto.
 
  (* Next, we see if the smaller env can prove the prop. *)
