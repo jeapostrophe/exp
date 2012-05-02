@@ -83,8 +83,8 @@
            (λ (proof new-env fk)
              (return
               (if (empty? new-env)
-                 proof
-                 (proof:weaken new-env proof))))
+                proof
+                (proof:weaken new-env proof))))
            (λ ()
              (return #f)))))
 
@@ -166,17 +166,75 @@
                    (print-prop (proof-prop p))
                    (print-proof p))]))
 
+         (define (prove-permutation structure l)
+           (define (coq-append lhs rhs)
+             (match lhs
+               ['nil rhs]
+               [`(,hd :: ,tl)
+                `(,hd :: ,(coq-append tl rhs))]))
+           (define (coq-remove x l)
+             (match l
+               ['nil
+                (error 'coq-remove "~e not in list" x)]
+               [`(,(== x) :: ,tl)
+                tl]
+               [`(,y :: ,tl)
+                `(,y :: ,(coq-remove x tl))]))
+           (define (coq-split-at-elem x l)
+             (match l
+               ['nil
+                (error 'coq-split-at-elem "~e not in list" x)]
+               [`(,(== x) :: ,tl)
+                (values 'nil tl)]
+               [`(,y :: ,tl)
+                (define-values (before after) (coq-split-at-elem x tl))
+                (values `(,y :: ,before) after)]))
+           (define structure->coq-list
+             (match-lambda
+              ['nil 'nil]
+              [`(,hd :: ,tl)
+               `(,hd :: ,(structure->coq-list tl))]
+              [`(gamma_union ,lhs ,rhs)
+               (coq-append (structure->coq-list lhs)
+                           (structure->coq-list rhs))]
+              [`(gamma_single ,p)
+               `(,p :: nil)]))
+           (define in (print-prop-list l))
+           (define out (structure->coq-list structure))
+
+           (define inner
+             (match-lambda*
+              [(list 'nil 'nil)
+               `(perm_nil prop)]
+              [(list (list x ':: left)
+                     (list x ':: right))
+               `(perm_skip ,x ,(inner left right))]
+              [(list (list y ':: left)
+                     (list x ':: right))
+               (define-values (before-y after-y)
+                 (coq-split-at-elem y right))
+               `(@Permutation_cons_app
+                 prop
+                 ,left
+                 (,x :: ,before-y)
+                 ,after-y
+                 ,y
+                 ,(inner left (list x ':: (coq-remove y right))))]))
+
+           (inner out in))
+
          (printf "Check\n")
          (pretty-display
-          (list (print-proof p)
+          (list (list 'P_Exchange
+                      (proof-gamma p)
+                      (print-prop-list env)
+                      (print-prop (proof-prop p))
+                      (prove-permutation (proof-gamma p) env)
+                      (print-proof p))
                 ':
-                (if #t
-                  (list 'Proves
-                        (print-prop-list env)
-                        (print-prop the-prop))
-                  (list 'Proves
-                        (proof-gamma p)
-                        (print-prop (proof-prop p))))))
+                (list 'Proves
+                      (print-prop-list env)
+                      (print-prop the-prop))))
          (printf ".\n")))
 
      (define okay?
@@ -234,5 +292,14 @@
                 (proof:assume 'c)))
 
 (check-equal?
+ (proves '(a c (-> a (-> c b)) d) 'b)
+ (proof:weaken '(d)
+               (proof:implies (proof:implies (proof:assume '(-> a (-> c b)))
+                                             (proof:assume 'a))
+                              (proof:assume 'c))))
+
+(check-equal?
  (proves '((-> a a)) 'a)
  #f)
+
+(proves '((-> part112 radio) part112 (-> radio car)) 'car)

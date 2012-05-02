@@ -46,8 +46,3 @@ Inductive Proves : Gamma -> prop -> Prop :=
    Proves g' pa ->
    Proves (gamma_union g g') pb.
 Hint Constructors Proves.
-
-Hypothesis a : atom.
-Check (P_Assume (Atom a)) 
-      : (Proves (gamma_single (Atom a)) (Atom a)).
-
