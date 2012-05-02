@@ -4,6 +4,23 @@
 (struct proof () #:transparent)
 (struct proof:assume proof (p) #:transparent)
 (struct proof:implies proof (a->p a) #:transparent)
+(struct proof:weaken proof (more p) #:transparent)
+
+(define prop-atoms
+  (match-lambda
+   [(? symbol? a)
+    (list a)]
+   [(list '-> lhs rhs)
+    (append (prop-atoms lhs) (prop-atoms rhs))]))
+
+(define proof-atoms
+  (match-lambda
+   [(proof:assume p)
+    (prop-atoms p)]
+   [(proof:implies lhs rhs)
+    (append (proof-atoms lhs) (proof-atoms rhs))]
+   [(proof:weaken ps p)
+    (append (append-map prop-atoms ps) (proof-atoms p))]))
 
 (define (every-split l sk fk f)
   (let/cc esc
@@ -60,13 +77,121 @@
        [#f
         (fk)]))))
 
-(define (proves env p)
+(define (unverified-proves env p)
   (let/cc return
     (prove env p
            (λ (proof new-env fk)
-             (return proof))
+             (return
+              (if (empty? new-env)
+                proof
+                (proof:weaken new-env proof))))
            (λ ()
              (return #f)))))
+
+(require racket/runtime-path
+         racket/pretty
+         unstable/pretty)
+(define-runtime-path coq-dir ".")
+(define (verified-proves env the-prop)
+  (match (unverified-proves env the-prop)
+    [#f #f]
+    [p
+
+     (define v-pth (build-path coq-dir "LinearProof.v"))
+     (define glob-pth (build-path coq-dir "LinearProof.glob"))
+     (with-output-to-file v-pth
+       #:exists 'replace
+       (λ ()
+         (printf "Require Import \"Linear\".\n")
+         (printf "\n")
+
+         ;; Atoms are hypotheses
+         (for ([a (in-list (remove-duplicates (proof-atoms p)))])
+           (printf "Hypothesis ~a : atom.\n"
+                   a))
+         (printf "\n")
+
+         ;; Render each proof term
+         (define proof-gamma
+           (match-lambda
+            [(proof:assume p)
+             (list 'gamma_single
+                   (print-prop p))]
+            [(proof:weaken more p)
+             (list 'gamma_union
+                   (print-prop-list more)
+                   (proof-gamma p))]
+            [(proof:implies lhs rhs)
+             (list 'gamma_union
+                   (proof-gamma lhs)
+                   (proof-gamma rhs))]))
+         (define proof-prop
+           (match-lambda
+            [(proof:assume p)
+             p]
+            [(proof:weaken more p)
+             (proof-prop p)]
+            [(proof:implies a->p a)
+             (third (proof-prop a->p))]))
+         (define print-prop
+           (match-lambda
+            [(? symbol? a)
+             (list 'Atom a)]
+            [(list '-> lhs rhs)
+             (list 'Implies
+                   (print-prop lhs)
+                   (print-prop rhs))]))
+         (define print-prop-list
+           (match-lambda
+            [(list)
+             'nil]
+            [(cons car cdr)
+             (list (print-prop car) ':: (print-prop-list cdr))]))
+         (define print-proof
+           (match-lambda
+            [(proof:assume p)
+             (list 'P_Assume (print-prop p))]
+            [(proof:implies a->p a)
+             (list 'P_Implies_Elim
+                   (proof-gamma a->p)
+                   (proof-gamma a)
+                   (print-prop (proof-prop a))
+                   (print-prop (third (proof-prop a->p)))
+                   (print-proof a->p)
+                   (print-proof a))]
+            [(proof:weaken more p)
+             (list 'P_Weak
+                   (print-prop-list more)
+                   (proof-gamma p)
+                   (print-prop (proof-prop p))
+                   (print-proof p))]))
+
+         (printf "Check\n")
+         (pretty-display
+          (list (print-proof p)
+                ':
+                (if #f
+                  (list 'Proves
+                        (print-prop-list env)
+                        (print-prop the-prop))
+                  (list 'Proves
+                        (proof-gamma p)
+                        (print-prop (proof-prop p))))))
+         (printf ".\n")))
+
+     (define okay?
+       (system* (find-executable-path "coqc")
+                "-opt"
+                v-pth))
+
+     #;(delete-file v-pth)
+     #;(delete-file glob-pth)
+
+     (if okay?
+       p
+       (error 'verified-proves "Coq failed to check proof."))]))
+
+(define proves verified-proves)
 
 (check-equal?
  (proves '(a) 'a)
@@ -74,11 +199,13 @@
 
 (check-equal?
  (proves '(b a) 'a)
- (proof:assume 'a))
+ (proof:weaken '(b)
+               (proof:assume 'a)))
 
 (check-equal?
  (proves '(a b) 'a)
- (proof:assume 'a))
+ (proof:weaken '(b)
+               (proof:assume 'a)))
 
 (check-equal?
  (proves '(b) 'a)
