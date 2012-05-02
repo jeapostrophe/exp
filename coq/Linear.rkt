@@ -11,40 +11,61 @@
       (define-values (before after) (split-at l i))
       (define hd (first after))
       (define tl (append before (rest after)))
-      
+
       (let/cc next
         (f hd tl (λ (p e fk) (esc (sk p e fk))) next)))
 
     (fk)))
 
+(define (subgoals-to-p a p)
+  (match a
+    [(== p)
+     empty]
+    [(list '-> lhs rhs)
+     (define inner (subgoals-to-p rhs p))
+     (and inner
+          (list* lhs inner))]
+    [_
+     #f]))
+
+(check-equal?
+ (subgoals-to-p 'a 'a)
+ '())
+(check-equal?
+ (subgoals-to-p '(-> b a) 'a)
+ '(b))
+(check-equal?
+ (subgoals-to-p '(-> c (-> b a)) 'a)
+ '(c b))
+
 (define (prove env p sk fk)
   (every-split
-   env
-   sk fk
+   env sk fk
    (λ (hd tl sk fk)
-     (match hd
-       [(== p)
+     (match (subgoals-to-p hd p)
+       [(list)
         (sk (proof:assume p) tl fk)]
-       [(list '-> a (== p))
-        (prove tl a
-               (λ (proof-of-a new-tl fk)
-                 (sk (proof:implies
-                      (proof:assume hd)
-                      proof-of-a)
-                     new-tl
-                     fk))
+       [(? list? subgoals)
+        (define x (last subgoals))
+        (prove (list* hd tl) (list '-> x p)
+               (λ (proof-of-x->p new-tl x->p-fk)
+                 (prove new-tl x
+                        (λ (proof-of-x final-tl x-fk)
+                          (sk (proof:implies proof-of-x->p
+                                             proof-of-x)
+                              final-tl
+                              x-fk))
+                        x->p-fk))
                fk)]
-       ;; May have (a -> (b -> p))
-       [_
-        (fk)]
-       ))))
+       [#f
+        (fk)]))))
 
 (define (proves env p)
   (let/cc return
     (prove env p
            (λ (proof new-env fk)
              (return proof))
-           (λ () 
+           (λ ()
              (return #f)))))
 
 (check-equal?
@@ -84,3 +105,7 @@
  (proof:implies (proof:implies (proof:assume '(-> a (-> c b)))
                                (proof:assume 'a))
                 (proof:assume 'c)))
+
+(check-equal?
+ (proves '((-> a a)) 'a)
+ #f)
