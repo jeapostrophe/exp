@@ -1,0 +1,32 @@
+FLinearProof
+var 37 <> b
+R41 Linear <> atom defax
+var 58 <> a
+R62 Linear <> atom defax
+R169 Linear <> Proves ind
+R209 Linear <> Atom constr
+R214 LinearProof <> a prfax
+R177:177 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R184:189 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R205:205 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R178 Linear <> Atom constr
+R183 LinearProof <> a prfax
+R190:190 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R197:201 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R191 Linear <> Atom constr
+R196 LinearProof <> b prfax
+R202 Coq.Init.Datatypes <> nil constr
+R77 Linear <> P_Weak constr
+R144 Linear <> P_Assume constr
+R154 Linear <> Atom constr
+R159 LinearProof <> a prfax
+R133 Linear <> Atom constr
+R138 LinearProof <> a prfax
+R107 Linear <> gamma_single def
+R121 Linear <> Atom constr
+R126 LinearProof <> a prfax
+R87:87 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R94:98 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R88 Linear <> Atom constr
+R93 LinearProof <> b prfax
+R99 Coq.Init.Datatypes <> nil constr

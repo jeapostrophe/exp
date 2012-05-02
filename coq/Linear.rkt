@@ -83,8 +83,8 @@
            (λ (proof new-env fk)
              (return
               (if (empty? new-env)
-                proof
-                (proof:weaken new-env proof))))
+                 proof
+                 (proof:weaken new-env proof))))
            (λ ()
              (return #f)))))
 
@@ -170,7 +170,7 @@
          (pretty-display
           (list (print-proof p)
                 ':
-                (if #f
+                (if #t
                   (list 'Proves
                         (print-prop-list env)
                         (print-prop the-prop))
