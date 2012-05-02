@@ -1,4 +1,4 @@
-Require Import List.
+Require Import List Permutation.
 Local Open Scope list_scope.
 
 Variable atom : Set.
@@ -23,80 +23,87 @@ Definition Gamma := list prop.
 Definition empty_gamma : Gamma := nil.
 Definition gamma_add (x:prop) (g:Gamma) := x :: g.
 Definition gamma_union (g g':Gamma) := g ++ g'.
-Hint Unfold empty_gamma gamma_add gamma_union.
+Definition gamma_single (x:prop) := gamma_add x empty_gamma.
+Hint Unfold empty_gamma gamma_add gamma_union gamma_single.
 
-Inductive Proves : Gamma -> prop -> Gamma -> Prop :=
+Inductive Proves : Gamma -> prop -> Prop :=
+| P_Weak :
+  forall (g:Gamma) (a b:prop),
+   Proves g b ->
+   Proves (gamma_add a g) b
+| P_Exchange :
+  forall (g g':Gamma) (a:prop),
+   Permutation g g' ->
+   Proves g a ->
+   Proves g' a
+
 | P_Atom_Intro :
-  forall (g:Gamma) (p:prop),
-   Proves (gamma_add p g) p g
+  forall (p:prop),
+   Proves (gamma_single p) p
 
 | P_Or_Intro_Left :
-  forall (g d:Gamma) (pa pb:prop),
-   Proves (gamma_union g d) pa d ->
-   Proves (gamma_union g d) (Or pa pb) d
+  forall (g:Gamma) (pa pb:prop),
+   Proves g pa ->
+   Proves g (Or pa pb)
 | P_Or_Intro_Right :
-  forall (g d:Gamma) (pa pb:prop),
-   Proves (gamma_union g d) pb d ->
-   Proves (gamma_union g d) (Or pa pb) d
+  forall (g:Gamma) (pa pb:prop),
+   Proves g pb ->
+   Proves g (Or pa pb)
 | P_Or_Elim :
   forall (g g' g'':Gamma) (pa pb pc:prop),
-   Proves (gamma_union g (gamma_union g' g'')) (Or pa pb) (gamma_union g' g'') ->
-   Proves (gamma_add pa (gamma_union g' g'')) pc g'' ->
-   Proves (gamma_add pb (gamma_union g' g'')) pc g'' ->
-   Proves (gamma_union g (gamma_union g' g'')) pc g''
+   Proves g (Or pa pb) ->
+   Proves (gamma_add pa g') pc ->
+   Proves (gamma_add pb g'') pc ->
+   Proves (gamma_union g (gamma_union g' g'')) pc
 
 | P_And_Intro :
-  forall (g g' g'':Gamma) (pa pb:prop),
-   Proves (gamma_union g (gamma_union g' g'')) pa (gamma_union g' g'') ->
-   Proves (gamma_union g' g'') pb g'' ->
-   Proves (gamma_union g (gamma_union g' g'')) (And pa pb) g''
+  forall (g g':Gamma) (pa pb:prop),
+   Proves g pa ->
+   Proves g' pb ->
+   Proves (gamma_union g g') (And pa pb)
 | P_And_Elim :
   forall (g g' g'':Gamma) (pa pb pc:prop),
-   Proves (gamma_union g (gamma_union g' g'')) (And pa pb) (gamma_union g' g'') ->
-   Proves (gamma_add pa (gamma_add pb (gamma_union g' g''))) pc g'' ->
-   Proves (gamma_union g (gamma_union g' g'')) pc g''
+   Proves g (And pa pb) ->
+   Proves (gamma_add pa (gamma_add pb g')) pc ->
+   Proves (gamma_union g g') pc
 
 | P_Implies_Intro :
-  forall (g g':Gamma) (pa pb:prop),
-   Proves (gamma_add pa (gamma_union g g')) pb g' ->
-   Proves (gamma_union g g') (Implies pa pb) g'
+  forall (g:Gamma) (pa pb:prop),
+   Proves (gamma_add pa g) pb ->
+   Proves g (Implies pa pb)
 | P_Implies_Elim :
-  forall (g g' g'':Gamma) (pa pb:prop),
-   Proves (gamma_union g (gamma_union g' g'')) (Implies pa pb) (gamma_union g' g'') ->
-   Proves (gamma_union g' g'') pa g'' ->
-   Proves (gamma_union g (gamma_union g' g'')) pb g''.
+  forall (g g':Gamma) (pa pb:prop),
+   Proves g (Implies pa pb) ->
+   Proves g' pa ->
+   Proves (gamma_union g g') pb.
 Hint Constructors Proves.
 
 Lemma Proves_nil :
- forall (p:prop) (g':Gamma),
-  ~ Proves empty_gamma p g'.
+ forall (p:prop),
+  ~ Proves empty_gamma p.
 Proof.
+ intros p P. induction P; eauto.
+
+
 Admitted.
 Hint Resolve Proves_nil.
 
-Lemma Proves_weaken:
- forall (g g' d:Gamma) (p:prop),
-  Proves g p g' ->
-  Proves (gamma_union d g) p (gamma_union d g').
+Lemma Proves_Weak_app :
+ forall (gb g ga:Gamma) (p:prop),
+  Proves g p ->
+  Proves (gb ++ g ++ ga) p.
 Proof.
 Admitted.
-Hint Resolve Proves_weaken.
-
-Lemma Proves_weaken_add:
- forall (g g':Gamma) (p d:prop),
-  Proves g p g' ->
-  Proves (gamma_add d g) p (gamma_add d g').
-Proof.
- intros g g' p d P.
- generalize (Proves_weaken g g' (gamma_add d empty_gamma) p P).
- eauto.
-Qed.
-Hint Resolve Proves_weaken_add.
+Hint Resolve Proves_Weak_app.
 
 Theorem Proves_dec:
  forall (g:Gamma) (p:prop),
-  { g' : Gamma | Proves g p g' } + { forall (g':Gamma), ~ Proves g p g' }.
+  { Proves g p } + { ~ Proves g p }.
 Proof.
+ intros g p. generalize g. induction p; eauto.
+
+
+
  (* We go by induction on the size of the assumption environment. *)
  induction g as [ | gp g ]; intros p.
 
@@ -104,29 +111,52 @@ Proof.
  right. eauto.
 
  (* Next, we see if the smaller env can prove the prop. *)
- case (IHg p) as [ [g' P] | NP ].
+ case (IHg p) as [ P | NP ].
 
  (* If it can, then the proof is easy. *)
- left. exists (gamma_add gp g'). eapply Proves_weaken_add. auto.
+ left. eapply P_Weak. eauto.
 
  (* Given that it can't that means that 'gp' is so how essential in the proof. *)
 
  (* Is it trivially essential? *)
  case (prop_eq_dec gp p) as [ EQ | NEQ ]. subst.
- left. exists g. eapply P_Atom_Intro.
+ left. eapply (Proves_Weak_app nil (p::nil) g).
+ eapply P_Atom_Intro.
 
  (* Now we know it is essential (or the prop is false) but we're not sure how. *)
  
  (* We'll do induction on p because then we'll know to use the introduction forms. *)
- case p.
+ induction p.
 
  Focus 2. (* The or case *)
- intros p0 p1. case (IHg p1) as [ [g' P1] | NP1 ].
- left. exists (gamma_add gp (gamma_union empty_gamma g')).
- eapply Proves_weaken_add.
- assert (g = (gamma_union empty_gamma g)) as EQ. auto.
- rewrite EQ. 
+ case (IHg p1) as [ P1 | NP1 ].
+ left.
+ eapply P_Weak. eapply P_Or_Intro_Left. auto.
+ case (IHg p2) as [ P2 | NP2 ].
+ left.
+ eapply P_Weak. eapply P_Or_Intro_Right. auto.
+ case (prop_eq_dec gp p1) as [EQ1 | NEQ1].
+ left. eapply P_Or_Intro_Left.
+ eapply (Proves_Weak_app nil (gp::nil) g).
+ rewrite EQ1. eapply P_Atom_Intro.
+ case (prop_eq_dec gp p2) as [EQ2 | NEQ2].
+ left. eapply P_Or_Intro_Right.
+ eapply (Proves_Weak_app nil (gp::nil) g).
+ rewrite EQ2. eapply P_Atom_Intro.
+ case (IHp1 NP1 NEQ1) as [IP1 | INP1].
+ eauto.
+ case (IHp2 NP2 NEQ2) as [IP2 | INP2].
+ eauto.
+ clear IHp1 IHp2.
+ right. intros P. 
 
+ inversion P; eauto.
+
+ Focus 2.
+
+ clear H1 H2 g' a. rename g0 into g'.
+ generalize (P_Exchange g' (gp::g) (Or p1 p2) H H0).
+ 
  (* XXX We are primarily stuck because there's no relation between g and g' *)
 
 eapply P_Or_Intro_Left.
