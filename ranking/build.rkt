@@ -248,9 +248,11 @@
 (define (perform-ranking kind games)
   (define key (format "Sort~a" kind))
   (define (game-completed? n)
-    (regexp-match #rx"^Done"
-                  (or (hash-ref (node-props n) "Status" #f)
-                      "Queue")))
+    ;; If it is already ranked or if it has a Done status.
+    (or (hash-ref (node-props n) key)
+        (regexp-match #rx"^Done"
+                      (or (hash-ref (node-props n) "Status" #f)
+                          "Queue"))))
   (define (sortable l)
     (for/list ([n (in-list l)])
       (node (format "~a (~a, ~a)"
