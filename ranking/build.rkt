@@ -249,7 +249,7 @@
   (define key (format "Sort~a" kind))
   (define (game-completed? n)
     ;; If it is already ranked or if it has a Done status.
-    (or (hash-ref (node-props n) key)
+    (or (hash-ref (node-props n) key #f)
         (regexp-match #rx"^Done"
                       (or (hash-ref (node-props n) "Status" #f)
                           "Queue"))))
