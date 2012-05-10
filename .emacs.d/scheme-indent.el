@@ -77,6 +77,9 @@
 
 (put 'module+ 'scheme-indent-function 1)
 
+(put 'class 'scheme-indent-function 1)
+(put 'class* 'scheme-indent-function 2)
+
 (put 'syntax 'scheme-indent-function 0)
 (put 'quasisyntax 'scheme-indent-function 0)
 (put 'syntax/loc 'scheme-indent-function 1)
