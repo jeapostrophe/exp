@@ -398,6 +398,7 @@ given a prefix arg."
     (setq suffixMap
           '(("java" . "javai")
             ("c" . "cci")
+            ("sh" . "zsh")
             ("py" . "python")
             ("cc" . "ccci")
             ("rkt" . "rk")
