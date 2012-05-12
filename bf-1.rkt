@@ -39,3 +39,17 @@
            (λ () (parse '(lbr > >))))
 (check-equal? (parse '(> lbr > > rbr >))
               '(> (> >) >))
+
+;; Plus, a puzzle...
+(define (A i)
+  (cond
+    [(zero? i)
+     empty]
+    [else
+     (define-values (j pipe-in) (pipe (B i)))
+     (define j-p (pipe-in (sub1 i)))
+     (list* j j-p)]))
+(define (B i)
+  (A (pipe-out (sub1 i))))
+;; Can you predict what this expression evaluates to?
+(A 10)
