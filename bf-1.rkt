@@ -5,16 +5,22 @@
 (struct control program (inner rest) #:transparent)
 (struct halt program () #:transparent)
 
-(define more-box (make-parameter #f))
+(define lbr-tag (make-continuation-prompt-tag 'lbr))
 (define (return-to-lbr i l)
-  (set-box! (more-box) l)
+  (call-with-composable-continuation
+   (λ (come-back)
+     (abort-current-continuation lbr-tag l come-back))
+   lbr-tag)
   i)
 (define (wait-for-rbr l)
-  (define this-more-box (box #f))
-  (define i 
-    (parameterize ([more-box this-more-box])
-      (parse l)))
-  (values i (unbox this-more-box)))
+  (let/ec esc
+    (call-with-continuation-prompt
+     (λ ()
+       (parse l))
+     lbr-tag
+     (λ (l come-back)
+       (esc (come-back) l)))
+    (error 'parse "lbr did not have closing rbr")))
 
 (define parse
   (match-lambda
@@ -41,6 +47,8 @@
 (check-equal? (parse '(lbr > > rbr)) 
               (control (instruction '> (instruction '> (halt)))
                        (halt)))
+(check-exn exn:fail?
+           (λ () (parse '(lbr > >))))
 (check-equal? (parse '(> lbr > > rbr >)) 
               (instruction '>
                            (control (instruction '> (instruction '> (halt)))
