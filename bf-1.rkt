@@ -41,6 +41,6 @@
      empty]
     [else
      (define-values (j pipe-in) (pipe (A (pipe-out (sub1 i)))))
-     (list* j (pipe-in (sub1 i)))]))
+     (list* j (pipe-in (sub1 j)))]))
 ;; Can you predict what this expression evaluates to?
 (A 10)
