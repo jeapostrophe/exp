@@ -1,5 +1,7 @@
 #lang racket
 
+;; In response to: http://stackoverflow.com/questions/10560124
+
 (define lbr-tag (make-continuation-prompt-tag 'lbr))
 (define (return-to-lbr i l)
   (call-with-composable-continuation
