@@ -24,8 +24,7 @@
     (list)]
    [(list* 'lbr more)
     (define-values (more-p pipe-in) (pipe (parse more)))
-    (define inner (pipe-in))
-    (list* inner (parse more-p))]
+    (list* (pipe-in) (parse more-p))]
    [(list* i more)
     (list* i (parse more))]))
 
@@ -47,8 +46,7 @@
      empty]
     [else
      (define-values (j pipe-in) (pipe (B i)))
-     (define j-p (pipe-in (sub1 i)))
-     (list* j j-p)]))
+     (list* j (pipe-in (sub1 i)))]))
 (define (B i)
   (A (pipe-out (sub1 i))))
 ;; Can you predict what this expression evaluates to?
