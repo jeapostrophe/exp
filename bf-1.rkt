@@ -1,10 +1,5 @@
 #lang racket
 
-(struct program () #:transparent)
-(struct instruction program (which rest) #:transparent)
-(struct control program (inner rest) #:transparent)
-(struct halt program () #:transparent)
-
 (define lbr-tag (make-continuation-prompt-tag 'lbr))
 (define (return-to-lbr i l)
   (call-with-composable-continuation
@@ -25,31 +20,24 @@
 (define parse
   (match-lambda
    [(list)
-    (halt)]
-   [(list* '> more)
-    (instruction '> (parse more))]
+    (list)]
    [(list* 'rbr more)
     (return-to-lbr
-     (halt)
+     (list)
      more)]
    [(list* 'lbr more)
     (define-values (inner more-p) (wait-for-rbr more))
-    (control inner (parse more-p))]))
+    (list* inner (parse more-p))]
+   [(list* i more)
+    (list* i (parse more))]))
 
 (require rackunit)
 
-(check-equal? (parse '()) 
-              (halt))
-(check-equal? (parse '(>)) 
-              (instruction '> (halt)))
-(check-equal? (parse '(> >)) 
-              (instruction '> (instruction '> (halt))))
-(check-equal? (parse '(lbr > > rbr)) 
-              (control (instruction '> (instruction '> (halt)))
-                       (halt)))
+(check-equal? (parse '())  '())
+(check-equal? (parse '(>)) '(>))
+(check-equal? (parse '(> >)) '(> >))
+(check-equal? (parse '(lbr > > rbr)) '((> >)))
 (check-exn exn:fail?
            (λ () (parse '(lbr > >))))
-(check-equal? (parse '(> lbr > > rbr >)) 
-              (instruction '>
-                           (control (instruction '> (instruction '> (halt)))
-                                    (instruction '> (halt)))))
+(check-equal? (parse '(> lbr > > rbr >))
+              '(> (> >) >))
