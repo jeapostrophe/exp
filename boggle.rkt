@@ -6,19 +6,21 @@
 (define empty-entry (cons #f empty-dict))
 (define (dict-add d w)
   (if (empty? w)
-    empty-dict
+    d
     (hash-update d (first w)
                  (match-lambda
                   [(cons word? rest-d)
                    (cons (or word? (empty? (rest w)))
                          (dict-add rest-d (rest w)))])
                  empty-entry)))
+(define (dict-add* d s)
+  (dict-add d (string->list s)))
 
 (define dict-pth "/usr/share/dict/words")
 (define the-dictionary
   (for/fold ([d empty-dict])
       ([w (in-lines (open-input-file dict-pth))])
-    (dict-add d (string->list w))))
+    (dict-add* d w)))
 
 (define board-n 4)
 (define letters
@@ -38,23 +40,24 @@
   (printf "\n"))
 (printf "\n")
 
-(define (solutions-from board dict k prefix)
+(define (solutions-from board dict k path)
   (define c (hash-ref board k #f))
   (when c
-    (match-define (cons word? next-dict)
+    (match-define (cons word? new-dict)
                   (hash-ref dict c empty-entry))
-    (define next-prefix (cons c prefix))
+    (define new-path (cons c path))
     (when word?
-      (displayln (list->string (reverse next-prefix))))
-    (unless (zero? (hash-count next-dict))
-      (define next-board (hash-remove board k))
+      (void (list->string (reverse new-path))))
+    (unless (zero? (hash-count new-dict))
+      (define new-board (hash-remove board k))
       (match-define (cons row col) k)
       (for* ([drow (in-list '(-1 0 1))]
              [dcol (in-list '(-1 0 1))])
-        (solutions-from next-board next-dict
+        (solutions-from new-board new-dict
                         (cons (+ row drow)
                               (+ col dcol))
-                        next-prefix)))))
+                        new-path)))))
 
-(for ([k (in-hash-keys board)])
-  (solutions-from board the-dictionary k empty))
+(time
+ (for ([k (in-hash-keys board)])
+   (solutions-from board the-dictionary k empty)))
