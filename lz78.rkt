@@ -50,23 +50,40 @@
        (output-from-dict ref)
        next])))
 
-;; XXX only works when dictionary is less than 255
 (define (encode str)
-  (for ([p (in-stream str)])
+  (for ([p (in-stream str)]
+        [refs (in-naturals 0)])
+    (define (write-ref ref)
+      (cond
+        [(<= refs (sub1 (expt 2 8)))
+         (write-byte ref)]
+        [(<= refs (sub1 (expt 2 16)))
+         (write-bytes (integer->integer-bytes ref 2 #f))]
+        [else
+         (error 'encode "too many refs ~e" refs)]))
     (match p
       [(cons ref b)
-       (write-byte ref)
+       (write-ref ref)
        (write-byte b)]
       [(? number? ref)
-       (write-byte ref)])))
+       (write-ref ref)])))
 
 (define (decode ip)
-  (define ref (read-byte ip))
-  (define b (read-byte ip))
-  (if (eof-object? b)
-    (stream ref)
-    (stream-cons (cons ref b)
-                 (decode ip))))
+  (let loop ([refs 0])
+    (define (read-ref ref)
+      (cond
+        [(<= refs (sub1 (expt 2 8)))
+         (read-byte ip)]
+        [(<= refs (sub1 (expt 2 16)))
+         (integer-bytes->integer (read-bytes 2 ip) #f)]
+        [else
+         (error 'decode "too many refs ~e" refs)]))
+    (define ref (read-ref ip))
+    (define b (read-byte ip))
+    (if (eof-object? b)
+      (stream ref)
+      (stream-cons (cons ref b)
+                   (loop (add1 refs))))))
 
 (require rackunit)
 (define input #"AABABBBABAABABBBABBABB")
@@ -94,9 +111,17 @@
               (stream->list compressed))
 
 (define (compresses? input)
-  (check <=
-         (bytes-length (with-output-to-bytes (λ () (encode (compress (open-input-bytes input))))))
-         (bytes-length input)))
+  (define compressed (compress (open-input-bytes input)))
+  (define encoded (with-output-to-bytes (λ () (encode compressed))))
+  (define decoded (decode (open-input-bytes encoded)))
+  (define output (with-output-to-bytes (λ () (decompress compressed))))
+  (define encoded-l (bytes-length encoded))
+  (define input-l (bytes-length input))
+  (check <= encoded-l input-l)
+  (check-equal? (stream->list decoded)
+                (stream->list compressed))
+  (check-equal? output input)
+  (exact->inexact (- 1 (/ encoded-l input-l))))
 
 (require racket/file)
 (compresses? (file->bytes "lz78.rkt"))
