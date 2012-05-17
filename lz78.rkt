@@ -97,3 +97,6 @@
   (check <=
          (bytes-length (with-output-to-bytes (λ () (encode (compress (open-input-bytes input))))))
          (bytes-length input)))
+
+(require racket/file)
+(compresses? (file->bytes "lz78.rkt"))
