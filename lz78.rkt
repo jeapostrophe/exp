@@ -26,12 +26,47 @@
     (define W (search-for-shortest next))
     (match W
       [(cons ref 0)
-       (stream W)]
+       (list ref)]
       [(cons ref c)
        (stream-cons W (outer-loop (add1 next)))])))
 
-(define (decompress seq)
-  (void))
+(define (decompress str)
+  (define dict (make-hasheq))
+  (define (output-from-dict this)
+    (match (hash-ref dict this #f)
+      [#f
+       (void)]
+      [(cons last this-b)
+       (output-from-dict last)
+       (write-byte this-b)]))
+  (for/fold ([next 1])
+      ([p (in-stream str)])
+    (match p
+      [(cons ref b)
+       (hash-set! dict next p)
+       (output-from-dict next)
+       (add1 next)]
+      [(? number? ref)
+       (output-from-dict ref)
+       next])))
+
+;; XXX only works when dictionary is less than 255
+(define (encode str)
+  (for ([p (in-stream str)])
+    (match p
+      [(cons ref b)
+       (write-byte ref)
+       (write-byte b)]
+      [(? number? ref)
+       (write-byte ref)])))
+
+(define (decode ip)
+  (define ref (read-byte ip))
+  (define b (read-byte ip))
+  (if (eof-object? b)
+    (stream ref)
+    (stream-cons (cons ref b)
+                 (decode ip))))
 
 (require rackunit)
 (define input #"AABABBBABAABABBBABBABB")
@@ -47,6 +82,18 @@
                     (cons 5 B)
                     (cons 4 B)
                     (cons 3 A)
-                    (cons 7 0)))
+                    7))
 (define output (with-output-to-bytes (λ () (decompress compressed))))
 (check-equal? output input)
+(define encoded (with-output-to-bytes (λ () (encode compressed))))
+(check-equal? encoded
+              (bytes 0 A 1 B 2 B 0 B 2 A 5 B 4 B 3 A 7))
+(check <= (bytes-length encoded) (bytes-length input))
+(define decoded (decode (open-input-bytes encoded)))
+(check-equal? (stream->list decoded)
+              (stream->list compressed))
+
+(define (compresses? input)
+  (check <=
+         (bytes-length (with-output-to-bytes (λ () (encode (compress (open-input-bytes input))))))
+         (bytes-length input)))
