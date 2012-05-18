@@ -14,7 +14,7 @@
       (define b (read-byte ip))
       (cond
         [(eof-object? b)
-         (cons last 0)]
+         last]
         [(hash-ref dict b #f)
          =>
          (λ (next)
@@ -25,8 +25,8 @@
   (let outer-loop ([next 1])
     (define W (search-for-shortest next))
     (match W
-      [(cons ref 0)
-       (list ref)]
+      [(? number? ref)
+       (stream ref)]
       [(cons ref c)
        (stream-cons W (outer-loop (add1 next)))])))
 
@@ -55,10 +55,14 @@
         [refs (in-naturals 0)])
     (define (write-ref ref)
       (cond
-        [(<= refs (sub1 (expt 2 8)))
+        [(<= refs (sub1 (expt 2 (* 8 1))))
          (write-byte ref)]
-        [(<= refs (sub1 (expt 2 16)))
+        [(<= refs (sub1 (expt 2 (* 8 2))))
          (write-bytes (integer->integer-bytes ref 2 #f))]
+        [(<= refs (sub1 (expt 2 (* 8 4))))
+         (write-bytes (integer->integer-bytes ref 4 #f))]
+        [(<= refs (sub1 (expt 2 (* 8 8))))
+         (write-bytes (integer->integer-bytes ref 8 #f))]
         [else
          (error 'encode "too many refs ~e" refs)]))
     (match p
@@ -72,10 +76,14 @@
   (let loop ([refs 0])
     (define (read-ref ref)
       (cond
-        [(<= refs (sub1 (expt 2 8)))
+        [(<= refs (sub1 (expt 2 (* 8 1))))
          (read-byte ip)]
-        [(<= refs (sub1 (expt 2 16)))
+        [(<= refs (sub1 (expt 2 (* 8 2))))
          (integer-bytes->integer (read-bytes 2 ip) #f)]
+        [(<= refs (sub1 (expt 2 (* 8 4))))
+         (integer-bytes->integer (read-bytes 4 ip) #f)]
+        [(<= refs (sub1 (expt 2 (* 8 8))))
+         (integer-bytes->integer (read-bytes 8 ip) #f)]
         [else
          (error 'decode "too many refs ~e" refs)]))
     (define ref (read-ref ip))
@@ -105,10 +113,14 @@
 (define encoded (with-output-to-bytes (λ () (encode compressed))))
 (check-equal? encoded
               (bytes 0 A 1 B 2 B 0 B 2 A 5 B 4 B 3 A 7))
-(check <= (bytes-length encoded) (bytes-length input))
+(define encoded-l (bytes-length encoded))
+(define input-l (bytes-length input))
+(check <= encoded-l input-l)
 (define decoded (decode (open-input-bytes encoded)))
 (check-equal? (stream->list decoded)
               (stream->list compressed))
+(list encoded-l input-l
+      (exact->inexact (- 1 (/ encoded-l input-l))))
 
 (define (compresses? input)
   (define compressed (compress (open-input-bytes input)))
@@ -120,8 +132,12 @@
   (check <= encoded-l input-l)
   (check-equal? (stream->list decoded)
                 (stream->list compressed))
-  (check-equal? output input)
-  (exact->inexact (- 1 (/ encoded-l input-l))))
+  (check-true (equal? output input))
+  (list encoded-l input-l
+        (exact->inexact (- 1 (/ encoded-l input-l)))))
 
 (require racket/file)
 (compresses? (file->bytes "lz78.rkt"))
+
+;; XXX This example uses too much memory
+(time (compresses? (file->bytes "/home/jay/Dev/scm/plt/bin/racket")))
