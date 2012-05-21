@@ -139,5 +139,7 @@
 (require racket/file)
 (compresses? (file->bytes "lz78.rkt"))
 
-;; XXX This example uses too much memory
+;; XXX This example uses too much memory. Maybe if I streamed the
+;; compressed output better and didn't need to create the whole thing
+;; ever.
 (time (compresses? (file->bytes "/home/jay/Dev/scm/plt/bin/racket")))
