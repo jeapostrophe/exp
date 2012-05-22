@@ -908,7 +908,7 @@ given a prefix arg."
 (add-to-list 'load-path "~/Dev/dist/autopair-read-only")
 (require 'autopair)
 
-(add-hook 'scheme-mode-hook #'(lambda () (autopair-mode)))
+(add-hook 'scheme-mode-hook #'(lambda () (autopair-mode t) (flymake-mode t)))
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode)))
 
 ;; CUA
@@ -1032,6 +1032,18 @@ given a prefix arg."
       (function (lambda () 
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
+
+(require 'flymake)
+(require 'flymake-cursor)
+(defun flymake-racket-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "racket" (list "-qf" local-file))))
+(push '("\\.rkt\\'" flymake-racket-init)
+      flymake-allowed-file-name-masks)
 
 ;; customs
 

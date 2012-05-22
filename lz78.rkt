@@ -50,7 +50,8 @@
        (add1 next)]
       [(? number? ref)
        (output-from-dict ref)
-       next])))
+       next]))
+  (pretty-print dict (current-error-port)))
 
 (define one-max (sub1 (expt 2 (* 8 1))))
 (define two-max (sub1 (expt 2 (* 8 2))))
