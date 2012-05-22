@@ -370,7 +370,9 @@ given a prefix arg."
            ("^~home/etc" . "~etc")
            ("^~home/finance" . "~fin")
            ("^~home/journal" . "~j")
-           ("^~github/get-bonus" . "~gb"))))
+           ("^~github/get-bonus" . "~gb")
+           ("^~scm/blogs" . "~blogs")
+           ("^~blogs/jeapostrophe.github.com/source/downloads/code" . "~je-blog"))))
     (abbreviate-file-name name)))
 
 (define-ibuffer-column je/name ()

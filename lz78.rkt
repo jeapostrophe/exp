@@ -1,5 +1,6 @@
 #lang racket/base
 (require racket/list
+         racket/pretty
          racket/match
          racket/stream
          racket/port)
@@ -7,14 +8,15 @@
 ;; Based on the example at the top of
 ;; https://en.wikipedia.org/wiki/LZ77 on 2012/05/17
 (define (compress ip)
-  (define dict (make-hasheq))
+  (define top-dict (make-hasheq))
   (define (search-for-shortest this)
-    (let loop ([dict dict]
+    (let loop ([dict top-dict]
                [last 0])
       (define b (read-byte ip))
       (cond
         [(eof-object? b)
-         last]
+         (begin0 last
+                 (pretty-print top-dict))]
         [(hash-ref dict b #f)
          =>
          (λ (next)
@@ -50,21 +52,31 @@
        (output-from-dict ref)
        next])))
 
+(define one-max (sub1 (expt 2 (* 8 1))))
+(define two-max (sub1 (expt 2 (* 8 2))))
+(define four-max (sub1 (expt 2 (* 8 4))))
+(define eight-max (sub1 (expt 2 (* 8 8))))
+(define (refs->len refs)
+  (cond
+    [(<= refs two-max) 2]
+    [(<= refs four-max) 4]
+    [(<= refs eight-max) 8]
+    [else
+     (error 'encode "too many refs ~e" refs)]))
+
 (define (encode str)
+  (define encode-bytes (make-bytes 8))
+  (define op (current-output-port))
   (for ([p (in-stream str)]
         [refs (in-naturals 0)])
     (define (write-ref ref)
       (cond
-        [(<= refs (sub1 (expt 2 (* 8 1))))
+        [(<= refs one-max)
          (write-byte ref)]
-        [(<= refs (sub1 (expt 2 (* 8 2))))
-         (write-bytes (integer->integer-bytes ref 2 #f))]
-        [(<= refs (sub1 (expt 2 (* 8 4))))
-         (write-bytes (integer->integer-bytes ref 4 #f))]
-        [(<= refs (sub1 (expt 2 (* 8 8))))
-         (write-bytes (integer->integer-bytes ref 8 #f))]
         [else
-         (error 'encode "too many refs ~e" refs)]))
+         (define len (refs->len refs))
+         (integer->integer-bytes ref len #f #f encode-bytes)
+         (write-bytes encode-bytes op 0 len)]))
     (match p
       [(cons ref b)
        (write-ref ref)
@@ -73,19 +85,16 @@
        (write-ref ref)])))
 
 (define (decode ip)
+  (define decode-bytes (make-bytes 8))
   (let loop ([refs 0])
     (define (read-ref ref)
       (cond
-        [(<= refs (sub1 (expt 2 (* 8 1))))
+        [(<= refs one-max)
          (read-byte ip)]
-        [(<= refs (sub1 (expt 2 (* 8 2))))
-         (integer-bytes->integer (read-bytes 2 ip) #f)]
-        [(<= refs (sub1 (expt 2 (* 8 4))))
-         (integer-bytes->integer (read-bytes 4 ip) #f)]
-        [(<= refs (sub1 (expt 2 (* 8 8))))
-         (integer-bytes->integer (read-bytes 8 ip) #f)]
         [else
-         (error 'decode "too many refs ~e" refs)]))
+         (define len (refs->len refs))
+         (read-bytes! decode-bytes ip 0 len)
+         (integer-bytes->integer decode-bytes #f #f 0 len)]))
     (define ref (read-ref ip))
     (define b (read-byte ip))
     (if (eof-object? b)
@@ -94,52 +103,63 @@
                    (loop (add1 refs))))))
 
 (require rackunit)
-(define input #"AABABBBABAABABBBABBABB")
-(define compressed (compress (open-input-bytes input)))
-(define A (char->integer #\A))
-(define B (char->integer #\B))
-(check-equal? (stream->list compressed)
-              (list (cons 0 A)
-                    (cons 1 B)
-                    (cons 2 B)
-                    (cons 0 B)
-                    (cons 2 A)
-                    (cons 5 B)
-                    (cons 4 B)
-                    (cons 3 A)
-                    7))
-(define output (with-output-to-bytes (λ () (decompress compressed))))
-(check-equal? output input)
-(define encoded (with-output-to-bytes (λ () (encode compressed))))
-(check-equal? encoded
-              (bytes 0 A 1 B 2 B 0 B 2 A 5 B 4 B 3 A 7))
-(define encoded-l (bytes-length encoded))
-(define input-l (bytes-length input))
-(check <= encoded-l input-l)
-(define decoded (decode (open-input-bytes encoded)))
-(check-equal? (stream->list decoded)
-              (stream->list compressed))
-(list encoded-l input-l
-      (exact->inexact (- 1 (/ encoded-l input-l))))
 
-(define (compresses? input)
+(define (stream-equal? s0 s1)
+  (cond
+    [(stream-empty? s0)
+     (stream-empty? s1)]
+    [(stream-empty? s1)
+     #f]
+    [else
+     (and (equal? (stream-first s0)
+                  (stream-first s1))
+          (stream-equal? (stream-rest s0)
+                         (stream-rest s1)))]))
+
+(define (compresses? input
+                     #:compressed [compressed-expected #f]
+                     #:encoded [encoded-expected #f])
   (define compressed (compress (open-input-bytes input)))
+  (when compressed-expected
+    (check-true (stream-equal? compressed
+                               compressed-expected)))
   (define encoded (with-output-to-bytes (λ () (encode compressed))))
+  (when encoded-expected
+    (check-equal? encoded encoded-expected))
   (define decoded (decode (open-input-bytes encoded)))
-  (define output (with-output-to-bytes (λ () (decompress compressed))))
+  (check-true (stream-equal? decoded
+                             compressed))
   (define encoded-l (bytes-length encoded))
   (define input-l (bytes-length input))
   (check <= encoded-l input-l)
-  (check-equal? (stream->list decoded)
-                (stream->list compressed))
+  (define output (with-output-to-bytes (λ () (decompress compressed))))
   (check-true (equal? output input))
   (list encoded-l input-l
         (exact->inexact (- 1 (/ encoded-l input-l)))))
 
 (require racket/file)
+(define A (char->integer #\A))
+(define B (char->integer #\B))
+(compresses? #"AABABBBABAABABBBABBABB"
+             #:compressed
+             (stream (cons 0 A)
+                     (cons 1 B)
+                     (cons 2 B)
+                     (cons 0 B)
+                     (cons 2 A)
+                     (cons 5 B)
+                     (cons 4 B)
+                     (cons 3 A)
+                     7)
+             #:encoded
+             (bytes 0 A 1 B 2 B 0 B 2 A 5 B 4 B 3 A 7))
 (compresses? (file->bytes "lz78.rkt"))
+
+(compresses? (bytes 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19))
+
+(compresses? (bytes 0 0))
 
 ;; XXX This example uses too much memory. Maybe if I streamed the
 ;; compressed output better and didn't need to create the whole thing
 ;; ever.
-(time (compresses? (file->bytes "/home/jay/Dev/scm/plt/bin/racket")))
+;;(time (compresses? (file->bytes "/home/jay/Dev/scm/plt/bin/racket")))
