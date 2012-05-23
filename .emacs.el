@@ -909,7 +909,7 @@ given a prefix arg."
 (require 'autopair)
 
 (add-hook 'scheme-mode-hook #'(lambda () (autopair-mode t) (flymake-mode t)))
-(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode)))
+(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
 
 ;; CUA
 (setq cua-enable-cua-keys nil)           ;; don't add C-x,C-c,C-v
