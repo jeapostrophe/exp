@@ -1,2 +1,2 @@
 #!/bin/sh
-raco make $1 && raco test $1 && racket -t $*
+raco make $1 && racket -t $*

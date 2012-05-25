@@ -1,5 +1,6 @@
 // Load modules
-require("content-delay.js");
+// I decided I don't like this
+//require("content-delay.js");
 require("page-modes/mini-gcal.js");
 require("page-modes/mini-gmail.js");
 
@@ -35,8 +36,8 @@ remove_hook("download_added_hook", open_download_buffer_automatically);
 // Show history in goto-url minibuffer
 url_completion_use_history = true;
 
-// Expire history in X days
-session_pref('browser.history_expire_days', 365);
+// Expire history in X days (10 years!)
+session_pref('browser.history_expire_days', 365*10);
 
 // Be able to edit in external places
 editor_shell_command = "emacsclient -c";

@@ -291,13 +291,13 @@
        (set! stop? #t)
        (game< a b)]))
 
-  (eprintf "~a unranked\n" (length unranked))
-
   (define ranked*
     (node "Ranked" (hasheq) empty
           (let/ec esc
             (for/fold ([ranked ranked])
-                ([unranked-game (in-list (shuffle unranked))])
+                ([unranked-game (in-list (shuffle unranked))]
+                 [i (in-naturals)])
+              (eprintf "~a unranked\n" (- (length unranked) i))
               (if stop?
                 (esc ranked)
                 (binary-tree->sorted-list

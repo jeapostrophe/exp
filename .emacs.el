@@ -403,7 +403,7 @@ given a prefix arg."
             ("sh" . "zsh")
             ("py" . "python")
             ("cc" . "ccci")
-            ("rkt" . "rk")
+            ("rkt" . "rkt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
             ("tex" . "pdflatex")))
