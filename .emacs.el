@@ -1042,6 +1042,7 @@ given a prefix arg."
                       temp-file
                       (file-name-directory buffer-file-name))))
     (list "racket" (list "-qf" local-file))))
+(setq flymake-gui-warnings-enabled nil)
 (push '("\\.rkt\\'" flymake-racket-init)
       flymake-allowed-file-name-masks)
 
