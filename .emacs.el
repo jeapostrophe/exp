@@ -174,9 +174,6 @@
 ;;;;; conf-mode
 (add-to-list 'auto-mode-alist '("\\.gitconfig$" . conf-mode))
 
-;;;;; flyspell-mode
-(setq-default ispell-program-name "/opt/local/bin/ispell")
-
 ;;;;; simple.el
 (defadvice kill-ring-save (before slickcopy activate compile)
   "When called interactively with no active region, copy
