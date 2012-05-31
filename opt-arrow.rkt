@@ -13,15 +13,14 @@
 (foo 1 2 3)
 (foo 1 2 3 4)
 
-(begin-for-syntax
-  (define opt->
-    (cons 't-macro
-          (λ (stx)
-            (printf "inside opt->\n")
-            (syntax-case stx (? ->)
-              [(_ [req-arg ... (? opt-arg ...) -> ret])
-               (syntax/loc stx
-                 [req-arg ... opt-arg ... -> ret])])))))
+(define-syntax opt->
+  (cons 't-macro
+        (λ (stx)
+          (printf "inside opt->\n")
+          (syntax-case stx (? ->)
+            [(_ [req-arg ... (? opt-arg ...) -> ret])
+             (syntax/loc stx
+               [req-arg ... opt-arg ... -> ret])]))))
 
 (: foo2
    (opt-> [Integer Integer (? Integer Integer) -> Integer]))
