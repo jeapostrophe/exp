@@ -1,11 +1,10 @@
-#lang racket/base
+#lang slideshow
 (require racket/file
          racket/date
          racket/match
          racket/list
          racket/function
          plot)
-(plot-new-window? #t)
 
 (define data "/home/jay/Dev/scm/github.jeapostrophe/home/etc/workout.rktd")
 (define data-pts (file->list data))
@@ -17,6 +16,8 @@
 
 (define day-zero
   (data-pt-day-abs (first data-pts)))
+(define day-last
+  (data-pt-day-abs (last data-pts)))
 
 (define (data-pt-day-rel dp)
   (/ (- (data-pt-day-abs dp) day-zero)
@@ -31,14 +32,32 @@
     (hash-update w->d regime (curry cons (vector day (apply * numbers))) empty)))
 
 (require racket/math)
-(parameterize ([plot-x-ticks (date-ticks)])
-  (plot
-   (for/list ([(regime ds) (in-hash workout->data-series)]
-              [i (in-naturals)])
-     (list
-      (points ds)
-      (lines ds
-             #:color i
-             #:label (symbol->string regime))))))
 
-(read)
+(plot-font-size (current-font-size))
+(plot-width (current-para-width))
+(plot-height 600)
+(plot-background-alpha 1/2)
+
+(parameterize ([plot-x-ticks (date-ticks)])
+  (for ([(regime ds) (in-hash workout->data-series)]
+        [i (in-naturals)])
+    (slide
+     #:title (symbol->string regime)
+     (plot-pict
+      #:y-label
+      (match regime
+        ['crunches
+         "how many"]
+        ['walking
+         "miles"]
+        [(or 'bicep 'shoulder-press 'bench)
+         "pounds"])
+      #:x-label "day"
+      #:x-min day-zero
+      #:x-max day-last
+      #:y-min 0
+      #:y-max (* 1.25 (apply max (map (λ (v) (vector-ref v 1)) ds)))
+      (list
+       (points ds)
+       (lines ds
+              #:color i))))))
