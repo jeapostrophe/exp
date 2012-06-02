@@ -1,0 +1,23 @@
+#lang racket
+
+(define lost-undead 0)
+(define large-lost-undead 0)
+(define nameless-soldier 1)
+(define large-nameless-soldier 3)
+(define proud-knight 0)
+(define large-proud-knight 0)
+(define brave-warrior 0)
+(define large-brave-warrior 0)
+(define hero 0)
+(define great-hero 0)
+
+(+ (* lost-undead 200)
+   (* large-lost-undead 400)
+   (* nameless-soldier 800)
+   (* large-nameless-soldier 1000)
+   (* proud-knight 2000)
+   (* large-proud-knight 3000)
+   (* brave-warrior 5000)
+   (* large-brave-warrior 8000)
+   (* hero 10000)
+   (* great-hero 20000))
