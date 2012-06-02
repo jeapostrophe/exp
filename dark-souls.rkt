@@ -4,7 +4,7 @@
 (define large-lost-undead 2)
 (define nameless-soldier 0)
 (define large-nameless-soldier 0)
-(define proud-knight 0)
+(define proud-knight 1)
 (define large-proud-knight 0)
 (define brave-warrior 0)
 (define large-brave-warrior 0)
