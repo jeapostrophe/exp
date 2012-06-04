@@ -7,7 +7,7 @@
 (define proud-knight 1)
 (define large-proud-knight 0)
 (define brave-warrior 0)
-(define large-brave-warrior 0)
+(define large-brave-warrior 1)
 (define hero 0)
 (define great-hero 0)
 
