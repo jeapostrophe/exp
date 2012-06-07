@@ -304,6 +304,7 @@ given a prefix arg."
 ;;(require 'quack)
 (add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.rktl$" . scheme-mode))
+(add-to-list 'auto-mode-alist '("\\.scrbl$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.rktd$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.ss$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
