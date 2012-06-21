@@ -99,5 +99,6 @@
 (put 'for/or 'scheme-indent-function 1)
 (put 'for*/or 'scheme-indent-function 1)
 (put 'for/vector 'scheme-indent-function 1)
+(put 'for/hash 'scheme-indent-function 1)
 
 (put 'nest 'scheme-indent-function 1)
