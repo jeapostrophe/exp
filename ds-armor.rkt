@@ -56,17 +56,28 @@
          [else
           (values best-so-far best-so-far-choice)]))]))
 
-(define-values (_ choices) 
-  #;(branch-and-bound (- (/ 80 2)
-                       #;6 5
-                       3 #;3.5) 0 options)
-    (branch-and-bound (- (/ 120 2)
-                       6 6) 0 options))
+(define target-weight/darkwood+iaito+crest
+  (- (/ 80 2)
+     #;6 5
+         3 #;3.5))
+(define target-weight/havels-ring+darkwood+hammer+eagle
+  (- (/ 120 2)
+     6 6))
 
-(printf "\nBest choices:\n")
-(printf "Total ~a\n"
-        (for/fold ([tots (list 0 0 0)])
-            ([c (in-list choices)])
-          (match-define (list* name vals) c)
-          (printf " ~a ~a\n" vals name)
-          (map + tots vals)))
+(define target-weight
+  target-weight/havels-ring+darkwood+hammer+eagle)
+
+(printf "\n")
+(printf "Target weight: ~a\n" target-weight)
+(define-values (_ choices) 
+  (branch-and-bound target-weight/havels-ring+darkwood+hammer+eagle 0 options))
+
+(printf "Best choices:\n")
+(match-define (and totals (list weight-used phys poise))
+              (for/fold ([tots (list 0 0 0)])
+                  ([c (in-list choices)])
+                (match-define (list* name vals) c)
+                (printf " ~a ~a\n" vals name)
+                (map + tots vals)))
+(printf "Total ~a\n" totals)
+(printf "Weight left: ~a\n" (- target-weight weight-used))
