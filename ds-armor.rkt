@@ -11,7 +11,7 @@
    [(list name durability weight phys str sls prc mag fir lit poise bleed poison curse have)
     (define vals (map string->number (list weight phys poise)))
     (and (andmap number? vals)
-         (string=? "1" have)
+         #;(string=? "1" have)
          #;(not (regexp-match (regexp-quote "+") name))
          (list* name vals))]))
 
@@ -57,9 +57,11 @@
           (values best-so-far best-so-far-choice)]))]))
 
 (define-values (_ choices) 
-  (branch-and-bound (- (/ 80 2)
+  #;(branch-and-bound (- (/ 80 2)
                        #;6 5
-                       3 #;3.5) 0 options))
+                       3 #;3.5) 0 options)
+    (branch-and-bound (- (/ 120 2)
+                       6 6) 0 options))
 
 (printf "\nBest choices:\n")
 (printf "Total ~a\n"
