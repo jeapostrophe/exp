@@ -34,6 +34,8 @@ conkeror &
 
 pidgin &
 
+xmessage "Jay, reset the power settings" &
+
 #start-skype.sh &
 
 exec ~/.cabal/bin/xmonad
