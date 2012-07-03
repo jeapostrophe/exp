@@ -720,7 +720,7 @@ given a prefix arg."
        'je/distant))
      a)
 
-    (if nil ;(< tn sta)
+    (if (< tn sta)
         nil
       a)))
 
