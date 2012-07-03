@@ -56,3 +56,114 @@ Proof.
 Qed.
 
 (** Exercise 2 **)
+
+Definition fahrenheitToCelsius (f:R) :=
+ ((f - 32) * 5 / 9)%R.
+
+Theorem a2_e2_e1:
+ fahrenheitToCelsius (32)%R = (0)%R.
+Proof.
+ unfold fahrenheitToCelsius.
+ field.
+Qed.
+
+Theorem a2_e2_e2:
+ fahrenheitToCelsius (212)%R = (100)%R.
+Proof.
+ unfold fahrenheitToCelsius.
+ field.
+Qed.
+
+(** Exercise 3 **)
+
+Definition convert3 (x:nat) (y:nat) (z:nat) :=
+ x + 10 * y + 100 * z.
+
+Theorem a2_e3_e1:
+ convert3 1 2 3 = 321.
+Proof.
+ tauto.
+Qed.
+
+Theorem a2_e3_e2:
+ convert3 3 5 1 = 153.
+Proof.
+ tauto.
+Qed.
+
+(** Exercise 4 **)
+
+Definition a2_e4 (n:nat) := n*n + 10.
+
+Theorem a2_e4_e1:
+ a2_e4 2 = 14.
+Proof.
+ tauto.
+Qed.
+
+Theorem a2_e4_e2:
+ a2_e4 9 = 91.
+Proof.
+ tauto.
+Qed.
+
+(** Exercise 5 **)
+
+Definition sum_coins p n d q :=
+ p + (n*5) + (d*10) + (q*25).
+
+Theorem a2_e5_e1:
+ sum_coins 1 0 0 0 = 1.
+Proof.
+ tauto.
+Qed.
+
+Theorem a2_e5_e2:
+ sum_coins 0 1 0 0 = 5.
+Proof.
+ tauto.
+Qed.
+
+Theorem a2_e5_e3:
+ sum_coins 0 0 1 0 = 10.
+Proof.
+ tauto.
+Qed.
+
+Theorem a2_e5_e4:
+ sum_coins 0 0 0 1 = 25.
+Proof.
+ tauto.
+Qed.
+
+Theorem a2_e5_e5:
+ sum_coins 1 1 1 1 = 41.
+Proof.
+ tauto.
+Qed.
+
+(** Exercise 6 **)
+
+Definition total_profit attendees :=
+ ((attendees * 5) - (20 + (attendees / 2)))%R.
+
+Theorem a2_e6_e1:
+ total_profit 10%R = 25%R.
+Proof.
+ unfold total_profit.
+ field.
+Qed.
+
+(** Exercise 7 **)
+
+Definition dollarToYen d :=
+ (d * 796 / 10)%R.
+
+Theorem a2_e7_e1:
+ dollarToYen 25 = 1990%R.
+Proof.
+ unfold dollarToYen. field.
+Qed.
+
+
+
