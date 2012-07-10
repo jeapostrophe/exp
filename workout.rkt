@@ -46,11 +46,11 @@
      (plot-pict
       #:y-label
       (match regime
-        ['crunches
+        [(or 'crunches 'pushups)
          "how many"]
         ['walking
          "miles"]
-        [(or 'bicep 'shoulder-press 'bench)
+        [(or 'bicep 'shoulder-press 'bench 'hindu-squats 'weight)
          "pounds"])
       #:x-label "day"
       #:x-min day-zero
