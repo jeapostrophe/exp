@@ -165,5 +165,33 @@ Proof.
  unfold dollarToYen. field.
 Qed.
 
+(** Exercise 8 **)
 
+Definition areaOfTriangle base height :=
+ (base * height * 1/2)%R.
+
+Theorem a2_e8_e1:
+ (areaOfTriangle 1 2 = 1)%R.
+Proof.
+ compute. field.
+Qed.
+
+(** Exercise 9 **)
+
+Definition a2_e9 n :=
+ ((1/2 * (n * n)) + 20)%R.
+
+Theorem a2_e9_e1:
+ (a2_e9 2 = 22)%R.
+Proof.
+ compute. field.
+Qed.
+
+Theorem a2_e9_e2:
+ (a2_e9 9 = (60 + 1/2))%R.
+Proof.
+ compute. field.
+Qed.
+
+(* Assignment 3 *)
 
