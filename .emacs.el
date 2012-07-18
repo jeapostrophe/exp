@@ -679,6 +679,8 @@ given a prefix arg."
   :group 'org-faces)
 (set-face-foreground 'je/distant "#93a1a1")
 
+(defvar je-schedule-flag? t)
+(setq je-schedule-flag? t)
 (defun je/todo-color (a)
   "Color things in the column view differently based on deadline"
   (let* ((ma (or (get-text-property 1 'org-marker a)
@@ -720,7 +722,7 @@ given a prefix arg."
        'je/distant))
      a)
 
-    (if (and nil (< tn sta))
+    (if (and je-schedule-flag? (< tn sta))
         nil
       a)))
 
