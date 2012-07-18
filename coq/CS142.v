@@ -195,3 +195,36 @@ Qed.
 
 (* Assignment 3 *)
 
+(** Exercise 1 **)
+Inductive Sign : Set :=
+| Positive : Sign
+| Zero : Sign
+| Negative : Sign.
+Hint Constructors Sign.
+
+Inductive SignOf : Z -> Sign -> Prop :=
+| Is_Positive :
+  forall z:Z, (z > 0)%Z -> SignOf z Positive
+| Is_Zero :
+  forall z:Z, (z = 0)%Z -> SignOf z Zero
+| Is_Negative :
+  forall z:Z, (z < 0)%Z -> SignOf z Negative.
+Hint Constructors SignOf.
+
+Theorem a3_e1:
+forall z,
+ { s | SignOf z s }.
+Proof.
+ intros z.
+ destruct (Z_dec z 0) as [ [H | H] | H ]; eauto.
+Qed.
+
+Example a3_e1_e1:
+ (SignOf (-2)%Z Negative).
+Proof.
+ cut ((-2 < 0)%Z); eauto.
+ omega.
+Qed.
+
+(** Exercise 2 **)
+
