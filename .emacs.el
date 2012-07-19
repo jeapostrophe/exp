@@ -680,7 +680,7 @@ given a prefix arg."
 (set-face-foreground 'je/distant "#93a1a1")
 
 (defvar je-schedule-flag? t)
-(setq je-schedule-flag? t)
+(setq je-schedule-flag? nil)
 (defun je/todo-color (a)
   "Color things in the column view differently based on deadline"
   (let* ((ma (or (get-text-property 1 'org-marker a)
