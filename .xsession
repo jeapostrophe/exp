@@ -8,7 +8,7 @@ xsetroot -solid '#fdf6e3'
 
 gnome-settings-daemon &
 
-start-trayer.sh &
+start-trayer.sh 0 &
 
 color-correct.sh
 
@@ -33,6 +33,8 @@ emacs &
 conkeror &
 
 pidgin &
+
+miro &
 
 xmessage "Jay, reset the power settings" &
 
