@@ -1,5 +1,7 @@
 #lang racket/base
 (require racket/system
+         racket/port
+         racket/list
          racket/file)
 
 (define steps
@@ -26,21 +28,74 @@
         "Rinse face cloth"
         "Rinse body"))
 
-(define unit-len 5.0)
+(define unit-len 10.0) ;; (I think I actually count about 9 seconds
+                       ;; when I try to count 5)
 
-(/ (* unit-len (length steps)) 60.0)
+(define (system+ s)
+  (eprintf "~a\n" s)
+  (system s))
 
-(define tmp-dir (make-temporary-file "~a" 'directory))
+(module+ main
+  (define music-dir "/home/jay/Downloads/shower/Mega Man 2")
+  (define shower-wav "/home/jay/Downloads/shower/shower.wav")
+  (define shower-mp3 "/home/jay/Downloads/shower/shower.mp3")
+  (define shower/hair-wav "/home/jay/Downloads/shower/shower-hair.wav")
+  (define shower/hair-mp3 "/home/jay/Downloads/shower/shower-hair.mp3")
+  (define tmp-dir (make-temporary-file "~a" 'directory))
 
-(parameterize ([current-directory tmp-dir])
-  (for ([step-name (in-list steps)]
-        [i (in-naturals)])
-    (define step-name-str
-      (if (string? step-name)
-        step-name
-        (bytes->string/utf-8 step-name)))
-    (define step-announce-wav (format "~a-announce.wav" i))
-    (system (format "espeak -w ~a ~s" step-announce-wav step-name-str))
-    (system (format "play ~a" step-announce-wav))))
+  (parameterize ([current-directory tmp-dir])
+    (define wavs
+      (for/list ([step-name (in-list steps)]
+                 [music-name
+                  (in-cycle (in-list (sort (directory-list music-dir)
+                                           string-ci<=?
+                                           #:key path->string)))]
+                 [i (in-naturals)])
+        (define music (path->string (build-path music-dir music-name)))
+        (define hair?
+          (not (string? step-name)))
+        (define step-name-str
+          (if (string? step-name)
+            step-name
+            (bytes->string/utf-8 step-name)))
+        (define step-announce-wav/mono (format "~a-announce-mono.wav" i))
+        (system+ (format "espeak -k20 -w ~a ~s" step-announce-wav/mono step-name-str))
+        (define step-announce-wav (format "~a-announce.wav" i))
+        (system+ (format "sox -v 2.0 ~a -c 2 -r 44100 ~a"
+                         step-announce-wav/mono
+                         step-announce-wav))
+        (define announce-len-str
+          (regexp-replace*
+           #rx"\n"
+           (with-output-to-string
+             (λ ()
+               (system+ (format "soxi -D ~a" step-announce-wav))))
+           ""))
+        (define announce-len
+          (string->number announce-len-str))
+        (define music-len
+          (- unit-len announce-len))
+        (define step-music-wav
+          (format "~a-music.wav" i))
 
-(delete-directory/files tmp-dir)
+        (system+ (format "sox ~s ~s trim 0 ~a"
+                         music step-music-wav music-len))
+        (when #f
+          (system (format "soxi ~a" step-announce-wav))
+          (system (format "soxi ~a" step-music-wav)))
+        (list hair? step-announce-wav step-music-wav)))
+
+    (define (combine wavs shower-wav shower-mp3)
+      (system+
+       (format "sox ~a ~a"
+               (apply string-append (add-between (apply append wavs) " "))
+               shower-wav))
+      (system+ (format "lame -S ~a ~a" shower-wav shower-mp3)))
+
+    (combine (filter-map (λ (l) (and (not (first l))
+                                     (rest l)))
+                         wavs)
+             shower-wav shower-mp3)
+    (combine (map rest wavs) shower/hair-wav shower/hair-mp3))
+
+  (delete-directory/files tmp-dir))
