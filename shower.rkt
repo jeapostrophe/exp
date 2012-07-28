@@ -41,7 +41,7 @@
   (define shower-mp3 "/home/jay/Downloads/shower/shower.mp3")
   (define shower/hair-wav "/home/jay/Downloads/shower/shower-hair.wav")
   (define shower/hair-mp3 "/home/jay/Downloads/shower/shower-hair.mp3")
-  (define alarm-sound "/home/jay/Downloads/shower/shower.wav")
+  (define alarm-sound "/home/jay/Downloads/shower/alarm.aif")
   (define tmp-dir (make-temporary-file "~a" 'directory))
 
   (parameterize ([current-directory tmp-dir])
