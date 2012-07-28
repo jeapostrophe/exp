@@ -41,6 +41,7 @@
   (define shower-mp3 "/home/jay/Downloads/shower/shower.mp3")
   (define shower/hair-wav "/home/jay/Downloads/shower/shower-hair.wav")
   (define shower/hair-mp3 "/home/jay/Downloads/shower/shower-hair.mp3")
+  (define alarm-sound "/home/jay/Downloads/shower/shower.wav")
   (define tmp-dir (make-temporary-file "~a" 'directory))
 
   (parameterize ([current-directory tmp-dir])
@@ -87,8 +88,9 @@
 
     (define (combine wavs shower-wav shower-mp3)
       (system+
-       (format "sox ~a ~a"
+       (format "sox ~a ~a ~a"
                (apply string-append (add-between (apply append wavs) " "))
+               alarm-sound
                shower-wav))
       (system+ (format "lame -S ~a ~a" shower-wav shower-mp3)))
 
