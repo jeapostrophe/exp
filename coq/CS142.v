@@ -228,3 +228,96 @@ Qed.
 
 (** Exercise 2 **)
 
+Definition areaOfCircle radius :=
+ (PI * radius * radius)%R.
+
+Definition areaOfCylinder radius len :=
+ ((areaOfCircle radius) * len)%R.
+
+Definition areaOfTube inner len thickness :=
+ ((areaOfCylinder (inner + thickness)%R len) 
+  - (areaOfCylinder inner len))%R.
+
+Example a3_e2_e1:
+ areaOfTube 1%R 2%R 3%R = (30 * PI)%R.
+Proof.
+ unfold areaOfTube. unfold areaOfCylinder. unfold areaOfCircle.
+ field.
+Qed.
+
+(** Exercise 3 **)
+
+Definition a3_e3_speed t :=
+ (2 * t)%R.
+
+Definition a3_e3_height t :=
+ (1/2 * (a3_e3_speed t) * t)%R.
+
+Example a3_e3_e1:
+ a3_e3_height 1%R = 1%R.
+Proof.
+ unfold a3_e3_height. unfold a3_e3_speed.
+ field.
+Qed.
+
+(** Exercise 4 **)
+
+Definition celsiusToFahrenheit (c:R) :=
+ ((c / (5/9)) + 32)%R.
+
+Theorem a3_e4_e1:
+ celsiusToFahrenheit (0)%R = (32)%R.
+Proof.
+ unfold celsiusToFahrenheit.
+ field.
+Qed.
+
+Theorem a3_e4_e2:
+ celsiusToFahrenheit (100)%R = (212)%R.
+Proof.
+ unfold celsiusToFahrenheit.
+ field.
+Qed.
+
+Theorem a3_e4_1:
+ forall r, celsiusToFahrenheit ( fahrenheitToCelsius ( r ) ) = r.
+Proof.
+ intros r. 
+ unfold fahrenheitToCelsius.
+ unfold celsiusToFahrenheit.
+ field.
+Qed.
+
+Theorem a3_e4_2:
+ forall r,  fahrenheitToCelsius ( celsiusToFahrenheit ( r ) ) = r.
+Proof.
+ intros r. 
+ unfold fahrenheitToCelsius.
+ unfold celsiusToFahrenheit.
+ field.
+Qed.
+
+(** Exercise 5 **)
+
+(****** See above *)
+
+(** Exercise 6 **)
+
+Definition milesToFeet (m:R) :=
+ (m * 5280)%R.
+
+Theorem a3_e6_e1:
+ milesToFeet (1)%R = (5280)%R.
+Proof.
+ unfold milesToFeet.
+ field.
+Qed.
+
+Theorem a3_e6_e2:
+ milesToFeet (6)%R = (31680)%R.
+Proof.
+ unfold milesToFeet.
+ field.
+Qed.
+
+(* Assignment 4 *)
