@@ -321,3 +321,34 @@ Proof.
 Qed.
 
 (* Assignment 4 *)
+
+(** Exercise 1 **)
+Example a4_e1:
+ (4 > 3) /\ (10 <= 100).
+Proof.
+ omega.
+Qed.
+
+(** Exercise 2 **)
+Section a4_e2.
+ Definition x := 4.
+ Example a4_e2_1:
+  (x > 3).
+ Proof.
+  unfold x. omega.
+ Qed.
+
+ Example a4_e2_2:
+  ~( (4 > x) /\ (x > 3) ).
+ Proof.
+  unfold x. omega.
+ Qed.
+
+ Example a4_e2_3:
+  ~( x * x = x ).
+ Proof.
+  unfold x. omega.
+ Qed.
+End a4_e2.
+
+(** Exercise 3 **)
