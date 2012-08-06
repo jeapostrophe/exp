@@ -28,8 +28,8 @@
         "Rinse face cloth"
         "Rinse body"))
 
-(define unit-len 10.0) ;; (I think I actually count about 9 seconds
-                       ;; when I try to count 5)
+;; (I think I actually count about 9 seconds when I try to count 5)
+(define unit-len 10.0)
 
 (define (system+ s)
   (eprintf "~a\n" s)
@@ -81,9 +81,6 @@
 
         (system+ (format "sox ~s ~s trim 0 ~a"
                          music step-music-wav music-len))
-        (when #f
-          (system (format "soxi ~a" step-announce-wav))
-          (system (format "soxi ~a" step-music-wav)))
         (list hair? step-announce-wav step-music-wav)))
 
     (define (combine wavs shower-wav shower-mp3)
