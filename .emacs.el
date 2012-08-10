@@ -402,6 +402,7 @@ given a prefix arg."
             ("py" . "python")
             ("cc" . "ccci")
             ("cg" . "cgc -noentry")
+            ("glsl" . "cgc -noentry -oglsl")
             ("rkt" . "rkt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
@@ -1050,6 +1051,7 @@ given a prefix arg."
 ;; cg mode
 (add-to-list 'load-path "~/Dev/dist/cg-mode")
 (require 'cg-mode)
+(add-to-list 'auto-mode-alist '("\\.glsl$" . cg-mode))
 
 ;; customs
 
