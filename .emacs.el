@@ -1046,6 +1046,10 @@ given a prefix arg."
 (push '("\\.rkt\\'" flymake-racket-init)
       flymake-allowed-file-name-masks)
 
+;; cg mode
+(add-to-list 'load-path "~/Dev/dist/cg-mode")
+(require 'cg-mode)
+
 ;; customs
 
 (custom-set-variables
