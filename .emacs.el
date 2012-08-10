@@ -401,6 +401,7 @@ given a prefix arg."
             ("sh" . "zsh")
             ("py" . "python")
             ("cc" . "ccci")
+            ("cg" . "cgc -noentry")
             ("rkt" . "rkt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
