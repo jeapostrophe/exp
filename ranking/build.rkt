@@ -94,7 +94,7 @@
         (hash-set cp id (number->string/padding this-id how-many))])))
   (struct-copy node games [children new-children]))
 
-(define (normalize-games games)
+(define (normalize-games rank? games)
   (define new-children
     (for/list ([c (in-list (node-children games))])
       (define p (node-props c))
@@ -106,8 +106,10 @@
           p
           (let ()
             (define (completed?)
+              (unless rank?
+                (error 'game-rank "Can't normalize"))
               (match
-                  (message-box/custom 
+                  (message-box/custom
                    "Ranking"
                    (format "Did you complete ~a?" (node-label c))
                    "Yes" "No" "Yes w/ cheats")
@@ -115,16 +117,20 @@
                 [2 "N"]
                 [3 "Y/C"]))
             (define (again?)
+              (unless rank?
+                (error 'game-rank "Can't normalize"))
               (match
-                  (message-box/custom 
+                  (message-box/custom
                    "Ranking"
                    (format "Would you play ~a again?" (node-label c))
                    "Yes" "No" #f)
                 [1 "Y"]
                 [2 "N"]))
             (define (recommended?)
+              (unless rank?
+                (error 'game-rank "Can't normalize"))
               (match
-                  (message-box/custom 
+                  (message-box/custom
                    "Ranking"
                    (format "Would you recommend ~a?" (node-label c))
                    "Yes" "No" #f)
@@ -237,11 +243,6 @@
   (λ (a b)
     (number-cmp (list-index a ordering)
                 (list-index b ordering))))
-(define status-cmp
-  (list->cmp
-   (list "Active" "Scheduled" "Queue"
-         #f
-         "Done-PlayAgain" "Done" "Done-MaybeAgain" "Done-NeverAgain")))
 
 (define (bloggable? n)
   (match-define (node label props content children) n)
@@ -353,7 +354,7 @@
   (match-define (list games meta) (with-input-from-file path read-org))
   (let*
       ((games
-        (normalize-games games))
+        (normalize-games rank? games))
 
        (games
         (if rank?
@@ -366,7 +367,18 @@
           games
           (cmp->lt
            (cmp-then
-            (2compose status-cmp (node-prop "Status"))
+            (2compose (list->cmp
+                       (list "Active" "Scheduled" "Queue" #f "Done"))
+                      (node-prop "Status"))
+            (2compose (list->cmp
+                       (list "Y" #f "N"))
+                      (node-prop "Again"))
+            (2compose (list->cmp
+                       (list "Y" #f "N"))
+                      (node-prop "Recommended"))
+            (2compose (list->cmp
+                       (list #f "N" "Y/C" "Y"))
+                      (node-prop "Completed"))
             (2compose number-cmp node-last-played)
             (2compose number-cmp (compose string->number/exn (node-prop "Year")))
             (2compose wordy-cmp node-label))))
