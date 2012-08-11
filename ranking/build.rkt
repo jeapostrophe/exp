@@ -99,37 +99,61 @@
     (for/list ([c (in-list (node-children games))])
       (define p (node-props c))
       (define cp
-        (if (hash-has-key? p "Status")
+        (if (and (hash-has-key? p "Status")
+                 (hash-has-key? p "Completed")
+                 (hash-has-key? p "Again")
+                 (hash-has-key? p "Recommended"))
           p
-          (hash-set
-           (hash-remove* p
-                         "ID"
-                         "Completed"
-                         "PlayAgain"
-                         "Reviewed"
-                         "SortOverall"
-                         "SortStory"
-                         "SortMechanic")
-           "Status"
-           (match* ((hash-ref p "Completed" #f) (hash-ref p "PlayAgain" #f))
-             [("Scheduled" _)
-              "Scheduled"]
-             [("Completed" #f)
-              "Done"]
-             [("Queue" _)
-              "Queue"]
-             [("N" "M")
-              #f]
-             [((or "Y" "Y*" "N") "N")
-              "Done-NeverAgain"]
-             [(#f #f)
-              #f]
-             [("Started" #f)
-              #f]
-             [("Y" "Y")
-              "Done-PlayAgain"]
-             [("Y" "M")
-              "Done-MaybeAgain"]))))
+          (let ()
+            (define (completed?)
+              (match
+                  (message-box/custom 
+                   "Ranking"
+                   (format "Did you complete ~a?" (node-label c))
+                   "Yes" "No" "Yes w/ cheats")
+                [1 "Y"]
+                [2 "N"]
+                [3 "Y/C"]))
+            (define (again?)
+              (match
+                  (message-box/custom 
+                   "Ranking"
+                   (format "Would you play ~a again?" (node-label c))
+                   "Yes" "No" #f)
+                [1 "Y"]
+                [2 "N"]))
+            (define (recommended?)
+              (match
+                  (message-box/custom 
+                   "Ranking"
+                   (format "Would you recommend ~a?" (node-label c))
+                   "Yes" "No" #f)
+                [1 "Y"]
+                [2 "N"]))
+            (define-values
+              (status completed again recommended)
+              (match (hash-ref p "Status" #f)
+                ["Done"
+                 (values "Done" (completed?) (again?) (recommended?))]
+                ["Done-NeverAgain"
+                 (values "Done" (completed?) "N" (recommended?))]
+                ["Done-PlayAgain"
+                 (values "Done" (completed?) "Y" "Y")]
+                ["Done-MaybeAgain"
+                 (values "Done" (completed?) "Y" "Y")]
+                ["Active"
+                 (values "Active" #f #f #f)]
+                ["Scheduled"
+                 (values "Scheduled" #f #f #f)]
+                ["Queue"
+                 (values "Queue" #f #f #f)]
+                [#f
+                 (values #f #f #f #f)]))
+            (hash-set* p
+                       "Status" status
+                       "Completed" completed
+                       "Again" again
+                       "Recommended" recommended))))
       (struct-copy
        node c
        [props cp])))
