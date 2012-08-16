@@ -5,5 +5,5 @@ precmd () {}
 preexec () {}
 chpwd () {}
 
-python ~exp/tw.py
+python2 ~exp/tw.py
 scp -r ~/Downloads/rss y:public_html
