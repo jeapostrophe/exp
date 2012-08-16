@@ -1,5 +1,0 @@
-#!/bin/sh
-
-SKYPE_HOME=~/Dev/dist/skype
-
-exec ${SKYPE_HOME}/skype --resources=${SKYPE_HOME}

@@ -14,7 +14,7 @@ export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/collects/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
-. /etc/default/locale
+. /etc/locale.conf
 export GTK_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus

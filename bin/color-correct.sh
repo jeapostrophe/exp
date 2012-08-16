@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/usr/bin/xcalib /etc/xcalib/profile.icc
+/usr/bin/xcalib ~/.xcalib/profile.icc

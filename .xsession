@@ -2,17 +2,21 @@
 . ~/.zshrc
 cd ~
 
+/usr/lib/notification-daemon-1.0/notification-daemon &
+
+batterymon -t 16x16 &
+
 xrdb -merge ~/.Xresources
 
 xsetroot -solid '#fdf6e3'
 
-gnome-settings-daemon &
+#gnome-settings-daemon &
 
 start-trayer.sh 0 &
 
 color-correct.sh
 
-nm-applet &
+#nm-applet &
 
 workrave &
 
@@ -38,6 +42,6 @@ miro &
 
 xmessage "Jay, reset the power settings" &
 
-#start-skype.sh &
+nvidia-settings -a InitialPixmapPlacement=2
 
-exec ~/.cabal/bin/xmonad
+exec xmonad

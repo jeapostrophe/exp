@@ -624,14 +624,15 @@ given a prefix arg."
  (kbd "<s-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
 
+(setq org-agenda-before-sorting-filter-function 'je/todo-color)
+(setq org-agenda-cmp-user-defined 'je/agenda-sort)
+(setq org-agenda-sorting-strategy '(user-defined-up))
+(setq org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
+(setq org-agenda-overriding-header "")
+
 (setq org-agenda-custom-commands 
       '(("t" "Todo list" todo "TODO"
-         ((org-agenda-before-sorting-filter-function 'je/todo-color)
-          (org-agenda-cmp-user-defined 'je/agenda-sort)
-          (org-agenda-sorting-strategy '(user-defined-up))
-          (org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
-          (org-agenda-overriding-header
-           "")))))
+         ())))
 
 (add-hook 'org-finalize-agenda-hook
     (lambda () 
@@ -896,11 +897,12 @@ given a prefix arg."
 
 (desktop-save-mode 1)
 
-(add-to-list 'load-path "~/Dev/dist/nxhtml/util")
-(require 'winsav)
-(setq winsav-save t)
-(setq winsav-dirname "~/.emacs.d/")
-(winsav-save-mode 1)
+;; Broken in switch to Emacs 24
+;;(add-to-list 'load-path "~/Dev/dist/nxhtml/util")
+;;(require 'winsav)
+;;(setq winsav-save t)
+;;(setq winsav-dirname "~/.emacs.d/")
+;;(winsav-save-mode 1)
 
 ;;;;; shift select
 (setq shift-select-mode 1)
@@ -956,6 +958,8 @@ given a prefix arg."
 
 ;; iBus
 (require 'ibus)
+(setq ibus-python-shell-command-name
+      "python2")
 (add-hook 'after-init-hook 'ibus-mode-on)
 (setq ibus-cursor-color 
       '("red" "blue" "limegreen"))
@@ -972,8 +976,8 @@ given a prefix arg."
 (global-set-key [(control return)] 'calculator)
 
 ;; W3M
-(require 'w3m-load)
-(require 'mime-w3m)
+;;(require 'w3m-load)
+;;(require 'mime-w3m)
 
 ;; v-center
 (require 'centered-cursor-mode)
