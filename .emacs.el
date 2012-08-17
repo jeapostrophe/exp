@@ -697,11 +697,14 @@ given a prefix arg."
          (a-day (if da (time-to-days (seconds-to-time ta)) 0))
          (sta (if sa (org-time-string-to-seconds sa) 0)))
     ;; Remove the TODO
-    (put-text-property 0 (length a)
-                       'txt
-                       (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
-                       a)
+    (put-text-property
+     0 (length a)
+     'txt
+     (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
+     a)
 
+    (remove-text-properties
+       0 (length a) '(face nil) a)
     (put-text-property
      0 (length a)
      'face
