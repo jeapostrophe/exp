@@ -703,8 +703,11 @@ given a prefix arg."
      (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
      a)
 
+    ;; Remove the old face
     (remove-text-properties
-       0 (length a) '(face nil) a)
+       0 (length a) '((face nil) (fontified nil)) a)
+
+    ;; Put on the new face
     (put-text-property
      0 (length a)
      'face
