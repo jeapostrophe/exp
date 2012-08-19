@@ -6,18 +6,15 @@ cd ~
 
 batterymon -t 16x16 &
 
+syndaemon -t -k -i 2 -d &
+
 xrdb -merge ~/.Xresources
 
 xsetroot -solid '#fdf6e3'
 
-#gnome-settings-daemon &
-
 start-trayer.sh 0 &
 
 color-correct.sh
-
-#nm-applet &
-
 workrave &
 
 ~/.dropbox-dist/dropboxd &
@@ -27,8 +24,6 @@ workrave &
 urxvtd &
 
 ibus-daemon --xim &
-
-# XXX Do I need to run bluetooth and sound?
 
 screen -UdmS lightning &
 
