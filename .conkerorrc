@@ -36,8 +36,8 @@ remove_hook("download_added_hook", open_download_buffer_automatically);
 // Show history in goto-url minibuffer
 url_completion_use_history = true;
 
-// Expire history in X days (10 years!)
-session_pref('browser.history_expire_days', 365*10);
+// Expire history in X days (6 months)
+session_pref('browser.history_expire_days', 30*6);
 
 // Be able to edit in external places
 editor_shell_command = "emacsclient -c";
