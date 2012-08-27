@@ -27,13 +27,13 @@ ibus-daemon --xim &
 
 screen -UdmS lightning &
 
-#emacs &
+emacs &
 
-#conkeror &
+conkeror &
 
-#pidgin &
+pidgin &
 
-#miro &
+miro &
 
 #xmessage "Jay, reset the power settings" &
 
