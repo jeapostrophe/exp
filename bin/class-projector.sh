@@ -1,22 +1,30 @@
-#!/bin/sh
+#!/bin/bash
 
 # https://wiki.archlinux.org/index.php/Xrandr
 
 #xrandr --output DP-1 --newmode "800x600_59.90"   38.00  800 832 912 1024  600 603 607 624 -hsync +vsync
 
-for j in "1280x1024_59.90" "1280x1024_60.00" "800x600_60.00" "800x600_59.90" ; do
-    xrandr --rmmode ${j}
+MODES=("1440 900 60" "1280 1024 50" "1280 1024 59.9" "1280 1024 60" "800 600 60" "800 600 59.9" "800 600 50")
+OUTPUTS=("DP-1" "DP-2")
+
+for mode in "${MODES[@]}" ; do
+    echo $mode
+    xrandr --rmmode "${mode}"
+    MODELINE=$(gtf $mode | tail -2 | head -1 | cut -f "5-" -d " ")
+    xrandr --newmode "${mode}" ${MODELINE}
+
+    for disp in "${OUTPUTS[@]}" ; do
+        sudo xrandr --delmode "${disp}" "${mode}"
+        sudo xrandr --addmode "${disp}" "${mode}"
+    done
 done
 
+exit 1
 
 for i in DP-1 DP-2 ; do
     for j in "1280x1024_59.90" "1280x1024_60.00" "800x600_60.00" "800x600_59.90" ; do
         xrandr --delmode ${i} ${j}
     done
-    xrandr --output ${i} --newmode "1280x1024_59.90"  108.70  1280 1360 1496 1712  1024 1025 1028 1060  -HSync +Vsync
-    xrandr --output ${i} --newmode "1280x1024_60.00"  108.88  1280 1360 1496 1712  1024 1025 1028 1060  -HSync +Vsync
-    xrandr --output ${i} --newmode "800x600_60.00"  38.22  800 832 912 1024  600 601 604 622  -HSync +Vsync
-    xrandr --output ${i} --newmode "800x600_59.90"  38.09  800 832 912 1024  600 601 604 621  -HSync +Vsync
     for j in "1280x1024_59.90" "1280x1024_60.00" "800x600_60.00" "800x600_59.90" ; do
         xrandr --addmode ${i} ${j}
     done
