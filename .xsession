@@ -6,7 +6,7 @@ cd ~
 
 batterymon -t 16x16 &
 
-syndaemon -t -k -i 2 -d &
+~/bin/syndaemon.sh &
 
 xrdb -merge ~/.Xresources
 
