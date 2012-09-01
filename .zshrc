@@ -58,7 +58,7 @@ function set-eterm-dir {
         # Track directory, username, and cwd for remote logons.
 if [ "$TERM" = "eterm-color" ]; then
     precmd () { set-eterm-dir }
-else
+elif [[ "$TERM" =~ "screen" ]] ; then
     precmd () {print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\"}
     preexec () {print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\"}
 fi

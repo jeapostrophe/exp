@@ -97,5 +97,13 @@ bindkey ^k next
 bindkey ^d kill
 bindkey ^n screen
 
-screen -t irc 0 irssi
-#screen -t alsa 1 alsamixer
+screen -t irc irssi
+#screen -t alsamixer alsamixer
+screen zsh_dir ~courses
+screen zsh_dir ~330
+screen zsh_dir ~github/public-sb
+screen zsh_dir ~github/grade-samurai 
+screen zsh_dir ~github/grade-samurai/courses/2012-fall-330/
+screen zsh_dir ~gb 
+screen zsh_dir ~gb
+screen zsh_dir ~ 
