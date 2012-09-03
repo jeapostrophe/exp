@@ -25,7 +25,7 @@ urxvtd &
 
 ibus-daemon --xim &
 
-screen -UdmS lightning &
+#screen -UdmS lightning &
 
 emacs &
 
