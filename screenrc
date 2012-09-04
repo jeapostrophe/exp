@@ -106,4 +106,4 @@ screen zsh_dir ~github/grade-samurai
 screen zsh_dir ~github/grade-samurai/courses/2012-fall-330/
 screen zsh_dir ~gb 
 screen zsh_dir ~gb
-screen zsh_dir ~ 
+screen zsh_dir ~jay

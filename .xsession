@@ -25,17 +25,23 @@ urxvtd &
 
 ibus-daemon --xim &
 
-#screen -UdmS lightning &
+if (screen -list | grep lightning) ; then
+	echo Screen exists
+else
+	screen -UdmS lightning &
+fi
 
-emacs &
+if [ "$1" = "default" ] ; then
+	emacs &
 
-conkeror &
+	conkeror &
 
-pidgin &
+	pidgin &
 
-miro &
+	miro &
 
-#xmessage "Jay, reset the power settings" &
+	google-chrome &
+fi
 
 nvidia-settings -a InitialPixmapPlacement=2
 
