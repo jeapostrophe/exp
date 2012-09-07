@@ -28,6 +28,8 @@ main = do
          ("M4-`", sendMessage NextLayout),
          ("M4-S-w", spawn "exec conkeror -new chrome://"),
          ("M4-S-e", spawn "exec emacsclient -nc"),
+         ("M4-S--", sendMessage Shrink),
+         ("M4-S-=", sendMessage Expand),
          ("M4-S-t", withFocused $ windows . W.sink),
          ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart")
        ]
