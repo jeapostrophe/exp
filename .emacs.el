@@ -327,8 +327,6 @@ given a prefix arg."
 (global-set-key (kbd "s-f") 'isearch-forward)
 (global-set-key (kbd "s-g") 'isearch-repeat-forward)
 
-
-
 (defun je/delete-window ()
   "Remove window or frame"
   (interactive)
