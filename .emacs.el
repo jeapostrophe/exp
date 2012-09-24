@@ -1061,6 +1061,12 @@ given a prefix arg."
 (require 'cg-mode)
 (add-to-list 'auto-mode-alist '("\\.glsl$" . cg-mode))
 
+;; proof general
+(load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
+(global-set-key (kbd "<M-s-right>") 'proof-goto-point)
+(global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
+(global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
+
 ;; customs
 
 (custom-set-variables
