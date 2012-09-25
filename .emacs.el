@@ -1062,7 +1062,13 @@ given a prefix arg."
 (add-to-list 'auto-mode-alist '("\\.glsl$" . cg-mode))
 
 ;; proof general
-(load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
+(load-file
+ "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
+;; XXX make these local to the proof mode
+;; proof-display-three-b
+;; proof-shell-exit
+;; proof-process-buffer
+;; proof-activate-scripting
 (global-set-key (kbd "<M-s-right>") 'proof-goto-point)
 (global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
