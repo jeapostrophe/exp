@@ -587,6 +587,7 @@ given a prefix arg."
 (setq org-timeline-show-empty-dates nil)
 (setq org-ctrl-k-protect-subtree t) 
 (setq org-use-property-inheritance nil)
+(setq org-agenda-todo-keyword-format "")
 
 (setq org-refile-use-outline-path t)
 (setq org-outline-path-complete-in-steps t)
