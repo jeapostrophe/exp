@@ -695,7 +695,9 @@ given a prefix arg."
          (ta (if da (org-time-string-to-seconds da) 1.0e+INF))
          (a-day (if da (time-to-days (seconds-to-time ta)) 0))
          (sta (if sa (org-time-string-to-seconds sa) 0)))
+
     ;; Remove the TODO
+    ;; use  (setq org-agenda-todo-keyword-format "") instead?
     (put-text-property
      0 (length a)
      'txt
