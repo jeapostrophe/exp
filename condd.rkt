@@ -6,7 +6,7 @@
   (syntax-parse stx
     #:literals (define else)
     [(_)
-     #'(void)]
+     #'(error 'condd "Missing else case")]
     [(_ [else . d])
      #'(let () . d)]
     [(_ (define . d) ...+ . more)
@@ -18,13 +18,15 @@
          (let () . b)
          (condd . more))]))
 
-(condd)
+(condd
+ [else (void)])
 
 (condd
  [else 1])
 
 (condd
- (define first 1))
+ (define first 1)
+ [else (void)])
 
 (condd
  [#t 1])
@@ -38,3 +40,7 @@
   (printf "2 again\n")]
  [else
   (printf "Nope\n")])
+
+(condd
+ [#f 1]
+ [#f 2])
