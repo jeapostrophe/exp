@@ -182,6 +182,7 @@
 
 (module+ main
   ;; Play Tic-Tac-Toe
-  ;; (invoke-unit/infer (link ttt@ arroy@))
+  ;;(invoke-unit/infer (link ttt@ arroy@))
   ;; Play Guess
-  (invoke-unit/infer (link guess@ arroy@)))
+  (invoke-unit/infer (link guess@ arroy@))
+  )
