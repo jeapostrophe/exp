@@ -14,6 +14,44 @@
 (define-signature lts^
   (initial-state moves next winner player))
 
+;; XXX I think it would be better to have
+;;  initial-state : -> state
+;; for games with random initial states (like a card game)
+;; Or just have them start with a big random move selection
+
+;; XXX I think it would be better to have a
+;;  players : (listof player)
+;; export, to specify how many players there are
+
+;; XXX Change to
+;;  available : state player -> (listof moves)
+;; to handle games where players can act "simultaneously" before the game necessarily advances
+;; (Ending would be when all the players are done)
+
+;; XXX Add
+;;  display : (U move state) player -> display-rep
+;; to view the representation of the state visible to a player. What
+;; is a good representation? String? Xexpr? Sprite list? It is not clear.
+
+;; XXX Add a distinguished player (computer clock) that will randomly
+;; choose an available move after clock time units. If clock is 0,
+;; then this can represent dice rolls. If clock is positive, then it
+;; can represent games with time limits, automatic actions, etc. The
+;; meaning of the unit could be agreed upon by players before
+;; starting--maybe a day, maybe minutes, maybe frames.
+
+;; XXX Change from winner to
+;;  score : state player -> number
+;; for games without distinct winners and better AIs
+
+;; XXX Sometimes the challenge of a game is knowing which moves are
+;; valid (like GHOST), in these cases you want to display invalid
+;; moves to the user. If such a move is chosen, then you may want the
+;; game to automatically convert it into an "error" move. You could do
+;; this totally within the model (by have available return "bad"
+;; moves), but it may be useful to incorporate that into the
+;; interface. (It isn't necessary though.)
+
 ;; Tic-Tac-Toe is an example of an LTS
 (define-unit ttt@
   (import)
@@ -36,6 +74,7 @@
     (define (set-members? s l)
       (for/and ([e (in-list l)])
         (equal? (hash-ref s e #f) last)))
+    ;; XXX Could be more efficient and doesn't check right diagonal
     (define last-won?
       (for*/or ([x (in-range 3)]
                 [y (in-range 3)])
