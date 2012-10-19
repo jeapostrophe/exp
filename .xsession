@@ -17,7 +17,7 @@ start-trayer.sh 0 &
 color-correct.sh
 workrave &
 
-~/.dropbox-dist/dropboxd &
+#~/.dropbox-dist/dropboxd &
 
 #~/Dev/dist/qjoypad-4.1.0/local/bin/qjoypad &
 
