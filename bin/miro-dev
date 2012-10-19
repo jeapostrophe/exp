@@ -1,1 +1,3 @@
-/home/jay/Dev/dist/miro/tv/linux/run.sh
+#!/bin/sh
+cd ~/Dev/dist/miro/tv/linux
+./run.sh
