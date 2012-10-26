@@ -1,0 +1,32 @@
+#!/bin/bash
+log() { logger -t "$( basename $0 )" "$*" ; }
+
+main() {
+        local host
+        while sleep 1; do
+                [[ "$( netcfg current )" = "" ]] && continue
+
+                host=$( route -n | awk '/^0.0.0.0/ { print $2 }' )
+                ping -c1 -w10 $host && continue
+
+                log "trying to reassociate"
+                wpa_cli reassociate
+                ping -c1 -w10 $host && continue
+
+                log "reassociate failed, reconfiguring network"
+                netcfg -r $( netcfg current )
+        done
+}
+
+exec 1>/dev/null
+[[ $EUID != 0 ]] && { log "must be root"; exit 1; }
+
+for cmd in wpa_cli ping netcfg; do
+        ! which $cmd && {
+                log "can't find command ${cmd}, exiting..."
+                exit 1
+        }
+done
+
+log 'starting...'
+main
