@@ -19,11 +19,11 @@ main() {
                 log "gateway not available, reconfiguring"
                 netcfg -r $( netcfg current )
             else
-                ping -c1 -w10 $host && continue
+                ping -c1 -w10 $host &>/dev/null && continue
 
                 log "trying to reassociate"
                 wpa_cli reassociate
-                ping -c1 -w10 $host && continue
+                ping -c1 -w10 $host &>/dev/null && continue
 
                 log "reassociate failed, reconfiguring network"
                 netcfg -r $( netcfg current )
@@ -32,11 +32,10 @@ main() {
     done
 }
 
-exec 1>/dev/null
 [[ $EUID != 0 ]] && { log "must be root"; exit 1; }
 
 for cmd in route wpa_cli ping netcfg; do
-    ! which $cmd && {
+    ! which $cmd &>/dev/null && {
         log "can't find command ${cmd}, exiting..."
         exit 1
     }
