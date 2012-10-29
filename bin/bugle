@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export LD_PRELOAD=libbugle.so
+export BUGLE_FILTER_DIR=/usr/lib/bugle
+export BUGLE_CHAIN=showstats
+
+exec $*
