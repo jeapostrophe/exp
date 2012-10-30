@@ -1,23 +1,27 @@
 #!/bin/bash
 log() { echo $* ; }
 
-LAST=
+CURRENT_FILE=~/.netcfg_active
+
+CURRENT() {
+    cat ${CURRENT_FILE}
+}
+
 main() {
     local host
     while sleep 1; do
-        if [[ "$( netcfg current )" = "" ]] ; then
+        if [[ "$(netcfg current)" = "" ]] ; then
             log "not connected, connecting"
-            if [[ "$LAST" = "" ]] ; then
+            if [[ "$(CURRENT)" = "" ]] ; then
                 log "no last connection, doing nothing"
             else
-                netcfg "${LAST}"
+                netcfg $(CURRENT)
             fi
         else
-            LAST=$(netcfg current)
             host=$( route -n | awk '/^0.0.0.0/ { print $2 }' )
             if [[ "${host}" = "" ]] ; then
                 log "gateway not available, reconfiguring"
-                netcfg -r $( netcfg current )
+                netcfg -r $(CURRENT)
             else
                 ping -c1 -w10 $host &>/dev/null && continue
 
@@ -26,20 +30,25 @@ main() {
                 ping -c1 -w10 $host &>/dev/null && continue
 
                 log "reassociate failed, reconfiguring network"
-                netcfg -r $( netcfg current )
+                netcfg -r $(CURRENT)
             fi
         fi
     done
 }
 
-[[ $EUID != 0 ]] && { log "must be root"; exit 1; }
+if [[ "$1" = "" ]] ; then
+    [[ $EUID != 0 ]] && { log "must be root"; exit 1; }
 
-for cmd in route wpa_cli ping netcfg; do
-    ! which $cmd &>/dev/null && {
-        log "can't find command ${cmd}, exiting..."
-        exit 1
-    }
-done
+    for cmd in route wpa_cli ping netcfg; do
+        ! which $cmd &>/dev/null && {
+            log "can't find command ${cmd}, exiting..."
+            exit 1
+        }
+    done
 
-log 'starting...'
-main
+    log 'starting...'
+    main
+else
+    log "setting connection to $1"
+    echo $1 > $CURRENT_FILE
+fi
