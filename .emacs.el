@@ -520,7 +520,6 @@ given a prefix arg."
 (setq load-path (cons "~/Dev/dist/org-mode/contrib/lisp" load-path))
 (add-to-list 'Info-default-directory-list
              (expand-file-name "~/Dev/dist/org-mode/doc"))
-(require 'org-install)
 (require 'org)
 (require 'org-faces)
 (require 'org-protocol)
