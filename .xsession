@@ -38,7 +38,7 @@ if [ "$1" = "default" ] ; then
 
 	pidgin &
 
-	miro-dev &
+	#miro-dev &
 
 	google-chrome &
 fi
