@@ -146,12 +146,6 @@
     (for/list ([t (in-list (next-times))])
       (schedule-of-time t)))
 
-  (for ([i (in-range 4)])
-    (for ([s (in-list (next-schedules))])
-      (printf "~a\t" (list-ref s i)))
-    (newline))
-  (exit 1)
-
   (define (start req)
     (define ts (next-times))
     (define these-schedules
