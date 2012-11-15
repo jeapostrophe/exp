@@ -22,78 +22,95 @@
                            (list "F" "D" "P" "M"))
                 #f))
 
-(define not-any-same?
-  (match-lambda
-   [(list)
-    #t]
-   [(list lst)
-    #t]
-   [(list-rest fst (and (list-rest snd snd-rst)
-                        fst-rst))
-    (and (not (any-same? fst snd))
-         (not-any-same? fst-rst))]))
-(module+ test
-  (check-equal? (not-any-same? empty)
-                #t)
-  (check-equal? (not-any-same? (list (list 1)))
-                #t)
-  (check-equal? (not-any-same? (list (list 1) (list 1)))
-                #f)
-  (check-equal? (not-any-same? (list (list 1) (list 2)))
-                #t)
-  (check-equal? (not-any-same? (list (list 2) (list 1)))
-                #t)
-  (check-equal? (not-any-same? (list (list 1) (list 2) (list 1)))
-                #t))
-
 (define (insert-everywhere e l)
-  (for ([i (in-range (add1 (length l)))])
+  (for/list ([i (in-range (add1 (length l)))])
     (define-values (before after) (split-at l i))
-    (yield (append before (list e) after))))
+    (append before (list e) after)))
 (module+ test
-  (define (insert-everywhere/l e l)
-    (for/list ([r (in-generator (insert-everywhere e l))])
-      r))
-
-  (check-equal? (insert-everywhere/l 1 (list))
+  (check-equal? (insert-everywhere 1 (list))
                 (list (list 1)))
-  (check-equal? (insert-everywhere/l 1 (list 1 2 3))
+  (check-equal? (insert-everywhere 1 (list 1 2 3))
                 (list (list 1 1 2 3)
                       (list 1 1 2 3)
                       (list 1 2 1 3)
                       (list 1 2 3 1))))
 
-(define permutations
-  (match-lambda
-   [(list)
-    (yield empty)]
-   [(list-rest fst rst)
-    (for ([rst-perm (in-generator (permutations rst))])
-      (insert-everywhere fst rst-perm))]))
-(module+ test
-  (define (permutations/l l)
-    (for/list ([r (in-generator (permutations l))])
-      r))
+(define (any-same?-distance-data e l)
+  (for/list ([x (in-list l)])
+    (if (equal? x e)
+      'this
+      (any-same? e x))))
 
-  (check-equal? (permutations/l empty)
-                (list empty))
-  (check-equal? (permutations/l (list 1))
-                (list (list 1)))
-  (check-equal? (permutations/l (list 1 2))
-                (list (list 1 2)
-                      (list 2 1))))
+(define (count-after l)
+  (match l
+    [(list)
+     +inf.0]
+    [(list-rest #t more)
+     1]
+    [(list-rest #f more)
+     (add1 (count-after more))]))
+(module+ test
+  (check-equal? (count-after empty)
+                +inf.0)
+  (check-equal? (count-after (list #t))
+                1)
+  (check-equal? (count-after (list #t #f))
+                1)
+  (check-equal? (count-after (list #f #t #f))
+                2))
+
+(define (count-before l)
+  (let loop ([cur-min +inf.0]
+             [l l])
+    (match l
+      [(list-rest 'this after)
+       (min cur-min (count-after after))]
+      [(list-rest #t more)
+       (loop 1 more)]
+      [(list-rest #f more)
+       (loop (add1 cur-min) more)])))
+(module+ test
+  (check-equal? (count-before (list 'this))
+                +inf.0)
+  (check-equal? (count-before (list #f 'this))
+                +inf.0)
+  (check-equal? (count-before (list #f 'this #f))
+                +inf.0)
+  (check-equal? (count-before (list #t #f 'this #f))
+                2.0))
+
+(define (any-same?-distance e l)
+  (count-before (any-same?-distance-data e l)))
+(module+ test
+  (check-equal? (any-same?-distance (list 1)
+                                    (list (list 1) (list 2) (list 3)))
+                +inf.0)
+  (check-equal? (any-same?-distance (list 1 5)
+                                    (list (list 1 5) (list 2 6)
+                                          (list 3 7) (list 1 4)))
+                3.0)
+  (check-equal? (any-same?-distance (list 1 4)
+                                    (list (list 1 5) (list 2 6)
+                                          (list 3 7) (list 1 4)))
+                3.0))
+
+(define (insert e l)
+  (argmax (curry any-same?-distance e)
+          (insert-everywhere e l)))
+(module+ test
+  (check-equal? (insert (list 1 'x) empty)
+                (list (list 1 'x)))
+  (check-equal? (insert (list 1 'x) (list (list 1 'y)))
+                (list (list 1 'x) (list 1 'y)))
+  (check-equal? (insert (list 1 'x) (list (list 1 'y) (list 2 'z)))
+                (list (list 1 'y) (list 2 'z) (list 1 'x))))
 
 (define (optimize l)
-  (for/or ([rl (in-generator (permutations l))]
-           [i (in-naturals)])
-    (printf "~a\n" i)
-    (not-any-same? rl)))
+  (foldl insert empty l))
 
 (module+ main
   (require web-server/servlet-env
            web-server/http)
-
-  (printf "done\n")
 
   (define schedules
     (optimize
@@ -102,8 +119,6 @@
                  [d (in-list (remove* (list b l) choices))]
                  [t (in-list (remove* (list b l d) choices))])
        (list b l d t))))
-
-  (printf "really done\n")
 
   (define how-many-schedules
     (length schedules))
