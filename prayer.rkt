@@ -1,7 +1,10 @@
 #lang racket/base
 (require racket/list
          racket/match
-         racket/function)
+         racket/function
+         racket/generator)
+(module+ test
+  (require rackunit))
 
 (define (tdize v)
   `(td ,v))
@@ -11,68 +14,104 @@
 
 (define (any-same? l r)
   (ormap equal? l r))
-(module+ tests
-  (require rackunit)
+(module+ test
   (check-equal? (any-same? (list "D" "M" "F" "P")
                            (list "D" "P" "F" "M"))
+                #t)
+  (check-equal? (any-same? (list "D" "M" "F" "P")
+                           (list "F" "D" "P" "M"))
+                #f))
+
+(define not-any-same?
+  (match-lambda
+   [(list)
+    #t]
+   [(list lst)
+    #t]
+   [(list-rest fst (and (list-rest snd snd-rst)
+                        fst-rst))
+    (and (not (any-same? fst snd))
+         (not-any-same? fst-rst))]))
+(module+ test
+  (check-equal? (not-any-same? empty)
+                #t)
+  (check-equal? (not-any-same? (list (list 1)))
+                #t)
+  (check-equal? (not-any-same? (list (list 1) (list 1)))
+                #f)
+  (check-equal? (not-any-same? (list (list 1) (list 2)))
+                #t)
+  (check-equal? (not-any-same? (list (list 2) (list 1)))
+                #t)
+  (check-equal? (not-any-same? (list (list 1) (list 2) (list 1)))
                 #t))
 
-(define (snoc l x)
-  (append l (list x)))
+(define (insert-everywhere e l)
+  (for ([i (in-range (add1 (length l)))])
+    (define-values (before after) (split-at l i))
+    (yield (append before (list e) after))))
+(module+ test
+  (define (insert-everywhere/l e l)
+    (for/list ([r (in-generator (insert-everywhere e l))])
+      r))
 
-(define (insert s l)
-  (let/ec esc
-    (let loop ([l l])
-      (match l
-        [(list)
-         (list s)]
-        [(list lst)
-         (if (any-same? s lst)
-           (esc #f)
-           (list s lst))]
-        [(list-rest fst rst)
-         (if (any-same? s fst)
-           (cons fst (loop rst))
-           (cons s l))]))))
+  (check-equal? (insert-everywhere/l 1 (list))
+                (list (list 1)))
+  (check-equal? (insert-everywhere/l 1 (list 1 2 3))
+                (list (list 1 1 2 3)
+                      (list 1 1 2 3)
+                      (list 1 2 1 3)
+                      (list 1 2 3 1))))
 
-(define (optimize il)
-  (let loop ([init-result empty]
-             [to-insert il])
-    (define-values
-      (result failed)
-      (for/fold ([result init-result]
-                 [failed empty])
-          ([s (in-list to-insert)])
-        (define next-result
-          (insert s result))
-        (cond
-          [next-result
-           (values next-result failed)]
-          [else
-           (values result (cons s failed))])))
-    (if (empty? failed)
-      result
-      (loop result failed))))
+(define permutations
+  (match-lambda
+   [(list)
+    (yield empty)]
+   [(list-rest fst rst)
+    (for ([rst-perm (in-generator (permutations rst))])
+      (insert-everywhere fst rst-perm))]))
+(module+ test
+  (define (permutations/l l)
+    (for/list ([r (in-generator (permutations l))])
+      r))
 
-(define schedules
-  (optimize
-   (for*/list ([b (in-list choices)]
-               [l (in-list (remove* (list b "Daddy") choices))]
-               [d (in-list (remove* (list b l) choices))]
-               [t (in-list (remove* (list b l d) choices))])
-     (list b l d t))))
+  (check-equal? (permutations/l empty)
+                (list empty))
+  (check-equal? (permutations/l (list 1))
+                (list (list 1)))
+  (check-equal? (permutations/l (list 1 2))
+                (list (list 1 2)
+                      (list 2 1))))
 
-(define how-many-schedules
-  (length schedules))
-
-(define (schedule-of-time t)
-  (list-ref schedules
-            (modulo (date-year-day t)
-                    how-many-schedules)))
+(define (optimize l)
+  (for/or ([rl (in-generator (permutations l))]
+           [i (in-naturals)])
+    (printf "~a\n" i)
+    (not-any-same? rl)))
 
 (module+ main
   (require web-server/servlet-env
            web-server/http)
+
+  (printf "done\n")
+
+  (define schedules
+    (optimize
+     (for*/list ([b (in-list choices)]
+                 [l (in-list (remove* (list b "Daddy") choices))]
+                 [d (in-list (remove* (list b l) choices))]
+                 [t (in-list (remove* (list b l d) choices))])
+       (list b l d t))))
+
+  (printf "really done\n")
+
+  (define how-many-schedules
+    (length schedules))
+
+  (define (schedule-of-time t)
+    (list-ref schedules
+              (modulo (date-year-day t)
+                      how-many-schedules)))
 
   (define how-many-days 7)
   (define days
