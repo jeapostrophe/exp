@@ -5,6 +5,7 @@
          racket/format
          racket/file
          racket/port
+         racket/runtime-path
          net/url
          file/sha1
          file/dbm
@@ -29,7 +30,7 @@
   the-call/input-url)
 
 (module+ main
-  (define db-pth "/tmp/url.cache.db")
+  (define-runtime-path db-pth "url.cache.db")
   
   (current-api-key
    "60fcf6401d6ad9c37f8daf603352fdedf36c6514")
