@@ -3,11 +3,38 @@
          racket/list
          racket/match
          racket/format
+         racket/file
+         racket/port
+         net/url
+         file/sha1
+         file/dbm
          "org.rkt")
 
+(define (make-cached-call/input-url cache)
+  (define (the-call/input-url url port-kind port-f)
+    (define db (dbm-open cache))
+    (define s (url->string url))
+    (define h (sha1 (open-input-string s)))
+    (define c
+      (dbm-ref db h
+               (λ ()
+                 (define c
+                   (call/input-url url port-kind
+                                   port->string))
+                 (dbm-set! db h c)
+                 c)))
+    (dbm-close! db)
+
+    (with-input-from-string c port-f))
+  the-call/input-url)
+
 (module+ main
+  (define db-pth "/tmp/url.cache.db")
+  
   (current-api-key
    "60fcf6401d6ad9c37f8daf603352fdedf36c6514")
+  (current-call/input-url
+   (make-cached-call/input-url db-pth))
 
   (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
   (match-define (list games meta) (with-input-from-file path read-org))
