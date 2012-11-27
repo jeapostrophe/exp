@@ -12,45 +12,87 @@
   (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
   (match-define (list games meta) (with-input-from-file path read-org))
 
-  (define (show-game ht)
-    (printf "~a: ~a (~v)\n"
-            ))
+  (define stop? #f)
+  (define new-games-children
+    (for/list ([g (in-list (node-children games))])
+      (let/ec return
+        (when stop?
+          (return g))
+        (define ns (node-props g))
+        (when (hash-has-key? ns "Release")
+          (return g))
 
-  (for/list ([g (in-list (node-children games))])
-    (let/ec return
-      (define ns (node-props g))
-      (when (hash-has-key? ns "Release")
-        (return g))
+        (define n (node-label g))
+        (printf "~v (~a ~a)\n"
+                n
+                (hash-ref ns "Year")
+                (hash-ref ns "System"))
 
-      (define n (node-label g))
-      (printf "~v (~a ~a)\n"
-              n
-              (hash-ref ns "Year")
-              (hash-ref ns "System"))
+        (define gbs (game-search n))
+        (define gb-releases
+          (sort
+           (remove-duplicates
+            (append-map
+             (λ (gb)
+               (define gb-deets
+                 (hash-ref
+                  (api-url->json
+                   (make-api-url
+                    (list "game"
+                          (number->string (hash-ref gb 'id))
+                          "")
+                    empty))
+                  'results))
 
-      (define gb-dates
-        (for ([gb (in-list (game-search n))]
-              [i (in-naturals)])
-          (define gb-n (hash-ref gb 'name))
-          (define gb-date (game-info-release gb))
-          (define gb-platforms
-            (map
-             (λ (ht)
-               (hash-ref ht 'name))
-             (hash-ref
-              (hash-ref
-               (api-url->json
-                (make-api-url
-                 (list "game"
-                       (number->string (hash-ref gb 'id))
-                       "")
-                 empty))
-               'results)
-              'platforms)))
-          (printf "\t~a. ~a ~a: ~v\n"
-                  i (~a #:min-width 10 gb-date) gb-n gb-platforms)
-          gb-date))
-      (printf "\ts. skip\n")
-      (printf "\tq. quit\n")
+               (map (λ (ht)
+                      (define release
+                        (hash-ref
+                         (api-url->json
+                          (make-api-url
+                           (list "release"
+                                 (number->string (hash-ref ht 'id))
+                                 "")
+                           empty))
+                         'results))
+                      (vector (game-info-release release)
+                              (hash-ref gb 'name)
+                              (hash-ref (hash-ref release 'platform)
+                                        'name)))
+                    (hash-ref
+                     gb-deets
+                     'releases)))
+             gbs))
+           string<=?
+           #:key (λ (v) (vector-ref v 0))))
 
-      (match (read)))))
+        (define gb-dates
+          (for/list ([gb (in-list gb-releases)]
+                     [i (in-naturals)])
+            (match-define (vector gb-date gb-n gb-platform) gb)
+            (printf "\t~a. ~a ~a: ~v\n"
+                    i (~a #:min-width 10 gb-date) gb-n gb-platform)
+            gb-date))
+        (printf "\ts. skip\n")
+        (printf "\tq. quit\n")
+
+        (match (read)
+          [(? number? n)
+           (when (<= (length gb-dates) n)
+             (return g))
+           (define gb-date (list-ref gb-dates n))
+           (struct-copy node g
+                        [props (hash-set ns "Release" gb-date)])]
+          ['s
+           (return g)]
+          [_
+           (set! stop? #t)
+           (return g)]))))
+
+  (define new-games
+    (struct-copy
+     node games
+     [children new-games-children]))
+
+  (with-output-to-file path
+    #:exists 'replace
+    (λ () (write-org (list new-games meta)))))
