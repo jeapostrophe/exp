@@ -403,7 +403,7 @@ given a prefix arg."
             ("cg" . "cgc -noentry")
             ("glsl" . "cgc -noentry -oglsl")
             ;; XXX rkt to rk switch
-            ("rkt" . "rk")
+            ("rkt" . "rkt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
             ("tex" . "pdflatex")))
