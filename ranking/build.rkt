@@ -7,7 +7,7 @@
          racket/function
          racket/gui
          racket/date
-         "org.rkt")
+         file/org-mode)
 
 (struct bst (left val right) #:prefab)
 (define sorted-list->binary-tree

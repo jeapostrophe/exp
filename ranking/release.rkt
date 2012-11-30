@@ -9,7 +9,7 @@
          net/url
          file/sha1
          file/dbm
-         "org.rkt")
+         file/org-mode)
 
 (define (make-cached-call/input-url cache)
   (define (the-call/input-url url port-kind port-f)
