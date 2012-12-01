@@ -1,15 +1,66 @@
 #lang racket/base
-(require net/giantbomb
-         racket/list
+(require racket/list
          racket/match
          racket/format
          racket/file
          racket/port
          racket/runtime-path
          net/url
+         json
          file/sha1
          file/dbm
          file/org-mode)
+
+(define current-api-key (make-parameter ""))
+
+(define (make-api-url path more)
+  (url "http"
+       #f
+       "api.giantbomb.com"
+       #f
+       #t
+       (map (λ (p) (path/param p empty))
+            path)
+       (list* (cons 'api_key (current-api-key))
+              (cons 'format "json")
+              more)
+       #f))
+
+(define current-call/input-url (make-parameter call/input-url))
+
+(define (api-url->json the-url)
+  ((current-call/input-url)
+   the-url
+   get-pure-port
+   read-json))
+
+(define (game-info-release ht)  
+  (define ord 
+    (or (hash-ref ht 'release_date #f)
+        (hash-ref ht 'original_release_date #f)
+        'null))
+  (define erm (hash-ref ht 'expected_release_month))
+  (define ery (hash-ref ht 'expected_release_year))
+  (if (eq? 'null ord)
+    (match erm
+      ['null
+       (~a ery)]
+      [_
+       (~a ery "/" (~a #:min-width 2
+                       #:align 'right
+                       #:left-pad-string "0"
+                       erm))])
+    (regexp-replace #rx"^(....)-(..)-(..) .+$"
+                    ord
+                    "\\1/\\2/\\3")))
+
+(define (game-search game-name)
+  (hash-ref
+   (api-url->json
+    (make-api-url (list "search" "")
+                  (list (cons 'resources "game")
+                        (cons 'query game-name))))
+   'results))
 
 (define (make-cached-call/input-url cache)
   (define (the-call/input-url url port-kind port-f)
