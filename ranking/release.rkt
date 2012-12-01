@@ -5,6 +5,7 @@
          racket/file
          racket/port
          racket/runtime-path
+         readline/readline
          net/url
          json
          file/sha1
@@ -113,71 +114,85 @@
         (when (hash-has-key? ns "Release")
           (return g))
 
-        (define n (node-label g))
-        (printf "~v (~a ~a)\n"
-                n
-                (hash-ref ns "Year")
-                (hash-ref ns "System"))
+        (define gb-date
+          (let loop ([n (node-label g)])
+            (add-history n)
+            (printf "~v (~a ~a)\n"
+                    (node-label g)
+                    (hash-ref ns "Year")
+                    (hash-ref ns "System"))
 
-        (define gbs (game-search n))
-        (define gb-releases
-          (sort
-           (remove-duplicates
-            (append-map
-             (λ (gb)
-               (define gb-deets
-                 (hash-ref
-                  (api-url->json
-                   (make-api-url
-                    (list "game"
-                          (number->string (hash-ref gb 'id))
-                          "")
-                    empty))
-                  'results))
+            (define gbs (game-search n))
+            (define gb-releases
+              (sort
+               (remove-duplicates
+                (append-map
+                 (λ (gb)
+                   (define gb-deets
+                     (hash-ref
+                      (api-url->json
+                       (make-api-url
+                        (list "game"
+                              (number->string (hash-ref gb 'id))
+                              "")
+                        empty))
+                      'results))
 
-               (map (λ (ht)
-                      (define release
+                   (map (λ (ht)
+                          (define release
+                            (hash-ref
+                             (api-url->json
+                              (make-api-url
+                               (list "release"
+                                     (number->string (hash-ref ht 'id))
+                                     "")
+                               empty))
+                             'results))
+                          (vector (game-info-release release)
+                                  (hash-ref gb 'name)
+                                  (hash-ref (hash-ref release 'platform)
+                                            'name)))
                         (hash-ref
-                         (api-url->json
-                          (make-api-url
-                           (list "release"
-                                 (number->string (hash-ref ht 'id))
-                                 "")
-                           empty))
-                         'results))
-                      (vector (game-info-release release)
-                              (hash-ref gb 'name)
-                              (hash-ref (hash-ref release 'platform)
-                                        'name)))
-                    (hash-ref
-                     gb-deets
-                     'releases)))
-             gbs))
-           string<=?
-           #:key (λ (v) (vector-ref v 0))))
+                         gb-deets
+                         'releases)))
+                 gbs))
+               string<=?
+               #:key (λ (v) (vector-ref v 0))))
 
-        (define gb-dates
-          (for/list ([gb (in-list gb-releases)]
-                     [i (in-naturals)])
-            (match-define (vector gb-date gb-n gb-platform) gb)
-            (printf "\t~a. ~a ~a: ~v\n"
-                    i (~a #:min-width 10 gb-date) gb-n gb-platform)
-            gb-date))
-        (printf "\ts. skip\n")
-        (printf "\tq. quit\n")
+            (define gb-dates
+              (for/list ([gb (in-list gb-releases)]
+                         [i (in-naturals)])
+                (match-define (vector gb-date gb-n gb-platform) gb)
+                (printf "\t~a. ~a ~a: ~v\n"
+                        i (~a #:min-width 10 gb-date) gb-n gb-platform)
+                gb-date))
+            (printf "\ts. skip\n")
+            (printf "\te. edit\n")
+            (printf "\tm. manual\n")
+            (printf "\tq. quit\n")
 
-        (match (read)
-          [(? number? n)
-           (when (<= (length gb-dates) n)
-             (return g))
-           (define gb-date (list-ref gb-dates n))
-           (struct-copy node g
-                        [props (hash-set ns "Release" gb-date)])]
-          ['s
-           (return g)]
-          [_
-           (set! stop? #t)
-           (return g)]))))
+            (match (readline "> ")
+              ["s"
+               (return g)]
+              ["e"
+               (loop (readline "Search: "))]
+              ["m"
+               (let date-loop ()
+                 (add-history (hash-ref ns "Year"))
+                 (define d (readline "Date: "))
+                 (if (regexp-match #rx"^..../../..$" d)
+                   d
+                   (date-loop)))]
+              ["q"
+               (set! stop? #t)
+               (return g)]
+              [(app string->number n)
+               (when (<= (length gb-dates) n)
+                 (return g))
+               (list-ref gb-dates n)])))
+
+        (struct-copy node g
+                     [props (hash-set ns "Release" gb-date)]))))
 
   (define new-games
     (struct-copy
