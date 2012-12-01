@@ -34,8 +34,8 @@
    get-pure-port
    read-json))
 
-(define (game-info-release ht)  
-  (define ord 
+(define (game-info-release ht)
+  (define ord
     (or (hash-ref ht 'release_date #f)
         (hash-ref ht 'original_release_date #f)
         'null))
@@ -55,12 +55,24 @@
                     "\\1/\\2/\\3")))
 
 (define (game-search game-name)
-  (hash-ref
-   (api-url->json
-    (make-api-url (list "search" "")
-                  (list (cons 'resources "game")
-                        (cons 'query game-name))))
-   'results))
+  (let loop ([offset 0])
+    (define s
+      (api-url->json
+       (make-api-url (list "search" "")
+                     (list* (cons 'resources "game")
+                            (cons 'query game-name)
+                            (if (zero? offset)
+                              empty
+                              (list
+                               (cons 'offset (number->string offset))))))))
+    (define number-here (hash-ref s 'number_of_page_results))
+    (define total (hash-ref s 'number_of_total_results))
+    (append (hash-ref s 'results)
+            (if (= (+ offset
+                      number-here)
+                   total)
+              empty
+              (loop (+ offset number-here ))))))
 
 (define (make-cached-call/input-url cache)
   (define (the-call/input-url url port-kind port-f)
@@ -82,7 +94,7 @@
 
 (module+ main
   (define-runtime-path db-pth "url.cache.db")
-  
+
   (current-api-key
    "60fcf6401d6ad9c37f8daf603352fdedf36c6514")
   (current-call/input-url
