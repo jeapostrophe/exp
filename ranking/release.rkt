@@ -172,7 +172,7 @@
             (printf "\tq. quit\n")
 
             (match (readline "> ")
-              ["s"
+              [(or "" "s")
                (return g)]
               ["e"
                (loop (readline "Search: "))]
@@ -183,13 +183,14 @@
                  (if (regexp-match #rx"^..../../..$" d)
                    d
                    (date-loop)))]
-              ["q"
-               (set! stop? #t)
-               (return g)]
-              [(app string->number n)
+              [(and (regexp #rx"^[0-9]+$" (list _)) s)
+               (define n (string->number s))
                (when (<= (length gb-dates) n)
                  (return g))
-               (list-ref gb-dates n)])))
+               (list-ref gb-dates n)]
+              [(or "q" _)
+               (set! stop? #t)
+               (return g)])))
 
         (struct-copy node g
                      [props (hash-set ns "Release" gb-date)]))))
