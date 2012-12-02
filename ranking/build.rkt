@@ -270,6 +270,22 @@
 (define (node-sort n <)
   (struct-copy node n [children (sort (node-children n) <)]))
 
+(define (node-props-year n)
+  (substring (node-props-release n) 0 4))
+
+(module+ test
+  (check-equal? (substring "2012/12/01" 0 4) "2012"))
+
+(define (node-props-release n)
+  (define ps (node-props n))
+  (cond
+    [(hash-ref ps "Release" #f)
+     => (λ (r) r)]
+    [(hash-ref ps "Year" #f)
+     => (λ (y) (format "~a/??/??" y))]
+    [else
+     "????/??/??"]))
+
 (define (perform-ranking kind games)
   (define key (format "Sort~a" kind))
   (define (game-completed? n)
@@ -283,7 +299,7 @@
       (node (format "~a (~a, ~a)"
                     (node-label n)
                     ((node-prop "System") n)
-                    ((node-prop "Year") n))
+                    (node-props-year n))
             (hasheq "ID" ((node-prop "ID") n)
                     key ((node-prop key #f) n))
             empty
@@ -380,7 +396,7 @@
                        (list #f "N" "Y/C" "Y"))
                       (node-prop "Completed"))
             (2compose number-cmp node-last-played)
-            (2compose number-cmp (compose string->number/exn (node-prop "Year")))
+            (2compose string-cmp node-props-release)
             (2compose wordy-cmp node-label))))
          "SortNormal"))
 
