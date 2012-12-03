@@ -281,8 +281,6 @@
   (cond
     [(hash-ref ps "Release" #f)
      => (λ (r) r)]
-    [(hash-ref ps "Year" #f)
-     => (λ (y) (format "~a/??/??" y))]
     [else
      "????/??/??"]))
 

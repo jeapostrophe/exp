@@ -428,7 +428,7 @@ given a prefix arg."
               (let ((multi-term-program-switches 
                      (list "-i" "-c" (concat progName " \"" fname "\""))))
                 (multi-term-dedicated-open)))))
-        (progn
+        (prognm
           (message "No recognized program file suffix for this file."))))))
 (defun run-current-file-ro () 
   "Execute or compile the current file."

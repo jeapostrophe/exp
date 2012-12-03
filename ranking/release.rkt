@@ -112,7 +112,10 @@
           (return g))
         (define ns (node-props g))
         (when (hash-has-key? ns "Release")
-          (return g))
+          (if (hash-has-key? ns "Year")
+            (return (struct-copy node g
+                     [props (hash-remove ns "Year")]))
+            (return g)))
 
         (define gb-date
           (let loop ([n (node-label g)])
