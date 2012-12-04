@@ -65,7 +65,7 @@ define_webjump("y", "http://www.youtube.com/results?search_query=%s&search=Searc
                $description = "YouTube");
 define_webjump("j", "http://jisho.org/words?jap=&eng=%s&dict=edict",
                $description = "Jisho");
-define_webjump("r", "file:///home/jay/Dev/scm/plt/doc/search/index.html?q=%s",
+define_webjump("r", "file:///home/jay/.racket/doc/search/index.html?q=%s",
                $description = "Racket search");
 define_webjump("g", "http://www.google.com/search?q=%s&ie=utf-8&oe=utf-8&aq=t",
                $description = "Google search");
@@ -74,10 +74,9 @@ require("page-modes/wikipedia.js");
 wikipedia_webjumps_format = "w";
 define_wikipedia_webjumps("en");
 
-define_webjump("ubuntupkg", "http://packages.ubuntu.com/%s");
-define_webjump("ubuntufile", "http://packages.ubuntu.com/search?searchon=contents&keywords=%s&mode=path&arch=any");
-define_webjump("ubuntubugs", "http://bugs.launchpad.net/ubuntu/+source/%s");
-define_webjump("launchpad", "https://launchpad.net/+search?field.text=%s");
+define_webjump("arch", "https://www.archlinux.org/packages/?q=%s");
+define_webjump("archwiki", "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s&fulltext=Search");
+
 
 // Send mailto to gmail
 set_protocol_handler("mailto", "https://mail.google.com/mail/?extsrc=mailto&url=%s");
