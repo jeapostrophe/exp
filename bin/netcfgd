@@ -1,5 +1,5 @@
 #!/bin/bash
-log() { echo $* ; }
+log() { echo $(date) : $* ; }
 
 CURRENT_FILE=~/.netcfg_active
 
