@@ -28,7 +28,7 @@ hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/tru
 hash -d courses=~work/courses
 hash -d 630=~courses/2013/spring/630
 hash -d 430=~courses/2013/winter/430
-hash -d 330=~courses/2012/fall/330
+hash -d 330=~courses/2013/fall/330
 
 export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 

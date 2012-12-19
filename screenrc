@@ -103,11 +103,15 @@ screen -t powertop forever sudo powertop
 screen -t irc forever irssi
 screen zsh_dir ~courses
 screen zsh_dir ~330
-screen zsh_dir ~430
 screen zsh_dir ~github/grade-samurai 
-screen zsh_dir ~github/grade-samurai/courses/2012-fall-330/
-screen zsh_dir ~github/grade-samurai/courses/2012-winter-430/
-screen zsh_dir ~gb 
+screen zsh_dir ~github/grade-samurai/courses/2013-winter-330/
+screen zsh_dir ~github/grade-samurai/courses/2013-fall-330/
+screen zsh_dir ~430
+screen zsh_dir ~github/sf-check
+screen zsh_dir ~630
+screen zsh_dir ~work/grants/career/2013
+screen zsh_dir ~work/papers/c-from-cm-journal
+screen zsh_dir ~gb
 screen zsh_dir ~gb
 screen zsh_dir ~github
 screen zsh_dir ~github
