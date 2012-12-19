@@ -105,7 +105,6 @@ screen zsh_dir ~courses
 screen zsh_dir ~330
 screen zsh_dir ~github/grade-samurai 
 screen zsh_dir ~github/grade-samurai/courses/2013-winter-330/
-screen zsh_dir ~github/grade-samurai/courses/2013-fall-330/
 screen zsh_dir ~430
 screen zsh_dir ~github/sf-check
 screen zsh_dir ~630
