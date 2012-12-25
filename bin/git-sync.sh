@@ -12,8 +12,13 @@ for REPO in ~exp ~home ~work ~github/jpn ~github/get-bonus.wiki ; do
     # Add new files
     git add . >/dev/null 2>&1
     git commit --quiet -m "Automatic commit at $(date)" > /dev/null
+    git gc
     if git remote show | grep origin &> /dev/null ; then
         git push --quiet
     fi
 done
 
+for REPO in ~plt ~github/* ; do
+    cd $REPO
+    git gc
+done
