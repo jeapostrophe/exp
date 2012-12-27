@@ -94,7 +94,7 @@
         (hash-set cp id (number->string/padding this-id how-many))])))
   (struct-copy node games [children new-children]))
 
-(define (normalize-games rank? games)
+(define (normalize-games games)
   (define new-children
     (for/list ([c (in-list (node-children games))])
       (define p (node-props c))
@@ -106,8 +106,6 @@
           p
           (let ()
             (define (completed?)
-              (unless rank?
-                (error 'game-rank "Can't normalize"))
               (match
                   (message-box/custom
                    "Ranking"
@@ -117,8 +115,6 @@
                 [2 "N"]
                 [3 "Y/C"]))
             (define (again?)
-              (unless rank?
-                (error 'game-rank "Can't normalize"))
               (match
                   (message-box/custom
                    "Ranking"
@@ -127,8 +123,6 @@
                 [1 "Y"]
                 [2 "N"]))
             (define (recommended?)
-              (unless rank?
-                (error 'game-rank "Can't normalize"))
               (match
                   (message-box/custom
                    "Ranking"
@@ -361,50 +355,70 @@
    node games
    [children games/SortOverall]))
 
-(module+ main
-  (define rank? (not (getenv "DONT_RANK")))
+(define (remove-props games some-props)
+  (define removed
+    (for/list ([c (in-list (node-children games))])
+      (define
+        removed-props
+        (for/fold ([ht (node-props c)])
+            ([p (in-list some-props)])
+          (hash-remove ht p)))
+      (struct-copy node c
+                   [props removed-props])))
+  (struct-copy
+   node games
+   [children removed]))
 
+(define (sort-games games)
+  (let* ((games
+          (id-games
+           (node-sort
+            games
+            (cmp->lt
+             (cmp-then
+              (2compose (list->cmp
+                         (list "Active" "Scheduled" "Queue" #f "Done"))
+                        (node-prop "Status" #f))
+              (2compose (list->cmp
+                         (list "Y" #f "N"))
+                        (node-prop "Again" #f))
+              (2compose (list->cmp
+                         (list "Y" #f "N"))
+                        (node-prop "Recommended" #f))
+              (2compose (list->cmp
+                         (list #f "N" "Y/C" "Y"))
+                        (node-prop "Completed" #f))
+              (2compose number-cmp node-last-played)
+              (2compose string-cmp node-props-release)
+              (2compose wordy-cmp node-label))))
+           "SortNormal"))
+
+         (games
+          (id-games
+           (node-sort
+            games
+            (cmp->lt
+             (2compose wordy-cmp node-label)))
+           "SortAlpha")))
+    games))
+
+(provide sort-games)
+
+(module+ main
   (define path "/home/jay/Dev/scm/github.jeapostrophe/home/etc/games.org")
   (match-define (list games meta) (with-input-from-file path read-org))
   (let*
       ((games
-        (normalize-games rank? games))
+        (normalize-games games))
 
        (games
-        (if rank?
-          (perform-ranking "Overall" games)
-          games))
+        (perform-ranking "Overall" games))
 
        (games
-        (id-games
-         (node-sort
-          games
-          (cmp->lt
-           (cmp-then
-            (2compose (list->cmp
-                       (list "Active" "Scheduled" "Queue" #f "Done"))
-                      (node-prop "Status"))
-            (2compose (list->cmp
-                       (list "Y" #f "N"))
-                      (node-prop "Again"))
-            (2compose (list->cmp
-                       (list "Y" #f "N"))
-                      (node-prop "Recommended"))
-            (2compose (list->cmp
-                       (list #f "N" "Y/C" "Y"))
-                      (node-prop "Completed"))
-            (2compose number-cmp node-last-played)
-            (2compose string-cmp node-props-release)
-            (2compose wordy-cmp node-label))))
-         "SortNormal"))
+        (sort-games games))
 
        (games
-        (id-games
-         (node-sort
-          games
-          (cmp->lt
-           (2compose wordy-cmp node-label)))
-         "SortAlpha")))
+        (remove-props games (list "SortNormal" "SortAlpha"))))
     (with-output-to-file path
       #:exists 'replace
       (λ () (write-org (list games meta))))))
