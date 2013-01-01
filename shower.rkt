@@ -5,8 +5,8 @@
          racket/file)
 
 (define steps
-  (list "Wet body"
-        #"Wet hair"
+  (list #"Wet hair"
+        "Wet body"        
         #"Get shampoo"
         #"Shampoo head"
         #"Rinse head"
@@ -21,11 +21,8 @@
         "Wash right leg"
         "Wash left leg"
         "Wash back"
-        "Rinse loufa"
         #"Rinse head"
-        "Wet face cloth"
-        "Wash face"
-        "Rinse face cloth"
+        "Rinse loufa"
         "Rinse body"))
 
 ;; (I think I actually count about 9 seconds when I try to count 5)
@@ -36,7 +33,7 @@
   (system s))
 
 (module+ main
-  (define music-dir "/home/jay/Downloads/shower/Mega Man 2")
+  (define music-dir "/home/jay/Downloads/shower/MegaMan2")
   (define shower-wav "/home/jay/Downloads/shower/shower.wav")
   (define shower-mp3 "/home/jay/Downloads/shower/shower.mp3")
   (define shower/hair-wav "/home/jay/Downloads/shower/shower-hair.wav")
@@ -85,7 +82,7 @@
 
     (define (combine wavs shower-wav shower-mp3)
       (system+
-       (format "sox ~a ~a ~a"
+       (format "sox -v 4.0 ~a ~a ~a"
                (apply string-append (add-between (apply append wavs) " "))
                alarm-sound
                shower-wav))
