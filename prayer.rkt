@@ -114,8 +114,8 @@
 
   (define schedules
     (optimize
-     (for*/list ([b (in-list choices)]
-                 [l (in-list (remove* (list b "Daddy") choices))]
+     (for*/list ([b (in-list (remove* (list "Daddy") choices))]
+                 [l (in-list (remove* (list b) choices))]
                  [d (in-list (remove* (list b l) choices))]
                  [t (in-list (remove* (list b l d) choices))])
        (list b l d t))))
