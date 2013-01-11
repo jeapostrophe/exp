@@ -1074,6 +1074,7 @@ given a prefix arg."
 ;; proof-process-buffer
 ;; proof-activate-scripting
 (global-set-key (kbd "<M-s-right>") 'proof-goto-point)
+(global-set-key (kbd "<M-s-return>") 'proof-goto-point)
 (global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
