@@ -25,6 +25,8 @@ urxvtd &
 
 ibus-daemon --xim &
 
+start-pulseaudio-x11 &
+
 if (screen -list | grep lightning) ; then
 	echo Screen exists
 else
