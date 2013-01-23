@@ -733,7 +733,9 @@ given a prefix arg."
        'je/distant))
      a)
 
-    (if (and je-schedule-flag? (< tn sta))
+    (if (or (and je-schedule-flag? (< tn sta))
+            (and je/org-agenda/filter-ctxt
+                 ....))
         nil
       a)))
 
@@ -745,7 +747,22 @@ given a prefix arg."
     (org-agenda "" "t")
     (org-agenda-columns)))
 
-(global-set-key (kbd "s-o") 'je/todo-list)
+(defvar je/org-agenda/filter-ctxt nil)
+(defun je/todo-list/all ()
+  "Open up the org-mode todo list (all)"
+  (interactive)
+  (progn
+    (setq je/org-agenda/filter-ctxt nil)
+    (je/todo-list)))
+(defun je/todo-list/work ()
+  "Open up the org-mode todo list (work)"
+  (interactive)
+  (progn
+    (setq je/org-agenda/filter-ctxt t)
+    (je/todo-list)))
+
+(global-set-key (kbd "s-o") 'je/todo-list/all)
+(global-set-key (kbd "S-s-o") 'je/todo-list/work)
 
 (defun je/agenda-sort (a b)
   "Sorting strategy for agenda items."
