@@ -735,9 +735,13 @@ given a prefix arg."
 
     (if (or (and je-schedule-flag? (< tn sta))
             (and je/org-agenda/filter-ctxt
-                 ....))
+                 (member/eq ":Home:" (org-entry-get ma "TAGS"))))
         nil
       a)))
+
+(defun member/eq (o l)
+  (or (equal o l)
+      (member o l)))
 
 (defun je/todo-list ()
   "Open up the org-mode todo list"
@@ -762,7 +766,7 @@ given a prefix arg."
     (je/todo-list)))
 
 (global-set-key (kbd "s-o") 'je/todo-list/all)
-(global-set-key (kbd "S-s-o") 'je/todo-list/work)
+(global-set-key (kbd "s-O") 'je/todo-list/work)
 
 (defun je/agenda-sort (a b)
   "Sorting strategy for agenda items."
