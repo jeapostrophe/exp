@@ -735,7 +735,8 @@ given a prefix arg."
 
     (if (or (and je-schedule-flag? (< tn sta))
             (and je/org-agenda/filter-ctxt
-                 (member/eq ":Home:" (org-entry-get ma "TAGS"))))
+                 (member/eq je/org-agenda/filter-ctxt
+                            (org-entry-get ma "TAGS"))))
         nil
       a)))
 
@@ -752,21 +753,30 @@ given a prefix arg."
     (org-agenda-columns)))
 
 (defvar je/org-agenda/filter-ctxt nil)
+
 (defun je/todo-list/all ()
   "Open up the org-mode todo list (all)"
   (interactive)
   (progn
     (setq je/org-agenda/filter-ctxt nil)
     (je/todo-list)))
+(global-set-key (kbd "s-o") 'je/todo-list/all)
+
 (defun je/todo-list/work ()
   "Open up the org-mode todo list (work)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt t)
+    (setq je/org-agenda/filter-ctxt ":Home:")
     (je/todo-list)))
-
-(global-set-key (kbd "s-o") 'je/todo-list/all)
 (global-set-key (kbd "s-O") 'je/todo-list/work)
+
+(defun je/todo-list/home ()
+  "Open up the org-mode todo list (home)"
+  (interactive)
+  (progn
+    (setq je/org-agenda/filter-ctxt ":Work:")
+    (je/todo-list)))
+(global-set-key (kbd "s-h") 'je/todo-list/home)
 
 (defun je/agenda-sort (a b)
   "Sorting strategy for agenda items."
