@@ -514,7 +514,7 @@ given a prefix arg."
   (desktop-save-in-desktop-dir)
   (save-some-buffers t))
 
-(run-with-idle-timer 60 t 'je/save-all)
+(run-with-idle-timer 6 t 'je/save-all)
 (global-set-key (kbd "s-S") 'je/save-all)
 
 ;; Org Mode
