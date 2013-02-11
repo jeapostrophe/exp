@@ -4,7 +4,7 @@ cd ~
 
 /usr/lib/notification-daemon-1.0/notification-daemon &
 
-~/bin/batterymon.sh &
+~/bin/bm.sh &
 
 ~/bin/syndaemon.sh &
 
