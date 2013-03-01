@@ -1,0 +1,5 @@
+#!/bin/bash
+
+INPUT=$(basename ${1} .mkv)
+
+ffmpeg -y -i ${INPUT}.mkv -c:a libvorbis -q:a 3 -c:v libvpx -b:v 2000k ${INPUT}.webm

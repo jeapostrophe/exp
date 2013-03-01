@@ -1,0 +1,5 @@
+#!/bin/bash
+
+OUTPUT=${1:-$(date +%s)}.mkv
+
+ffcast % ffmpeg -f x11grab -r 24 -s %wx%h -i %d+%x,%y -f alsa -i hw:0,0 -acodec flac -vcodec ffvhuff ${OUTPUT}
