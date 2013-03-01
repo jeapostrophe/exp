@@ -10,7 +10,7 @@ xrdb -merge ~/.Xresources
 
 xsetroot -solid '#fdf6e3'
 
-start-trayer.sh 0 &
+disp m & 
 
 workrave &
 

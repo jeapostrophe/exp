@@ -1,0 +1,27 @@
+#!/bin/sh
+
+case $1 in
+ m)
+  xrandr --output eDP1 --mode 1600x1200 --primary
+ ;;
+ d)
+  xrandr --output HDMI1 --mode 1920x1080 --primary
+ ;; 
+ dm)
+  xrandr --output HDMI1 --mode 1920x1080 --primary --output eDP1 --mode 1600x1200 --left-of HDMI1
+ ;;
+
+ m2d)
+  disp d
+  xrandr --output eDP1 --off
+ ;;
+ d2m)
+  disp m
+  xrandr --output HDMI1 --off
+ ;;
+ *)
+  echo Unknown: $1
+ ;;
+esac 
+
+~/bin/start-trayer.sh primary &
