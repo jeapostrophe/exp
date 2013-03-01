@@ -1,8 +1,8 @@
 // Load modules
 // I decided I don't like this
 //require("content-delay.js");
-require("page-modes/mini-gcal.js");
-require("page-modes/mini-gmail.js");
+//require("page-modes/mini-gcal.js");
+//require("page-modes/mini-gmail.js");
 
 session_pref("xpinstall.whitelist.required", false);
 
