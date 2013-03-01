@@ -6,20 +6,13 @@ cd ~
 
 ~/bin/bm.sh &
 
-~/bin/syndaemon.sh &
-
 xrdb -merge ~/.Xresources
 
 xsetroot -solid '#fdf6e3'
 
 start-trayer.sh 0 &
 
-color-correct.sh
 workrave &
-
-#~/.dropbox-dist/dropboxd &
-
-#~/Dev/dist/qjoypad-4.1.0/local/bin/qjoypad &
 
 urxvtd &
 
@@ -44,7 +37,5 @@ if [ "$1" = "default" ] ; then
 
 	google-chrome &
 fi
-
-nvidia-settings -a InitialPixmapPlacement=2
 
 exec xmonad
