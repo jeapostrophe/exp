@@ -1,7 +1,8 @@
 #!/bin/sh
 
 case $1 in
- mute) amixer set Master 0 ;;
- down) amixer set Master 5%- ;;
-   up) amixer set Master 5%+ ;;
+   mute) amixer set Master 0 ;;
+   down) amixer set Master 5%- ;;
+     up) amixer set Master 5%+ ;;
+ status) echo mehz ;;
 esac

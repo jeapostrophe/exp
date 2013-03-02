@@ -2,9 +2,11 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antiali
          bgColor = "#002b36",
          fgColor = "#839496",
          position = TopW L 90,
-         commands = [ Run Date "%a %b %e %H:%M" "date" 60,
+         commands = [ Run Date "%a %b %e %H:%M" "date" 600,
+                      Run Com "netcfgd" ["status"] "netcfgd" 10,
+                      Run Com "volume" ["status"] "volume" 10,
                       Run StdinReader ],
-         sepChar = "%",         
+         sepChar = "%",
          alignSep = "}{",
-         template = "%StdinReader% }{ <fc=#839496>%date%</fc>"
+         template = "%StdinReader% }{ %netcfgd% <fc=#839496>%date%</fc> %volume%"
        }

@@ -1,10 +1,15 @@
 #!/bin/bash
-log() { echo $(date) : $* ; }
+log() { logger -t netcfgd $* ; }
 
 CURRENT_FILE=~/.netcfg_active
+STATUS_FILE=~/.netcfg_status
 
 CURRENT() {
     cat ${CURRENT_FILE}
+}
+
+status () {
+ echo $1 > ${STATUS_FILE}
 }
 
 main() {
@@ -12,8 +17,10 @@ main() {
     while sleep 1; do
         if [[ "$(netcfg current)" = "" ]] ; then
             log "not connected, connecting"
+            status down
             if [[ "$(CURRENT)" = "" ]] ; then
                 log "no last connection, doing nothing"
+                status down
             else
                 netcfg $(CURRENT)
             fi
@@ -21,15 +28,18 @@ main() {
             host=$( route -n | awk '/^0.0.0.0/ { print $2 }' )
             if [[ "${host}" = "" ]] ; then
                 log "gateway not available, reconfiguring"
+                status down
                 netcfg -r $(CURRENT)
             else
-                ping -c1 -w10 $host &>/dev/null && continue
+                ping -c1 -w10 $host &>/dev/null && status up && continue
 
                 log "trying to reassociate"
+                status down
                 wpa_cli reassociate
-                ping -c1 -w10 $host &>/dev/null && continue
+                ping -c1 -w10 $host &>/dev/null && status up && continue
 
                 log "reassociate failed, reconfiguring network"
+                status down
                 netcfg -r $(CURRENT)
             fi
         fi
@@ -49,6 +59,16 @@ if [[ "$1" = "" ]] ; then
     log 'starting...'
     main
 else
-    log "setting connection to $1"
-    echo $1 > $CURRENT_FILE
+    case $1 in
+        status)
+            case $(cat $STATUS_FILE) in
+                down) echo "<fc=#dc322f>$(CURRENT)</fc>" ;;
+                up) echo "<fc=#268bd2>$(CURRENT)</fc>" ;;
+            esac  
+            ;;
+        *)
+            echo "setting connection to $1"
+            echo $1 > $CURRENT_FILE
+            ;;
+    esac
 fi

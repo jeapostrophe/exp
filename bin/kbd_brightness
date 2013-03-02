@@ -1,9 +1,11 @@
 #!/bin/bash
 
 DIR=/sys/devices/platform/applesmc.768/leds/smc::kbd_backlight
+FILE=${DIR}/brightness
 
 case $1 in
- on) echo 255 > ${DIR}/brightness ;;
- off) echo 0 > ${DIR}/brightness ;;
+ on) echo 255 > ${FILE} ;;
+ off) echo 0 > ${FILE} ;;
+ perm) chmod a+w ${FILE} ;;
 esac
 
