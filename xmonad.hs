@@ -32,9 +32,19 @@ main = do
          ("M4-S-=", sendMessage Expand),
          ("M4-S-t", withFocused $ windows . W.sink),
          ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart"),
-         ("<XF86AudioMute>", spawn "fnkey mute"),
-         ("<XF86AudioLowerVolume", spawn "fnkey voldown"),
-         ("<XF86AudioRaiseVolume", spawn "fnkey volup")
+         ("<XF86MonBrightnessDown>", spawn "brightness down"),
+         ("<XF86MonBrightnessUp>", spawn "brightness up"),
+         ("<XF86LaunchA>", spawn "fnkey launcha"),
+         ("<XF86LaunchB>", spawn "fnkey launchb"),
+         ("<XF86KbdBrightnessDown>", spawn "fnkey kbddown"),
+         ("<XF86KbdBrightnessUp>", spawn "fnkey kbdup"),
+         ("<XF86AudioPrev>", spawn "fnkey prev"),
+         ("<XF86AudioPlay>", spawn "fnkey play"),
+         ("<XF86AudioNext>", spawn "fnkey next"),
+         ("<XF86AudioMute>", spawn "volume mute"),
+         ("<XF86AudioLowerVolume>", spawn "volume down"),
+         ("<XF86AudioRaiseVolume>", spawn "volume up"),
+         ("<XF86PowerOff>", spawn "fnkey poweroff")
        ]
        `removeKeysP`
        [ "M4-r", "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h", "M4-S-q" ]

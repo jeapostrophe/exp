@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DIR=/sys/devices/platform/applesmc.768/leds/smc::kbd_backlight
+
+case $1 in
+ on) echo 255 > ${DIR}/brightness ;;
+ off) echo 0 > ${DIR}/brightness ;;
+esac
+
