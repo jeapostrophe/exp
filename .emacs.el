@@ -1109,6 +1109,9 @@ given a prefix arg."
 (global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
+;; haskell
+(load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file")
+
 ;; customs
 
 (custom-set-variables
