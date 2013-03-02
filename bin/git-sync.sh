@@ -20,5 +20,7 @@ done
 
 for REPO in ~plt ~github/* ; do
     cd $REPO
-    git gc
+    if [ -d .git ] ; then
+        git gc
+    fi
 done

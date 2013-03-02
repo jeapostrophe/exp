@@ -97,7 +97,6 @@ bindkey ^k next
 bindkey ^d kill
 bindkey ^n screen
 
-screen -t netcfgd forever sudo netcfgd
 screen -t alsamixer forever alsamixer
 screen -t powertop forever sudo powertop
 screen -t irc forever irssi

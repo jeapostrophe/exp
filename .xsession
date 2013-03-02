@@ -27,6 +27,8 @@ else
 fi
 
 if [ "$1" = "default" ] ; then
+    mpd ~/.mpdconf &
+
 	emacs &
 
 	conkeror &

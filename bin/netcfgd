@@ -1,8 +1,8 @@
 #!/bin/bash
 log() { logger -t netcfgd $* ; }
 
-CURRENT_FILE=~/.netcfg_active
-STATUS_FILE=~/.netcfg_status
+CURRENT_FILE=~jay/.netcfg_active
+STATUS_FILE=~jay/.netcfg_status
 
 CURRENT() {
     cat ${CURRENT_FILE}
