@@ -4,5 +4,7 @@ case $1 in
    mute) amixer set Master 0 ;;
    down) amixer set Master 5%- ;;
      up) amixer set Master 5%+ ;;
- status) echo mehz ;;
+ status) 
+        cur=$(amixer get Master | tail -1 | awk -F"[" '{print $2}' | awk -F% '{print $1}')
+        printf "v%3s%%" ${cur} ;;
 esac
