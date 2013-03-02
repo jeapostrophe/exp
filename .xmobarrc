@@ -4,9 +4,10 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antiali
          position = TopW L 90,
          commands = [ Run Date "%a %b %e %H:%M" "date" 600,
                       Run Com "netcfgd" ["status"] "netcfgd" 10,
-                      Run Com "volume" ["status"] "volume" 10,
+                      Run Com "volume" ["status"] "volume" 5,
+                      Run Com "mpc_status.sh" [] "mpc" 10,
                       Run StdinReader ],
          sepChar = "%",
          alignSep = "}{",
-         template = "%StdinReader% }{ %netcfgd% <fc=#839496>%date%</fc> %volume%"
+         template = "%StdinReader%}{M %mpc% N %netcfgd% V %volume% <fc=#839496>%date%</fc>"
        }

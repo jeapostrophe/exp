@@ -48,13 +48,13 @@ main = do
                              "killall workrave", "workrave"]),
          ("<XF86KbdBrightnessDown>", spawn "kbd_brightness off"),
          ("<XF86KbdBrightnessUp>", spawn "kbd_brightness on"),
-         ("<XF86AudioPrev>", spawn "fnkey prev"),
-         ("<XF86AudioPlay>", spawn "fnkey play"),
-         ("<XF86AudioNext>", spawn "fnkey next"),
+         ("<XF86AudioPrev>", spawn "mpc prev"),
+         ("<XF86AudioPlay>", spawn "mpc toggle"),
+         ("<XF86AudioNext>", spawn "mpc next"),
          ("<XF86AudioMute>", spawn "volume mute"),
          ("<XF86AudioLowerVolume>", spawn "volume down"),
          ("<XF86AudioRaiseVolume>", spawn "volume up"),
-         ("<XF86PowerOff>", spawn "xlock -delay 20000 -usefirst")
+         ("<XF86PowerOff>", spawn "mpc pause ; xlock -delay 20000 -usefirst")
        ]
        `removeKeysP`
        [ "M4-r", "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h", "M4-S-q" ]

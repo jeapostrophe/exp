@@ -1,10 +1,20 @@
 #!/bin/sh
 
+OLD=~/.volume
+cur=$(amixer get Master | tail -1 | awk '{print $3}')
+
 case $1 in
-   mute) amixer set Master 0 ;;
+   mute)
+        if [ "${cur}" = "0" ] ; then
+            amixer set Master $(cat $OLD)
+        else
+            echo ${cur} > ${OLD}
+            amixer set Master 0 
+        fi 
+        ;;
    down) amixer set Master 5%- ;;
      up) amixer set Master 5%+ ;;
  status) 
-        cur=$(amixer get Master | tail -1 | awk -F"[" '{print $2}' | awk -F% '{print $1}')
-        printf "v%3s%%" ${cur} ;;
+        curp=$(amixer get Master | tail -1 | awk -F"[" '{print $2}' | awk -F% '{print $1}')        
+        printf "%3s%%" ${curp} ;;
 esac
