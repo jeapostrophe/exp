@@ -19,8 +19,10 @@ for REPO in ~exp ~home ~work ~github/jpn ~github/get-bonus.wiki ; do
 done
 
 for REPO in ~plt ~github/* ; do
-    cd $REPO
-    if [ -d .git ] ; then
-        git gc
+    if [ -d $REPO ] ; then
+        cd $REPO
+        if [ -d .git ] ; then
+            git gc
+        fi
     fi
 done
