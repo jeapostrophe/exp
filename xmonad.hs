@@ -44,8 +44,12 @@ main = do
          ("<XF86MonBrightnessUp>", spawn "brightness up"),
          ("<XF86LaunchA>", goToSelected defaultGSConfig),
          ("<XF86LaunchB>", spawnSelected defaultGSConfig 
-                            ["netcfgd home","netcfgd cs",
-                             "killall workrave", "workrave"]),
+                            ["netcfgd home",
+                             "netcfgd cs",
+                             "netcfgd byu", 
+                             "killall workrave",
+                             "workrave",
+                             "xbacklight = 10"]),
          ("<XF86KbdBrightnessDown>", spawn "kbd_brightness off"),
          ("<XF86KbdBrightnessUp>", spawn "kbd_brightness on"),
          ("<XF86AudioPrev>", spawn "mpc prev"),
@@ -58,4 +62,6 @@ main = do
        ]
        `removeKeysP`
        [ "M4-r", "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h", "M4-S-q" ]
+       `removeMouseBindings`
+       [(mod4Mask, button1), (mod4Mask, button2), (mod4Mask, button3)]
                                           

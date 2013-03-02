@@ -87,6 +87,9 @@ if [ $(pwd) = ${HOME} ] ; then
 fi
 
 # Completions
+autoload -U compinit
+compinit
+
 if which compdef &>/dev/null ; then
     compdef -d git
     compdef -d svn
@@ -98,8 +101,8 @@ compctl -g '*(-/)' cd chdir dirs pushd
 #compctl -j -P '%' + -s '`ps -x | tail +2 | cut -c1-5`' wait
 
 # Caching
-#zstyle ':completion:*' use-cache on
-#zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
 
 # Adding known hosts
 #local _myhosts
