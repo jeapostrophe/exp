@@ -28,5 +28,3 @@ alias o=open
 
 export EMACS_SERVER_PORT=50000
 export EMACS_SERVER_FILE=~/.emacs.d/server/lightning
-
-source ~/.rvm/scripts/rvm

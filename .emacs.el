@@ -355,6 +355,9 @@ given a prefix arg."
          '(("^/home/jay" . "~")
            ("^/Users/jay" . "~")
            ("^~/Dev/scm" . "~scm")
+           ("^~/Dev/dist" . "~dist")
+           ("^~dist/sf" . "~sf")
+           ("^~sf/full" . "~sff")
            ("^~scm/plt" . "~plt")
            ("^~plt/collects" . "~collects")
            ("^~collects/web-server" . "~ws")
@@ -373,7 +376,9 @@ given a prefix arg."
     (abbreviate-file-name name)))
 
 (setq frame-title-format
-      '())
+      '(:eval (if (buffer-file-name)
+                  (je/abbreviate-file-name (buffer-file-name))
+                "%b")))
 
 (define-ibuffer-column je/name ()
   (cond
