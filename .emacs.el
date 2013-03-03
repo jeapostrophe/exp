@@ -372,6 +372,9 @@ given a prefix arg."
            ("^~blogs/jeapostrophe.github.com/source/downloads/code" . "~je-blog"))))
     (abbreviate-file-name name)))
 
+(setq frame-title-format
+      '())
+
 (define-ibuffer-column je/name ()
   (cond
    ((buffer-file-name buffer)
