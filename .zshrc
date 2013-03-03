@@ -145,9 +145,9 @@ function stoe() {
 }	
 
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
 if [ -L ~/.racket/doc ] ; then
     rm ~/.racket/doc
     ln -s $(racket -e '(require setup/dirs) (displayln (path->string (find-user-doc-dir)))') ~/.racket/doc
 fi
+
+export REPORTTIME=10
