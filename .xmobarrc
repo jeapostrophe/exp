@@ -1,7 +1,7 @@
 Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true",
          bgColor = "#002b36",
          fgColor = "#839496",
-         position = TopW L 90,
+         position = TopW L 95,
          commands = [ Run Date "%b %e %H:%M" "date" 600,
                       Run Com "netcfgd" ["status"] "netcfgd" 10,
                       Run Com "volume" ["status"] "volume" 5,

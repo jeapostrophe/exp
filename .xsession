@@ -4,8 +4,6 @@ cd ~
 
 /usr/lib/notification-daemon-1.0/notification-daemon &
 
-~/bin/bm.sh &
-
 xrdb -merge ~/.Xresources
 
 xsetroot -solid '#fdf6e3'

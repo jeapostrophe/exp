@@ -7,5 +7,5 @@ else
 fi
 
 echo -n "<fc=${COLOR}>"
-echo -n $(mpc current | perl -ne 's/^(.{18}).*(.{18})$/\1...\2/; print')
+echo -n $(mpc current | perl -ne 's/^(.{19}).*(.{19})$/\1...\2/; print')
 echo "</fc>"
