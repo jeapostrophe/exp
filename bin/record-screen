@@ -2,6 +2,6 @@
 
 OUTPUT=${1:-$(date +%s)}
 
-ffcast % ffmpeg -f x11grab -r 24 -s %wx%h -i %d+%x,%y -f alsa -i hw:0,0 -c:a flac -c:v libx264 -preset ultrafast -crf 0 ${OUTPUT}.mkv
+ffcast % ffmpeg -f x11grab -r 24 -s 1440x900 -i %d+0,0 -f alsa -i hw:0,0 -c:a flac -c:v libx264 -preset ultrafast -crf 0 ${OUTPUT}.mkv
 
 

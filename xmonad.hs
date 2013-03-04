@@ -73,9 +73,11 @@ main = do
        `removeKeysP`
        [ "M4-r", "M4-n", "M4-w", "M4-p", "M4-q", "M4-t", "M4-l", "M4-h", "M4-S-q" ]
        `removeMouseBindings`
-       [(mod4Mask, button1), (mod4Mask, button2), (mod4Mask, button3)]
+       -- (mod4Mask, button1),
+       [ (mod4Mask, button2), (mod4Mask, button3)]
        -- This doesn't work for copy/paste
        `additionalMouseBindings`
-       [((controlMask, button1), (\_ -> spawn "xte 'mouseup 1' 'mouseclick 3'")),
-        ((mod4Mask, button1), (\_ -> spawn "xte 'mouseup 1' 'mouseclick 2'"))]
+       [((controlMask, button1), (\_ -> spawn "xte 'mouseup 1' 'mouseclick 3'"))
+       -- ,((mod4Mask, button1), (\_ -> spawn "xte 'mouseup 1' 'mouseclick 2'"))
+       ]
                                           
