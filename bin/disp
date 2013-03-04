@@ -11,7 +11,7 @@ case $1 in
   xrandr --output HDMI1 --mode 1920x1080 --primary
  ;; 
  dm)
-  xrandr --output HDMI1 --mode 1920x1080 --primary --output eDP1 --mode 1600x1200 --left-of HDMI1
+  xrandr --output HDMI1 --mode 1920x1080 --primary --output eDP1 --mode 2560x1600 --scale 0.5625x0.5625 --left-of HDMI1
  ;;
 
  m2d)
