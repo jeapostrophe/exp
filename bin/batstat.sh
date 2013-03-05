@@ -12,6 +12,8 @@ PERCENT_N=$(echo $PERCENT_S | awk -F% '{print $1}')
 
 if acpi -b | grep Unknown &> /dev/null ; then
     TIME="??:??"
+elif acpi -b | grep Full &> /dev/null ; then
+    TIME="     "
 else
     TIME=$(acpi -b | perl -ne 's/^.+(..:..):...+$/\1/; print;')
 fi
