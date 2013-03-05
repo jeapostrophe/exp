@@ -2,11 +2,6 @@
 
 source ~/bin/solarized.sh
 
-AC=1
-if acpi -a | grep off-line &>/dev/null ; then
-    AC=0
-fi
-
 CHARGING=1
 if acpi -b | grep Discharging &>/dev/null ; then
     CHARGING=0
@@ -56,4 +51,4 @@ else
     echo -n "<fc=$RED>"
 fi
 echo -n "$TIME"
-echo -n "</fc>"
+echo "</fc>"

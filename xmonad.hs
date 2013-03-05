@@ -3,11 +3,38 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig
+import Graphics.X11.ExtraTypes.XF86
 import System.IO
+import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import XMonad.Actions.GridSelect
 
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ]
+
+myNavigation :: TwoD a (Maybe a)
+myNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navMyHandler
+  where navKeyMap = M.fromList [
+           ((0,xK_Escape)     , cancel)
+          ,((0,xF86XK_LaunchA), cancel)
+          ,((0,xF86XK_LaunchB), cancel)
+          ,((0,xK_Return)     , select)
+          ,((0,xK_slash)      , substringSearch myNavigation)
+          ,((0,xK_Left)       , move (-1,0) >> myNavigation)
+          ,((0,xK_Right)      , move (1,0) >> myNavigation)
+          ,((0,xK_Down)       , move (0,1) >> myNavigation)
+          ,((0,xK_Up)         , move (0,-1) >> myNavigation)
+          ,((0,xK_BackSpace), transformSearchString (\s -> if (s == "") then "" else init s) >> myNavigation)         
+          ]
+        -- The navigation handler ignores unknown key symbols,
+        -- therefore we const
+        navMyHandler (_,s,_) = do
+          transformSearchString (++ s)
+          myNavigation
+
+myGSConfig :: HasColorizer a => GSConfig a
+myGSConfig = defaultGSConfig
+  { gs_navigate = myNavigation
+  }
 
 main = do
   xmproc <- spawnPipe "exec xmobarj ~/.xmobarrc"
@@ -46,8 +73,8 @@ main = do
          ("M4-<Esc>", spawn "xmonad --recompile && xmonad --restart"),
          ("<XF86MonBrightnessDown>", spawn "brightness down"),
          ("<XF86MonBrightnessUp>", spawn "brightness up"),
-         ("<XF86LaunchA>", goToSelected defaultGSConfig),
-         ("<XF86LaunchB>", spawnSelected defaultGSConfig 
+         ("<XF86LaunchA>", goToSelected myGSConfig),
+         ("<XF86LaunchB>", spawnSelected myGSConfig
                             ["netcfgd home",
                              "netcfgd cs",
                              "netcfgd byu", 
