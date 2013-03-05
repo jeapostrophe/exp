@@ -60,6 +60,9 @@ if [[ "$1" = "" ]] ; then
     main
 else
     case $1 in
+        pstatus)
+            cat $STATUS_FILE
+            ;;
         status)
             case $(cat $STATUS_FILE) in
                 down) echo "<fc=#dc322f>$(CURRENT)</fc>" ;;
