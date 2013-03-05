@@ -6,13 +6,7 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antiali
                       Run Com "netcfgd" ["status"] "netcfgd" 10,
                       Run Com "volume" ["status"] "volume" 5,
                       Run Com "mpc_status.sh" [] "mpc" 10,
-                      Run BatteryP ["BAT0"]
-                          ["-t", "<acstatus><left>% <timeleft></fc>",
-                           "--",
-                           "-O", "<fc=#859900>",
-                           "-o", "<fc=#dc322f>",
-                           "-f", "ADP1/online" ]
-                          600,
+                      Run Com "batstat.sh" [] "battery" 10,
                       Run StdinReader ],
          sepChar = "%",
          alignSep = "}{",
