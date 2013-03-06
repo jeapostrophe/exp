@@ -1,9 +1,11 @@
 #!/bin/sh
 
 case $1 in
-    setup) 
-        xrandr --newmode TEC $(cvt 1400 1050 60 | awk -F\" '{print $3}')
-        exit 0
+    class1)
+        xrandr --noprimary --output eDP1 --mode 1400x1050 --scale 1x1 --output DP2 --mode TEC
+        ;;
+    class2)
+        xrandr --output DP2 --mode TECL
         ;;
     m)
 # old was 1440x900, and this gets that exactly
