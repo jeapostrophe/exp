@@ -85,6 +85,8 @@ main = do
                              "disp dm",
                              "disp m2d",
                              "disp d2m",
+                             "disp class-on",
+                             "disp class-off",
                              "xbacklight = 10"]),
          ("<XF86KbdBrightnessDown>", spawn "kbd_brightness off"),
          ("<XF86KbdBrightnessUp>", spawn "kbd_brightness on"),

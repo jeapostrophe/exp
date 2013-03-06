@@ -4,8 +4,11 @@ case $1 in
     class1)
         xrandr --noprimary --output eDP1 --mode 1400x1050 --scale 1x1 --output DP2 --mode TEC
         ;;
-    class2)
+    class-on)
         xrandr --output DP2 --mode TECL
+        ;;
+    class-off)
+        xrandr --output DP2 --off
         ;;
     m)
 # old was 1440x900, and this gets that exactly
