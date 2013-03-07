@@ -1,3 +1,10 @@
 #!/bin/sh
 
-mplayer tv:// -tv driver=v4l2:width=320:height=240:device=/dev/video0 -fps 24
+case $1 in
+    full)
+        mplayer tv:// -tv driver=v4l2:width=1440:height=900:device=/dev/video0 -fps 24
+        ;;
+    *)
+        mplayer tv:// -tv driver=v4l2:width=320:height=240:device=/dev/video0 -fps 24
+        ;;
+esac
