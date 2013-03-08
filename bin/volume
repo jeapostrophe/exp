@@ -1,7 +1,7 @@
 #!/bin/sh
 
 OLD=~/.volume
-cur=$(amixer get Master | tail -1 | awk '{print $3}')
+cur=$(amixer get Master | tail -1 | awk -F"[" '{print $1}' | perl -ne 's/^.* ([0-9]+) *$/\1/; print;')
 
 case $1 in
    mute)
@@ -14,7 +14,8 @@ case $1 in
         ;;
    down) amixer set Master 5%- ;;
      up) amixer set Master 5%+ ;;
+    cur) echo ${cur} ;;
  status) 
         curp=$(amixer get Master | tail -1 | awk -F"[" '{print $2}' | awk -F% '{print $1}')        
-        printf "%3s%%" ${curp} ;;
+        printf "%3s%%\n" ${curp} ;;
 esac
