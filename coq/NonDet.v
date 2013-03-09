@@ -78,21 +78,54 @@ Hint Constructors ceval.
 Definition thread := list com.
 Hint Unfold thread.
 
-Inductive tseval : state -> list thread -> state -> Prop :=
-| Thread_eval:
+Inductive tseval_nondet : state -> list thread -> state -> Prop :=
+| Thread_nondet:
   forall s c_0 s' ts ts_before c_n ts_after s'',
     ceval s c_0 s' ->
     ts = ts_before ++ (c_0 :: c_n) :: ts_after ->
-    tseval s' (ts_before ++ c_n :: ts_after) s'' ->
-    tseval s ts s''.
-Hint Constructors tseval.
+    tseval_nondet s' (ts_before ++ c_n :: ts_after) s'' ->
+    tseval_nondet s ts s''.
+Hint Constructors tseval_nondet.
 
-Fixpoint ts_reduce (ts:list thread) : thread :=
-  nil.
+Definition schedule := list nat.
+Hint Unfold schedule.
 
-Theorem tseval_to_seqeval:
+Inductive tseval_det : schedule -> state -> list thread -> state -> Prop :=
+| Thread_det:
+  forall s c_0 s' ts sch_0 ts_before c_n ts_after sch_n s'',
+    ceval s c_0 s' ->
+    ts = ts_before ++ (c_0 :: c_n) :: ts_after ->
+    length ts_before = sch_0 ->
+    tseval_det sch_n s' (ts_before ++ c_n :: ts_after) s'' ->
+    tseval_det (sch_0 :: sch_n) s  ts  s''.
+Hint Constructors tseval_det.
+
+Theorem tseval_non_to_det:
   forall s ts s',
-    tseval s ts s' <->
-    tseval s ((ts_reduce ts)::nil) s'.
+    tseval_nondet s ts s' ->
+    exists sch,
+      tseval_det sch s ts s'.
 Proof.
-Admitted.
+  intros s ts s' TND.
+  induction TND as [s c_0 s' ts ts_before c_n ts_after s'' C EQts N].
+  destruct IHN as [sch_n IHN].
+  eexists.
+  eapply Thread_det.
+  apply C.
+  apply EQts.
+  reflexivity.
+  apply IHN.
+Qed.
+
+Theorem tseval_det_to_non:
+  forall sch s ts s',
+    tseval_det sch s ts s' ->
+    tseval_nondet s ts s'.
+Proof.
+  intros sch s ts s' TD.
+  induction TD as [s c_0 s' ts sch_0 ts_before c_n ts_after  sch_n s'' C EQts LENtsb N].
+  eapply Thread_nondet.
+  apply C.
+  apply EQts.
+  apply IHN.
+Qed.
