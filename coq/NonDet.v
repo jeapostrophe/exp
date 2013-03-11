@@ -78,33 +78,103 @@ Hint Constructors ceval.
 Definition thread := list com.
 Hint Unfold thread.
 
-Inductive tseval_nondet : state -> list thread -> state -> Prop :=
-| Thread_nondet:
-  forall s c_0 s' ts ts_before c_n ts_after s'',
+Inductive teval : state -> thread -> state -> thread -> Prop :=
+| fst_eval :
+  forall s c_0 ts s',
     ceval s c_0 s' ->
-    ts = ts_before ++ (c_0 :: c_n) :: ts_after ->
-    tseval_nondet s' (ts_before ++ c_n :: ts_after) s'' ->
+    teval s (c_0::ts) s' ts.
+Hint Constructors teval.
+
+Inductive tseval_nondet : state -> list thread -> state -> Prop :=
+| Done_nondet :
+  forall s ts,
+  (forall t,
+    In t ts -> ~ (exists s' t', teval s t s' t')) ->
+  tseval_nondet s ts s
+| Thread_nondet:
+  forall s t s' t' ts ts_before ts_after s'',
+    teval s t s' t' ->
+    ts = ts_before ++ t :: ts_after ->
+    tseval_nondet s' (ts_before ++ t' :: ts_after) s'' ->
     tseval_nondet s ts s''.
 Hint Constructors tseval_nondet.
 
 Theorem tseval_nondet_is:
+  exists s ts s' s'',
+    tseval_nondet s ts s'
+    /\ tseval_nondet s ts s''
+    /\ s' <> s''.
+Proof.
+  exists empty_state.
+  exists (((CAss 0 (ANum 1))::nil) :: ((CAss 0 (ANum 2))::nil) :: nil).
+  exists (update (update empty_state 0 2) 0 1).
+  exists (update (update empty_state 0 1) 0 2).
+  split; [idtac | split].
+
+  eapply Thread_nondet with (ts_before:=((CAss 0 (ANum 1))::nil)::nil); 
+    [idtac|reflexivity|idtac].
+  eapply fst_eval.
+  eapply CAss_eval.
+  eapply ANum_eval.
+  eapply Thread_nondet with (ts_before:=nil);
+        [idtac|reflexivity|idtac].
+  eapply fst_eval.
+  eapply CAss_eval.
+  eapply ANum_eval.
+  eapply Done_nondet.
+  simpl. intros t [EQnil | [EQnil | F]]; subst; try (inversion F);
+   intros [s' [t' TE]]; inversion TE.
+
+  eapply Thread_nondet with (ts_before:=nil);
+    [idtac|simpl; reflexivity|idtac].
+  eapply fst_eval.
+  eapply CAss_eval.
+  eapply ANum_eval.
+  eapply Thread_nondet with (ts_before:=nil :: nil);
+        [idtac|simpl; reflexivity|idtac].
+  eapply fst_eval.
+  eapply CAss_eval.
+  eapply ANum_eval.
+  eapply Done_nondet.
+  simpl. intros t [EQnil | [EQnil | F]]; subst; try (inversion F);
+   intros [s' [t' TE]]; inversion TE.
+
+  intros HF.
+  absurd (1 = 2).
+   intros HEQ. inversion HEQ.
+   replace 2 with ((update (update empty_state 0 1) 0 2) 0).
+   rewrite <- HF.
+   reflexivity.
+   reflexivity.
+Qed.
+
+Theorem tseval_nondet_isn:
    ~ ( forall s ts s' s'',
         tseval_nondet s ts s' ->
         tseval_nondet s ts s'' ->
         s' = s'' ).
 Proof.
-Admitted.
+  intros H.
+  destruct tseval_nondet_is as [s [ts [s' [s'' [E1 [E2 EQ]]]]]].
+  apply EQ.
+  eapply H. apply E1. apply E2.
+Qed.
 
 Definition schedule := list nat.
 Hint Unfold schedule.
 
 Inductive tseval_det : schedule -> state -> list thread -> state -> Prop :=
+| Done_det :
+  forall sch s ts,
+  (forall t,
+    In t ts -> ~ (exists s' t', teval s t s' t')) ->
+  tseval_det sch s ts s
 | Thread_det:
-  forall s c_0 s' ts sch_0 ts_before c_n ts_after sch_n s'',
-    ceval s c_0 s' ->
-    ts = ts_before ++ (c_0 :: c_n) :: ts_after ->
+  forall s t s' t' ts sch_0 ts_before ts_after sch_n s'',
+    teval s t s' t' ->
+    ts = ts_before ++ t :: ts_after ->
     length ts_before = sch_0 ->
-    tseval_det sch_n s' (ts_before ++ c_n :: ts_after) s'' ->
+    tseval_det sch_n s' (ts_before ++ t' :: ts_after) s'' ->
     tseval_det (sch_0 :: sch_n) s  ts  s''.
 Hint Constructors tseval_det.
 
@@ -114,6 +184,26 @@ Theorem tseval_det_is:
     tseval_det sch s ts s'' ->
     s' = s''.
 Proof.
+  intros sch s ts s' s'' E1. generalize dependent s''.
+  induction E1 as [sch s ts NoRun|s t s' t' ts sch_0 ts_before ts_after sch_n s'' T1 TEQ LEQ E1]; intros s''' E2; inversion E2; subst.
+   reflexivity.
+
+   assert False. eapply NoRun with (t0:=t).
+   apply in_or_app. right. simpl. auto.
+   exists s'. exists t'. assumption.
+   inversion H0.
+
+   assert False. eapply H with (t0:=t).
+   apply in_or_app. right. simpl. auto.
+   exists s'. exists t'. assumption.
+   inversion H0.
+
+   eapply IHE1. 
+   replace t0 with t in *.
+   replace ts_before0 with ts_before in *.
+   replace ts_after0 with ts_after in *.
+   replace s'0
+
 Admitted.
 
 Theorem tseval_non_to_det:
