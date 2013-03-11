@@ -87,6 +87,14 @@ Inductive tseval_nondet : state -> list thread -> state -> Prop :=
     tseval_nondet s ts s''.
 Hint Constructors tseval_nondet.
 
+Theorem tseval_nondet_is:
+   ~ ( forall s ts s' s'',
+        tseval_nondet s ts s' ->
+        tseval_nondet s ts s'' ->
+        s' = s'' ).
+Proof.
+Admitted.
+
 Definition schedule := list nat.
 Hint Unfold schedule.
 
@@ -99,6 +107,14 @@ Inductive tseval_det : schedule -> state -> list thread -> state -> Prop :=
     tseval_det sch_n s' (ts_before ++ c_n :: ts_after) s'' ->
     tseval_det (sch_0 :: sch_n) s  ts  s''.
 Hint Constructors tseval_det.
+
+Theorem tseval_det_is:
+  forall sch s ts s' s'',
+    tseval_det sch s ts s' ->
+    tseval_det sch s ts s'' ->
+    s' = s''.
+Proof.
+Admitted.
 
 Theorem tseval_non_to_det:
   forall s ts s',
