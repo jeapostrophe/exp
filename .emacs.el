@@ -1123,6 +1123,12 @@ given a prefix arg."
 ;; haskell
 (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file")
 
+;;
+(defun je/insert-$ (cmd)
+  (interactive (list (read-shell-command "$ ")))
+  (progn
+    (shell-command cmd t)))
+
 ;; customs
 
 (custom-set-variables
