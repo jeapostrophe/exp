@@ -37,14 +37,44 @@ Definition Learner_correct (o:Oracle) (l:Learner) :=
       (l o) x = f x.
 Hint Unfold Learner_correct.
 
+Axiom function_equality_dec :
+ forall (f f':function), {x | f x <> f' x} + {f = f'}.
+
 Definition pipe_oracle (f:function) : Oracle :=
-fun q =>
-match q with
-| membership x =>
-  membership_answer x (f x)
-| correct f' =>
-  
+  fun q =>
+    match q with
+      | membership x =>
+        membership_answer x (f x)
+      | correct f' =>
+        match function_equality_dec f f' with
+          | inright _ =>
+            correct_answer_good f'
+          | inleft (exist x _) =>
+            correct_answer_counter f' x (f x)
+        end
+    end.
+
+Definition pipe_learner (o:Oracle) :=
+  fun x =>
+    match o (membership x) with
+      | membership_answer _ y =>
+        y
+      | _ =>
+        0
+    end.
 
 Theorem pipe_oracle_learner_correct:
   forall f,
     Learner_correct (pipe_oracle f) (pipe_learner).
+Proof.
+  intros f.
+
+  unfold Learner_correct, Oracle_correct, pipe_learner, pipe_oracle.
+
+  intros f'.
+  intros [membership_correct [correct_counter_correct correct_good_correct]].
+  intros x.
+  symmetry.
+  eapply membership_correct.
+  reflexivity.
+Qed.
