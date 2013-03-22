@@ -49,91 +49,95 @@ End Learning.
 
 Require Import List.
 
-Module PolyLD <: LearningDomain.
-  Definition function_spec := list nat.
+Module LagrangeLD <: LearningDomain.
+  Definition function_spec := list (nat*nat).
 
   Theorem function_spec_dec :
     forall (x y:function_spec),
       { x = y } + { x <> y }.
   Proof.
     decide equality. decide equality.
+    decide equality. decide equality.
   Qed.
 
-  Fixpoint function_spec_eval (coefficients:list nat) x :=
-    match coefficients with
+  Theorem nat_eq_dec:
+    forall (x y:nat),
+      { x = y } + { x <> y }.
+  Proof.
+    decide equality.
+  Qed.
+
+  Fixpoint function_spec_eval (ps:list (nat*nat)) x' :=
+    match ps with
       | nil =>
         0
-      | a :: more =>
-        (a + x * (function_spec_eval more x))
+      | (x,y) :: ps =>
+        if nat_eq_dec x x' then
+          y
+          else
+            function_spec_eval ps x'
     end.  
+End LagrangeLD.
 
-  Theorem all_zeros_dec :
-    forall (l:list nat),
-      { x | In x l /\ x <> 0 }
-      + { forall x, In x l -> x = 0 }.
-  Proof.
-    induction l as [|x l].
-    right. intros x IN. inversion IN.
-    destruct x as [|x].
-    destruct IHl as [[x [IN NZ]] | Z].
-    left. exists x. simpl. auto.
-    right. intros x. simpl. 
-    intros [IS IN
+Module Import LagrangeLearning := Learning LagrangeLD.
 
-
-  Theorem function_spec_eval_dec :
-    forall (x y:function_spec),
-      { z | function_spec_eval x z <> function_spec_eval y z }
-      + { forall z, function_spec_eval x z = function_spec_eval y z }.
-  Proof.
-    induction x as [|c cs].
-    induction y as [|c' cs'].
-
-    right. intros z. simpl. auto.
-
-    simpl in *.
-    
-
-    destruct IHcs' as [[z NEQ] | EQ].
-
-    destruct z as [|z].
-
-
-    destruct c' as [|c'].
-
-    left. exists z.
-    intros H. apply NEQ.
-    rewrite H. simpl.
-
-End PolyLD.
-
-Module Import PolyLearning := Learning PolyLD.
-
-Theorem poly_counter_example :
-  forall cs cs',
-    cs <> cs' ->
-    { x | function_spec_eval cs x <> function_spec_eval cs' x }.
+Theorem lagrange_counter_example :
+  forall ps ps',
+    ps <> ps' ->
+    { x | function_spec_eval ps x <> function_spec_eval ps' x }.
 Proof.
-  induction cs as [|c cs].
-  induction cs' as [|c' cs'].
-  
-  intros H. absurd (@nil nat = nil); auto.
+Admitted.
 
-  intros NEQ. simpl.
-  destruct c' as [|c']; simpl.
-
-Definition poly_oracle (cs:list nat) (q:query) : answer q :=
+Definition lagrange_oracle (ps:list (nat*nat)) (q:query) : answer q :=
 match q with
 | membership x =>
-  membership_answer x ((function_spec_eval cs) x) 
-| correct cs' =>
-  match function_spec_dec cs' with
+  membership_answer x ((function_spec_eval ps) x) 
+| correct ps' =>
+  match function_spec_dec ps ps' with
     | left _ =>
-      correct_answer_good cs'
-    | right _ =>
-      match poly_counter_example cs cs' in
-      correct_answer_counter f' x y
+      correct_answer_good ps'
+    | right NEQ  =>
+      match lagrange_counter_example ps ps' NEQ with
+        | exist x _ =>
+          correct_answer_counter ps' x ((function_spec_eval ps) x)
+      end
+  end
 end.
+
+Theorem lagrange_oracle_correct :
+  forall cs,
+    Oracle_correct (function_spec_eval cs) (lagrange_oracle cs).
+Proof.
+  intros cs. unfold Oracle_correct, lagrange_oracle.
+  split; [|split]; simpl.
+
+  intros x y EQ. inversion_clear EQ. reflexivity.
+
+  intros cs' x y.
+  destruct (function_spec_dec cs cs') as [EQ | NEQ].
+  intros H. inversion H.
+  destruct (lagrange_counter_example cs cs' NEQ) as [z CEX].
+  intros H. inversion H. subst x y. auto.
+
+  intros cs'. destruct (function_spec_dec cs cs') as [EQ | NEQ].
+  subst cs'. auto.
+  destruct (lagrange_counter_example cs cs' NEQ) as [z CEX].
+  intros H. inversion H.
+Qed.
+
+Definition lagrange_learner (o:Oracle) (ps:list (nat*nat)) (n:nat) :=
+match n with 
+| 0 =>
+  ps
+| S n =>
+  match o (correct ps) with
+    | correct_answer_good _ =>
+      ps
+    | correct_answer_counter _ x y =>
+      lagrange_learner o ((x,y)::ps) n
+  end
+end.
+
 
   Axiom function_spec_dec :
     forall (f f':function), {x | f x <> f' x} + {f = f'}.

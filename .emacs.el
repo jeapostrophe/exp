@@ -279,10 +279,10 @@ given a prefix arg."
 (setq server-host "localhost")
 (setq server-name "lightning")
 
-(defadvice make-network-process (before force-tcp-server-ipv4 activate)
-  "Monkey patch the server to force the port"
-  (if (string= "lightning" (plist-get (ad-get-args 0) :name))
-      (ad-set-args 0 (plist-put (ad-get-args 0) :service 50000))))
+;;(defadvice make-network-process (before force-tcp-server-ipv4 activate)
+;;  "Monkey patch the server to force the port"
+;;  (if (string= "lightning" (plist-get (ad-get-args 0) :name))
+;;      (ad-set-args 0 (plist-put (ad-get-args 0) :service 50000))))
 
 (server-start)
 
