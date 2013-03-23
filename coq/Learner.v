@@ -122,10 +122,60 @@ End ConstantLearner.
 (* XXX Can't figure out how to instantiate ConstantLD with Dom = Rng =
 nat *)
 
+(* lagrange takes a set of data points and produces the Lagrangian
+polynomial that hits them exactly *)
 Axiom lagrange : list (nat*nat) -> nat -> nat.
-Definition lagrange_correct f n :=
-  forall l, 
-    length l <= n -> 
+
+(* the learner relies on the idea that if the oracle has said it is
+correct on (S N) data points, then it is correct for polynomials up
+degree N, or update to N data points. *)
+
+(* this idea is captured in this axiom: if a list of points if
+accurate, then adding more accurate points can't hurt it *)
+
+Axiom lagrange_monotone:
+  forall ps y f x,
+  lagrange ps y = lagrange f y ->
+  lagrange ((x, lagrange f x) :: ps) y = lagrange f y.
+
+Require Import List.
+
+Definition lagrange_correct f (n:nat) ps :=
+  (exists f_rst,
+    length f_rst = n
+    /\ length f = length f_rst + length ps
+    /\ (forall x y, In (x,y) (f_rst++ps) -> (lagrange f) x = y))
+  /\ (forall x, (lagrange ps) x = (lagrange f) x).
+
+Theorem lagrange_step:
+  forall f n ps x,
+    lagrange_correct f (S n) ps ->
+    lagrange_correct f n ((x, lagrange f x)::ps).
+Proof.
+  intros f n ps x.
+  intros [[f_rst [LEN_frst [LENf IN]]] EQ].
+  unfold lagrange_correct.
+  
+  destruct f_rst as [|[xx yy] f_rst]; simpl in LEN_frst;
+    inversion LEN_frst.
+  clear LEN_frst.
+  rename H0 into LEN_frst.
+  simpl in LENf.
+  split. exists f_rst.
+  split. reflexivity.
+  split. simpl. rewrite LENf. omega.
+  intros xx' yy'.
+  rewrite in_app_iff. simpl.
+  simpl in IN.
+  intros [IN_fst | [EQ' | IN_ps]].
+  apply IN. rewrite in_app_iff. auto.
+  inversion EQ'. subst xx' yy'. reflexivity.
+  apply IN. rewrite in_app_iff. auto.
+
+  intros xx'.
+  apply lagrange_monotone.
+  apply EQ.
+Qed.
 
 Module PolyLD <: LearningDomain.
   Definition function_spec := list (nat*nat).
@@ -158,16 +208,26 @@ Module PolyLearner <: Learner PolyLD.
         end
     end.
 
-  Definition Learner_P := lagrange_correct f n.
-
   Theorem learner_good : 
-    forall o f,
-      Oracle_good f o ->
-      forall x,
-        (function_spec_eval (learner o)) x = (function_spec_eval f) x.
-
-    forall n,
-      Learner_good (fun f => ) (learner nil n)
-
-      (fun o =>  o f).
+    forall n ps,
+      Learner_good (fun f => lagrange_correct f n ps) (learner ps n).
   Proof.
+    unfold Learner_good, function_spec_eval.
+    induction n as [|n]; intros ps o f lc og x; simpl.
+
+    apply lc.
+
+    remember (snd o ps) as oc_ps.
+    destruct oc_ps as [u|[xx yy]].
+    apply lc.
+    
+    eapply IHn; try auto.
+    destruct og as [om_g [ocl_g ocr_g]].
+    symmetry in Heqoc_ps.
+    eapply ocr_g in Heqoc_ps.
+    destruct Heqoc_ps as [NEQ EQ].
+    subst yy.
+    apply lagrange_step. exact lc.
+  Qed.
+
+End PolyLearner.
