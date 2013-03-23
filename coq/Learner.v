@@ -32,13 +32,13 @@ Module Learning ( Export Domain : LearningDomain ).
 
   Definition Oracle_correct (f:function_spec) (o:Oracle) :=
     (forall x y,
-      o (membership x) = membership_answer x y -> 
+      o (membership x) = membership_answer x y ->
       (function_spec_eval f) x = y)
-    /\ (forall f' x y, 
-      o (correct f') = correct_answer_counter f' x y -> 
+    /\ (forall f' x y,
+      o (correct f') = correct_answer_counter f' x y ->
       (function_spec_eval f') x <> y
       /\ (function_spec_eval f) x = y)
-    /\ (forall f', 
+    /\ (forall f',
       o (correct f') = correct_answer_good f'
       -> forall x,
         (function_spec_eval f') x = (function_spec_eval f) x).
@@ -47,15 +47,21 @@ Module Learning ( Export Domain : LearningDomain ).
   Definition Learner := Oracle -> function_spec.
   Hint Unfold Learner.
 
-  Definition Learner_correct (o:Oracle) (l:Learner) :=
-    forall f,
+  Definition Learner_correct (learner:Learner) :=
+    forall o f,
       Oracle_correct f o ->
       forall x,
-        (function_spec_eval (l o)) x = (function_spec_eval f) x.
+        (function_spec_eval (learner o)) x = (function_spec_eval f) x.
   Hint Unfold Learner_correct.
 End Learning.
 
-Require Import List.
+Module Type Learner ( Export Domain : LearningDomain ).
+  Module Export L := Learning Domain.
+
+  Parameter learner : Learner.
+
+  Parameter learner_correct : Learner_correct learner.
+End Learner.
 
 Module ConstantLD <: LearningDomain.
   Definition function_spec := nat.
@@ -64,26 +70,59 @@ Module ConstantLD <: LearningDomain.
     forall (x y:function_spec),
       { x = y } + { x <> y }.
   Proof.
-    decide equality. 
+    decide equality.
   Qed.
 
-  Definition function_spec_eval (p:nat) (x:nat) := p.  
+  Definition function_spec_eval (p:nat) (x:nat) := p.
 End ConstantLD.
+
+Module ConstantLearner <: Learner ConstantLD.
+  Module Export L := Learning ConstantLD.
+
+  Definition learner (o:Oracle) :=
+    match o (correct 0) with
+      | membership_answer _ _ =>
+      (* XXX This case is impossible. It's strange that the type system doesn't rule it out *)
+        0
+      | correct_answer_good _ =>
+        0
+      | correct_answer_counter _ x y =>
+        y
+    end.
+
+  Theorem learner_correct : Learner_correct learner.
+  Proof.
+    intros o k.
+    unfold Learner_correct, Oracle_correct, learner, function_spec_eval.
+    intros [m_c [cac_c cag_c]].
+    intros x.
+    remember k (correct 0).
+    remember (function_spec_dec k 0) as EQ.
+    destruct EQ.
+    symmetry. eapply m_c. rewrite e. reflexivity.
+    symmetry. eapply (cac_c 0). rewrite <- HeqEQ.
+    reflexivity.
+
+    Grab Existential Variables.
+    apply 0.
+  Qed.
+
+End ConstantLearner.
 
 Module Import ConstantLearning := Learning ConstantLD.
 
 Definition constant_oracle (k:nat) (q:query) : answer q :=
-match q with
-| membership x =>
-  membership_answer x k 
-| correct k' =>
-  match function_spec_dec k k' with
-    | left _ =>
-      correct_answer_good k'
-    | right NEQ  =>
-      correct_answer_counter k' 0 k
-  end
-end.
+  match q with
+    | membership x =>
+      membership_answer x k
+    | correct k' =>
+      match function_spec_dec k k' with
+        | left _ =>
+          correct_answer_good k'
+        | right NEQ  =>
+          correct_answer_counter k' 0 k
+      end
+  end.
 
 Theorem constant_oracle_correct :
   forall k,
@@ -103,35 +142,4 @@ Proof.
   intros k'. destruct (function_spec_dec k k') as [EQ | NEQ].
   subst k'. auto.
   intros H. inversion H.
-Qed.
-
-Definition constant_learner (o:Oracle) :=
-  match o (correct 0) with
-    | membership_answer _ _ =>
-      (* XXX This case is impossible. It's strange that the type system doesn't rule it out *)
-      0
-    | correct_answer_good _ =>
-      0
-    | correct_answer_counter _ x y =>
-      y
-  end.
-
-Theorem constant_learner_correct :
-  forall k,
-    Learner_correct
-     (constant_oracle k)
-     (constant_learner).
-Proof.
-  intros k.
-  unfold Learner_correct, Oracle_correct, constant_oracle, constant_learner, function_spec_eval.
-  intros f [m_c [cac_c cag_c]].
-  intros x. 
-  remember (function_spec_dec k 0) as EQ.
-  destruct EQ.
-  symmetry. eapply m_c. rewrite e. reflexivity.
-  symmetry. eapply (cac_c 0). rewrite <- HeqEQ.
-  reflexivity.
-
-  Grab Existential Variables.
-  apply 0.
 Qed.
