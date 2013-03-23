@@ -122,9 +122,16 @@ End ConstantLearner.
 (* XXX Can't figure out how to instantiate ConstantLD with Dom = Rng =
 nat *)
 
+Require Import List.
+
 (* lagrange takes a set of data points and produces the Lagrangian
 polynomial that hits them exactly *)
 Axiom lagrange : list (nat*nat) -> nat -> nat.
+
+Axiom lagrange_spec :
+  forall x y f,
+    In (x,y) f ->
+    lagrange f x = y.
 
 (* the learner relies on the idea that if the oracle has said it is
 correct on (S N) data points, then it is correct for polynomials up
@@ -137,8 +144,6 @@ Axiom lagrange_monotone:
   forall ps y f x,
   lagrange ps y = lagrange f y ->
   lagrange ((x, lagrange f x) :: ps) y = lagrange f y.
-
-Require Import List.
 
 Definition lagrange_correct f (n:nat) ps :=
   (exists f_rst,
@@ -208,7 +213,7 @@ Module PolyLearner <: Learner PolyLD.
         end
     end.
 
-  Theorem learner_good : 
+  Theorem learner_good_general : 
     forall n ps,
       Learner_good (fun f => lagrange_correct f n ps) (learner ps n).
   Proof.
@@ -228,6 +233,24 @@ Module PolyLearner <: Learner PolyLD.
     destruct Heqoc_ps as [NEQ EQ].
     subst yy.
     apply lagrange_step. exact lc.
+  Qed.
+
+  Theorem initial_args :
+    forall f,
+      lagrange_correct f (length f) nil.
+  Proof.
+    unfold lagrange_correct.
+    intros f. split.
+    exists f. simpl.
+    split; auto.
+    split. omega.
+    intros x y. rewrite in_app_iff.
+    intros [IN | F]. apply lagrange_spec. auto.
+    inversion F.
+
+    intros x.
+    (* XXX oops *)
+
   Qed.
 
 End PolyLearner.
