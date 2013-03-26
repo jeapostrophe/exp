@@ -144,10 +144,12 @@ function stoe() {
     oe $*
 }	
 
+function racketdoclink() {
+    rm -f ~/.racket/doc
+    DEST=$(racket -e '(require setup/dirs) (displayln (path->string (find-user-doc-dir)))')
+    ln -s $DEST ~/.racket/doc
+}
 
-if [ -L ~/.racket/doc ] ; then
-    rm ~/.racket/doc
-    ln -s $(racket -e '(require setup/dirs) (displayln (path->string (find-user-doc-dir)))') ~/.racket/doc
-fi
+racketdoclink
 
 export REPORTTIME=10
