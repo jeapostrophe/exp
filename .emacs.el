@@ -287,12 +287,12 @@ given a prefix arg."
 (server-start)
 
 ;;;;; line numbering
-;(global-linum-mode 1)
+                                        ;(global-linum-mode 1)
 
-;(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode org-mode))
-;(defun linum-on ()
-;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
-;    (linum-mode 1)))
+                                        ;(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode org-mode))
+                                        ;(defun linum-on ()
+                                        ;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
+                                        ;    (linum-mode 1)))
 
 ;;;;; auto-fill
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -351,7 +351,7 @@ given a prefix arg."
       '())
 
 (defun je/abbreviate-file-name (name)
-  (let ((directory-abbrev-alist         
+  (let ((directory-abbrev-alist
          '(("^/home/jay" . "~")
            ("^/Users/jay" . "~")
            ("^~/Dev/scm" . "~scm")
@@ -387,10 +387,10 @@ given a prefix arg."
    (t
     (buffer-name buffer))))
 (setq ibuffer-formats
-	'((mark modified " "
-		(je/name 65 65 :left :elide)
-		" "
-		(mode 16 16 :left :elide))))
+      '((mark modified " "
+              (je/name 65 65 :left :elide)
+              " "
+              (mode 16 16 :left :elide))))
 
 ;; Setup some font size changers
 (define-key global-map (kbd "C-=") 'text-scale-increase)
@@ -428,21 +428,21 @@ given a prefix arg."
       (if progName
           (progn
             (message "Running...")
-            
+
             (if (and t (file-exists-p (concat default-directory "/Makefile")))
                 (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
               (if (not writep)
-                (compile (concat "zsh " cmdStr))
-              (let ((multi-term-program-switches 
-                     (list "-i" "-c" (concat progName " \"" fname "\""))))
-                (multi-term-dedicated-open)))))
+                  (compile (concat "zsh " cmdStr))
+                (let ((multi-term-program-switches
+                       (list "-i" "-c" (concat progName " \"" fname "\""))))
+                  (multi-term-dedicated-open)))))
         (progn
           (message "No recognized program file suffix for this file."))))))
-(defun run-current-file-ro () 
+(defun run-current-file-ro ()
   "Execute or compile the current file."
   (interactive)
   (run-current-file nil))
-(defun run-current-file-wr () 
+(defun run-current-file-wr ()
   "Execute or compile the current file."
   (interactive)
   (run-current-file t))
@@ -550,7 +550,7 @@ given a prefix arg."
   (org-map-entries 'org-archive-subtree "/DONE" 'file))
 
 (global-set-key (kbd "s-t")
-                (lambda () 
+                (lambda ()
                   (interactive)
                   (if (eq major-mode 'org-mode)
                       (org-todo)
@@ -594,11 +594,11 @@ given a prefix arg."
 (setq org-agenda-repeating-timestamp-show-all t)
 (setq org-agenda-show-all-dates t)
 (setq org-timeline-show-empty-dates nil)
-(setq org-ctrl-k-protect-subtree t) 
+(setq org-ctrl-k-protect-subtree t)
 (setq org-use-property-inheritance nil)
 (setq org-agenda-todo-keyword-format "")
 
-(setq org-time-clocksum-format 
+(setq org-time-clocksum-format
       '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
 
 (setq org-refile-use-outline-path t)
@@ -628,10 +628,10 @@ given a prefix arg."
          "* %a\n  %i"
          :immediate-finish t)))
 
-(global-set-key 
+(global-set-key
  (kbd "<s-f1>")
  (lambda () (interactive) (org-capture nil "t")))
-(global-set-key 
+(global-set-key
  (kbd "<s-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
 
@@ -641,14 +641,14 @@ given a prefix arg."
 (setq org-agenda-overriding-columns-format "%56ITEM %DEADLINE")
 (setq org-agenda-overriding-header "")
 
-(setq org-agenda-custom-commands 
+(setq org-agenda-custom-commands
       '(("t" "Todo list" todo "TODO"
          ())))
 
 (add-hook 'org-finalize-agenda-hook
-    (lambda () 
-      (remove-text-properties
-       (point-min) (point-max) '(mouse-face t))))
+          (lambda ()
+            (remove-text-properties
+             (point-min) (point-max) '(mouse-face t))))
 
 ;;; These are the default colours from OmniFocus
 (defface je/due
@@ -700,7 +700,7 @@ given a prefix arg."
   (let* ((ma (or (get-text-property 1 'org-marker a)
                  (get-text-property 1 'org-hd-marker a)))
          (tn (org-float-time (org-current-time)))
-         
+
          (sa (org-entry-get ma "SCHEDULED"))
          (da (org-entry-get ma "DEADLINE"))
 
@@ -718,7 +718,7 @@ given a prefix arg."
 
     ;; Remove the old face
     (remove-text-properties
-       0 (length a) '((face nil) (fontified nil)) a)
+     0 (length a) '((face nil) (fontified nil)) a)
 
     ;; Put on the new face
     (put-text-property
@@ -740,7 +740,7 @@ given a prefix arg."
       ((< ta (+ tn (* 60 60 24 7 4 )))
        ;; The deadline is in the next four weeks
        'je/normal)
-      (t 
+      (t
        'je/distant))
      a)
 
@@ -809,15 +809,15 @@ given a prefix arg."
  mode-line-format
  '((:propertize "%p" face mode-line-folder-face)
    " "
-   ; Position, including warning for 80 columns
+                                        ; Position, including warning for 80 columns
    (:propertize "%4l:" face mode-line-position-face)
    (:eval (propertize "%3c" 'face
                       (if (>= (current-column) 80)
                           'mode-line-80col-face
                         'mode-line-position-face)))
-   ; emacsclient [default -- keep?]
-   ;mode-line-client
-   ; read-only or modified status
+                                        ; emacsclient [default -- keep?]
+                                        ;mode-line-client
+                                        ; read-only or modified status
    " "
    (:eval
     (cond (buffer-read-only
@@ -826,15 +826,15 @@ given a prefix arg."
            (propertize " ** " 'face 'mode-line-modified-face))
           (t "      ")))
    " "
-   ; directory and buffer/file name
+                                        ; directory and buffer/file name
    ;;(:propertize (:eval (shorten-directory default-directory 5))
    ;;             face mode-line-folder-face)
    (:propertize (:eval (je/abbreviate-file-name (buffer-name)))
                 face mode-line-filename-face)
-   ; narrow [default -- keep?]
-   ;" %n "
-   ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
-   ;(vc-mode vc-mode)
+                                        ; narrow [default -- keep?]
+                                        ;" %n "
+                                        ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
+                                        ;(vc-mode vc-mode)
    "  %["
    (:propertize mode-name
                 face mode-line-mode-face)
@@ -880,44 +880,44 @@ given a prefix arg."
 (defvar foreground-process "") (setq foreground-process "#dc322f")
 
 (set-face-attribute 'mode-line nil
-    :foreground light-text :background background
-    :inverse-video nil
-    :box `(:line-width 6 :color ,background :style nil))
+                    :foreground light-text :background background
+                    :inverse-video nil
+                    :box `(:line-width 6 :color ,background :style nil))
 (set-face-attribute 'mode-line-inactive nil
-    :foreground light-text-inactive :background background-inactive
-    :inverse-video nil
-    :box `(:line-width 6 :color ,background-inactive :style nil))
+                    :foreground light-text-inactive :background background-inactive
+                    :inverse-video nil
+                    :box `(:line-width 6 :color ,background-inactive :style nil))
 
 (set-face-attribute 'mode-line-read-only-face nil
-    :inherit 'mode-line-face
-    :foreground foreground-warning
-    :background background-warning
-    :box `(:line-width 2 :color ,foreground-warning))
+                    :inherit 'mode-line-face
+                    :foreground foreground-warning
+                    :background background-warning
+                    :box `(:line-width 2 :color ,foreground-warning))
 (set-face-attribute 'mode-line-modified-face nil
-    :inherit 'mode-line-face
-    :foreground foreground-warning
-    :background background-warning
-    :box `(:line-width 2 :color ,foreground-warning))
+                    :inherit 'mode-line-face
+                    :foreground foreground-warning
+                    :background background-warning
+                    :box `(:line-width 2 :color ,foreground-warning))
 (set-face-attribute 'mode-line-folder-face nil
-    :inherit 'mode-line-face
-    :foreground light-text)
+                    :inherit 'mode-line-face
+                    :foreground light-text)
 (set-face-attribute 'mode-line-filename-face nil
-    :inherit 'mode-line-face
-    :foreground bright-text
-    :weight 'bold)
+                    :inherit 'mode-line-face
+                    :foreground bright-text
+                    :weight 'bold)
 (set-face-attribute 'mode-line-mode-face nil
-    :inherit 'mode-line-face
-    :foreground light-text-inactive)
+                    :inherit 'mode-line-face
+                    :foreground light-text-inactive)
 (set-face-attribute 'mode-line-minor-mode-face nil
-    :inherit 'mode-line-mode-face
-    :foreground background-inactive
-    :height 110)
+                    :inherit 'mode-line-mode-face
+                    :foreground background-inactive
+                    :height 110)
 (set-face-attribute 'mode-line-process-face nil
-    :inherit 'mode-line-face
-    :foreground foreground-process)
+                    :inherit 'mode-line-face
+                    :foreground foreground-process)
 (set-face-attribute 'mode-line-80col-face nil
-    :inherit 'mode-line-position-face
-    :foreground foreground-warning :background background-warning)
+                    :inherit 'mode-line-position-face
+                    :foreground foreground-warning :background background-warning)
 
 ;; Desktop
 ;; save a list of open files in ~/.emacs.desktop
@@ -970,7 +970,7 @@ given a prefix arg."
 (cua-mode t)                             ;; for rectangles, CUA is nice
 
 (add-hook 'term-mode-hook
-  #'(lambda () (setq autopair-dont-activate t)))
+          #'(lambda () (setq autopair-dont-activate t)))
 
 (put 'autopair-insert-opening 'delete-selection t)
 (put 'autopair-skip-close-maybe 'delete-selection t)
@@ -997,13 +997,29 @@ given a prefix arg."
 (global-set-key (kbd "M-/") 'company-complete)
 (add-hook 'after-init-hook 'global-company-mode)
 
+(setq company-backends
+      '(company-dabbrev
+        company-elisp
+        company-nxml
+        company-css
+        company-clang
+        company-semantic
+        company-eclim
+        company-xcode
+        company-ropemacs
+        (company-gtags company-etags company-dabbrev-code company-keywords)
+        company-oddmuse
+        company-files
+        company-dabbrev))
+(setq company-backend nil)
+
 ;; Auto saving
-;(autoload 'paredit-mode "paredit"
-;  "Minor mode for pseudo-structurally editing Lisp code." t)
-;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
-;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
-;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
-;(add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
+                                        ;(autoload 'paredit-mode "paredit"
+                                        ;  "Minor mode for pseudo-structurally editing Lisp code." t)
+                                        ;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
+                                        ;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
+                                        ;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+                                        ;(add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
 
 ;; Insert lambda
 (global-set-key (kbd "s-\\")
@@ -1014,7 +1030,7 @@ given a prefix arg."
 (setq ibus-python-shell-command-name
       "python2")
 (add-hook 'after-init-hook 'ibus-mode-on)
-(setq ibus-cursor-color 
+(setq ibus-cursor-color
       '("red" "blue" "limegreen"))
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
@@ -1043,9 +1059,9 @@ given a prefix arg."
 
 ;; mark down
 (autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
+  "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
-   (cons '("\\.md" . markdown-mode) auto-mode-alist))
+      (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 ;; spelling
 (require 'ispell)
@@ -1088,7 +1104,7 @@ given a prefix arg."
 (setq case-fold-search t)
 ;; XXX I don't know why this works
 (setq isearch-mode-hook
-      (function (lambda () 
+      (function (lambda ()
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
 
@@ -1135,17 +1151,17 @@ given a prefix arg."
 ;; customs
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(doc-view-continuous t)
  '(ibuffer-default-sorting-mode (quote filename/process))
  '(ibuffer-display-summary nil))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(fringe ((((class color) (background "#fdf6e3")) nil)))
  '(org-column ((t (:background "#fdf6e3" :foreground  "#657b83")))))

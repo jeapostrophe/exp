@@ -55,12 +55,16 @@ fi
 echo -n "$TIME"
 echo "</fc>"
 
-if (($PERCENT_N <= 02)) ; then
-    systemctl hibernate
-elif (($PERCENT_N <= 03)) ; then
-    espeak -a 200 -k20 -z "Hibernation Eminent"
-elif (($PERCENT_N <= 05)) ; then
-    espeak -a 200 -k20 -z "Warning Battery Extremely Low"
-elif (($PERCENT_N <= 10)) ; then
-    espeak -a 200 -k20 -z "Warning Battery Low"
+if (($CHARGING == 1)) ; then
+    echo -n
+else
+    if (($PERCENT_N <= 02)) ; then
+        sudo systemctl hibernate
+    elif (($PERCENT_N <= 03)) ; then
+        espeak -a 200 -k20 -z "Hibernation Eminent"
+    elif (($PERCENT_N <= 05)) ; then
+        espeak -a 200 -k20 -z "Warning Battery Extremely Low"
+    elif (($PERCENT_N <= 10)) ; then
+        espeak -a 200 -k20 -z "Warning Battery Low"
+    fi
 fi
