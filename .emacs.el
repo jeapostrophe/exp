@@ -992,7 +992,10 @@ given a prefix arg."
 ;; dynamic abbreviations
 (setq dabbrev-case-fold-search nil)
 ;; XXX make this play nicer with C++
-;; maybe try auto-complete-mode
+
+;; company mode
+(global-set-key (kbd "M-/") 'company-complete)
+(add-hook 'after-init-hook 'global-company-mode)
 
 ;; Auto saving
 ;(autoload 'paredit-mode "paredit"
