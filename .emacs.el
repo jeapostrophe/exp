@@ -1012,6 +1012,7 @@ given a prefix arg."
         company-files
         company-dabbrev))
 (setq company-backend nil)
+(setq company-idle-delay nil)
 
 ;; Auto saving
                                         ;(autoload 'paredit-mode "paredit"
