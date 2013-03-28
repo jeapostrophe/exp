@@ -33,10 +33,14 @@ main() {
             else
                 ping -c1 -w10 $host &>/dev/null && status up && continue
 
-                log "trying to reassociate"
-                status down
-                wpa_cli reassociate
-                ping -c1 -w10 $host &>/dev/null && status up && continue
+                if [[ "$(CURRENT)" = "cs-wired" ]] ; then
+                    log "no reassociate, wired"
+                else
+                    log "trying to reassociate"
+                    status down
+                    wpa_cli reassociate
+                    ping -c1 -w10 $host &>/dev/null && status up && continue
+                fi
 
                 log "reassociate failed, reconfiguring network"
                 status down
