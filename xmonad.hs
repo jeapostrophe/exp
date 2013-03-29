@@ -77,6 +77,7 @@ main = do
          ("<XF86LaunchB>", spawnSelected myGSConfig
                             ["netcfgd home",
                              "netcfgd cs",
+                             "netcfgd cs-wired",
                              "netcfgd byu", 
                              "killall workrave",
                              "workrave",
