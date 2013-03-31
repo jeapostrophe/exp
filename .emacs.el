@@ -598,6 +598,9 @@ given a prefix arg."
 (setq org-use-property-inheritance nil)
 (setq org-agenda-todo-keyword-format "")
 
+(setq org-todo-keywords
+      '((sequence "TODO" "DONE")))
+
 (setq org-time-clocksum-format
       '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
 
