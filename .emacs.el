@@ -1012,8 +1012,8 @@ given a prefix arg."
 ;; XXX make this play nicer with C++
 
 ;; company mode
-(global-set-key (kbd "M-/") 'company-complete)
-(add-hook 'after-init-hook 'global-company-mode)
+;; (global-set-key (kbd "M-/") 'company-complete)
+;; (add-hook 'after-init-hook 'global-company-mode)
 
 (setq company-backends
       '(company-dabbrev
@@ -1158,6 +1158,8 @@ given a prefix arg."
 (global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
+(setq proof-three-window-mode-policy 'hybrid)
+
 ;; haskell
 (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file")
 
@@ -1168,9 +1170,6 @@ given a prefix arg."
     (shell-command cmd t)))
 
 ;; customs
-
-(if nil
-    (proof-display-three-b 'hybrid))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
