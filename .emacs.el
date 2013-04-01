@@ -549,6 +549,21 @@ given a prefix arg."
   (interactive)
   (org-map-entries 'org-archive-subtree "/DONE" 'file))
 
+(defun je/clear-state-changes ()
+  "Clear state changes"
+  (interactive)
+  (let ((regexp "- State \"DONE\""))
+    (let ((buffer-file-name nil)) ;; HACK for `clone-buffer'
+      (with-current-buffer (clone-buffer nil nil)
+        (let ((inhibit-read-only t))
+          (keep-lines regexp)
+          (kill-region (line-beginning-position)
+                       (point-max)))
+        (kill-buffer)))
+    (unless (and buffer-read-only kill-read-only-ok)
+      ;; Delete lines or make the "Buffer is read-only" error.
+      (flush-lines regexp))))
+
 (global-set-key (kbd "s-t")
                 (lambda ()
                   (interactive)
