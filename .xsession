@@ -18,6 +18,9 @@ ibus-daemon --xim &
 
 start-pulseaudio-x11 &
 
+synclient PalmDetect=1
+syndaemon -t -k -i 2 -d &
+
 if (screen -list | grep lightning) ; then
 	echo Screen exists
 else
