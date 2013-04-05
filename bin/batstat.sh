@@ -2,21 +2,28 @@
 
 source ~/bin/solarized.sh
 
-CHARGING=1
-if acpi -b | grep Discharging &>/dev/null ; then
+if [ "x$1" == "xtest" ] ; then
     CHARGING=0
-fi
-
-PERCENT_S=$(acpi -b | awk -F, '{print $2}')
-PERCENT_N=$(echo $PERCENT_S | awk -F% '{print $1}')
-
-if acpi -b | grep Unknown &> /dev/null ; then
-    TIME="??:??"
-elif acpi -b | grep Full &> /dev/null ; then
-    TIME="     "
+    PERCENT_S="3%"
+    TIME="0:09"
 else
-    TIME=$(acpi -b | perl -ne 's/^.+(..:..):...+$/\1/; print;')
+    CHARGING=1
+    if acpi -b | grep Discharging &>/dev/null ; then
+        CHARGING=0
+    fi
+
+    PERCENT_S=$(acpi -b | awk -F, '{print $2}')
+
+    if acpi -b | grep Unknown &> /dev/null ; then
+        TIME="??:??"
+    elif acpi -b | grep Full &> /dev/null ; then
+        TIME="     "
+    else
+        TIME=$(acpi -b | perl -ne 's/^.+(..:..):...+$/\1/; print;')
+    fi
 fi
+
+PERCENT_N=$(echo $PERCENT_S | awk -F% '{print $1}')
 
 COLOR=$GREEN
 if (($PERCENT_N <= 95)) ; then
@@ -55,16 +62,23 @@ fi
 echo -n "$TIME"
 echo "</fc>"
 
+function espeakwav() {
+    if ! [ -f "$2" ] ; then
+        espeak -a 200 -k20 -z "$1" -w "$2"
+    fi
+    mplayer "$2" &>/dev/null &
+}
+
 if (($CHARGING == 1)) ; then
     echo -n
 else
     if (($PERCENT_N <= 02)) ; then
         sudo systemctl hibernate
     elif (($PERCENT_N <= 03)) ; then
-        espeak -a 200 -k20 -z "Hibernation Eminent"
+        espeakwav "Hibernation Eminent" /tmp/he.wav
     elif (($PERCENT_N <= 05)) ; then
-        espeak -a 200 -k20 -z "Warning Battery Extremely Low"
+        espeakwav "Warning Battery Extremely Low" /tmp/wbel.wav
     elif (($PERCENT_N <= 10)) ; then
-        espeak -a 200 -k20 -z "Warning Battery Low"
+        espeakwav "Warning Battery Low" /tmp/wbl.wav
     fi
 fi
