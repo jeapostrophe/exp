@@ -1159,6 +1159,8 @@ given a prefix arg."
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
 (setq proof-three-window-mode-policy 'hybrid)
+(if nil
+    (proof-display-three-b 'hybrid))
 
 ;; haskell
 (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file")
