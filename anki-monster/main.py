@@ -19,6 +19,14 @@ def monster():
     if mw.monsterToDo > 0:
         mw.moveToState("review")
 
+# XXX Either put a display of monster into the Web view here:
+def monsterShowQuestion():
+    showInfo("Current monsters: %d" % mw.monsterToDo)
+
+addHook('showQuestion', monsterShowQuestion)
+
+# XXX Or, make it so if we don't return, then display the set of monsters
+
 def monsterAnswerCard(card, ease):
     if ease == 1:
         return
@@ -28,11 +36,7 @@ def monsterAnswerCard(card, ease):
     if mw.monsterToDo <= 0:
         mw.moveToState("deckBrowser")
 
-def monsterShowQuestion():
-    showInfo("Current monsters: %d" % mw.monsterToDo)
-
 addHook('answerCard', monsterAnswerCard)
-addHook('showQuestion', monsterShowQuestion)
 
 action = QAction("Monster", mw)
 mw.connect(action, SIGNAL("triggered()"), monster)
