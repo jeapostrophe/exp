@@ -33,6 +33,7 @@ def displayMonsters():
     parent = mw.app.activeWindow() or mw
     mb = QDialog(parent)
     mb.setWindowModality(Qt.WindowModal)
+    mb.show()
 
     grid = QGridLayout()
     grid.setMargin(0)
@@ -54,9 +55,8 @@ def displayMonsters():
 
     print "About to setLayout"
 
-    mb.setLayout(grid)
-
     # XXX This causes a hang and doesn't display anything
+    mb.setLayout(grid)
 
     print "About to exec"
 
