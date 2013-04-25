@@ -29,6 +29,9 @@ def monster():
         displayMonsters(False)
         mw.moveToState("review")
 
+def setScaledPixmap(l, p):
+    sp = l.scaled
+
 def displayMonsters(shoot_p):
     parent = mw.app.activeWindow() or mw
     mb = QDialog(parent)
@@ -44,12 +47,16 @@ def displayMonsters(shoot_p):
     dead = QLabel("Dead")
     grid.addWidget( dead, 0, 0, 1, 1, Qt.AlignCenter )
     for i in xrange(mw.monstersDone):
-        grid.addWidget( QLabel("d"), 0, i + 1, Qt.AlignCenter )
+        l = QLabel()
+        setScaledPixmap( l, mw.monsters[ i ] )
+        grid.addWidget( l, 0, i + 1, Qt.AlignCenter )
 
     alive = QLabel("Alive")
     grid.addWidget( alive, 1, 0, 1, 1, Qt.AlignCenter )
     for i in xrange(mw.monsterToDo):
-        grid.addWidget( QLabel("X"), 1, i + 1, Qt.AlignCenter )
+        l = QLabel()
+        setScaledPixmap( l, mw.monsters[ mw.monstersDone + i ] )
+        grid.addWidget( l, 1, i + 1, Qt.AlignCenter )
 
     b = QPushButton("Shoot" if shoot_p else "Next")
     b.setDefault(True)
