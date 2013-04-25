@@ -6,7 +6,7 @@ import os, random
 from random import shuffle
 
 N = 50
-MonstersPath = "/home/jay/Downloads/anki-monster-pngs"
+MonstersPath = os.path.join(os.path.expanduser("~"), "Downloads", "anki-monster-pngs")
 
 def loadMonster(png):
     path = os.path.join( MonstersPath, png )
