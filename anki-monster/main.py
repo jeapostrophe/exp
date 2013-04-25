@@ -26,14 +26,13 @@ def monster():
     mw.monsters = [ loadMonster() for n in range(howManyToDo)]
 
     if mw.monsterToDo > 0:
-        displayMonsters()
+        displayMonsters(False)
         mw.moveToState("review")
 
-def displayMonsters():
+def displayMonsters(shoot_p):
     parent = mw.app.activeWindow() or mw
     mb = QDialog(parent)
     mb.setWindowModality(Qt.WindowModal)
-    mb.show()
 
     grid = QGridLayout()
     grid.setMargin(0)
@@ -42,24 +41,22 @@ def displayMonsters():
     grid.setRowStretch(1, 100)
     grid.setRowMinimumHeight(2, 6)
 
-    dead = QLabel("Dead: %d" % mw.monstersDone)
-    grid.addWidget( dead, 0, 0 )
+    dead = QLabel("Dead")
+    grid.addWidget( dead, 0, 0, 1, 1, Qt.AlignCenter )
+    for i in xrange(mw.monstersDone):
+        grid.addWidget( QLabel("d"), 0, i + 1, Qt.AlignCenter )
 
-    alive = QLabel("Alive: %d" % mw.monsterToDo)
-    grid.addWidget( alive, 1, 0 )
+    alive = QLabel("Alive")
+    grid.addWidget( alive, 1, 0, 1, 1, Qt.AlignCenter )
+    for i in xrange(mw.monsterToDo):
+        grid.addWidget( QLabel("X"), 1, i + 1, Qt.AlignCenter )
 
-    b = QPushButton("Shoot")
+    b = QPushButton("Shoot" if shoot_p else "Next")
     b.setDefault(True)
     mb.connect(b, SIGNAL('clicked()'), mb.accept)
-    grid.addWidget( mb, 2, 0 )
+    grid.addWidget( b, 2, 0, 1, -1, Qt.AlignCenter )
 
-    print "About to setLayout"
-
-    # XXX This causes a hang and doesn't display anything
     mb.setLayout(grid)
-
-    print "About to exec"
-
     mb.exec_()
 
 def monsterAnswerCard(card, ease):
@@ -69,7 +66,7 @@ def monsterAnswerCard(card, ease):
     mw.monstersDone = mw.monstersDone + 1
     mw.monsterToDo = mw.monsterToDo - 1
 
-    displayMonsters()
+    displayMonsters(True)
 
     if mw.monsterToDo <= 0:
         mw.moveToState("deckBrowser")
