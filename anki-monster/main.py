@@ -35,21 +35,30 @@ def displayMonsters():
     mb.setWindowModality(Qt.WindowModal)
 
     grid = QGridLayout()
+    grid.setMargin(0)
+    grid.setVerticalSpacing(0)
+    grid.setHorizontalSpacing(0)
+    grid.setRowStretch(1, 100)
+    grid.setRowMinimumHeight(2, 6)
 
     dead = QLabel("Dead: %d" % mw.monstersDone)
-    grid.addWidget( dead, 0, 0, 1, -1 )
+    grid.addWidget( dead, 0, 0 )
 
     alive = QLabel("Alive: %d" % mw.monsterToDo)
-    grid.addWidget( alive, 1, 0, 1, -1 )
+    grid.addWidget( alive, 1, 0 )
 
     b = QPushButton("Shoot")
     b.setDefault(True)
     mb.connect(b, SIGNAL('clicked()'), mb.accept)
-    grid.addWidget( mb, 2, 0, 1, -1 )
+    grid.addWidget( mb, 2, 0 )
+
+    print "About to setLayout"
 
     mb.setLayout(grid)
 
     # XXX This causes a hang and doesn't display anything
+
+    print "About to exec"
 
     mb.exec_()
 
