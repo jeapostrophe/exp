@@ -1,5 +1,6 @@
 #lang racket/base
 (require racket/include
+         racket/function
          racket/list)
 (module+ test
   (require rackunit))
@@ -55,10 +56,29 @@
     (for ([e (in-list r)])
       (when e (check-not-false (member e arcana))))))
 
-(define personas empty)
 (struct persona (arcana lvl name) #:transparent)
+
+(define personas empty)
+(define arcana->personas (make-hash))
+(define (insert p l)
+  (cond
+    [(empty? l)
+     (list p)]
+    [else
+     (if (< (persona-lvl p)
+            (persona-lvl (first l)))
+       (list* p l)
+       (list* (first l) (insert p (rest l))))]))
+(define name->persona (make-hash))
 (define-syntax-rule (define-persona a l n)
-  (set! personas (cons (persona 'a l n) personas)))
+  (begin 
+    (define av 'a)
+    (define lv l)
+    (define nv n)
+    (define p (persona av lv nv))
+    (set! personas (cons p personas))
+    (hash-update! arcana->personas av (curry insert p) empty)
+    (hash-set! name->persona nv p)))
 (include "persona.rkt")
 
 (module+ test
