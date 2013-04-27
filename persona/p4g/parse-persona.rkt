@@ -23,8 +23,18 @@
                      (regexp #rx"^\\|\\[\\[(.+)\\]\\]$"
                              (list _ persona))
                      l)
-          (displayln `(define-persona ,arcana ,lvl ,persona))
-          (loop l)]))]))
+          (write `(define-persona ,arcana ,lvl ,persona)) (newline)
+          (loop l)]
+         [(list-rest (regexp #rx"^.+\\| -$" 
+                             (list _ ))
+                     (regexp #rx"^\\|\\[\\[(.+)\\]\\]$"
+                             (list _ persona))
+                     l)
+          (loop l)]
+         [(list-rest (regexp #rx"^\\|}$" (list _))
+                     ""
+                     l)
+          l]))]))
 
 (define (parse-all p)
   (let loop ([l (file->lines p)])
@@ -33,6 +43,5 @@
 
 (module+ main
   (require racket/runtime-path)
-  ;; This file is based on http://megamitensei.wikia.com/wiki/List_of_Persona_4_Personas?action=edit
   (define-runtime-path persona.txt "persona.txt")
   (parse-all persona.txt))

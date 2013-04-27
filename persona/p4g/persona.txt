@@ -414,7 +414,7 @@
 |[[Zaou Gongen]]
 |}
 
-==Hanged Man==
+==Hanged-Man==
 {|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
 !width="5%" style="background-color:black; border-radius:3.5px;"|Level
 !width="20%" style="background-color:black; border-radius:3.5px;"|Persona
@@ -499,7 +499,7 @@
 |-
 !style="background-color:#FFE600; border-radius:3.5px; color:black;"|31
 |[[Mithra]]
-!style="background-color:#FFE600; border-radius:3.5px; color:black;"|??
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|40
 |[[Genbu]]
 !style="background-color:#FFE600; border-radius:3.5px; color:black;"|47
 |[[Seiryuu]]
@@ -680,7 +680,7 @@
 |[[Asura]]
 |}
 
-==Jester (Hunger) ''[Persona 4 Golden only]''==
+==Jester==
 {|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
 !width="5%" style="background-color:black; border-radius:3.5px;"|Level
 !width="20%" style="background-color:black; border-radius:3.5px;"|Persona
@@ -713,7 +713,7 @@
 |[[Magatsu-Izanagi]]
 |}
 
-==Aeon ''(Persona 4 Golden Only)''==
+==Aeon==
 {|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
 !width="5%" style="background-color:black; border-radius:3.5px;"|Level
 !width="20%" style="background-color:black; border-radius:3.5px;"|Persona
@@ -771,12 +771,12 @@
 |[[Lucifer]]
 |}
 
-==The World==
+==World==
 {|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
 !width="5%" style="background-color:black; border-radius:3.5px;"|Level
 !width="20%" style="background-color:black; border-radius:3.5px;"|Persona
-!
 |-
 !style="background-color:#FFE600; border-radius:3.5px; color:black;"|91
 |[[Izanagi-no-Okami]]
 |}
+
