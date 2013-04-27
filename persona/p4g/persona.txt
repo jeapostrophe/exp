@@ -1,0 +1,782 @@
+==Fool==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|01
+|[[Izanagi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|07
+|[[Yomotsu-Shikome]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|13
+|[[Obariyon]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|21
+|[[Legion]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|31
+|[[Ose]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|38
+|[[Black Frost]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|46
+|[[Decarabia]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|56
+|[[Shiki-Ouji]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|64
+|[[Loki]]
+|}
+
+==Magician==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|04
+|[[Jiraiya]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Susano-O]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|02
+|[[Pixie]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|08
+|[[Orobas]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|16
+|[[Jack Frost]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|25
+|[[Hua Po]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|32
+|[[Pyro Jack]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|39
+|[[Dis]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|47
+|[[Rangda]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|62
+|[[Jinn]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|69
+|[[Surt]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|78
+|[[Mada]]
+|}
+
+==Priestess==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|15
+|[[Konohana Sakuya]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Amaterasu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|11
+|[[Saki Mitama]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|17
+|[[Sarasvati]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|22
+|[[High Pixie]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|29
+|[[Ganga]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|37
+|[[Parvati]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|48
+|[[Kikuri-Hime]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|59
+|[[Hariti]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|70
+|[[Tzitzimitl]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|79
+|[[Scathach]]
+|}
+
+==Empress==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|09
+|[[Senri]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|18
+|[[Yaksini]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|26
+|[[Titania]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|34
+|[[Gorgon]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|43
+|[[Gabriel]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|52
+|[[Skadi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|61
+|[[Mother Harlot]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|71
+|[[Alilat]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|79
+|[[Isis]]
+|}
+
+==Emperor==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|25
+|[[Take-Mikazuchi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Rokuten Maoh]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|12
+|[[Oberon]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|22
+|[[King Frost]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|34
+|[[Setanta]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|41
+|[[Okuninushi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|45
+|[[Thoth]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|51
+|[[Pabilsag]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|65
+|[[Barong]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|74
+|[[Odin]]
+|}
+
+==Hierophant==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|07
+|[[Omoikane]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|15
+|[[Anzu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|21
+|[[Shiisaa]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|29
+|[[Unicorn]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|36
+|[[Flauros]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|45
+|[[Hokuto Seikun]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|52
+|[[Cerberus]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|60
+|[[Daisoujou]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|70
+|[[Hachiman]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|76
+|[[Kohryu]]
+|}
+
+==Lovers==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|34
+|[[Himiko]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Kanzeon]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|25
+|[[Queen Mab]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|33
+|[[Undine]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|42
+|[[Leanan Sidhe]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|53
+|[[Raphael]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|64
+|[[Cybele]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|71
+|[[Ishtar]]
+|}
+
+==Chariot==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|06
+|[[Tomoe]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Suzuka Gongen]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|02
+|[[Slime]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|06
+|[[Nata Taishi]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|12
+|[[Eligor]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|18
+|[[Ara Mitama]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|25
+|[[Ares]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|43
+|[[Triglav]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|54
+|[[Kin-Ki]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|65
+|[[Thor]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|72
+|[[Atavaka]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|80
+|[[Futsunushi]]
+|}
+
+==Justice==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|04
+|[[Angel]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|11
+|[[Archangel]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|19
+|[[Principality]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|27
+|[[Power]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|33
+|[[Virtue]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|38
+|[[Dominion]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|49
+|[[Throne]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|58
+|[[Uriel]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|66
+|[[Melchizedek]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|74
+|[[Sraosha]]
+|}
+
+==Hermit==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|06
+|[[Forneus]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|17
+|[[Ippon-Datara]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|26
+|[[Lamia]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|33
+|[[Mothman]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|41
+|[[Hitokotonushi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|48
+|[[Kurama Tengu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|55
+|[[Nidhoggr]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|63
+|[[Nebiros]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|73
+|[[Arahabaki]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|82
+|[[Ongyo-Ki]]
+|}
+
+==Fortune==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|55
+|[[Sukuna-Hikona]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Yamato-Takeru]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|35
+|[[Fortuna]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|44
+|[[Clotho]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|54
+|[[Lachesis]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|58
+|[[Ananta]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|65
+|[[Atropos]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|72
+|[[Norn]]
+|}
+
+==Strength==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|05
+|[[Sandman]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|08
+|[[Valkyrie]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|14
+|[[Titan]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|23
+|[[Rakshasa]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|28
+|[[Kusi Mitama]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|30
+|[[Oni]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|42
+|[[Hanuman]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|50
+|[[Kali]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|63
+|[[Siegfried]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|90
+|[[Zaou Gongen]]
+|}
+
+==Hanged Man==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|15
+|[[Berith]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|22
+|[[Yomotsu-Ikusa]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|27
+|[[Makami]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|39
+|[[Orthrus]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|49
+|[[Yatsufusa]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|56
+|[[Taowu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|66
+|[[Hell Biker]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|71
+|[[Vasuki]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|82
+|[[Attis]]
+|}
+
+==Death==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|09
+|[[Ghoul]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|14
+|[[Mokoi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|24
+|[[Matador]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|36
+|[[Samael]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|46
+|[[Mot]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|58
+|[[White Rider]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|72
+|[[Alice]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|78
+|[[Mahakala]]
+|}
+
+==Temperance==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|04
+|[[Apsaras]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|11
+|[[Sylph]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|16
+|[[Xiezhai]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|23
+|[[Nigi Mitama]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|31
+|[[Mithra]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|??
+|[[Genbu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|47
+|[[Seiryuu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|54
+|[[Suzaku]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|62
+|[[Byakko]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|69
+|[[Yurlungur]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|73
+|[[Vishnu]]
+|}
+
+==Devil==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|03
+|[[Ukobach]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|10
+|[[Lilim]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|19
+|[[Vetala]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|28
+|[[Incubus]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|37
+|[[Pazuzu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|44
+|[[Succubus]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|53
+|[[Lilith]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|61
+|[[Belphegor]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|68
+|[[Belial]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|81
+|[[Beelzebub]]
+|}
+
+==Tower==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|35
+|[[Tao Tie]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|46
+|[[Cu Chulainn]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|55
+|[[Abaddon]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|62
+|[[Mara]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|69
+|[[Masakado]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|75
+|[[Yoshitsune]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|80
+|[[Shiva]]
+|}
+
+==Star==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|35
+|[[Kintoki-Douji]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"| -
+|[[Kamui]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|24
+|[[Kaiwan]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|32
+|[[Neko Shogun]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|43
+|[[Fuu-Ki]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|50
+|[[Ganesha]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|57
+|[[Garuda]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|67
+|[[Kartikeya]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|75
+|[[Saturnus]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|87
+|[[Helel]]
+|}
+
+==Moon==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|20
+|[[Andras|Andra]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|27
+|[[Nozuchi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|34
+|[[Yamata-no-Orochi]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|41
+|[[Alraune]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|48
+|[[Girimehkala]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|57
+|[[Sui-Ki]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|68
+|[[Seth (demon)|Seth]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|77
+|[[Baal Zebul]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|84
+|[[Sandalphon]]
+|}
+
+==Sun==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|10
+|[[Cu Sith]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|20
+|[[Phoenix]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|31
+|[[Gdon]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|40
+|[[Yatagarasu]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|47
+|[[Narasimha]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|53
+|[[Tam Lin]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|61
+|[[Jatayu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|68
+|[[Horus]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|77
+|[[Suparna]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|86
+|[[Asura]]
+|}
+
+==Jester (Hunger) ''[Persona 4 Golden only]''==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|20
+|[[Gurr]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|27
+|[[Take-Minakata]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|34
+|[[Pale Rider]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|40
+|[[Loa]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|47
+|[[Baphomet]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|55
+|[[Kumbhanda]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|62
+|[[Chernobog]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|68
+|[[Seiten Taisei]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|77
+|[[Magatsu-Izanagi]]
+|}
+
+==Aeon ''(Persona 4 Golden Only)''==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|18
+|[[Ame-no-Uzume]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|24
+|[[Narcissus]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|31
+|[[Sati]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|37
+|[[Raja Naga]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|44
+|[[Kushinada-Hime]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|51
+|[[Quetzalcoatl]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|58
+|[[Kingu]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|65
+|[[Kaguya]]
+|}
+
+==Judgement==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|59
+|[[Anubis]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|67
+|[[Trumpeter]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|72
+|[[Michael]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|76
+|[[Satan]]
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|83
+|[[Metatron]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|90
+|[[Ardha]]
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|93
+|[[Lucifer]]
+|}
+
+==The World==
+{|style="border-radius:7px; background: #222222; text-align:center;" width="100%" align="center" cellpadding="0" cellspacing="2"
+!width="5%" style="background-color:black; border-radius:3.5px;"|Level
+!width="20%" style="background-color:black; border-radius:3.5px;"|Persona
+!
+|-
+!style="background-color:#FFE600; border-radius:3.5px; color:black;"|91
+|[[Izanagi-no-Okami]]
+|}
