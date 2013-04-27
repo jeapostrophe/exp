@@ -3,16 +3,6 @@ How to install:
 0. Turn off Anki
 1. Unzip anki-monster-pngs.zip to ~/Downloads/anki-monster-pngs
 2. Install "main.py" into ~/Documents/Anki/addons/anki-monster.py
-3. Edit "aqt/reviewer.py" from the Anki source, line 250 and add:
-   
-        runHook("answerCard", self.card, ease)
-   
-   It should look like
-
-        self.mw.autosave()
-        runHook("answerCard", self.card, ease)
-        self.nextCard()
-
-4. Turn on Anki
-5. Click on a collection
-6. Click on Tools > Monster
+3. Turn on Anki
+4. Click on a collection
+5. Click on Tools > Monster

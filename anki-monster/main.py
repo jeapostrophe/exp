@@ -1,4 +1,4 @@
-from anki.hooks import addHook
+from anki.hooks import addHook, wrap
 from aqt import mw
 from aqt.utils import showInfo
 from aqt.qt import *
@@ -14,6 +14,8 @@ def loadMonster(png):
     return pixmap
 
 def monster():
+    mw.col.sched.answerCard = wrap( mw.col.sched.answerCard, monsterAnswerCard )
+
     newCount, lrnCount, revCount = mw.col.sched.counts()
     totalCount = (newCount + lrnCount + revCount)
     howManyToDo = totalCount / 2
@@ -95,8 +97,6 @@ def monsterAnswerCard(card, ease):
 
     if mw.monstersToDo <= 0:
         mw.moveToState("deckBrowser")
-
-addHook('answerCard', monsterAnswerCard)
 
 action = QAction("Monster", mw)
 mw.connect(action, SIGNAL("triggered()"), monster)
