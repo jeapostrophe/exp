@@ -115,6 +115,7 @@
          (define tri-a (triangle-chart-lookup int-a hi-a))
          (and tri-a
               (fusion-result 
+               tri-a
                (+ (/ (+ lo-l mi-l hi-l) 3) 5))))))
 
 (module+ test

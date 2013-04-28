@@ -56,7 +56,7 @@
     (for ([e (in-list r)])
       (when e (check-not-false (member e arcana))))))
 
-(struct persona (arcana lvl name) #:transparent)
+(struct persona (arcana lvl name) #:prefab)
 
 (define personas empty)
 (define arcana->personas (make-hash))
