@@ -1,6 +1,7 @@
 #lang racket/base
 (require racket/list
          racket/match
+         racket/function
          racket/path
          racket/file
          racket/runtime-path
@@ -57,13 +58,13 @@
       (apply build-path
              cache-path
              (map (compose path-sanitize ~a)
-                  (list* f-id args))))    
+                  (list* f-id args))))
     (cond
       [(file-exists? p)
-       (printf "! ~a\n" p)
+       ;; (printf "! ~a\n" p)
        (file->value p)]
       [else
-       (printf "? ~a\n" p)
+       ;; (printf "? ~a\n" p)
        (define ans (apply f args))
        (make-directory* (path-only p))
        (write-to-file ans p)
@@ -83,6 +84,7 @@
     (for*/fold ([l l])
         ([l-p (in-list (hash-ref data:arcana->personas l-a))]
          [r-p (in-list (hash-ref data:arcana->personas r-a))]
+         #:when (not (equal? l-p r-p))
          #:when (equal? t1-n
                         (double-fusion (data:persona-name l-p)
                                        (data:persona-name r-p))))
@@ -115,6 +117,9 @@
           ([p1 (in-list (hash-ref data:arcana->personas lo-a))]
            [p2 (in-list (hash-ref data:arcana->personas mi-a))]
            [p3 (in-list (hash-ref data:arcana->personas hi-a))]
+           #:when (not (or (equal? p1 p2)
+                           (equal? p1 p3)
+                           (equal? p2 p3)))
            #:when (equal? t1-n
                           (triple-fusion (data:persona-name p1)
                                          (data:persona-name p2)
@@ -123,24 +128,20 @@
 
 (cache! triple-options)
 
-(define (find-minimal-plan plan-cost ts)
-  (match ts
-    [(list)
-     (void)]
-    [(list* t1 ts)
-     (define options
-       (append (double-options t1)
-               (triple-options t1)))
+(define (find-minimal-plan plan-cost t1)
+  (define options
+    (append (double-options t1)
+            (triple-options t1)))
 
-     (define best-p
-       (and (not (empty? options))
-            (argmin plan-cost options)))
+  (define best-p
+    (and (not (empty? options))
+         (argmin plan-cost options)))
 
-     (cond
-       [(and best-p (not (= (plan-cost best-p) +inf.0)))
-        best-p]
-       [else
-        (find-minimal-plan plan-cost ts)])]))
+  (cond
+    [(and best-p (not (= (plan-cost best-p) +inf.0)))
+     best-p]
+    [else
+     #f]))
 
 (module+ main
   (require "current.rkt")
@@ -167,8 +168,24 @@
      (append (for/list ([a (in-list active)])
                (list a 0))
              compendium)))
-  (display-plan
-   plan-cost
-   (find-minimal-plan
-    plan-cost
-    targets)))
+  (define ps
+    (sort (filter-map (curry find-minimal-plan
+                             plan-cost)
+                      targets)
+          <
+          #:key plan-cost
+          #:cache-keys? #t))
+  (displayln  (~a (~a (length ps)
+                      #:align 'right
+                      #:min-width 3)
+                  " of "
+                  (~a (length targets)
+                      #:align 'right
+                      #:min-width 3)
+                  " targets available"))
+  (for ([p (in-list ps)]
+        [i (in-naturals)])
+    (printf "~a. " i)
+    (display-plan
+     plan-cost
+     p)))
