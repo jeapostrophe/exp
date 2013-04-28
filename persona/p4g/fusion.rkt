@@ -6,13 +6,17 @@
   (require rackunit))
 
 (define (fusion-result arcana level #:same? [same? #f])
-  (define ps 
+  (define ps
     (filter
      (λ (p)
        (not (memf (λ (e) (string=? (first e) (data:persona-name p)))
                   data:special)))
-     (hash-ref data:arcana->personas arcana)))
-  
+     (hash-ref data:arcana->personas arcana
+               (λ ()
+                 (error 'fusion-result
+                        "Arcana ~a unknown"
+                        arcana)))))
+
   (let loop ([ps ps])
     (cond
       [(empty? (rest ps))
@@ -27,13 +31,13 @@
 (module+ test
   (check-equal? (fusion-result 'Star 49)
                 "Ganesha")
-  (check-equal? (fusion-result 'Tower 80) 
+  (check-equal? (fusion-result 'Tower 80)
                 "Masakado")
-  (check-equal? (fusion-result 'Temperance 57) 
+  (check-equal? (fusion-result 'Temperance 57)
                 "Byakko")
-  (check-equal? (fusion-result 'Fool 32) 
+  (check-equal? (fusion-result 'Fool 32)
                 "Decarabia")
-  (check-equal? (fusion-result 'Fool 32 #:same? #t) 
+  (check-equal? (fusion-result 'Fool 32 #:same? #t)
                 "Ose"))
 
 (define (arcana->i a)
@@ -56,14 +60,22 @@
 
 (define (double-fusion left right)
   (match-define (data:persona left-a left-l _)
-                (hash-ref data:name->persona left))
+                (hash-ref data:name->persona left
+                          (λ () (error 'double-fusion
+                                       "Persona ~a unknown"
+                                       left))))
   (match-define (data:persona right-a right-l _)
-                (hash-ref data:name->persona right))  
-  (fusion-result (normal-chart-lookup left-a right-a)
-                 (+ (/ (+ left-l right-l)
-                       2)
-                    1)
-                 #:same? (eq? left-a right-a)))
+                (hash-ref data:name->persona right
+                          (λ () (error 'double-fusion
+                                       "Persona ~a unknown"
+                                       right))))
+  (define result-a (normal-chart-lookup left-a right-a))
+  (and result-a
+       (fusion-result result-a
+                      (+ (/ (+ left-l right-l)
+                            2)
+                         1)
+                      #:same? (eq? left-a right-a))))
 
 (module+ test
   (check-equal? (double-fusion "Throne" "Siegfried")
@@ -80,10 +92,13 @@
   (list-ref low-r max-i))
 
 (define (triple-fusion p1 p2 p3)
-  (define ps 
-    (map (λ (n) (hash-ref data:name->persona n))
+  (define ps
+    (map (λ (n) (hash-ref data:name->persona n
+                          (λ () (error 'triple-fusion
+                                       "Persona ~a unknown"
+                                       n))))
          (list p1 p2 p3)))
-  (match-define 
+  (match-define
    (list (data:persona lo-a lo-l _)
          (data:persona mi-a mi-l _)
          (data:persona hi-a hi-l _))
@@ -95,8 +110,12 @@
              (< (arcana->i a1) (arcana->i a2))
              (< l1 l2)))))
   (define int-a (normal-chart-lookup lo-a mi-a))
-  (fusion-result (triangle-chart-lookup int-a hi-a)
-                 (+ (/ (+ lo-l mi-l hi-l) 3) 5)))
+  (and int-a
+       (let ()
+         (define tri-a (triangle-chart-lookup int-a hi-a))
+         (and tri-a
+              (fusion-result 
+               (+ (/ (+ lo-l mi-l hi-l) 3) 5))))))
 
 (module+ test
   (check-equal? (triple-fusion "Senri" "Throne" "Loki")
