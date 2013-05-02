@@ -12,43 +12,6 @@
 (module+ test
   (require rackunit))
 
-(struct plan-double (left right result) #:prefab)
-(struct plan-triple (p1 p2 p3 result) #:prefab)
-
-(define (display-plan plan-cost plan)
-  (match plan
-    [(plan-double (data:persona _ _ l)
-                  (data:persona _ _ r)
-                  (data:persona _ _ a))
-     (printf "Double fusion: ~a x ~a = ~a [~a]\n"
-             l r a (plan-cost plan))]
-    [(plan-triple (data:persona _ _ p1)
-                  (data:persona _ _ p2)
-                  (data:persona _ _ p3)
-                  (data:persona _ _ a))
-     (printf "Triple fusion: (~a x ~a) x ~a = ~a [~a]\n"
-             p1 p2 p3 a (plan-cost plan))]))
-
-(define (compendium->plan-cost comp)
-  (define (persona-cost p)
-    (first (dict-ref comp (data:persona-name p) (list +inf.0))))
-  (match-lambda
-   [(plan-double l r _)
-    (+ (persona-cost l) (persona-cost r))]
-   [(plan-triple p1 p2 p3 _)
-    (+ (persona-cost p1) (persona-cost p2) (persona-cost p3))]))
-
-(define (double-arcana-pairs t1-a)
-  (for/fold ([l empty])
-      ([max-a (in-list data:arcana)]
-       [max-c (in-list data:fusion-chart)])
-    (for/fold ([l l])
-        ([low-a (in-list data:arcana)]
-         [some-a (in-list max-c)])
-      (if (equal? t1-a some-a)
-        (list* (cons low-a max-a) l)
-        l))))
-
 (define-runtime-path cache-path "/tmp/p4g-cache")
 (define (path-sanitize s)
   (regexp-replace* #rx"[^a-zA-Z0-9]" s "_"))
@@ -74,74 +37,97 @@
     (define old-f f)
     (set! f (make-cache 'f old-f))))
 
-(cache! double-arcana-pairs)
+(struct plan (cost))
+(struct double plan (l r))
+(struct buy plan ())
 
-(define (double-options t1)
-  (match-define (data:persona t1-a t1-l t1-n) t1)
-  (for/fold ([l empty])
-      ([l-a*r-a (in-list (double-arcana-pairs t1-a))])
-    (match-define (cons l-a r-a) l-a*r-a)
-    (for*/fold ([l l])
-        ([l-p (in-list (hash-ref data:arcana->personas l-a))]
-         [r-p (in-list (hash-ref data:arcana->personas r-a))]
-         #:when (not (equal? l-p r-p))
-         #:when (equal? t1-n
-                        (double-fusion (data:persona-name l-p)
-                                       (data:persona-name r-p))))
-      (list* (plan-double l-p r-p t1) l))))
-
-(cache! double-options)
-
-(define (triple-arcana-pairs t1-a)
-  (for/fold ([l empty])
-      ([low-a (in-list data:arcana)]
-       [low-c (in-list data:fusion-chart)])
-    (for/fold ([l l])
-        ([max-a (in-list data:arcana)]
-         [some-a (in-list low-c)])
-      (if (equal? t1-a some-a)
-        (list* (cons low-a max-a) l)
-        l))))
-
-(cache! triple-arcana-pairs)
-
-(define (triple-options t1)
-  (match-define (data:persona t1-a t1-l t1-n) t1)
-  (for/fold ([l empty])
-      ([int-a*hi-a (in-list (triple-arcana-pairs t1-a))])
-    (match-define (cons int-a hi-a) int-a*hi-a)
-    (for/fold ([l l])
-        ([lo-a*mi-a (in-list (double-arcana-pairs int-a))])
-      (match-define (cons lo-a mi-a) lo-a*mi-a)
-      (for*/fold ([l l])
-          ([p1 (in-list (hash-ref data:arcana->personas lo-a))]
-           [p2 (in-list (hash-ref data:arcana->personas mi-a))]
-           [p3 (in-list (hash-ref data:arcana->personas hi-a))]
-           #:when (not (or (equal? p1 p2)
-                           (equal? p1 p3)
-                           (equal? p2 p3)))
-           #:when (equal? t1-n
-                          (triple-fusion (data:persona-name p1)
-                                         (data:persona-name p2)
-                                         (data:persona-name p3))))
-        (list* (plan-triple p1 p2 p3 t1) l)))))
-
-(cache! triple-options)
-
-(define (find-minimal-plan plan-cost t1)
-  (define options
-    (append (double-options t1)
-            (triple-options t1)))
-
-  (define best-p
-    (and (not (empty? options))
-         (argmin plan-cost options)))
-
+(define (insert changed?-box new old)
   (cond
-    [(and best-p (not (= (plan-cost best-p) +inf.0)))
-     best-p]
+    [(not old)
+     (set-box! changed?-box #t)
+     new]
+    [(< (plan-cost new) (plan-cost old))
+     (set-box! changed?-box #t)
+     new]
     [else
-     #f]))
+     old]))
+
+(define (optimize c)
+  (define init-persona->plan
+    (for/hash ([lp (in-list c)])
+      (match-define (list l lc) lp)
+      (values l (buy lc))))
+  (let loop ([persona->plan init-persona->plan])
+    (define changed?-box (box #f))
+    (define next
+      (for*/fold ([this persona->plan])
+          ([(l lp) (in-hash persona->plan)]
+           [(r rp) (in-hash persona->plan)])
+        (cond
+          [(double-fusion l r)
+           =>
+           (λ (res)
+             (define lc (plan-cost lp))
+             (define rc (plan-cost rp))
+             (define plan (double (+ lc rc) l r))
+             (hash-update this res (curry insert changed?-box plan) #f))]
+          [else
+           this])))
+    (if (unbox changed?-box)
+      (loop next)
+      next)))
+
+(struct lplan (res))
+(struct ldouble lplan (l r))
+(struct lbuy lplan (c))
+
+(define lplan-cost
+  (match-lambda
+   [(ldouble _ l r)
+    (+ (lplan-cost l)
+       (lplan-cost r))]
+   [(lbuy _ c)
+    c]))
+
+(define (linearize p->p)
+  (define (linearize-one p pl)
+    (match pl
+      [(buy c)
+       (lbuy p c)]
+      [(double _ l r)
+       (ldouble
+        p
+        (linearize-one! l (hash-ref p->p l))
+        (linearize-one! r (hash-ref p->p r)))]))
+  (define p->lp (make-hash))
+  (define (linearize-one! p pl)
+    (hash-ref! p->lp p (λ () (linearize-one p pl))))
+  (for/list ([(p pl) (in-hash p->p)])
+    (linearize-one! p pl)))
+
+(define lplan-format
+  (match-lambda
+   [(ldouble res l r)
+    (format "[~a@(~a x ~a)]"
+            res
+            (lplan-format l)
+            (lplan-format r))]
+   [(lbuy res c)
+    (format "B(~a)" res)]))
+
+(define (display-plans p->p)
+  (define lps 
+    (sort (filter ldouble?
+                  (linearize p->p))
+          <
+          #:key lplan-cost
+          #:cache-keys? #t))
+  (for ([lp (in-list lps)]
+        [i (in-range 10)])
+    (printf "~a [~a] <= ~a\n"
+            (lplan-res lp)
+            (lplan-cost lp)
+            (lplan-format lp))))
 
 (module+ main
   (require "current.rkt")
@@ -158,34 +144,5 @@
                       #:align 'right
                       #:min-width 3)
                   " remaining"))
-  (define targets
-    (sort (filter (λ (p) (<= (data:persona-lvl p) current-level))
-                  remaining)
-          <
-          #:key data:persona-lvl))
-  (define plan-cost
-    (compendium->plan-cost
-     (append (for/list ([a (in-list active)])
-               (list a 0))
-             compendium)))
-  (define ps
-    (sort (filter-map (curry find-minimal-plan
-                             plan-cost)
-                      targets)
-          <
-          #:key plan-cost
-          #:cache-keys? #t))
-  (displayln  (~a (~a (length ps)
-                      #:align 'right
-                      #:min-width 3)
-                  " of "
-                  (~a (length targets)
-                      #:align 'right
-                      #:min-width 3)
-                  " targets available"))
-  (for ([p (in-list ps)]
-        [i (in-naturals)])
-    (printf "~a. " i)
-    (display-plan
-     plan-cost
-     p)))
+  (display-plans
+   (optimize compendium)))
