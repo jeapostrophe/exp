@@ -583,6 +583,14 @@ given a prefix arg."
 (org-defkey org-mode-map (kbd "s-{") 'org-shiftleft)
 (org-defkey org-mode-map (kbd "s-}") 'org-shiftright)
 
+(defun je/org-meta-return ()
+  (interactive)
+  (newline)
+  (org-meta-return))
+
+(org-defkey org-mode-map [(meta return)]  'je/org-meta-return)
+(setq org-M-RET-may-split-line '((default . t)))
+
 (org-defkey org-mode-map [(meta left)]  nil)
 (org-defkey org-mode-map [(meta right)] nil)
 (org-defkey org-mode-map [(shift meta left)]  nil)
