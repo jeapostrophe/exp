@@ -62,7 +62,8 @@
     (define next
       (for*/fold ([this persona->plan])
           ([(l lp) (in-hash persona->plan)]
-           [(r rp) (in-hash persona->plan)])
+           [(r rp) (in-hash persona->plan)]
+           #:unless (equal? l r))
         (cond
           [(double-fusion l r)
            =>
@@ -105,29 +106,37 @@
   (for/list ([(p pl) (in-hash p->p)])
     (linearize-one! p pl)))
 
-(define lplan-format
-  (match-lambda
+(define (lplan-format res? lp)
+  (match lp
    [(ldouble res l r)
-    (format "[~a@(~a x ~a)]"
+    (if res?
+      (format "[~a@~a]"
             res
-            (lplan-format l)
-            (lplan-format r))]
+            (lplan-format #f lp))
+      (format "(~a x ~a)"
+              (lplan-format #t l)
+              (lplan-format #t r)))]
    [(lbuy res c)
-    (format "B(~a)" res)]))
+    res]))
 
 (define (display-plans p->p)
-  (define lps 
+  (define lps
     (sort (filter ldouble?
                   (linearize p->p))
           <
           #:key lplan-cost
           #:cache-keys? #t))
+  (define max-len
+    (apply max (map (compose string-length lplan-res) lps)))
   (for ([lp (in-list lps)]
         [i (in-range 10)])
-    (printf "~a [~a] <= ~a\n"
-            (lplan-res lp)
-            (lplan-cost lp)
-            (lplan-format lp))))
+    (displayln
+     (~a (~a #:min-width max-len
+             (lplan-res lp))
+         " ["
+         (lplan-cost lp)
+         "] <= "
+         (lplan-format #f lp)))))
 
 (module+ main
   (require "current.rkt")
