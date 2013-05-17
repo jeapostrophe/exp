@@ -28,8 +28,9 @@
                 (struct name-struct stack-op ()
                         #:property prop:procedure
                         (λ (so in_0 ...)
-                          (match-define (list out_n ...) (f (list in_n ...)))
+                          (match-define (list* out_n ... left-over) (f (list in_n ...)))
                           (values out_0 ...)))))
+             ;; You can't call Forth functions without a spec.
              (syntax/loc stx
                (struct name-struct stack-op ())))
          (define (f this-stack)
