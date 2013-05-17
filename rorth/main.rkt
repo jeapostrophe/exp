@@ -77,6 +77,7 @@
   (syntax-rules ()
     [(_ stk)
      stk]
+    ;; xxx optimize this when stack-op is statically known
     [(_ stk e)
      (maybe-apply-stack-op e stk)]
     [(_ stk f m ...)
