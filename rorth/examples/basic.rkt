@@ -83,7 +83,7 @@
 (define (squared2 x)
   (* x x))
 
-(define-rorth :squared2 1
+(define-rorth :squared2 (1 -- 1)
   squared2)
 
 (define/rorth :sum-of-squares3
@@ -100,7 +100,7 @@
 (define (weird x y)
   (values x (* x x) y))
 
-(define-rorth :weird 2
+(define-rorth :weird (2 -- 3)
   weird)
 
 (module+ test

@@ -4,6 +4,8 @@
          racket/match
          racket/stxparam
          (for-syntax racket/base
+                     racket/syntax
+                     racket/list
                      syntax/parse))
 
 (define-syntax-parameter stack
@@ -30,17 +32,22 @@
      #'(define/raw-rorth name
          (rorth/stack stack body ...))]))
 
+(begin-for-syntax
+  (define (generate-n-temporaries stx)
+    (generate-temporaries (build-list (syntax->datum stx) (λ (i) stx)))))
+
 (define-syntax (define-rorth stx)
   (syntax-parse stx
-    [(_ new-name:id input:nat name:id)
-     #'(define/raw-rorth new-name
-         ;; xxx slow
-         (define-values (before left-over) (split-at stack 'input))
-         ;; xxx slow
-         (call-with-values (λ () (apply name (reverse before)))
-           (λ after
-             ;; xxx slow
-             (append (reverse after) left-over))))]))
+    [(_ new-name:id (input:nat -- output:nat) name:id)
+     (with-syntax*
+      ([(in_0 ...) (generate-n-temporaries #'input)]
+       [(in_n ...) (reverse (syntax->list #'(in_0 ...)))]
+       [(out_0 ...) (generate-n-temporaries #'output)]
+       [(out_n ...) (reverse (syntax->list #'(out_0 ...)))])
+      #'(define/raw-rorth new-name
+          (match-define (list* in_n ... left-over) stack)
+          (define-values (out_0 ...) (name in_0 ...))
+          (list* out_n ... left-over)))]))
 
 (define-syntax-rule (rorth . body)
   (rorth/stack empty . body))
@@ -85,9 +92,9 @@
   (match-define (list* i rest) stack)
   (list* (list-ref rest i) rest))
 
-(define-rorth :+ 2 +)
-(define-rorth :- 2 -)
-(define-rorth :* 2 *)
+(define-rorth :+ (2 -- 1) +)
+(define-rorth :- (2 -- 1) -)
+(define-rorth :* (2 -- 1) *)
 
 (provide define/rorth
          define-rorth
