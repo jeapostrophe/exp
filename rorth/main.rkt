@@ -17,20 +17,16 @@
           ;; xxx slow
           (apply values (rorth/stack (reverse args) so))))
 
-(define-syntax (define/raw-rorth stx)
-  (syntax-parse stx
-    [(_ name:id . body)
-     #'(define name
-         (stack-op
-          (λ (this-stack)
-            (syntax-parameterize ([stack (make-rename-transformer #'this-stack)])
-              . body))))]))
+(define-syntax-rule (define/raw-rorth name . body)
+  (define name
+    (stack-op
+     (λ (this-stack)
+       (syntax-parameterize ([stack (make-rename-transformer #'this-stack)])
+         . body)))))
 
-(define-syntax (define/rorth stx)
-  (syntax-parse stx
-    [(_ name:id body ...)
-     #'(define/raw-rorth name
-         (rorth/stack stack body ...))]))
+(define-syntax-rule (define/rorth name body ...)
+  (define/raw-rorth name
+    (rorth/stack stack body ...)))
 
 (begin-for-syntax
   (define (generate-n-temporaries stx)
@@ -38,16 +34,17 @@
 
 (define-syntax (define-rorth stx)
   (syntax-parse stx
-    [(_ new-name:id (input:nat -- output:nat) name:id)
+    [(_ new-name:id (input:nat -- output:nat) name:expr)
      (with-syntax*
       ([(in_0 ...) (generate-n-temporaries #'input)]
        [(in_n ...) (reverse (syntax->list #'(in_0 ...)))]
        [(out_0 ...) (generate-n-temporaries #'output)]
        [(out_n ...) (reverse (syntax->list #'(out_0 ...)))])
-      #'(define/raw-rorth new-name
+      (syntax/loc stx
+        (define/raw-rorth new-name
           (match-define (list* in_n ... left-over) stack)
           (define-values (out_0 ...) (name in_0 ...))
-          (list* out_n ... left-over)))]))
+          (list* out_n ... left-over))))]))
 
 (define-syntax-rule (rorth . body)
   (rorth/stack empty . body))
@@ -57,18 +54,23 @@
     ((stack-op-f e) stk)
     (list* e stk)))
 
-(define-syntax (rorth/stack stx)
-  (syntax-parse stx
-    [(_ stk:expr)
-     #'stk]
-    [(_ stk:expr e:expr)
-     #'(maybe-apply-stack-op e stk)]
-    [(_ stk:expr f:expr m:expr ...)
-     #'(rorth/stack (rorth/stack stk f) m ...)]))
+(define-syntax rorth/stack
+  (syntax-rules ()
+    [(_ stk)
+     stk]
+    [(_ stk e)
+     (maybe-apply-stack-op e stk)]
+    [(_ stk f m ...)
+     (rorth/stack (rorth/stack stk f) m ...)]))
 
-(define-syntax-rule (check-rorth (r ...) (a ...))
-  (check-equal? (reverse (rorth r ...))
-                (list a ...)))
+(define-syntax (check-rorth stx)
+  (syntax-case stx ()
+    [(_ (r ...) (a ...))
+     (with-syntax
+         ([(ar ...) (reverse (syntax->list #'(a ...)))])
+       (syntax/loc stx
+         (check-equal? (rorth r ...)
+                       (list ar ...))))]))
 
 (define/raw-rorth :dup
   (match-define (list* top rest) stack)
