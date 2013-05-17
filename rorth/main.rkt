@@ -13,58 +13,70 @@
 
 (struct stack-op (f))
 
+(begin-for-syntax
+  (define (generate-n-temporaries stx)
+    (generate-temporaries
+     (build-list (syntax->datum stx) (λ (i) stx))))
+
+  (define (generate-n-ids&reverse stx)
+    (define l (generate-n-temporaries stx))
+    (values l (reverse l)))
+
+  (define-syntax-class stack-spec
+    #:attributes ([in_0 1] [in_n 1]
+                  [out_0 1] [out_n 1])
+    (pattern (input:nat (~datum --) output:nat)
+             #:do [(define-values (in_0s in_ns)
+                     (generate-n-ids&reverse #'input))
+                   (define-values (out_0s out_ns)
+                     (generate-n-ids&reverse #'output))]
+             #:attr [in_0 1] in_0s
+             #:attr [in_n 1] in_ns
+             #:attr [out_0 1] out_0s
+             #:attr [out_n 1] out_ns)))
+
 (define-syntax (define/raw-rorth stx)
   (syntax-parse stx
-    [(_ name (~optional (input:nat (~datum --) output:nat)) . body)
+    [(_ name (~optional ss:stack-spec) . body)
      (quasisyntax/loc stx
        (begin
-         #,(if (attribute input)
-             (with-syntax*
-              ([(in_0 ...) (generate-n-temporaries #'input)]
-               [(in_n ...) (reverse (syntax->list #'(in_0 ...)))]
-               [(out_0 ...) (generate-n-temporaries #'output)]
-               [(out_n ...) (reverse (syntax->list #'(out_0 ...)))])
-              (syntax/loc stx
-                (struct name-struct stack-op ()
-                        #:property prop:procedure
-                        (λ (so in_0 ...)
-                          (match-define (list* out_n ... left-over) (f (list in_n ...)))
-                          (values out_0 ...)))))
+         #,(if (attribute ss)
+             (syntax/loc stx
+               (struct name-struct stack-op ()
+                       #:property prop:procedure
+                       (λ (so ss.in_0 ...)
+                         (match-define
+                          (list* ss.out_n ... left-over)
+                          (f (list ss.in_n ...)))
+                         (values ss.out_0 ...))))
              ;; You can't call Forth functions without a spec.
              (syntax/loc stx
                (struct name-struct stack-op ())))
          (define (f this-stack)
-           (syntax-parameterize ([stack (make-rename-transformer #'this-stack)])
+           (syntax-parameterize
+               ([stack (make-rename-transformer #'this-stack)])
              . body))
          (define name (name-struct f))))]))
 
 (define-syntax (define/rorth stx)
   (syntax-parse stx
-    [(_ name (~optional (input:nat (~datum --) output:nat)) body ...+)
+    [(_ name (~optional ss:stack-spec) body ...+)
      (quasisyntax/loc stx
        (define/raw-rorth name
-         #,@(if (attribute input)
-              #'((input -- output))
+         #,@(if (attribute ss)
+              #'(ss)
               #'())
          (rorth/stack stack body ...)))]))
 
-(begin-for-syntax
-  (define (generate-n-temporaries stx)
-    (generate-temporaries (build-list (syntax->datum stx) (λ (i) stx)))))
 
 (define-syntax (define-rorth stx)
   (syntax-parse stx
-    [(_ new-name:id (input:nat (~datum --) output:nat) name:expr)
-     (with-syntax*
-      ([(in_0 ...) (generate-n-temporaries #'input)]
-       [(in_n ...) (reverse (syntax->list #'(in_0 ...)))]
-       [(out_0 ...) (generate-n-temporaries #'output)]
-       [(out_n ...) (reverse (syntax->list #'(out_0 ...)))])
-      (syntax/loc stx
-        (define/raw-rorth new-name (input -- output)
-          (match-define (list* in_n ... left-over) stack)
-          (define-values (out_0 ...) (name in_0 ...))
-          (list* out_n ... left-over))))]))
+    [(_ new-name:id ss:stack-spec name:expr)
+     (syntax/loc stx
+       (define/raw-rorth new-name ss
+         (match-define (list* ss.in_n ... left-over) stack)
+         (define-values (ss.out_0 ...) (name ss.in_0 ...))
+         (list* ss.out_n ... left-over)))]))
 
 (define-syntax-rule (rorth . body)
   (rorth/stack empty . body))
