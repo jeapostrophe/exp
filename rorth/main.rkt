@@ -35,9 +35,24 @@
              #:attr [out_0 1] out_0s
              #:attr [out_n 1] out_ns)))
 
-(define-syntax (define/raw-rorth stx)
+(define-syntax (define/rorth stx)
   (syntax-parse stx
-    [(_ name (~optional ss:stack-spec) . body)
+    [(_ name
+        (~or (~seq ss:stack-spec
+                   #:lift lifted:expr)
+             (~seq (~optional ss:stack-spec)
+                   #:lower lowered-body:expr ...)
+             (~seq (~optional ss:stack-spec)
+                   normal-body:expr ...)))
+     (with-syntax
+         ([body
+           (cond
+             [(attr lifted)
+              ....]
+             [(attr (lowered-body ...))
+              ....]
+             [else
+              ....])])
      (quasisyntax/loc stx
        (begin
          #,(if (attribute ss)
@@ -56,7 +71,7 @@
            (syntax-parameterize
                ([stack (make-rename-transformer #'this-stack)])
              . body))
-         (define name (name-struct f))))]))
+         (define name (name-struct f)))))]))
 
 (define-syntax (define/rorth stx)
   (syntax-parse stx
@@ -104,33 +119,44 @@
                        (list ar ...))))]))
 
 (define/raw-rorth :dup (1 -- 2)
+  #:lower
   (match-define (list* top rest) stack)
   (list* top top rest))
 (define/raw-rorth :drop (1 -- 2)
+  #:lower
   (match-define (list* top rest) stack)
   rest)
 (define/raw-rorth :swap (2 -- 2)
+  #:lower
   (match-define (list* a b rest) stack)
   (list* b a rest))
 (define/raw-rorth :rot (3 -- 3)
+  #:lower
   (match-define (list* a b c rest) stack)
   (list* c a b rest))
 (define/raw-rorth :over (2 -- 3)
+  #:lower
   (match-define (list* a b rest) stack)
   (list* b a b rest))
 (define/raw-rorth :tuck (2 -- 3)
+  #:lower
   (match-define (list* a b rest) stack)
   (list* a b a rest))
-(define/raw-rorth :pick
+(define/rorth :pick
+  #:lower
   (match-define (list* i rest) stack)
   (list* (list-ref rest i) rest))
 
-(define-rorth :+ (2 -- 1) +)
-(define-rorth :- (2 -- 1) -)
-(define-rorth :* (2 -- 1) *)
+(define/rorth :+ (2 -- 1)
+  #:lift +)
+(define/rorth :- (2 -- 1) 
+  #:lift -)
+(define/rorth :* (2 -- 1)
+  #:lift *)
 
 (provide define/rorth
          define-rorth
          rorth
          check-rorth
+         (rename-out [stack rorth-stack])
          :pick :tuck :over :rot :drop :dup :+ :- :* :swap)
