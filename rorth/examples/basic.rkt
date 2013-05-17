@@ -55,7 +55,7 @@
    (2 5 73 -16 3 :pick)
    (2 5 73 -16 2)))
 
-(define/rorth :sum-of-squares
+(define/rorth :sum-of-squares (2 -- 1)
   :dup :* :swap :dup :* :+)
 
 (module+ test
@@ -66,10 +66,10 @@
    (1 2 :sum-of-squares)
    (5)))
 
-(define/rorth :squared
+(define/rorth :squared (1 -- 1)
   :dup :*)
 
-(define/rorth :sum-of-squares2
+(define/rorth :sum-of-squares2 (2 -- 1)
   :squared :swap :squared :+)
 
 (module+ test
@@ -86,7 +86,7 @@
 (define-rorth :squared2 (1 -- 1)
   squared2)
 
-(define/rorth :sum-of-squares3
+(define/rorth :sum-of-squares3 (2 -- 1)
   :squared2 :swap :squared2 :+)
 
 (module+ test

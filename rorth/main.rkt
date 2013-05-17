@@ -11,22 +11,41 @@
 (define-syntax-parameter stack
   (λ (stx) (raise-syntax-error 'stack "Illegal outside rorth" stx)))
 
-(struct stack-op (f)
-        #:property prop:procedure
-        (λ (so . args)
-          ;; xxx slow
-          (apply values (rorth/stack (reverse args) so))))
+(struct stack-op (f))
 
-(define-syntax-rule (define/raw-rorth name . body)
-  (define name
-    (stack-op
-     (λ (this-stack)
-       (syntax-parameterize ([stack (make-rename-transformer #'this-stack)])
-         . body)))))
+(define-syntax (define/raw-rorth stx)
+  (syntax-parse stx
+    [(_ name (~optional (input:nat (~datum --) output:nat)) . body)
+     (quasisyntax/loc stx
+       (begin
+         #,(if (attribute input)
+             (with-syntax*
+              ([(in_0 ...) (generate-n-temporaries #'input)]
+               [(in_n ...) (reverse (syntax->list #'(in_0 ...)))]
+               [(out_0 ...) (generate-n-temporaries #'output)]
+               [(out_n ...) (reverse (syntax->list #'(out_0 ...)))])
+              (syntax/loc stx
+                (struct name-struct stack-op ()
+                        #:property prop:procedure
+                        (λ (so in_0 ...)
+                          (match-define (list out_n ...) (f (list in_n ...)))
+                          (values out_0 ...)))))
+             (syntax/loc stx
+               (struct name-struct stack-op ())))
+         (define (f this-stack)
+           (syntax-parameterize ([stack (make-rename-transformer #'this-stack)])
+             . body))
+         (define name (name-struct f))))]))
 
-(define-syntax-rule (define/rorth name body ...)
-  (define/raw-rorth name
-    (rorth/stack stack body ...)))
+(define-syntax (define/rorth stx)
+  (syntax-parse stx
+    [(_ name (~optional (input:nat (~datum --) output:nat)) body ...+)
+     (quasisyntax/loc stx
+       (define/raw-rorth name
+         #,@(if (attribute input)
+              #'((input -- output))
+              #'())
+         (rorth/stack stack body ...)))]))
 
 (begin-for-syntax
   (define (generate-n-temporaries stx)
@@ -34,14 +53,14 @@
 
 (define-syntax (define-rorth stx)
   (syntax-parse stx
-    [(_ new-name:id (input:nat -- output:nat) name:expr)
+    [(_ new-name:id (input:nat (~datum --) output:nat) name:expr)
      (with-syntax*
       ([(in_0 ...) (generate-n-temporaries #'input)]
        [(in_n ...) (reverse (syntax->list #'(in_0 ...)))]
        [(out_0 ...) (generate-n-temporaries #'output)]
        [(out_n ...) (reverse (syntax->list #'(out_0 ...)))])
       (syntax/loc stx
-        (define/raw-rorth new-name
+        (define/raw-rorth new-name (input -- output)
           (match-define (list* in_n ... left-over) stack)
           (define-values (out_0 ...) (name in_0 ...))
           (list* out_n ... left-over))))]))
@@ -72,22 +91,22 @@
          (check-equal? (rorth r ...)
                        (list ar ...))))]))
 
-(define/raw-rorth :dup
+(define/raw-rorth :dup (1 -- 2)
   (match-define (list* top rest) stack)
   (list* top top rest))
-(define/raw-rorth :drop
+(define/raw-rorth :drop (1 -- 2)
   (match-define (list* top rest) stack)
   rest)
-(define/raw-rorth :swap
+(define/raw-rorth :swap (2 -- 2)
   (match-define (list* a b rest) stack)
   (list* b a rest))
-(define/raw-rorth :rot
+(define/raw-rorth :rot (3 -- 3)
   (match-define (list* a b c rest) stack)
   (list* c a b rest))
-(define/raw-rorth :over
+(define/raw-rorth :over (2 -- 3)
   (match-define (list* a b rest) stack)
   (list* b a b rest))
-(define/raw-rorth :tuck
+(define/raw-rorth :tuck (2 -- 3)
   (match-define (list* a b rest) stack)
   (list* a b a rest))
 (define/raw-rorth :pick
