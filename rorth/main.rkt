@@ -12,6 +12,7 @@
 (struct stack-op (f)
         #:property prop:procedure
         (λ (so . args)
+          ;; xxx slow
           (apply values (rorth/stack (reverse args) so))))
 
 (define-syntax (define/raw-rorth stx)
@@ -33,9 +34,13 @@
   (syntax-parse stx
     [(_ new-name:id input:nat name:id)
      #'(define/raw-rorth new-name
+         ;; xxx slow
          (define-values (before left-over) (split-at stack 'input))
+         ;; xxx slow
          (call-with-values (λ () (apply name (reverse before)))
-           (λ after (append (reverse after) left-over))))]))
+           (λ after
+             ;; xxx slow
+             (append (reverse after) left-over))))]))
 
 (define-syntax-rule (rorth . body)
   (rorth/stack empty . body))
