@@ -66,8 +66,7 @@
          #,@(if (attribute ss)
               #'(ss)
               #'())
-         (rorth/stack stack body ...)))]))
-
+         (rorth #:stack stack body ...)))]))
 
 (define-syntax (define-rorth stx)
   (syntax-parse stx
@@ -78,23 +77,22 @@
          (define-values (ss.out_0 ...) (name ss.in_0 ...))
          (list* ss.out_n ... left-over)))]))
 
-(define-syntax-rule (rorth . body)
-  (rorth/stack empty . body))
-
 (define (maybe-apply-stack-op e stk)
   (if (stack-op? e)
     ((stack-op-f e) stk)
     (list* e stk)))
 
-(define-syntax rorth/stack
-  (syntax-rules ()
-    [(_ stk)
-     stk]
+(define-syntax (rorth stx)
+  (syntax-case stx ()
+    [(_ #:stack stk)
+     (syntax/loc stx stk)]
     ;; xxx optimize this when stack-op is statically known
-    [(_ stk e)
-     (maybe-apply-stack-op e stk)]
-    [(_ stk f m ...)
-     (rorth/stack (rorth/stack stk f) m ...)]))
+    [(_ #:stack stk e)
+     (syntax/loc stx (maybe-apply-stack-op e stk))]
+    [(_ #:stack stk f m ...)
+     (syntax/loc stx (rorth #:stack (rorth #:stack stk f) m ...))]
+    [(_ e ...)
+     (syntax/loc stx (rorth #:stack empty e ...))]))
 
 (define-syntax (check-rorth stx)
   (syntax-case stx ()
