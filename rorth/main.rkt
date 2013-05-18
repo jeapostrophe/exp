@@ -31,6 +31,7 @@
                    #:lower lstack:id lowered-body:expr ...)
              (~seq (~optional ss:stack-spec)
                    normal-body:expr ...)))
+     #:attr stack (or (attribute lstack) #'stack)
      (with-syntax
          ([body
            (cond
@@ -57,7 +58,6 @@
                             (list* ss.out_n ... left-over)
                             (f (list ss.in_n ...)))
                            (values ss.out_0 ...))))
-               ;; You can't call Forth functions without a spec.
                (syntax/loc stx
                  (struct name-struct stack-op ())))
            (define (f stack) body)
@@ -75,7 +75,6 @@
   (syntax-parse stx
     [(_ #:stack stk)
      (syntax/loc stx stk)]
-    ;; xxx optimize this when stack-op is statically known
     [(_ #:stack stk e)
      (syntax/loc stx (maybe-apply-stack-op e stk))]
     [(_ #:stack stk f m ...)
