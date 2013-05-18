@@ -47,50 +47,37 @@
      (with-syntax
          ([body
            (cond
-             [(attr lifted)
-              ....]
-             [(attr (lowered-body ...))
-              ....]
+             [(attribute lifted)
+              (syntax/loc stx
+                (let ()
+                  (match-define (list* ss.in_n ... left-over) stack)
+                  (define-values (ss.out_0 ...) (lifted ss.in_0 ...))
+                  (list* ss.out_n ... left-over)))]
+             [(attribute lowered-body)
+              (syntax/loc stx
+                (begin lowered-body ...))]
              [else
-              ....])])
-     (quasisyntax/loc stx
-       (begin
-         #,(if (attribute ss)
-             (syntax/loc stx
-               (struct name-struct stack-op ()
-                       #:property prop:procedure
-                       (λ (so ss.in_0 ...)
-                         (match-define
-                          (list* ss.out_n ... left-over)
-                          (f (list ss.in_n ...)))
-                         (values ss.out_0 ...))))
-             ;; You can't call Forth functions without a spec.
-             (syntax/loc stx
-               (struct name-struct stack-op ())))
-         (define (f this-stack)
-           (syntax-parameterize
-               ([stack (make-rename-transformer #'this-stack)])
-             . body))
-         (define name (name-struct f)))))]))
-
-(define-syntax (define/rorth stx)
-  (syntax-parse stx
-    [(_ name (~optional ss:stack-spec) body ...+)
-     (quasisyntax/loc stx
-       (define/raw-rorth name
-         #,@(if (attribute ss)
-              #'(ss)
-              #'())
-         (rorth #:stack stack body ...)))]))
-
-(define-syntax (define-rorth stx)
-  (syntax-parse stx
-    [(_ new-name:id ss:stack-spec name:expr)
-     (syntax/loc stx
-       (define/raw-rorth new-name ss
-         (match-define (list* ss.in_n ... left-over) stack)
-         (define-values (ss.out_0 ...) (name ss.in_0 ...))
-         (list* ss.out_n ... left-over)))]))
+              (syntax/loc stx
+                (rorth #:stack stack normal-body ...))])])
+       (quasisyntax/loc stx
+         (begin
+           #,(if (attribute ss)
+               (syntax/loc stx
+                 (struct name-struct stack-op ()
+                         #:property prop:procedure
+                         (λ (so ss.in_0 ...)
+                           (match-define
+                            (list* ss.out_n ... left-over)
+                            (f (list ss.in_n ...)))
+                           (values ss.out_0 ...))))
+               ;; You can't call Forth functions without a spec.
+               (syntax/loc stx
+                 (struct name-struct stack-op ())))
+           (define (f this-stack)
+             (syntax-parameterize
+                 ([stack (make-rename-transformer #'this-stack)])
+               body))
+           (define name (name-struct f)))))]))
 
 (define (maybe-apply-stack-op e stk)
   (if (stack-op? e)
@@ -98,7 +85,7 @@
     (list* e stk)))
 
 (define-syntax (rorth stx)
-  (syntax-case stx ()
+  (syntax-parse stx
     [(_ #:stack stk)
      (syntax/loc stx stk)]
     ;; xxx optimize this when stack-op is statically known
@@ -106,8 +93,8 @@
      (syntax/loc stx (maybe-apply-stack-op e stk))]
     [(_ #:stack stk f m ...)
      (syntax/loc stx (rorth #:stack (rorth #:stack stk f) m ...))]
-    [(_ e ...)
-     (syntax/loc stx (rorth #:stack empty e ...))]))
+    [(_ (~and (~not #:stack) e1) e ...)
+     (syntax/loc stx (rorth #:stack empty e1 e ...))]))
 
 (define-syntax (check-rorth stx)
   (syntax-case stx ()
@@ -118,27 +105,27 @@
          (check-equal? (rorth r ...)
                        (list ar ...))))]))
 
-(define/raw-rorth :dup (1 -- 2)
+(define/rorth :dup (1 -- 2)
   #:lower
   (match-define (list* top rest) stack)
   (list* top top rest))
-(define/raw-rorth :drop (1 -- 2)
+(define/rorth :drop (1 -- 2)
   #:lower
   (match-define (list* top rest) stack)
   rest)
-(define/raw-rorth :swap (2 -- 2)
+(define/rorth :swap (2 -- 2)
   #:lower
   (match-define (list* a b rest) stack)
   (list* b a rest))
-(define/raw-rorth :rot (3 -- 3)
+(define/rorth :rot (3 -- 3)
   #:lower
   (match-define (list* a b c rest) stack)
   (list* c a b rest))
-(define/raw-rorth :over (2 -- 3)
+(define/rorth :over (2 -- 3)
   #:lower
   (match-define (list* a b rest) stack)
   (list* b a b rest))
-(define/raw-rorth :tuck (2 -- 3)
+(define/rorth :tuck (2 -- 3)
   #:lower
   (match-define (list* a b rest) stack)
   (list* a b a rest))
@@ -149,13 +136,12 @@
 
 (define/rorth :+ (2 -- 1)
   #:lift +)
-(define/rorth :- (2 -- 1) 
+(define/rorth :- (2 -- 1)
   #:lift -)
 (define/rorth :* (2 -- 1)
   #:lift *)
 
 (provide define/rorth
-         define-rorth
          rorth
          check-rorth
          (rename-out [stack rorth-stack])
