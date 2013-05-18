@@ -22,9 +22,12 @@
     (define l (generate-n-temporaries stx))
     (values l (reverse l)))
 
+  (define-syntax-class stack-nat
+    (pattern count:nat
+             #:attr [forward 1] (generate-n-temporaries #'count)
+             #:attr [backward 1] (reverse #'forward)))
+
   (define-syntax-class stack-spec
-    #:attributes ([in_0 1] [in_n 1]
-                  [out_0 1] [out_n 1])
     (pattern (input:nat (~datum --) output:nat)
              #:do [(define-values (in_0s in_ns)
                      (generate-n-ids&reverse #'input))
@@ -35,10 +38,9 @@
              #:attr [out_0 1] out_0s
              #:attr [out_n 1] out_ns)))
 
-(define-syntax (define/rorth stx)
+(define-syntax (rorthda stx)
   (syntax-parse stx
-    [(_ name
-        (~or (~seq ss:stack-spec
+    [(_ (~or (~seq ss:stack-spec
                    #:lift lifted:expr)
              (~seq (~optional ss:stack-spec)
                    #:lower lowered-body:expr ...)
@@ -60,7 +62,7 @@
               (syntax/loc stx
                 (rorth #:stack stack normal-body ...))])])
        (quasisyntax/loc stx
-         (begin
+         (let ()
            #,(if (attribute ss)
                (syntax/loc stx
                  (struct name-struct stack-op ()
@@ -77,7 +79,10 @@
              (syntax-parameterize
                  ([stack (make-rename-transformer #'this-stack)])
                body))
-           (define name (name-struct f)))))]))
+           (name-struct f))))]))
+
+(define-syntax-rule (define/rorth name . body)
+  (define name (rorthda . body)))
 
 (define (maybe-apply-stack-op e stk)
   (if (stack-op? e)
@@ -105,44 +110,8 @@
          (check-equal? (rorth r ...)
                        (list ar ...))))]))
 
-(define/rorth :dup (1 -- 2)
-  #:lower
-  (match-define (list* top rest) stack)
-  (list* top top rest))
-(define/rorth :drop (1 -- 2)
-  #:lower
-  (match-define (list* top rest) stack)
-  rest)
-(define/rorth :swap (2 -- 2)
-  #:lower
-  (match-define (list* a b rest) stack)
-  (list* b a rest))
-(define/rorth :rot (3 -- 3)
-  #:lower
-  (match-define (list* a b c rest) stack)
-  (list* c a b rest))
-(define/rorth :over (2 -- 3)
-  #:lower
-  (match-define (list* a b rest) stack)
-  (list* b a b rest))
-(define/rorth :tuck (2 -- 3)
-  #:lower
-  (match-define (list* a b rest) stack)
-  (list* a b a rest))
-(define/rorth :pick
-  #:lower
-  (match-define (list* i rest) stack)
-  (list* (list-ref rest i) rest))
-
-(define/rorth :+ (2 -- 1)
-  #:lift +)
-(define/rorth :- (2 -- 1)
-  #:lift -)
-(define/rorth :* (2 -- 1)
-  #:lift *)
-
 (provide define/rorth
+         rorthda
          rorth
          check-rorth
-         (rename-out [stack rorth-stack])
-         :pick :tuck :over :rot :drop :dup :+ :- :* :swap)
+         (rename-out [stack rorth-stack]))

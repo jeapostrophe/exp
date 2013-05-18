@@ -1,7 +1,44 @@
 #lang racket/base
-(require "../main.rkt")
+(require racket/match
+         "../main.rkt")
 (module+ test
   (require rackunit))
+
+(define/rorth :dup (1 -- 2)
+  #:lower
+  (match-define (list* top rest) rorth-stack)
+  (list* top top rest))
+(define/rorth :drop (1 -- 2)
+  #:lower
+  (match-define (list* top rest) rorth-stack)
+  rest)
+(define/rorth :swap (2 -- 2)
+  #:lower
+  (match-define (list* a b rest) rorth-stack)
+  (list* b a rest))
+(define/rorth :rot (3 -- 3)
+  #:lower
+  (match-define (list* a b c rest) rorth-stack)
+  (list* c a b rest))
+(define/rorth :over (2 -- 3)
+  #:lower
+  (match-define (list* a b rest) rorth-stack)
+  (list* b a b rest))
+(define/rorth :tuck (2 -- 3)
+  #:lower
+  (match-define (list* a b rest) rorth-stack)
+  (list* a b a rest))
+(define/rorth :pick
+  #:lower
+  (match-define (list* i rest) rorth-stack)
+  (list* (list-ref rest i) rest))
+
+(define/rorth :+ (2 -- 1)
+  #:lift +)
+(define/rorth :- (2 -- 1)
+  #:lift -)
+(define/rorth :* (2 -- 1)
+  #:lift *)
 
 (module+ test
   (check-equal?
@@ -107,3 +144,31 @@
   (check-rorth
    (1 2 :weird)
    (1 1 2)))
+
+(module+ test
+  (check-rorth
+   (1 2 (rorthda :+ 0 :swap :-))
+   (-3)))
+
+(define (make-adder x)
+  (rorthda x :+))
+
+(module+ test
+  (check-rorth
+   (7 (make-adder 5))
+   (12)))
+
+(struct *delayed* (v))
+
+(define (:delay v)
+  (*delayed* v))
+
+(define/rorth :apply (1 -- 1)
+  #:lower
+  (match-define (list* (*delayed* thing) rest) rorth-stack)
+  (rorth #:stack rest thing))
+
+(module+ test
+  (check-rorth
+   ((:delay (make-adder 5)) :dup 7 :swap :apply :swap :apply)
+   (17)))
