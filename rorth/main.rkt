@@ -2,48 +2,33 @@
 (require rackunit
          racket/list
          racket/match
-         racket/stxparam
          (for-syntax racket/base
-                     racket/syntax
-                     racket/list
                      syntax/parse))
-
-(define-syntax-parameter stack
-  (λ (stx) (raise-syntax-error 'stack "Illegal outside rorth" stx)))
 
 (struct stack-op (f))
 
 (begin-for-syntax
   (define (generate-n-temporaries stx)
-    (generate-temporaries
-     (build-list (syntax->datum stx) (λ (i) stx))))
-
-  (define (generate-n-ids&reverse stx)
-    (define l (generate-n-temporaries stx))
-    (values l (reverse l)))
+    (generate-temporaries (build-list (syntax->datum stx) (λ (i) stx))))
 
   (define-syntax-class stack-nat
     (pattern count:nat
              #:attr [forward 1] (generate-n-temporaries #'count)
-             #:attr [backward 1] (reverse #'forward)))
+             #:attr [backward 1] (reverse (attribute forward))))
 
   (define-syntax-class stack-spec
-    (pattern (input:nat (~datum --) output:nat)
-             #:do [(define-values (in_0s in_ns)
-                     (generate-n-ids&reverse #'input))
-                   (define-values (out_0s out_ns)
-                     (generate-n-ids&reverse #'output))]
-             #:attr [in_0 1] in_0s
-             #:attr [in_n 1] in_ns
-             #:attr [out_0 1] out_0s
-             #:attr [out_n 1] out_ns)))
+    (pattern (input:stack-nat (~datum --) output:stack-nat)
+             #:attr [in_0 1] (attribute input.forward)
+             #:attr [in_n 1] (attribute input.backward)
+             #:attr [out_0 1] (attribute output.forward)
+             #:attr [out_n 1] (attribute output.backward))))
 
 (define-syntax (rorthda stx)
   (syntax-parse stx
     [(_ (~or (~seq ss:stack-spec
                    #:lift lifted:expr)
              (~seq (~optional ss:stack-spec)
-                   #:lower lowered-body:expr ...)
+                   #:lower lstack:id lowered-body:expr ...)
              (~seq (~optional ss:stack-spec)
                    normal-body:expr ...)))
      (with-syntax
@@ -75,10 +60,7 @@
                ;; You can't call Forth functions without a spec.
                (syntax/loc stx
                  (struct name-struct stack-op ())))
-           (define (f this-stack)
-             (syntax-parameterize
-                 ([stack (make-rename-transformer #'this-stack)])
-               body))
+           (define (f stack) body)
            (name-struct f))))]))
 
 (define-syntax-rule (define/rorth name . body)
@@ -113,5 +95,4 @@
 (provide define/rorth
          rorthda
          rorth
-         check-rorth
-         (rename-out [stack rorth-stack]))
+         check-rorth)

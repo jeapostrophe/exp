@@ -5,32 +5,32 @@
   (require rackunit))
 
 (define/rorth :dup (1 -- 2)
-  #:lower
-  (match-define (list* top rest) rorth-stack)
+  #:lower stack
+  (match-define (list* top rest) stack)
   (list* top top rest))
 (define/rorth :drop (1 -- 2)
-  #:lower
-  (match-define (list* top rest) rorth-stack)
+  #:lower stack
+  (match-define (list* top rest) stack)
   rest)
 (define/rorth :swap (2 -- 2)
-  #:lower
-  (match-define (list* a b rest) rorth-stack)
+  #:lower stack
+  (match-define (list* a b rest) stack)
   (list* b a rest))
 (define/rorth :rot (3 -- 3)
-  #:lower
-  (match-define (list* a b c rest) rorth-stack)
+  #:lower stack
+  (match-define (list* a b c rest) stack)
   (list* c a b rest))
 (define/rorth :over (2 -- 3)
-  #:lower
-  (match-define (list* a b rest) rorth-stack)
+  #:lower stack
+  (match-define (list* a b rest) stack)
   (list* b a b rest))
 (define/rorth :tuck (2 -- 3)
-  #:lower
-  (match-define (list* a b rest) rorth-stack)
+  #:lower stack
+  (match-define (list* a b rest) stack)
   (list* a b a rest))
 (define/rorth :pick
-  #:lower
-  (match-define (list* i rest) rorth-stack)
+  #:lower stack
+  (match-define (list* i rest) stack)
   (list* (list-ref rest i) rest))
 
 (define/rorth :+ (2 -- 1)
@@ -164,8 +164,8 @@
   (*delayed* v))
 
 (define/rorth :apply (1 -- 1)
-  #:lower
-  (match-define (list* (*delayed* thing) rest) rorth-stack)
+  #:lower stack
+  (match-define (list* (*delayed* thing) rest) stack)
   (rorth #:stack rest thing))
 
 (module+ test
