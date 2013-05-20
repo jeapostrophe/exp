@@ -158,14 +158,11 @@
    (7 (make-adder 5))
    (12)))
 
-(struct *delayed* (v))
-
-(define (:delay v)
-  (*delayed* v))
+(struct :delay (v))
 
 (define/rorth :apply (1 -- 1)
   #:lower stack
-  (match-define (list* (*delayed* thing) rest) stack)
+  (match-define (list* (:delay thing) rest) stack)
   (rorth #:stack rest thing))
 
 (module+ test
