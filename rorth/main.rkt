@@ -75,10 +75,8 @@
   (syntax-parse stx
     [(_ #:stack stk)
      (syntax/loc stx stk)]
-    [(_ #:stack stk e)
-     (syntax/loc stx (maybe-apply-stack-op e stk))]
     [(_ #:stack stk f m ...)
-     (syntax/loc stx (rorth #:stack (rorth #:stack stk f) m ...))]
+     (syntax/loc stx (rorth #:stack (maybe-apply-stack-op f stk) m ...))]
     [(_ (~and (~not #:stack) e1) e ...)
      (syntax/loc stx (rorth #:stack empty e1 e ...))]))
 

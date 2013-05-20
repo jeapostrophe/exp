@@ -8,7 +8,7 @@
   #:lower stack
   (match-define (list* top rest) stack)
   (list* top top rest))
-(define/rorth :drop (1 -- 2)
+(define/rorth :drop (1 -- 0)
   #:lower stack
   (match-define (list* top rest) stack)
   rest)
