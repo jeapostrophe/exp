@@ -39,7 +39,9 @@
           [((local-f local-f-args local-f-body) ...)
            local-state-fs]
           [(local-f-new-id ...)
-           (generate-temporaries #'(local-f ...))])
+           (generate-temporaries #'(local-f ...))]
+          [(local-state-new-id ...)
+           (generate-temporaries #'(local-state-id ...))])
        (syntax/loc stx
          (#%module-begin
           (define local-state-new-id local-state-init)
