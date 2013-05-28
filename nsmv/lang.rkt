@@ -62,6 +62,13 @@
 (define-invocation-local-state-dependent-function (get)
   state)
 
+#;#;#;
+(define state null)
+(define (add v)
+  (set! state (cons v state)))
+(define (get)
+  state)
+
 (provide (except-out (all-from-out racket/base)
                      #%module-begin)
          (rename-out [module-begin #%module-begin])
