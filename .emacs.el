@@ -5,7 +5,7 @@
 
 ;; font & color
 (set-face-attribute 'default nil 
-                    :font "Bitstream Vera Sans Mono:pixelsize=15:scalable=true:antialias=true")
+                    :font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
 (require 'color-theme)
 (color-theme-initialize)
 (add-to-list 'load-path "~/Dev/dist/solarized/emacs-colors-solarized")
