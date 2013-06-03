@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 OLD=~/.volume
 cur=$(amixer get Master | tail -1 | awk -F"[" '{print $1}' | perl -ne 's/^.* ([0-9]+) *$/\1/; print;')

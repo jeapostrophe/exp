@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 log() { logger -t netcfgd $* ; }
 
 CURRENT_FILE=~jay/.netcfg_active

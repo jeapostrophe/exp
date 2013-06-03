@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 if (mpc | grep paused) &> /dev/null ; then
  COLOR="#dc322f"
