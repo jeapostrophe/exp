@@ -5,6 +5,8 @@
          xml)
 (struct e (sets reps-per-set ctxt name))
 
+;; a2ps -4 ... --borders=no -o ...
+
 (define (ctxt-merge old new)
   (for/fold ([changes empty]
              [next old])
@@ -45,12 +47,11 @@
        (for/list ([c (in-list changes)])
          (match-define (list what from to) c)
          `(tr ([class "action"])
-              (td ([colspan "3"])
+              (td ([colspan "2"])
                   ,(format-ctxt what from to))))
        (list `(tr ([class "exercise"])
-                  (td ,(number->string sets))
-                  (td ,(number->string reps-per-seat))
-                  (td ,name)))
+                  (td ,(format "~ax~a ~a" sets reps-per-seat name))
+                  (td (img ([src ,(format ".workout-plan/~a.png" name)])))))
        rest-plan))]))
 
 (define (draw p es)
@@ -62,6 +63,10 @@
     (error 'draw "Inconsistent states"))
   (define x
     `(html
+      (head
+       (link ([rel "stylesheet"]
+              [type "text/css"]
+              [href ".workout-plan/style.css"])))
       (body
        (table
         ,@x2))))

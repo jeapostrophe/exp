@@ -1,0 +1,16 @@
+body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+}
+
+img {
+    max-width: 166px;
+    max-height: 162px;
+}
+
+tr.action {
+    width: 400px;
+    text-align: center;
+    background: #eceeec;
+}
