@@ -179,5 +179,8 @@ interactive("switch-to-other-buffer",
             });
 define_key(default_global_keymap, "M-tab", "switch-to-other-buffer");
 
+define_key(default_global_keymap, "home", "cmd_scrollTop");
+define_key(default_global_keymap, "M-<", "cmd_scrollTop");
+
 // Set char set
 user_pref("intl.charset.default", "utf8");
