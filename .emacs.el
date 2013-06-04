@@ -1021,27 +1021,6 @@ given a prefix arg."
 (setq dabbrev-case-fold-search nil)
 ;; XXX make this play nicer with C++
 
-;; company mode
-;; (global-set-key (kbd "M-/") 'company-complete)
-;; (add-hook 'after-init-hook 'global-company-mode)
-
-(setq company-backends
-      '(company-dabbrev
-        company-elisp
-        company-nxml
-        company-css
-        company-clang
-        company-semantic
-        company-eclim
-        company-xcode
-        company-ropemacs
-        (company-gtags company-etags company-dabbrev-code company-keywords)
-        company-oddmuse
-        company-files
-        company-dabbrev))
-(setq company-backend nil)
-(setq company-idle-delay nil)
-
 ;; Auto saving
                                         ;(autoload 'paredit-mode "paredit"
                                         ;  "Minor mode for pseudo-structurally editing Lisp code." t)
@@ -1125,9 +1104,9 @@ given a prefix arg."
 (set-input-method "TeX")
 
 ;; forth
-(autoload 'forth-mode "gforth.el")
-(autoload 'forth-block-mode "gforth.el")
-(add-to-list 'auto-mode-alist '("\\.fs$" . forth-mode))
+;;(autoload 'forth-mode "gforth.el")
+;;(autoload 'forth-block-mode "gforth.el")
+;;(add-to-list 'auto-mode-alist '("\\.fs$" . forth-mode))
 
 ;; search is case insensitive
 (setq case-fold-search t)
