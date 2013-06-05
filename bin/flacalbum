@@ -1,0 +1,2 @@
+#!/bin/sh
+metaflac --remove-tag=ALBUM --set-tag=ALBUM="$1" *.flac

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+find . -name '*.flac' -print0 | while IFS= read -r -d $'\0' file; do
+ T=$(basename "$file" .flac | awk -F' - ' '{print $1}')
+ metaflac --remove-tag=TRACKNUMBER --set-tag=TRACKNUMBER=${T} "${file}"
+done
