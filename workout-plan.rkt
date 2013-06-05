@@ -9,60 +9,66 @@
 
 ;; a2ps -4 ... --borders=no -o ...
 
-(define (ctxt-merge old new)
-  (for/fold ([changes empty]
-             [next old])
-      ([k*v (in-list new)])
-    (match-define (list k v) k*v)
-    (define ov (hash-ref next k #f))
-    (cond
-      [(and ov (equal? ov v))
-       (values changes next)]
-      [else
-       (values (list* (list k ov v) changes)
-               (hash-set next k v))])))
+(define (list->hash l)
+  (for/hasheq ([k*v (in-list l)])
+              (values (first k*v) (second k*v))))
+
+(define (context-subset? ctxt last-ctxt)
+  (for/or ([(k v) (in-hash ctxt)])
+    (and (not (equal? v (hash-ref last-ctxt k #f)))
+         (cons k v))))
 
 (define (em e)
   `(em ,(format "~a" e)))
 
 (define format-ctxt
   (match-lambda*
-   [(list 'peg _ to)
+   [(list 'peg to)
     `(span "Move peg to " ,(em to))]
-   [(list 'weight _ to)
+   [(list 'weight to)
     `(span "Move weights to " ,(em to))]
-   [(list 'seat _ to)
+   [(list 'seat to)
     `(span "Move seat to " ,(em to))]
-   [(list 'where _ to)
-    `(span "Move to " ,(em to))]))
+   [(list 'where to)
+    `(span "Move to " ,(em to))]
+   [(list 'bar to)
+    `(span "Move bar to " ,(em to))]
+   [(list 'seat-pos to)
+    `(span "Move seat-pos to " ,(em to))]))
 
 (define (exercise-plan last-ctxt es)
   (match es
     [(list)
      (values last-ctxt empty)]
-    [(list-rest (e sets reps-per-seat ctxt name) es)
-     (define-values (changes new-ctxt) (ctxt-merge last-ctxt ctxt))
+    [(list-rest (a what to) es)
+     (define new-ctxt (hash-set last-ctxt what to))
      (define-values (final-ctxt rest-plan) (exercise-plan new-ctxt es))
      (values
       final-ctxt
-      (append
-       (for/list ([c (in-list changes)])
-         (match-define (list what from to) c)
-         `(tr ([class "action"])
-              (td ([colspan "2"])
-                  ,(format-ctxt what from to))))
-       (list `(tr ([class "exercise"])
-                  (td ,(format "~ax~a ~a" sets reps-per-seat name))
-                  (td (img ([src ,(format ".workout-plan/~a.png" name)])))))
+      (cons
+       `(tr ([class "action"])
+            (td ([colspan "2"])
+                ,(format-ctxt what to)))
+       rest-plan))]
+    [(list-rest (e sets reps-per-seat ctxt name) es)
+     (cond
+       [(context-subset? (list->hash ctxt) last-ctxt)
+        => (λ (e) (error 'execise-plan "Context off: ~e" e))])
+     (define-values (final-ctxt rest-plan) (exercise-plan last-ctxt es))
+     (values
+      final-ctxt
+      (cons
+       `(tr ([class "exercise"])
+            (td ,(format "~ax~a ~a" sets reps-per-seat name))
+            (td (img ([src ,(format ".workout-plan/~a.png" name)]))))
        rest-plan))]))
 
-(define (draw p es)
-  (define-values (final-ctxt1 x1)
-    (exercise-plan (hasheq) es))
-  (define-values (final-ctxt2 x2)
-    (exercise-plan (hash-set final-ctxt1 'where 'free) es))
-  (unless (equal? final-ctxt1 final-ctxt2)
-    (error 'draw "Inconsistent states"))
+(define (draw init-ctxt p es)
+  (define-values (final-ctxt x1)
+    (exercise-plan init-ctxt es))
+  (cond
+    [(context-subset? init-ctxt final-ctxt)
+     => (λ (e) (error 'draw "Inconsistent start vs end: ~e" e))])
   (define x
     `(html
       (head
@@ -71,7 +77,7 @@
               [href ".workout-plan/style.css"])))
       (body
        (table
-        ,@x2))))
+        ,@x1))))
   (display-to-file (xexpr->string x) p #:exists 'replace))
 
 (module+ main
@@ -79,38 +85,62 @@
   (define-runtime-path output.html "workout-plan.html")
   (define exercises
     (list
+     (a 'where 'free)
      (e 1  50 '((where free))
         "hindu squat")
+     (a 'where 'pull-up-bar:above)
      (e 1  10 '((where pull-up-bar:above))
         "wide")
      (e 1  10 '((where pull-up-bar:above))
         "narrow")
      (e 1  10 '((where pull-up-bar:above))
         "neutral")
+     (a 'where 'pull-up-bar:free)
      (e 4  25 '((where pull-up-bar:free))
         "push up")
-     (e 4 100 '((where gym:seated) (seat down))
+     (a 'seat-pos 'front)
+     (a 'where 'gym:seated)
+     (e 4 50 '((where gym:seated) (seat down))
         "crunches")
+     (a 'seat 'flat)
      (e 1  25 '((where gym:seated) (seat flat))
         "leg curl")
      (e 5  10 '((where gym:seated) (seat flat) (weight back) (peg bottom))
         "lat pull")
-     (e 5  10 '((where gym:seated) (seat incline) (weight front) (peg bottom+1))
+     (a 'peg 'bottom+2)
+     (a 'seat 'top-2)
+     (a 'weight 'front)
+     (e 5  10 '((where gym:seated) (seat top-2) (weight front) (peg bottom+2))
         "chest press")
-     (e 1  25 '((where gym:seated) (seat straight))
+     (a 'seat 'bot+1)
+     (e 1  25 '((where gym:seated) (seat bot+1))
         "quad extension")
-     (e 5  10 '((where gym:seated) (seat straight) (weight front) (peg top-2))
+     (a 'peg 'top-2)
+     (a 'bar 'removed)
+     (e 5  10 '((where gym:seated) (seat bot+1) (weight front) (peg top-2))
         "shoulder press")
-     (e 5  10 '((where gym:standing) (seat side) (weight front) (peg bottom+2))
+     (a 'peg 'bottom+2)
+     (a 'seat 'down)
+     (a 'seat-pos 'side)
+     (a 'bar 'there)
+     (a 'where 'gym:standing)
+     (e 2  25 '((where gym:standing) (seat-pos side) (weight front) (peg bottom+2))
         "squat")
-     (e 5  10 '((where gym:standing) (seat side) (weight front) (peg bottom+2))
+     (a 'peg 'top-1)
+     (e 2  25 '((where gym:standing) (seat-pos side) (weight front) (peg top-1))
         "calf raise")
-     (e 5  10 '((where gym:standing) (seat side) (weight front) (peg gone))
+     (a 'peg 'bottom)
+     (e 2  25 '((where gym:standing) (seat-pos side) (weight front) (peg bottom))
         "arm curl")
-     (e 5  10 '((where gym:standing) (seat side) (weight front) (peg gone))
+     (e 5  10 '((where gym:standing) (seat-pos side) (weight front) (peg bottom))
         "row")
-     (e 5  10 '((where gym:standing) (seat side) (weight front) (peg gone))
+     (e 2  25 '((where gym:standing) (seat-pos side) (weight front) (peg bottom))
         "shrug")
-     (e 5  10 '((where gym:standing) (seat side) (weight back) (peg bottom))
+     (a 'weight 'back)
+     (e 5  10 '((where gym:standing) (seat-pos side) (weight back) (peg bottom))
         "tricep press")))
-  (draw output.html exercises))
+  (draw (hasheq 'seat-pos 'side
+                'seat 'down
+                'weight 'back
+                'peg 'bottom)
+        output.html exercises))
