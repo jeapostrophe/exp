@@ -1,0 +1,22 @@
+\documentclass[letterpaper,twocolumn]{article}
+
+\usepackage[margin=0.1in]{geometry}
+
+\setlength{\columnsep}{10px}
+\setlength{\columnseprule}{2px}
+
+\usepackage{xparse}
+\usepackage{graphicx}
+\usepackage[space]{grffile}
+
+\DeclareExpandableDocumentCommand{\action}{m}{%
+  \begin{center} #1 \end{center} %
+}%
+
+\DeclareExpandableDocumentCommand{\exercise}{m m}{%
+  \begin{tabular}{rl} #1 & \includegraphics[height=162px,width=166px]{#2} \end{tabular} \\%
+}%
+
+\begin{document}
+\input{workout-plan-inner}
+\end{document}

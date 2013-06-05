@@ -2,6 +2,7 @@
 (require racket/file
          racket/match
          racket/list
+         racket/runtime-path
          xml)
 
 (struct e (sets reps-per-set ctxt name))
@@ -36,6 +37,8 @@
    [(list 'seat-pos to)
     `(span "Move seat-pos to " ,(em to))]))
 
+(define-runtime-path images-dir ".workout-plan")
+
 (define (exercise-plan last-ctxt es)
   (match es
     [(list)
@@ -46,9 +49,7 @@
      (values
       final-ctxt
       (cons
-       `(tr ([class "action"])
-            (td ([colspan "2"])
-                ,(format-ctxt what to)))
+       (format "\\action{~a}" (format-ctxt what to))
        rest-plan))]
     [(list-rest (e sets reps-per-seat ctxt name) es)
      (cond
@@ -58,31 +59,26 @@
      (values
       final-ctxt
       (cons
-       `(tr ([class "exercise"])
-            (td ,(format "~ax~a ~a" sets reps-per-seat name))
-            (td (img ([src ,(format ".workout-plan/~a.png" name)]))))
+       (format "\\exercise{~a}{~a}" 
+               (format "~ax~a ~a" sets reps-per-seat name)
+               (format "~a/~a.png" (path->string images-dir) name))
        rest-plan))]))
 
 (define (draw init-ctxt p es)
-  (define-values (final-ctxt x1)
+  (define-values (final-ctxt x)
     (exercise-plan init-ctxt es))
   (cond
     [(context-subset? init-ctxt final-ctxt)
-     => (λ (e) (error 'draw "Inconsistent start vs end: ~e" e))])
-  (define x
-    `(html
-      (head
-       (link ([rel "stylesheet"]
-              [type "text/css"]
-              [href ".workout-plan/style.css"])))
-      (body
-       (table
-        ,@x1))))
-  (display-to-file (xexpr->string x) p #:exists 'replace))
+     => (λ (e) (error 'draw "Inconsistent start vs end: ~e" e))])  
+  (with-output-to-file
+      p #:exists 'replace
+      (λ ()
+        (for-each displayln x))))
 
 (module+ main
-  (require racket/runtime-path)
-  (define-runtime-path output.html "workout-plan.html")
+  (define-runtime-path output.tex "workout-plan.tex")
+  (define-runtime-path output-inner.tex "workout-plan-inner.tex")
+  (define-runtime-path output.pdf "workout-plan.pdf")
   (define exercises
     (list
      (a 'where 'free)
@@ -143,4 +139,7 @@
                 'seat 'down
                 'weight 'back
                 'peg 'bottom)
-        output.html exercises))
+        output-inner.tex exercises)
+  (require racket/system
+           racket/path)
+  (system* "/usr/bin/pdflatex" output.tex))
