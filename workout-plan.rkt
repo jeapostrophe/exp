@@ -3,7 +3,9 @@
          racket/match
          racket/list
          xml)
+
 (struct e (sets reps-per-set ctxt name))
+(struct a (thing new))
 
 ;; a2ps -4 ... --borders=no -o ...
 
