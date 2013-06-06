@@ -2,7 +2,7 @@
 
 \usepackage[margin=0.1in]{geometry}
 
-\setlength{\columnsep}{10px}
+\setlength{\columnsep}{5px}
 \setlength{\columnseprule}{2px}
 
 \usepackage{xparse}
@@ -11,15 +11,10 @@
 \usepackage{graphicx}
 \usepackage[space]{grffile}
 
-\DeclareExpandableDocumentCommand{\action}{m m}{%
-  {\setlength{\fboxsep}{0pt}\colorbox{gray!20}{\makebox[260px][c]{\huge Move #1 to #2}}} \vspace{0.75em}
-}%
+% \setlength{\fboxsep}{0pt}
+\DeclareExpandableDocumentCommand{\action}{m}{{\colorbox{gray!20}{\makebox[260px][c]{\huge#1}}}}
 
-\DeclareExpandableDocumentCommand{\exercise}{m m}{%
-  \makebox[255px][c]{
-    \makebox[200px][l]{\raisebox{27.5px}{\LARGE #1}}
-    \makebox[55px][r]{\includegraphics[height=55px,width=55px, keepaspectratio=true]{#2}}} \\
-}%
+\DeclareExpandableDocumentCommand{\exercise}{m m}{\makebox[260px][c]{\makebox[200px][c]{\raisebox{30px}{\LARGE #1}}\makebox[60px][r]{\includegraphics[height=60px,width=60px, keepaspectratio=true]{#2}}}}
 
 \begin{document}
 \begin{center}
