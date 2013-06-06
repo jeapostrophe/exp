@@ -19,23 +19,30 @@
     (and (not (equal? v (hash-ref last-ctxt k #f)))
          (cons k v))))
 
-(define (em e)
-  `(em ,(format "~a" e)))
+(define format-what
+  (match-lambda
+   ['weight "weights"]
+   ['peg "peg"]
+   ['where ""]
+   ['bar "bar"]
+   ['seat "seat"]
+   ['seat-pos "base"]))
 
-(define format-ctxt
+(define format-to
   (match-lambda*
-   [(list 'peg to)
-    `(span "Move peg to " ,(em to))]
-   [(list 'weight to)
-    `(span "Move weights to " ,(em to))]
-   [(list 'seat to)
-    `(span "Move seat to " ,(em to))]
-   [(list 'where to)
-    `(span "Move to " ,(em to))]
-   [(list 'bar to)
-    `(span "Move bar to " ,(em to))]
-   [(list 'seat-pos to)
-    `(span "Move seat-pos to " ,(em to))]))
+   [(list 'weight 'back) "Rear"]
+   [(list 'weight 'front) "Front"]
+   [(list 'peg to) (symbol->string to)]
+   [(list 'seat to) (symbol->string to)]
+   [(list 'bar 'there) "Gym"]
+   [(list 'bar 'removed) "side"]
+   [(list 'seat-pos 'side) "side"]
+   [(list 'seat-pos 'front) "front"]
+   [(list 'where 'gym:standing) "Standing"]
+   [(list 'where 'gym:seated) "Seat"]
+   [(list 'where 'pull-up-bar:free) "Bar on Floor"]
+   [(list 'where 'pull-up-bar:above) "Bar on Door"]
+   [(list 'where 'free) "Floor"]))
 
 (define-runtime-path images-dir ".workout-plan")
 
@@ -49,7 +56,7 @@
      (values
       final-ctxt
       (cons
-       (format "\\action{~a}" (format-ctxt what to))
+       (format "\\action{~a}{~a}" (format-what what) (format-to what to))
        rest-plan))]
     [(list-rest (e sets reps-per-seat ctxt name) es)
      (cond

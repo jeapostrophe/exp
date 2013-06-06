@@ -1,4 +1,4 @@
-\documentclass[letterpaper,twocolumn]{article}
+\documentclass[letterpaper,twocolumn,12pt]{article}
 
 \usepackage[margin=0.1in]{geometry}
 
@@ -9,14 +9,20 @@
 \usepackage{graphicx}
 \usepackage[space]{grffile}
 
-\DeclareExpandableDocumentCommand{\action}{m}{%
-  \begin{center} #1 \end{center} %
+\DeclareExpandableDocumentCommand{\action}{m m}{%
+  \makebox[260px][c]{\huge Move #1 to #2}
+
+  ~ \\
 }%
 
 \DeclareExpandableDocumentCommand{\exercise}{m m}{%
-  \begin{tabular}{rl} #1 & \includegraphics[height=162px,width=166px]{#2} \end{tabular} \\%
+  \makebox[255px][c]{
+    \makebox[200px][l]{\large #1}
+    \makebox[55px][r]{\includegraphics[height=55px,width=55px, keepaspectratio=true]{#2}}} \\
 }%
 
 \begin{document}
+\begin{center}
 \input{workout-plan-inner}
+\end{center}
 \end{document}
