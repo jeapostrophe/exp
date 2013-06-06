@@ -75,7 +75,7 @@
   (define-values (final-ctxt x)
     (exercise-plan init-ctxt es))
   (cond
-    [(context-subset? init-ctxt final-ctxt)
+    [(context-subset? init-ctxt (hash-set final-ctxt 'where 'free))
      => (λ (e) (error 'draw "Inconsistent start vs end: ~e" e))])  
   (with-output-to-file
       p #:exists 'replace
@@ -88,7 +88,6 @@
   (define-runtime-path output.pdf "workout-plan.pdf")
   (define exercises
     (list
-     (a 'where 'free)
      (e 1  50 '((where free))
         "hindu squat")
      (a 'where 'pull-up-bar:above)
@@ -144,6 +143,7 @@
         "tricep press")))
   (draw (hasheq 'seat-pos 'side
                 'seat 'down
+                'where 'free
                 'weight 'back
                 'peg 'bottom)
         output-inner.tex exercises)

@@ -6,18 +6,18 @@
 \setlength{\columnseprule}{2px}
 
 \usepackage{xparse}
+\usepackage{picture}
+\usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage[space]{grffile}
 
 \DeclareExpandableDocumentCommand{\action}{m m}{%
-  \makebox[260px][c]{\huge Move #1 to #2}
-
-  ~ \\
+  {\setlength{\fboxsep}{0pt}\colorbox{gray!20}{\makebox[260px][c]{\huge Move #1 to #2}}} \vspace{0.75em}
 }%
 
 \DeclareExpandableDocumentCommand{\exercise}{m m}{%
   \makebox[255px][c]{
-    \makebox[200px][l]{\large #1}
+    \makebox[200px][l]{\raisebox{27.5px}{\LARGE #1}}
     \makebox[55px][r]{\includegraphics[height=55px,width=55px, keepaspectratio=true]{#2}}} \\
 }%
 
