@@ -1,5 +1,6 @@
 #!/bin/sh
 
+export LIBGL_DEBUG=verbose
 export LD_PRELOAD=libbugle.so
 export BUGLE_FILTER_DIR=/usr/lib/bugle
 export BUGLE_CHAIN=showstats
