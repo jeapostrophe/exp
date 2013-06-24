@@ -6,82 +6,72 @@
 
 (struct building (left height right) #:transparent)
 
+(define (height-map->drawing hm)
+  (define locs (sort (hash-keys hm) <))
+  (define start (apply min locs))
+  (define end (apply max locs))
+
+  (define-values (lasth lasti res)
+    (for/fold ([lasth 0] [lasti 0] [res empty])
+        ([i (in-range 0 (add1 end))])
+      (define this (hash-ref hm i 0))
+      (if (= this lasth)
+        (values lasth i res)
+        (values this i (list* this i res)))))
+
+  (reverse (list* 0 (add1 lasti) res)))
+
+(module+ test
+  (check-equal? (height-map->drawing (hasheq 1 4
+                                             2 4))
+                '(1 4 3 0)))
+
 (define (skyline* l)
-  (skyline (map (λ (l) (apply building l)) l)))
+  ;; xxx what about linear time?
+  (height-map->drawing (skyline (map (λ (l) (apply building l)) l))))
 
-(define (building-at:height i os)
-  (printf "~a\n" (list 'building-at:right i os))
-  (cond
-    [(empty? os)
-     0]
-    [else
-     (match os
-       [(list r 0)
-        0]
-       [(list* l h r more)
-        (if (<= l i r)
-          h
-          (building-at:height i (list* r more)))])]))
+(define empty-hm (hasheq))
 
-(define (building-at:right i os)
-  (cond
-    [(empty? os)
-     (error 'building-at:right "No building at ~e" i)]
-    [else
-     (match-define (list* l h r more) os)
-     (if (<= l i r)
-       r
-       (building-at:right i (list* r more)))]))
+(define (height-map-incr hm i new)
+  (hash-update hm i (λ (old) (max old new)) 0))
 
-(define (insert b os)
+(define (insert b hm)
   (match-define (building l h r) b)
-  (cond
-    [(< r l)
-     os]
-    [(empty? os)
-     (list l h r 0)]
-    [else
-     (match os
-       [(list last-r 0)
-        (if (< l last-r)
-
-          )]
-       )]
-
-    [(> (building-at:height l os) h)
-     (insert (building (building-at:right l os) h r) os)]
-    [else
-     (error 'insert "Don't know how to deal with ~v in ~v\n" b os)]))
+  (for/fold ([hm hm])
+      ;; xxx what about non-reals?
+      ([i (in-range l r)])    
+    (height-map-incr hm i h)))
 
 (define (skyline bs)
   (cond
     [(empty? bs)
-     empty]
+     empty-hm]
     [else
      (insert (first bs) (skyline (rest bs)))]))
 
 (module+ test
-  (check-equal? (insert (building 0 3 4) empty)
-                '(0 3 4 0))
+  (when #f
+    (check-equal? (insert (building 0 3 4) empty)
+                  '(0 3 4 0))
 
-  ;; Un-obscured
-  (check-equal? (insert (building 0 3 4) '(5 6 7 0))
-                '(0 3 4 0 5 6 7 0))
+    ;; Un-obscured
+    (check-equal? (insert (building 0 3 4) '(5 6 7 0))
+                  '(0 3 4 0 5 6 7 0))
 
-  ;; Obscured on left
-  (check-equal? (insert (building 6 3 8) '(5 2 7 0))
-                '(0 5 2 6 3 8 0))
+    ;; Obscured on left
+    (check-equal? (insert (building 6 2 8) '(5 3 7 0))
+                  '(0 5 2 6 3 8 0))
 
-  ;; Obscured on right
-  (check-equal? (insert (building 5 2 7) '(6 3 8 0))
-                '(0 5 2 6 3 8 0))
+    ;; Obscured on right
+    (check-equal? (insert (building 5 2 7) '(6 3 8 0))
+                  '(0 5 2 6 3 8 0))
 
-  ;; Totally obscured
-  (check-equal? (insert (building 0 2 3) '(1 1 2 0))
-                '(0 2 3 0))
+    ;; Totally obscured
+    (check-equal? (insert (building 0 2 3) '(1 1 2 0))
+                  '(0 2 3 0))
 
-  (check-equal? (insert (building 23 13 29) '(24 4 28 0))
-                '(23 13 29 0))
+    (check-equal? (insert (building 23 13 29) '(24 4 28 0))
+                  '(23 13 29 0)))
 
   (check-equal?
    (skyline*
