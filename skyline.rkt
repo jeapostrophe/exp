@@ -50,5 +50,6 @@
   (define out
     '((1 11) (3 13) (9 0) (12 7) (16 3) (19 18) (22 3) (23 13) (29 0)))
   (check-equal? (skyline in) out)
+  (check-equal? (skyline (append in in)) out)
   (for ([i (in-range 10)])
     (check-equal? (skyline (shuffle in)) out)))
