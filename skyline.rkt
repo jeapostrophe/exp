@@ -7,7 +7,6 @@
 (define (building->drawing x y b)
   (match-define (list l h r) b)
   (eprintf "~a ~a ~a\n" x y b)
-
   (cond
     [(= y h)
      (values empty r h)]
@@ -35,6 +34,12 @@
   (match-define (list nl nh nr) n)
   (match-define (list cl ch cr) c)
   (cond
+    ;; Case A: Totally to left
+    [(and (< cr nl))
+     (list #f c n)]
+    ;; Case B: Totally to right
+    [(and (< nr cl))
+     (list n c #f)]
     ;; Case 1
     [(and (<= nl cr) (< nh ch) (< cr nr))
      (list #f c (list cr nh nr))]
@@ -54,10 +59,20 @@
      (list #f
            (list nl nh cr)
            (list cr nh nr))]
+    ;; Case 6
+    [(and (< nl cl) (< ch nh) (< cr nr))
+     (list (list nl nh cl)
+           (list cl nh cr)
+           (list cr nh nr))]
     [else
      (error 'split "~a ~a" n c)]))
 
 (module+ test
+  ;; Case A
+  (check-equal? (split '(12 7 16) '(3 13 5))
+                (list #f
+                      '(3 13 5)
+                      '(12 7 16)))
   ;; Case 1
   (check-equal? (split '(2 6 7) '(1 11 5))
                 (list #f
@@ -92,29 +107,40 @@
   (check-equal? (split '(25 4 28) '(25 13 29))
                 (list #f
                       '(25 13 29)
-                      #f)))
+                      #f))
+  ;; Case 6
+  (check-equal? (split '(9 18 22) '(12 7 16))
+                (list '(9 18 12)
+                      '(12 18 16)
+                      '(16 18 22))))
 
 (define (insert* b hm)
   (if b
     (insert b hm)
     hm))
 
+(define (hm-check hm)
+  (define (inner min-x max-x hm)
+    (match hm
+      [(list tl (list l h r) tr)
+       (hm-check tl)
+       (unless (< ))
+       (hm-check tr)]))
+  (inner -inf.0 +inf.0 hm)
+  hm)
+
 (define (insert b hm)
   (match-define (list l h r) b)
   (match hm
     [#f
-     (list #f b #f)]
-    [(list to-the-left (and tb (list tl _ tr)) to-the-right)
-     (cond
-       [(< r tl)
-        (list (insert b to-the-left) tb to-the-right)]
-       [(< tr l)
-        (list to-the-left tb (insert b to-the-right))]
-       [else
-        (match-define (list nl nm nr) (split b tb))
-        (list (insert* nl to-the-left)
-              nm
-              (insert* nr to-the-right))])]))
+     (hm-check
+      (list #f b #f))]
+    [(list to-the-left tb to-the-right)
+     (match-define (list nl nm nr) (split b tb))
+     (hm-check
+      (list (insert* nl to-the-left)
+            nm
+            (insert* nr to-the-right)))]))
 
 (define (skyline bs)
   (foldl insert empty-hm bs))
