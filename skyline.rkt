@@ -122,10 +122,14 @@
 (define (hm-check hm)
   (define (inner min-x max-x hm)
     (match hm
+      [#f
+       (void)]
       [(list tl (list l h r) tr)
-       (hm-check tl)
-       (unless (< ))
-       (hm-check tr)]))
+       (inner min-x l tl)
+       (unless (and (<= min-x l max-x)
+                    (<= min-x r max-x))
+         (error 'hm-check "~a ~a ~e\n" min-x max-x hm))
+       (inner r max-x tr)]))
   (inner -inf.0 +inf.0 hm)
   hm)
 
