@@ -7,46 +7,40 @@
   (define (lift <= f)
     (λ (x y)
       (<= (f x) (f y))))
-
   (define evt-pos
     (match-lambda
      [(cons 'start (list l h r)) l]
      [(cons 'end (list l h r)) r]))
+
   (define events (make-heap (lift <= evt-pos)))
   (for ([b (in-list bs)])
     (heap-add! events (cons 'start b))
     (heap-add! events (cons 'end b)))
 
-  (define heights (make-heap (lift > second)))
-  (heap-add! heights (list -inf.0 0 +inf.0))
+  (define active-bs (make-heap (lift > second)))
+  (heap-add! active-bs (list -inf.0 0 +inf.0))
 
   (define ended-bs (make-hasheq))
 
-  (define-values (d)
-    (for/fold ([d empty]) ([e (in-heap events)])
-      (match e
-        [(cons 'start (and b (list l h r)))
-         (match-define (list _ max-h _) (heap-min heights))
-         (heap-add! heights b)
-         (if (> h max-h)
-           (cons (list l h) d)
-           d)]
-        [(cons 'end (and b (list l h r)))
-         (hash-set! ended-bs b #t)
-
-         (match-define (list _ old-max-h _) (heap-min heights))
-
-         (let loop ()
-           (define max-b (heap-min heights))
-           (when (hash-ref ended-bs max-b #f)
-             (heap-remove-min! heights)
-             (loop)))
-
-         (match-define (list _ new-max-h _) (heap-min heights))
-
-         (if (= old-max-h new-max-h)
-           d
-           (cons (list r new-max-h) d))])))
+  (define d empty)
+  (for ([e (in-heap events)])
+    (match-define (cons pol (and b (list l h r))) e)
+    (match-define (list _ old-max-h _) (heap-min active-bs))
+    (match pol
+      ['start
+       (heap-add! active-bs b)
+       (when (> h old-max-h)
+         (set! d (cons (list l h) d)))]
+      ['end
+       (hash-set! ended-bs b #t)
+       (let loop ()
+         (define max-b (heap-min active-bs))
+         (when (hash-ref ended-bs max-b #f)
+           (heap-remove-min! active-bs)
+           (loop)))
+       (match-define (list _ new-max-h _) (heap-min active-bs))
+       (unless (= old-max-h new-max-h)
+         (set! d (cons (list r new-max-h) d)))]))
   (reverse d))
 
 (module+ test
