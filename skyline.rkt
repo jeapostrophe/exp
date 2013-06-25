@@ -1,27 +1,20 @@
 #lang racket/base
 (require data/heap)
 
-(define (lift < f)
-  (λ (x y) (< (f x) (f y))))
-
 (define (skyline bs)
   (define abs (make-heap (lift > cadr)))
   (heap-add! abs (list 0 0 0))
   (define ebs (make-hasheq))
   (define d '())
 
-  (define ((start b))
-    (define omh (cadr (heap-min abs)))
+  (define ((start b) omh)
     (heap-add! abs b)
     (when (> (cadr b) omh)
       (set! d (cons (list (car b) (cadr b)) d))))
-  (define ((end b))
-    (define omh (cadr (heap-min abs)))
+  (define ((end b) omh)
     (hash-set! ebs b 1)
-    (let L ()
-      (when (hash-ref ebs (heap-min abs) #f)
-        (heap-remove-min! abs)
-        (L)))
+    (while (hash-ref ebs (heap-min abs) #f)
+      (heap-remove-min! abs))
     (define nmh (cadr (heap-min abs)))
     (unless (= omh nmh)
       (set! d (cons (list (caddr b) nmh) d))))
@@ -31,8 +24,14 @@
     (heap-add! es (cons (car b) (start b)))
     (heap-add! es (cons (caddr b) (end b))))
   (for ([e (in-heap es)])
-    ((cdr e)))
+    ((cdr e) (cadr (heap-min abs))))
   (reverse d))
+
+(define (lift < f)
+  (λ (x y) (< (f x) (f y))))
+
+(define-syntax-rule (while C B)
+  (let L () (when C B (L))))
 
 (module+ test
   (require rackunit racket/list)
