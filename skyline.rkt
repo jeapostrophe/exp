@@ -3,44 +3,41 @@
          data/heap
          racket/match)
 
+(define (lift <= f)
+  (λ (x y)
+    (<= (f x) (f y))))
+
+(define-syntax-rule (while cond body ...)
+  (let loop () (when cond body ... (loop))))
+
 (define (skyline bs)
-  (define (lift <= f)
-    (λ (x y)
-      (<= (f x) (f y))))
-  (define evt-pos
-    (match-lambda
-     [(cons 'start (list l h r)) l]
-     [(cons 'end (list l h r)) r]))
-
-  (define events (make-heap (lift <= evt-pos)))
-  (for ([b (in-list bs)])
-    (heap-add! events (cons 'start b))
-    (heap-add! events (cons 'end b)))
-
   (define active-bs (make-heap (lift > second)))
   (heap-add! active-bs (list -inf.0 0 +inf.0))
-
   (define ended-bs (make-hasheq))
-
   (define d empty)
-  (for ([e (in-heap events)])
-    (match-define (cons pol (and b (list l h r))) e)
+
+  (define ((start b))
+    (match-define (list l h r) b)
     (match-define (list _ old-max-h _) (heap-min active-bs))
-    (match pol
-      ['start
-       (heap-add! active-bs b)
-       (when (> h old-max-h)
-         (set! d (cons (list l h) d)))]
-      ['end
-       (hash-set! ended-bs b #t)
-       (let loop ()
-         (define max-b (heap-min active-bs))
-         (when (hash-ref ended-bs max-b #f)
-           (heap-remove-min! active-bs)
-           (loop)))
-       (match-define (list _ new-max-h _) (heap-min active-bs))
-       (unless (= old-max-h new-max-h)
-         (set! d (cons (list r new-max-h) d)))]))
+    (heap-add! active-bs b)
+    (when (> h old-max-h)
+      (set! d (cons (list l h) d))))
+  (define ((end b))
+    (match-define (list l h r) b)
+    (match-define (list _ old-max-h _) (heap-min active-bs))
+    (hash-set! ended-bs b #t)
+    (while (hash-ref ended-bs (heap-min active-bs) #f)
+      (heap-remove-min! active-bs))
+    (match-define (list _ new-max-h _) (heap-min active-bs))
+    (unless (= old-max-h new-max-h)
+      (set! d (cons (list r new-max-h) d))))
+
+  (define events (make-heap (lift <= car)))
+  (for ([b (in-list bs)])
+    (match-define (list l h r) b)
+    (heap-add! events (cons l (start b)))
+    (heap-add! events (cons r (end b))))
+  (for ([e (in-heap events)]) ((cdr e)))
   (reverse d))
 
 (module+ test
