@@ -34,16 +34,30 @@
     (insert b hm)
     hm))
 
-(define (split b1 b2)
-  (match-define (list l1 h1 r1) b1)
-  (match-define (list l2 h2 r2) b2)
-  (list #f b2 (list r2 h1 r1)))
+(define (split n c)
+  (match-define (list nl nh nr) n)
+  (match-define (list cl ch cr) c)
+  (cond
+    [(and (< nl cr) (< nh ch) (< cr nr))
+     (list #f c (list cr nh nr))]
+    [(and (< cl nr) (< ch nh) (< nr cr))
+     (list n (list nr ch cr) #f)]    
+    [else
+     (error 'split "~a ~a" n c)]))
 
 (module+ test
   (check-equal? (split '(2 6 7) '(1 11 5))
                 (list #f
                       '(1 11 5)
-                      '(5 6 7))))
+                      '(5 6 7)))
+  (check-equal? (split '(1 11 5) '(2 6 7))
+                (list '(1 11 5)
+                      '(5 6 7)
+                      #f))
+  (check-equal? (split '(3 13 9) '(1 11 5))
+                (list '(1 11 3)
+                      '(3 13 9)
+                      #f)))
 
 (define (insert b hm)
   (match-define (list l h r) b)
@@ -59,7 +73,7 @@
        [else
         (match-define (list nl nm nr) (split b tb))
         (list (insert* nl to-the-left)
-              nm 
+              nm
               (insert* nr to-the-right))])]))
 
 (define (skyline bs)
