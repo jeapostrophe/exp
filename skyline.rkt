@@ -1,159 +1,58 @@
 #lang racket/base
 (require racket/list
+         data/heap
          racket/match)
 (module+ test
   (require rackunit))
 
-(define (building->drawing x y b)
-  (match-define (list l h r) b)
-  (eprintf "~a ~a ~a\n" x y b)
-  (cond
-    [(= y h)
-     (values empty r h)]
-    [(= x l)
-     (values (list (list l h)) r h)]
-    [else
-     (values (list (list x 0) (list l h)) r h)]))
-
-(define (height-map->drawing hm)
-  (define (inner x y hm)
-    (match hm
-      [#f
-       (values empty x y)]
-      [(list tl b tr)
-       (define-values (tld tl-x tl-y) (inner x y tl))
-       (define-values (bd b-x b-y) (building->drawing tl-x tl-y b))
-       (define-values (trd tr-x tr-y) (inner b-x b-y tr))
-       (values (append tld bd trd) tr-x tr-y)]))
-  (define-values (hmd hm-x hm-y) (inner 0 0 hm))
-  (rest (append hmd (list (list hm-x 0)))))
-
-(define empty-hm #f)
-
-(define (split n c)
-  (match-define (list nl nh nr) n)
-  (match-define (list cl ch cr) c)
-  (cond
-    ;; Case A: Totally to left
-    [(and (< cr nl))
-     (list #f c n)]
-    ;; Case B: Totally to right
-    [(and (< nr cl))
-     (list n c #f)]
-    ;; Case 1
-    [(and (<= nl cr) (< nh ch) (< cr nr))
-     (list #f c (list cr nh nr))]
-    ;; Case 2
-    [(and (< cl nr) (< ch nh) (< nr cr))
-     (list n (list nr ch cr) #f)]
-    ;; Case 3
-    [(and (< cl nl) (< ch nh) (< cr nr))
-     (list (list cl ch nl)
-           (list nl nh cr)
-           (list cr nh nr))]
-    ;; Case 4
-    [(and (<= cl nl) (< nh ch) (<= nr cr))
-     (list #f c #f)]
-    ;; Case 5
-    [(and (= cl nl) (< ch nh) (< cr nr))
-     (list #f
-           (list nl nh cr)
-           (list cr nh nr))]
-    ;; Case 6
-    [(and (< nl cl) (< ch nh) (< cr nr))
-     (list (list nl nh cl)
-           (list cl nh cr)
-           (list cr nh nr))]
-    [else
-     (error 'split "~a ~a" n c)]))
-
-(module+ test
-  ;; Case A
-  (check-equal? (split '(12 7 16) '(3 13 5))
-                (list #f
-                      '(3 13 5)
-                      '(12 7 16)))
-  ;; Case 1
-  (check-equal? (split '(2 6 7) '(1 11 5))
-                (list #f
-                      '(1 11 5)
-                      '(5 6 7)))
-  ;; Case 2
-  (check-equal? (split '(1 11 5) '(2 6 7))
-                (list '(1 11 5)
-                      '(5 6 7)
-                      #f))
-  ;; Case 3
-  (check-equal? (split '(3 13 9) '(1 11 5))
-                (list '(1 11 3)
-                      '(3 13 5)
-                      '(5 13 9)))
-  ;; Case 1 (generalize to <=)
-  (check-equal? (split '(22 3 23) '(19 18 22))
-                (list #f
-                      '(19 18 22)
-                      '(22 3 23)))
-  ;; Case 4
-  (check-equal? (split '(24 4 28) '(23 13 29))
-                (list #f
-                      '(23 13 29)
-                      #f))
-  ;; Case 5
-  (check-equal? (split '(5 13 9) '(5 6 7))
-                (list #f
-                      '(5 13 7)
-                      '(7 13 9)))
-  ;; Case 4 (generalize to <=)
-  (check-equal? (split '(25 4 28) '(25 13 29))
-                (list #f
-                      '(25 13 29)
-                      #f))
-  ;; Case 6
-  (check-equal? (split '(9 18 22) '(12 7 16))
-                (list '(9 18 12)
-                      '(12 18 16)
-                      '(16 18 22))))
-
-(define (insert* b hm)
-  (if b
-    (insert b hm)
-    hm))
-
-(define (hm-check hm)
-  (define (inner min-x max-x hm)
-    (match hm
-      [#f
-       (void)]
-      [(list tl (list l h r) tr)
-       (inner min-x l tl)
-       (unless (and (<= min-x l max-x)
-                    (<= min-x r max-x))
-         (error 'hm-check "~a ~a ~e\n" min-x max-x hm))
-       (inner r max-x tr)]))
-  (inner -inf.0 +inf.0 hm)
-  hm)
-
-(define (insert b hm)
-  (match-define (list l h r) b)
-  (match hm
-    [#f
-     (hm-check
-      (list #f b #f))]
-    [(list to-the-left tb to-the-right)
-     (match-define (list nl nm nr) (split b tb))
-     (hm-check
-      (list (insert* nl to-the-left)
-            nm
-            (insert* nr to-the-right)))]))
-
 (define (skyline bs)
-  (foldl insert empty-hm bs))
+  (define (lift <= f)
+    (λ (x y)
+      (<= (f x) (f y))))
 
-(define (skyline* l)
-  (height-map->drawing (skyline l)))
+  (struct evt (pos b polarity))
+  (define events (make-heap (lift <= evt-pos)))
+  (for ([b (in-list bs)])
+    (match-define (list l h r) b)
+    (heap-add! events (evt l b 'start))
+    (heap-add! events (evt r b 'end)))
+
+  (struct past (h b))
+  (define heights (make-heap (lift > past-h)))
+  (heap-add! heights (past 0 #f))
+
+  (define visited-bs (make-hasheq))
+
+  (define-values (d)
+    (for/fold ([d empty])
+        ([e (in-heap events)])
+      (match e
+        [(evt pos (and b (list l h r)) 'start)
+         (match-define (past max-h max-b) (heap-min heights))
+         (heap-add! heights (past h b))
+         (if (> h max-h)
+           (cons (list l h) d)
+           d)]
+        [(evt pos (and b (list l h r)) 'end)
+         (hash-set! visited-bs b #t)
+
+         (match-define (past old-max-h _) (heap-min heights))
+
+         (let loop ()
+           (match-define (past max-h max-b) (heap-min heights))
+           (when (hash-ref visited-bs max-b #f)
+             (heap-remove-min! heights)
+             (loop)))
+
+         (match-define (past new-max-h _) (heap-min heights))
+
+         (if (= old-max-h new-max-h)
+           d
+           (cons (list r new-max-h) d))])))
+  (reverse d))
 
 (module+ test
   (check-equal?
-   (skyline*
+   (skyline
     '((1 11 5) (2 6 7) (3 13 9) (12 7 16) (14 3 25) (19 18 22) (23 13 29) (24 4 28)))
    '((1 11) (3 13) (9 0) (12 7) (16 3) (19 18) (22 3) (23 13) (29 0))))
