@@ -27,6 +27,9 @@
     ((cdr e) (cadr (heap-min abs))))
   (reverse d))
 
+(require (for-syntax racket/base))
+(define-syntax D (make-rename-transformer #'define))
+
 (define (lift < f)
   (λ (x y) (< (f x) (f y))))
 
