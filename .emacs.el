@@ -1152,7 +1152,7 @@ given a prefix arg."
     (proof-display-three-b 'hybrid))
 
 ;; haskell
-(load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file")
+;; (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file")
 
 ;;
 (defun je/insert-$ (cmd)
