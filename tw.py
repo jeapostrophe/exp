@@ -69,16 +69,13 @@ class Tumblr(NewsSource):
 
 class Twitter(NewsSource):
     def connect(self, app_key = None, app_secret = None, oauth_token = None, oauth_token_secret = None):
-        return Twython(twitter_token = app_key,
-                       twitter_secret = app_secret,
-                       oauth_token = oauth_token,
-                       oauth_token_secret = oauth_token_secret )
+        return Twython(app_key, app_secret, oauth_token, oauth_token_secret )
 
     def rss(self, config, section):
         t = self.login(config, section)
         def inner(page_n):
             print "\tDownloading page %d" % page_n
-            return t.getHomeTimeline(count = 200, page = page_n)
+            return t.get_home_timeline(count = 200, page = page_n)
         results = append_map(inner, range(4))
         return PyRSS2Gen.RSS2(
             title = "@%s/following" % (config.get(section, "user")),
