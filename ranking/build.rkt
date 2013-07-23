@@ -311,12 +311,17 @@
     (ranked unranked)
     (partition (node-prop key #f) finished-games))
 
+  (define (node-label* n)
+    (format "~a - ~a"
+            (node-label n)
+            ((node-prop key #f) n)))
+
   (define stop? #f)
   (define (game< a b)
     (match
         (message-box/custom
          "Ranking" (format "~a Which is better?" kind)
-         (node-label a) (node-label b)
+         (node-label* a) (node-label* b)
          "Stop Asking")
       [1 #t]
       [2 #f]
