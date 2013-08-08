@@ -65,7 +65,7 @@ define_webjump("y", "http://www.youtube.com/results?search_query=%s&search=Searc
                $description = "YouTube");
 define_webjump("j", "http://jisho.org/words?jap=&eng=%s&dict=edict",
                $description = "Jisho");
-define_webjump("R", "file:///home/jay/Dev/scm/plt/doc/search/index.html?q=%s",
+define_webjump("R", "file:///home/jay/Dev/scm/plt/racket/doc/search/index.html?q=%s",
                $description = "Racket search");
 define_webjump("r", "file:///home/jay/.racket/doc/search/index.html?q=%s",
                $description = "Racket search");

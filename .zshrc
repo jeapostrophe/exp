@@ -7,9 +7,10 @@ setopt printeightbit
 
 hash -d scm=$SVNROOT
 hash -d plt=$PLTHOME
-hash -d tests=~plt/collects/tests
-hash -d ws=~plt/collects/web-server
-hash -d drdr=~plt/collects/meta/drdr
+hash -d pkgs=~plt/pkgs
+hash -d ws=~pkgs/web-server-pkgs
+hash -d drdr=~pkgs/plt-services/meta/drdr
+hash -d pkgi=~pkgs/plt-services/meta/pkg-index
 hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
@@ -150,6 +151,6 @@ function racketdoclink() {
     ln -s $DEST ~/.racket/doc
 }
 
-racketdoclink
+#racketdoclink
 
 export REPORTTIME=10

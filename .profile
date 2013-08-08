@@ -3,14 +3,14 @@ export PATH=$HOME/.cabal/bin:$PATH
 export SVNROOT=$HOME/Dev/scm
 export PROJS=$SVNROOT/github.jeapostrophe/work
 export PLTHOME=$SVNROOT/plt
-export PATH=$PLTHOME/bin:$PATH
+export PATH=$PLTHOME/racket/bin:$PATH
 export DIST=$HOME/Dev/dist
 export COQ_ROOT=$DIST/coq/local
 export PATH=$COQ_ROOT/bin:$PATH
 export CVS_RSH=ssh
 export OCAMLRUNPARAM=b
 export EDITOR='emacsclient -c'
-export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/collects/slatex:$TEXINPUTS
+export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/pkgs/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
