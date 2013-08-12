@@ -66,19 +66,61 @@
   (define p (cache-static-url! u))
   (html->xexp (file->string p)))
 
-;; //*[@id="wrapper"]/div[2]/div/div/div[1]/div/p[2]/a
+(define (parse-number-s number-s)
+  (cond
+    [(string? number-s)
+     (inexact->exact (string->number number-s))]
+    [else
+     (error 'parse-number-s "~e" number-s)]))
 
-(define (root! us)
+(struct word (freq url word english part) #:transparent)
+
+(define (word! w)
+  (match-define (word _ us _ _ _) w)
+  (with-handlers ([exn:fail? void])
+    (read-url/cache (string->url us))))
+
+(define (list! us)
   (define x (read-url/cache (string->url us)))
-  
-  (define ns ((sxpath '((p ((equal? (a "Next >")))))) x))
-  (error 'root "~v" ns)
+  (define trs ((sxpath '(// (table (@ (equal? (class "topwords")))) tr)) x))
+  (define ws
+    (for/list ([w (in-list (rest trs))])
+      (with-handlers ([exn:fail?
+                       (λ (x)
+                         (error 'list! "~v: ~a" w (exn-message x)))])
+        (match-define
+         (list 'tr (list '@ (list 'class _))
+               (list 'td (list '@ (list 'class "number"))
+                     '(a (@ (name "205") (id "220"))) ...
+                     (? string? number-s) '(& nbsp) ...)
+               '(td) ...
+               (list 'td (list '@ (list 'class "word"))
+                     "\r\n" ...
+                     (or (and (? string? russian)
+                              (app (λ _ #f) word-url-s))
+                         (list 'a (list '@ (list 'href word-url-s) _ ...) russian
+                               '(a) ...
+                               '(& nbsp) ...))
+                     '(a) ...
+                     '(& nbsp) ...)
+               (list-rest 'td english)
+               (list 'td part))
+         w)
+        (word (parse-number-s number-s) word-url-s russian english part))))
+  ws)
 
-  (define ws ((sxpath '(// (table (@ (equal? (class "topwords")))) tr)) x))
-  (for/list ([w (in-list (rest ws))])
-    (match-define `(tr (@ (class ,_)) (td (@ (class "number")) ,number-s . ,_) (td) (td (@ (class "word")) (a (@ (href ,word-url-s) . ,_) ,word) (& nbsp)) (td ,english) (td ,part))
-                  w)
-    (list (inexact->exact (string->number number-s)) word-url-s word english part)))
+(define (root!)
+  (define ws
+    (append*
+     (list! "http://masterrussian.com/vocabulary/most_common_words.htm")
+     (for/list ([i (in-range 2 13)])
+       ;; xxx 8 is wrong and needs a tr on line 225
+       (list! (format "http://masterrussian.com/vocabulary/most_common_words_~a.htm" i)))))
+  
+  (for ([w (in-list ws)])
+    (word! w))
+
+  (length ws))
 
 (module+ main
-  (root! "http://masterrussian.com/vocabulary/most_common_words.htm"))
+  (root!))
