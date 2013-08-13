@@ -79,10 +79,32 @@
   (match-define (word f us r e p) w)
   (when us
     (define x (read-url/cache (string->url us)))
-    (define wods ((sxpath '(// (div (@ (equal? (id "wod_header")))) *text*)) x))
-    (write x) (newline)
-    (exit 42)
-    42))
+
+    ;; Idioms and set expressions:
+    ;; Related words:
+    ;; Verb conjugation:
+    ;; Proverbs and sayings:
+    ;; Other forms of the word (declensions):
+    ;; Example sentences:
+
+    (define mp3s ((sxpath '(// (div (@ (equal? (id "wod_vocab")))) (script 3) *text*)) x))
+    (define mp3-us
+      (match (regexp-match #rx"soundFile: \"(.*?)\"," (apply string-append mp3s))
+        [(list _ mp3)
+         mp3]
+        [else
+         (unless (member f '(83 152 250 282 396 430 568 574))
+           (error 'russian "~v ~v ~v" 
+                  us
+                  mp3s
+                  ((sxpath '(// (div (@ (equal? (id "wod_vocab")))))) x)))
+         #f]))
+
+    (when mp3-us
+      (cache-static-url! (string->url mp3-us)))
+    
+    
+    ))
 
 (define (list! us)
   (define x (read-url/cache (string->url us)))
@@ -122,7 +144,7 @@
        (list! (format "http://masterrussian.com/vocabulary/most_common_words_~a.htm" i)))))
 
   (for ([w (in-list ws)])
-    (word! w))
+    (word! w))  
 
   (length ws))
 
