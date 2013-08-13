@@ -76,9 +76,13 @@
 (struct word (freq url word english part) #:transparent)
 
 (define (word! w)
-  (match-define (word _ us _ _ _) w)
-  (with-handlers ([exn:fail? void])
-    (read-url/cache (string->url us))))
+  (match-define (word f us r e p) w)
+  (when us
+    (define x (read-url/cache (string->url us)))
+    (define wods ((sxpath '(// (div (@ (equal? (id "wod_header")))) *text*)) x))
+    (write x) (newline)
+    (exit 42)
+    42))
 
 (define (list! us)
   (define x (read-url/cache (string->url us)))
@@ -116,7 +120,7 @@
      (for/list ([i (in-range 2 13)])
        ;; xxx 8 is wrong and needs a tr on line 225
        (list! (format "http://masterrussian.com/vocabulary/most_common_words_~a.htm" i)))))
-  
+
   (for ([w (in-list ws)])
     (word! w))
 
