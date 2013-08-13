@@ -76,35 +76,41 @@
 (struct word (freq url word english part) #:transparent)
 
 (define (word! w)
-  (match-define (word f us r e p) w)
-  (when us
-    (define x (read-url/cache (string->url us)))
+  (match w
+    [(word f #f r e p)
+     (list f r "" e p)]
+    [(word f us r e p)
+     (define x (read-url/cache (string->url us)))
 
-    ;; Idioms and set expressions:
-    ;; Related words:
-    ;; Verb conjugation:
-    ;; Proverbs and sayings:
-    ;; Other forms of the word (declensions):
-    ;; Example sentences:
+     ;; xxx Idioms and set expressions:
+     ;; xxx Related words:
+     ;; xxx Verb conjugation:
+     ;; xxx Proverbs and sayings:
+     ;; xxx Other forms of the word (declensions):
+     ;; xxx Example sentences:
 
-    (define mp3s ((sxpath '(// (div (@ (equal? (id "wod_vocab")))) (script 3) *text*)) x))
-    (define mp3-us
-      (match (regexp-match #rx"soundFile: \"(.*?)\"," (apply string-append mp3s))
-        [(list _ mp3)
-         mp3]
-        [else
-         (unless (member f '(83 152 250 282 396 430 568 574))
-           (error 'russian "~v ~v ~v" 
-                  us
-                  mp3s
-                  ((sxpath '(// (div (@ (equal? (id "wod_vocab")))))) x)))
-         #f]))
+     (define mp3s ((sxpath '(// (div (@ (equal? (id "wod_vocab")))) (script 3) *text*)) x))
+     (define mp3-us
+       (match (regexp-match #rx"soundFile: \"(.*?)\"," (apply string-append mp3s))
+         [(list _ mp3)
+          mp3]
+         [else
+          (unless (member f '(83 152 250 282 396 430 568 574))
+            (error 'russian "~v ~v ~v"
+                   us
+                   mp3s
+                   ((sxpath '(// (div (@ (equal? (id "wod_vocab")))))) x)))
+          #f]))
 
-    (when mp3-us
-      (cache-static-url! (string->url mp3-us)))
-    
-    
-    ))
+     (list f r
+           (cond
+             [mp3-us
+              (define u (string->url mp3-us))
+              (cache-static-url! u)
+              (url->cache-path u)]
+             [else
+              ""])
+           e p)]))
 
 (define (list! us)
   (define x (read-url/cache (string->url us)))
@@ -135,6 +141,26 @@
         (word (parse-number-s number-s) word-url-s russian english part))))
   ws)
 
+(define (write-csv l)
+  (for ([r (in-list l)])
+    (for ([e (in-list r)])
+      (display (regexp-replace* #rx"[ \r\n\t]" (srl:sxml->xml e) " "))
+      (display #\tab))
+    (display #\newline)))
+
+(define word->csv
+  (match-lambda
+   [(list freq r mp3-url e p)
+    (list (number->string freq) 
+          r
+          (match mp3-url
+            [""
+             ""]
+            [else
+             (format "[sound:~a]" mp3-url)])
+          `(span (@) . ,e)
+          p)]))
+
 (define (root!)
   (define ws
     (append*
@@ -143,10 +169,17 @@
        ;; xxx 8 is wrong and needs a tr on line 225
        (list! (format "http://masterrussian.com/vocabulary/most_common_words_~a.htm" i)))))
 
-  (for ([w (in-list ws)])
-    (word! w))  
+  (define word-db
+    (for/list ([w (in-list ws)])
+      (word! w)))
 
-  (length ws))
+  (with-output-to-file
+      (build-path *output-dir* "word.csv")
+    #:exists 'replace
+    (λ ()
+      (write-csv (map word->csv word-db))))
+
+  (length word-db))
 
 (module+ main
   (root!))
