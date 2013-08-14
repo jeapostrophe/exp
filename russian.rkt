@@ -82,12 +82,12 @@
     [(word f us r e p)
      (define x (read-url/cache (string->url us)))
 
-     ;; xxx Idioms and set expressions:
-     ;; xxx Related words:
-     ;; xxx Verb conjugation:
-     ;; xxx Proverbs and sayings:
-     ;; xxx Other forms of the word (declensions):
-     ;; xxx Example sentences:
+     ;; xxx Verb conjugation: [verbs]
+     ;; xxx Proverbs and sayings: [sent]
+     ;; xxx Other forms of the word (declensions): [noun declensions]
+     ;; xxx Related words: [words]
+     ;; xxx Idioms and set expressions: [words]
+     ;; xxx Example sentences: [sent]
 
      (define mp3s ((sxpath '(// (div (@ (equal? (id "wod_vocab")))) (script 3) *text*)) x))
      (define mp3-us
