@@ -202,6 +202,11 @@
 
                     (let sloop2 ([lis lis])
                       (match lis
+                        ;; xxx no_but has an error, no russian for a sentence
+
+                        ;; xxx voda_water, utro_morning has a link to a wiki page
+
+                        ;; xxx zhivoy_living is broken
                         [`((li (@ (class "first"))) (li) . ,more)
                          (sloop2 more)]
                         [`((li (@ (class "first")) (span (@ (style "color: green; font-size: 10px;font-family:Arial,helvetica;")) "Click on " #\► " to listen to the examples."))
@@ -276,6 +281,18 @@
             `(a (@ (href ,us)) ,us)
             ""))]))
 
+(define sentence->csv
+  (match-lambda
+   [(list r mp3-url e lit)
+    (list r
+          (match mp3-url
+            [""
+             ""]
+            [else
+             (format "[sound:~a]" mp3-url)])
+          e
+          lit)]))
+
 (define (snoc l x)
   (append l (list x)))
 
@@ -293,7 +310,7 @@
              (set! word-db (snoc word-db (word->csv l))))))
 
   (define-extend! word! word-db word->csv)
-  (define-extend! sentence! sentence-db identity)
+  (define-extend! sentence! sentence-db sentence->csv)
 
   (for ([w (in-list ws)])
     (parse/word word! sentence! w))
