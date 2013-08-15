@@ -1,6 +1,7 @@
 #lang racket/base
 (require racket/file
          net/url
+         racket/string
          racket/match
          racket/port
          racket/list
@@ -75,10 +76,11 @@
 
 (struct word (freq url word english part) #:transparent)
 
-(define (word! w)
+(define (parse/word word! w)
   (match w
     [(word f #f r e p)
-     (list f r "" e p)]
+     (word!
+      (list f r "" e p))]
     [(word f us r e p)
      (define x (read-url/cache (string->url us)))
 
@@ -86,7 +88,6 @@
      ;; xxx Proverbs and sayings: [sent]
      ;; xxx Other forms of the word (declensions): [noun declensions]
      ;; xxx Related words: [words]
-     ;; xxx Idioms and set expressions: [words]
      ;; xxx Example sentences: [sent]
 
      (define mp3s ((sxpath '(// (div (@ (equal? (id "wod_vocab")))) (script 3) *text*)) x))
@@ -102,17 +103,30 @@
                    ((sxpath '(// (div (@ (equal? (id "wod_vocab")))))) x)))
           #f]))
 
-     (list f r
-           (cond
-             [mp3-us
-              (define u (string->url mp3-us))
-              (cache-static-url! u)
-              (url->cache-path u)]
-             [else
-              ""])
-           e p)]))
+     ;; xxx Idioms and set expressions: [words]
+     (define cx (rest (rest (first ((sxpath '(// (div (@ (equal? (class "col1")))))) x)))))
+     (let loop ([cx cx])
+       (unless (empty? cx)
+         (match (first cx)
+           [`(div (@ (id "wod_header")) . ,kind)
+            (match (string-trim (apply string-append (filter string? kind)))
+              [k
+               (error 'word! "~v" k)])]
+           [else
+            (loop (rest cx))])))
 
-(define (list! us)
+     (word!
+      (list f r
+            (cond
+              [mp3-us
+               (define u (string->url mp3-us))
+               (cache-static-url! u)
+               (url->cache-path u)]
+              [else
+               ""])
+            e p))]))
+
+(define (parse/list us)
   (define x (read-url/cache (string->url us)))
   (define trs ((sxpath '(// (table (@ (equal? (class "topwords")))) tr)) x))
   (define ws
@@ -151,7 +165,7 @@
 (define word->csv
   (match-lambda
    [(list freq r mp3-url e p)
-    (list (number->string freq) 
+    (list (number->string freq)
           r
           (match mp3-url
             [""
@@ -161,23 +175,29 @@
           `(span (@) . ,e)
           p)]))
 
+(define (snoc l x)
+  (append l (list x)))
+
 (define (root!)
   (define ws
     (append*
-     (list! "http://masterrussian.com/vocabulary/most_common_words.htm")
+     (parse/list "http://masterrussian.com/vocabulary/most_common_words.htm")
      (for/list ([i (in-range 2 13)])
        ;; xxx 8 is wrong and needs a tr on line 225
-       (list! (format "http://masterrussian.com/vocabulary/most_common_words_~a.htm" i)))))
+       (parse/list (format "http://masterrussian.com/vocabulary/most_common_words_~a.htm" i)))))
 
-  (define word-db
-    (for/list ([w (in-list ws)])
-      (word! w)))
+  (define word-db empty)
+  (define (word! l)
+    (set! word-db (snoc word-db (word->csv l))))
+
+  (for ([w (in-list ws)])
+    (parse/word word! w))
+
 
   (with-output-to-file
       (build-path *output-dir* "word.csv")
     #:exists 'replace
-    (λ ()
-      (write-csv (map word->csv word-db))))
+    (λ () (write-csv word-db)))
 
   (length word-db))
 
