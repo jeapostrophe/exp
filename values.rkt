@@ -293,10 +293,18 @@
     (let-values+ ([(x y z a b c [d 7]) (f)])
                  (list x y z a b c d))
     (values+ 1 2 3 4 5 6)]
+   [values7opt
+    (let-values+ ([(x y z a b c [d 7]) (f)])
+                 (list x y z a b c d))
+    (values 1 2 3 4 5 6)]
    [values+7kwopt
     (let-values+ ([(x y z a b c #:d [d 7]) (f)])
                  (list x y z a b c d))
     (values+ 1 2 3 4 5 6)]
+   [values7kwopt
+    (let-values+ ([(x y z a b c #:d [d 7]) (f)])
+                 (list x y z a b c d))
+    (values 1 2 3 4 5 6)]
    [values+7rest
     (let-values+ ([(x . xs) (f)])
                  (cons x xs))
