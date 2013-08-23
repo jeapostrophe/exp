@@ -184,7 +184,7 @@
    =>
    (list 13 2 3)))
 
-;; XXX performance
+;; performance
 (module+ main
   (define-syntax-rule
     (stress f [label code fun-body] ...)
