@@ -1,6 +1,7 @@
 #lang racket/base
 (require (for-syntax racket/base
-                     syntax/parse)
+                     syntax/parse
+                     racket/vector)
          racket/list
          racket/match)
 
@@ -95,19 +96,21 @@
               (mutator oi margs.f.idx margs.e)
               ...)))])))
 
+  (define field-static-info->mutable
+    (λ (fsi) (field-static-info (field-static-info-kw fsi) #t)))
+  
   (define-syntax-class field-option
     #:attributes (transform)
     (pattern #:mutable
-             ;; xxx
-             #:attr transform (λ (x) x)))
+             #:attr transform field-static-info->mutable))
 
   (define-syntax-class record-field
     #:attributes (info)
-    ;; xxx ensure kw is not #:?
+    ;; xxx ensure kw is not #:? or #:!
     (pattern kw:keyword
              #:attr info (field-static-info (syntax->datum #'kw) #f))
     (pattern [kw:keyword o:field-option ...]
-             #:attr info 
+             #:attr info
              (foldr
               (λ (e a) (e a))
               (field-static-info (syntax->datum #'kw) #f)
@@ -116,8 +119,11 @@
   (define-syntax-class record-option
     #:attributes (transform)
     (pattern #:mutable
-             ;; xxx
-             #:attr transform (λ (x) x))))
+             #:attr
+             transform
+             (λ (rd)
+               (record-details (vector-map field-static-info->mutable (record-details-fields rd))
+                               (record-details-field->idx rd))))))
 
 (define-syntax (record stx)
   (syntax-parse stx
@@ -216,7 +222,10 @@
     (posn p0 #:x 2 #:!)
     (posn p0 #:y 4 #:!)
     (check-equal? (posn p0 #:x) 2)
-    (check-equal? (posn p0 #:y) 4))
+    (check-equal? (posn p0 #:y) 4)
+    (posn p0 #:x 1 #:y 3 #:!)
+    (check-equal? (posn p0 #:x) 1)
+    (check-equal? (posn p0 #:y) 3))
 
   ;; xxx super
   ;; xxx inspector
@@ -226,5 +235,6 @@
   ;; xxx methods
   ;; xxx auto
   ;; xxx how to get constructor, predicate, and accessor as function
+  ;; xxx guards & contracts
   ;; xxx close records for export
   )
