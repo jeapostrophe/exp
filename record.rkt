@@ -9,33 +9,30 @@
     (in-list (syntax->list e))))
 
 (begin-for-syntax
-  (define-syntax-class field-option
-    (pattern #:mutable))
+  (struct field-static-info (kw mutable?))
 
-  (struct field-static-info (kw))
+  (define-splicing-syntax-class fmap
+    ;; xxx ensure no duplicates
+    (pattern (~seq (~seq f:keyword e:expr) ...)
+             #:attr hash
+             (for/hasheq ([f (in-stx-list #'(f ...))]
+                          [e (in-stx-list #'(e ...))])
+                         (values (syntax->datum f) e))))
 
-  (define-syntax-class record-field
-    #:attributes (info)
-    ;; xxx ensure kw is not #:?
-    (pattern kw:keyword
-             #:attr info #'(field-static-info 'kw))
-    (pattern [kw:keyword o:field-option ...]
-             #:attr info #'(field-static-info 'kw)))
-
-  (define-syntax-class record-option
-    (pattern #:mutable)))
-
-(begin-for-syntax
   (struct
    record-static-info
-   (type constructor predicate accessor mutator
-         fields)
+   (name
+    type constructor predicate accessor mutator
+    fields field->idx)
    #:property prop:match-expander
    (λ (rsi match-stx)
      (syntax-parse match-stx
-       [(_ (~seq fkw:keyword fv:expr) ...)
-        (syntax/loc match-stx
-          (list fv ...))]))
+       [(_ margs:fmap)
+        (with-syntax ([name (record-static-info-name rsi)])
+          (syntax/loc match-stx
+            (and (? (λ (x) (name #:? x)))
+                 (app (λ (x) (name x margs.f)) margs.e)
+                 ...)))]))
    #:property prop:procedure
    (λ (rsi name-stx)
      (syntax-parse name-stx
@@ -44,62 +41,116 @@
         (quasisyntax/loc name-stx
           (#,(record-static-info-predicate rsi) o))]
        ;; Constructor
-       [(_ (~seq fkw:keyword fv:expr) ...)
-        ;; xxx ensure no duplicates
-        (define fv-map
-          (for/hasheq ([fkw (in-stx-list #'(fkw ...))]
-                       [fv (in-stx-list #'(fv ...))])
-                      (values (syntax->datum fkw) fv)))
+       [(_ cargs:fmap)
         ;; xxx check for totality
         (quasisyntax/loc name-stx
           (#,(record-static-info-constructor rsi)
-           #,@(for/list ([f (in-list (record-static-info-fields rsi))])
+           #,@(for/list ([f (in-vector (record-static-info-fields rsi))])
                 (define fkw (field-static-info-kw f))
-                (hash-ref fv-map fkw
-                          (λ () (error 'name:constructor "missing value of field ~e in ~e" fkw fv-map))))))]
+                (hash-ref (attribute cargs.hash) fkw
+                          (λ () (error 'name:constructor "missing value of field ~e in ~e" fkw #'cargs))))))]
        ;; Accessor
        [(_ o:expr fkw:keyword)
         (quasisyntax/loc name-stx
           (#,(record-static-info-accessor rsi)
            o
-           #,(for/or ([f (in-list (record-static-info-fields rsi))]
-                      [i (in-naturals)])
-               (and (eq? (syntax->datum #'fkw) (field-static-info-kw f))
-                    i))))]
-       ;; Updater or mutator
-       [(_ o:expr (~seq fkw:keyword fv:expr) ...)
-        (syntax/loc name-stx
-          #f)]))))
+           #,(hash-ref
+              (record-static-info-field->idx rsi)
+              (syntax->datum #'fkw)
+              (λ ()
+                (error 'name:accessor "unknown field ~e\n" 'fkw)))))]
+       ;; Updater
+       [(_ o:expr uargs:fmap)
+        (quasisyntax/loc name-stx
+          (let ([oi o])
+            (#,(record-static-info-constructor rsi)
+             #,@(for/list ([f (in-vector (record-static-info-fields rsi))]
+                           [i (in-naturals)])
+                  (define fkw (field-static-info-kw f))
+                  (hash-ref (attribute uargs.hash) fkw
+                            (λ ()
+                              (quasisyntax/loc name-stx
+                                (#,(record-static-info-accessor rsi)
+                                 oi
+                                 #,i))))))))]
+       ;; Mutator
+       [(_ o:expr margs:fmap #:!)
+        (with-syntax ([mutator (record-static-info-mutator rsi)]
+                      [(margs.f.idx ...)
+                       (for/list ([f (in-stx-list #'(margs.f ...))])
+                         (hash-ref
+                          (record-static-info-field->idx rsi)
+                          (syntax->datum f)
+                          (λ ()
+                            (error 'name:mutator "unknown field ~e\n" f))))])
+          (syntax/loc name-stx
+            (let ([oi o])
+              (mutator oi margs.f.idx margs.e)
+              ...)))])))
+
+  (define-syntax-class field-option
+    (pattern #:mutable))
+
+  (define-syntax-class record-field
+    #:attributes (info)
+    ;; xxx ensure kw is not #:?
+    (pattern kw:keyword
+             #:attr info (field-static-info (syntax->datum #'kw) #f))
+    (pattern [kw:keyword o:field-option ...]
+             #:attr info (field-static-info (syntax->datum #'kw) #f)))
+
+  (define-syntax-class record-option
+    (pattern #:mutable)))
 
 (define-syntax (record stx)
   (syntax-parse stx
     [(_ name:id (f:record-field ...) o:record-option ...)
-     (quasisyntax/loc stx
-       (begin
-         (define-values
-           (name:type name:constructor name:predicate name:accessor name:mutator)
-           (make-struct-type
-            'name
-            ;; xxx super type
-            #f
-            #,(length (syntax->list #'(f ...)))
-            0
-            #f
-            ;; xxx properties
-            empty
-            ;; xxx inspector
-            (current-inspector)
-            ;; xxx proc-spec
-            #f
-            ;; xxx immutables
-            empty
-            #f
-            'name))
-         (define-syntax name
-           (record-static-info
-            #'name:type #'name:constructor #'name:predicate
-            #'name:accessor #'name:mutator
-            (list f.info ...)))))]))
+     (define finfos (list->vector (attribute f.info)))
+     (with-syntax
+         ([(name:type name:constructor name:predicate name:accessor name:mutator)
+           (generate-temporaries
+            '(name:type name:constructor name:predicate name:accessor name:mutator))]
+          [((fi fkw fidx) ...)
+           (for/list ([f (in-vector finfos)]
+                      [i (in-naturals)])
+             (list f (field-static-info-kw f) i))]
+          [(immutable-idx ...)
+           (for/list ([f (in-vector finfos)]
+                      [i (in-naturals)]
+                      #:unless (field-static-info-mutable? f))
+             i)])
+       (define rsi
+         (record-static-info
+          #'name
+          #'#'name:type #'#'name:constructor #'#'name:predicate
+          #'#'name:accessor #'#'name:mutator
+          finfos
+          (for/hasheq ([fi (in-vector finfos)]
+                       [i (in-naturals)])
+                      (values (field-static-info-kw fi) i))))
+       (quasisyntax/loc stx
+         (begin
+           (define-values
+             (name:type name:constructor name:predicate name:accessor name:mutator)
+             (make-struct-type
+              'name
+              ;; xxx super type
+              #f
+              #,(vector-length finfos)
+              0
+              #f
+              ;; xxx properties
+              empty
+              ;; xxx inspector
+              (current-inspector)
+              ;; xxx proc-spec
+              #f
+              (list immutable-idx ...)
+              #f
+              'name))
+           (define-syntax name #,rsi))))]))
+
+(provide record)
 
 (module+ test
   (require rackunit)
@@ -140,7 +191,7 @@
     (define p0 (posn #:x 1 #:y 3))
     (check-equal? (posn p0 #:x) 1)
     ;; Mutation
-    (posn p0 #:x! 2)
+    (posn p0 #:x 2 #:!)
     (check-equal? (posn p0 #:x) 2))
 
   (let ()
@@ -150,8 +201,8 @@
     (define p0 (posn #:x 1 #:y 3))
     (check-equal? (posn p0 #:x) 1)
     (check-equal? (posn p0 #:y) 3)
-    (posn p0 #:x! 2)
-    (posn p0 #:y! 4)
+    (posn p0 #:x 2 #:!)
+    (posn p0 #:y 4 #:!)
     (check-equal? (posn p0 #:x) 2)
     (check-equal? (posn p0 #:y) 4))
 
@@ -162,4 +213,6 @@
   ;; xxx prefab
   ;; xxx methods
   ;; xxx auto
+  ;; xxx how to get constructor, predicate, and accessor as function
+  ;; xxx close records for export
   )
