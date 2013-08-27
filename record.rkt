@@ -19,11 +19,18 @@
                           [e (in-stx-list #'(e ...))])
                          (values (syntax->datum f) e))))
 
+  (struct record-details (fields field->idx))
+
+  (define (record-static-info-fields rsi)
+    (record-details-fields (record-static-info-details rsi)))
+  (define (record-static-info-field->idx rsi)
+    (record-details-field->idx (record-static-info-details rsi)))
+
   (struct
    record-static-info
    (name
     type constructor predicate accessor mutator
-    fields field->idx)
+    details)
    #:property prop:match-expander
    (λ (rsi match-stx)
      (syntax-parse match-stx
@@ -107,10 +114,7 @@
     [(_ name:id (f:record-field ...) o:record-option ...)
      (define finfos (list->vector (attribute f.info)))
      (with-syntax
-         ([(name:type name:constructor name:predicate name:accessor name:mutator)
-           (generate-temporaries
-            '(name:type name:constructor name:predicate name:accessor name:mutator))]
-          [((fi fkw fidx) ...)
+         ([((fi fkw fidx) ...)
            (for/list ([f (in-vector finfos)]
                       [i (in-naturals)])
              (list f (field-static-info-kw f) i))]
@@ -119,11 +123,8 @@
                       [i (in-naturals)]
                       #:unless (field-static-info-mutable? f))
              i)])
-       (define rsi
-         (record-static-info
-          #'name
-          #'#'name:type #'#'name:constructor #'#'name:predicate
-          #'#'name:accessor #'#'name:mutator
+       (define rd
+         (record-details
           finfos
           (for/hasheq ([fi (in-vector finfos)]
                        [i (in-naturals)])
@@ -148,7 +149,11 @@
               (list immutable-idx ...)
               #f
               'name))
-           (define-syntax name #,rsi))))]))
+           (define-syntax name
+             (record-static-info
+              #'name
+              #'name:type #'name:constructor #'name:predicate #'name:accessor #'name:mutator
+              #,rd)))))]))
 
 (provide record)
 
