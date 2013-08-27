@@ -96,7 +96,10 @@
               ...)))])))
 
   (define-syntax-class field-option
-    (pattern #:mutable))
+    #:attributes (transform)
+    (pattern #:mutable
+             ;; xxx
+             #:attr transform (λ (x) x)))
 
   (define-syntax-class record-field
     #:attributes (info)
@@ -104,56 +107,60 @@
     (pattern kw:keyword
              #:attr info (field-static-info (syntax->datum #'kw) #f))
     (pattern [kw:keyword o:field-option ...]
-             #:attr info (field-static-info (syntax->datum #'kw) #f)))
+             #:attr info 
+             (foldr
+              (λ (e a) (e a))
+              (field-static-info (syntax->datum #'kw) #f)
+              (attribute o.transform))))
 
   (define-syntax-class record-option
-    (pattern #:mutable)))
+    #:attributes (transform)
+    (pattern #:mutable
+             ;; xxx
+             #:attr transform (λ (x) x))))
 
 (define-syntax (record stx)
   (syntax-parse stx
     [(_ name:id (f:record-field ...) o:record-option ...)
      (define finfos (list->vector (attribute f.info)))
-     (with-syntax
-         ([((fi fkw fidx) ...)
-           (for/list ([f (in-vector finfos)]
+     (define rd
+       (foldr
+        (λ (e a) (e a))
+        (record-details
+         finfos
+         (for/hasheq ([fi (in-vector finfos)]
                       [i (in-naturals)])
-             (list f (field-static-info-kw f) i))]
-          [(immutable-idx ...)
-           (for/list ([f (in-vector finfos)]
-                      [i (in-naturals)]
-                      #:unless (field-static-info-mutable? f))
-             i)])
-       (define rd
-         (record-details
-          finfos
-          (for/hasheq ([fi (in-vector finfos)]
-                       [i (in-naturals)])
-                      (values (field-static-info-kw fi) i))))
-       (quasisyntax/loc stx
-         (begin
-           (define-values
-             (name:type name:constructor name:predicate name:accessor name:mutator)
-             (make-struct-type
-              'name
-              ;; xxx super type
-              #f
-              #,(vector-length finfos)
-              0
-              #f
-              ;; xxx properties
-              empty
-              ;; xxx inspector
-              (current-inspector)
-              ;; xxx proc-spec
-              #f
-              (list immutable-idx ...)
-              #f
-              'name))
-           (define-syntax name
-             (record-static-info
-              #'name
-              #'name:type #'name:constructor #'name:predicate #'name:accessor #'name:mutator
-              #,rd)))))]))
+                     (values (field-static-info-kw fi) i)))
+        (attribute o.transform)))
+     (quasisyntax/loc stx
+       (begin
+         (define-values
+           (name:type name:constructor name:predicate name:accessor name:mutator)
+           (make-struct-type
+            'name
+            ;; xxx super type
+            #f
+            #,(vector-length (record-details-fields rd))
+            0
+            #f
+            ;; xxx properties
+            empty
+            ;; xxx inspector
+            (current-inspector)
+            ;; xxx proc-spec
+            #f
+            (list
+             #,@(for/list ([f (in-vector (record-details-fields rd))]
+                           [i (in-naturals)]
+                           #:unless (field-static-info-mutable? f))
+                  i))
+            #f
+            'name))
+         (define-syntax name
+           (record-static-info
+            #'name
+            #'name:type #'name:constructor #'name:predicate #'name:accessor #'name:mutator
+            #,rd))))]))
 
 (provide record)
 
