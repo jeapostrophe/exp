@@ -201,6 +201,8 @@
     (check-equal? (match p1 [(posn #:y y #:x x) (list x y)])
                   (list 2 3))
     (check-equal? (match p1 [(posn #:x x) (list x 3)])
+                  (list 2 3))
+    (check-equal? (match p1 [(posn) (list 2 3)])
                   (list 2 3)))
 
   (let ()
@@ -234,6 +236,7 @@
   ;; xxx prefab
   ;; xxx methods
   ;; xxx auto
+  ;; xxx multiple refs at same time?
   ;; xxx how to get constructor, predicate, and accessor as function
   ;; xxx guards & contracts
   ;; xxx close records for export
