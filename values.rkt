@@ -322,21 +322,27 @@
     (values 1 2 3 4 5 6 7)]))
 
 ;; XXX contracts
-(begin-for-syntax
-  (define-splicing-syntax-class dom
-    (pattern (~seq e:expr))
-    (pattern (~seq kw:keyword e:expr))))
-
 (define-syntax (->+ stx)
   (syntax-parse stx
-    [(_ (m:dom ...)
+    [(_ (m-e:expr ...)
         ((~literal values+)
-         rm:dom ...
+         ((~or rm-e:expr
+               (~seq rm-kw:keyword rm-kw-e:expr))
+          ...)
+         (~optional ((~or ro-e:expr
+                          (~seq ro-kw:keyword ro-kw-e:expr))
+                     ...)
+                    #:defaults ([(ro-e 1) empty]
+                                [(ro-kw 1) empty]
+                                [(ro-kw-e 1) empty]))
          (~optional (~seq #:rest rr-ctc:expr)
-                    #:defaults ([rr-ctc #'any/c]))))
+                    #:defaults ([rr-ctc #'#f]))))
      (syntax/loc stx
-       (let ([ms (list m ...)]
-             [rms (list rm ...)]
+       (let ([ms (list m-e ...)]
+             [rms (list rm-e ...)]
+             [ros (list ro-e ...)]
+             [kw-ms (make-immutable-hasheq (list (cons 'rm-kw rm-kw-e) ...))]
+             [kw-os (make-immutable-hasheq (list (cons 'ro-kw ro-kw-e) ...))]
              [rr-ctcv rr-ctc])
          (make-contract
           #:name '->+
@@ -348,9 +354,42 @@
                 (λ args
                   (unless (= (length args) (length ms))
                     (raise-blame-error b args "expected ~e args" (length ms)))
-                  (apply f
-                         (for/list ([a (in-list args)])
-                           a)))
+                  (call-with-values+
+                   (λ ()
+                     (apply f
+                            (for/list ([a (in-list args)]
+                                       [m (in-list ms)])
+                              (((contract-projection m) (blame-swap b)) a))))
+                   (make-keyword-procedure
+                    (λ (kws kw-res . res)
+                      (unless rr-ctcv
+                        (unless (<= (length res) (+ (length rms) (length ros)))
+                          (raise-blame-error b res "expected ~e plus ~e results, given ~e"
+                                             (length rms)
+                                             (length ros)
+                                             (length res))))
+                      (unless (for/and ([kw (in-hash-keys kw-ms)])
+                                (member kw kws))
+                        (raise-blame-error b kws "expected ~a kw args" kw-ms))
+                      (keyword-apply
+                       values+
+                       kws
+                       (for/list ([kw (in-list kws)]
+                                  [kw-a (in-list kw-res)])
+                         (define ctc
+                           (hash-ref kw-ms kw
+                                     (λ ()
+                                       (hash-ref kw-os kw
+                                                 (λ ()
+                                                   (raise-blame-error b kw "unexpected kw result ~e" kw))))))
+                         (((contract-projection ctc) b) kw-a))
+                       (append
+                        (for/list ([a (in-list res)]
+                                   [m (in-list (append rms ros))])
+                          (((contract-projection m) b) a))
+                        (if rr-ctcv
+                          (((contract-projection rr-ctcv) b) (list-tail res (length rms)))
+                          empty)))))))
                 (raise-blame-error b f "expected procedure")))))))]))
 
 (module+ test
@@ -363,14 +402,30 @@
   (define-syntax-rule (cbad c f)
     (check-exn exn:fail:contract? (λ () (ctest c f))))
   (define-syntax-rule (cboth x c f)
-    (let ([ci c]
-          [fi (λ (x) f)])
-      (cok ci (fi #t))
-      (cbad ci (fi 0))))
+    (begin
+      (cok c ((λ (x) f) #t))
+      (cbad c ((λ (x) f) 0))))
 
   (cboth x (-> boolean?) (λ () x))
+
   (cboth x (->* () (values boolean?)) (λ () x))
-  (cboth x (->+ () (values+ boolean?)) (λ () x))
-  (cboth x (->+ () (values+ boolean? boolean?)) (λ () (values+ x x)))
-  (cboth x (->+ () (values+ boolean? #:a boolean?)) (λ () (values+ x #:a x)))
-  (cboth x (->+ () (values+ boolean? #:rest (listof boolean?))) (λ () (values+ x x x))))
+
+  (cboth x (->+ () (values+ (boolean?))) (λ () x))
+  (cbad (->+ () (values+ (boolean?))) (λ () (values+ #f #:a 0)))
+  (cboth x (->+ () (values+ (boolean? any/c))) (λ () (values+ x x)))
+  (cboth x (->+ () (values+ (any/c boolean?))) (λ () (values+ x x)))
+  (cboth x (->+ () (values+ (boolean?) (any/c))) (λ () (values+ x)))
+  (cboth x (->+ () (values+ (boolean?) (boolean?))) (λ () (values+ x)))
+  (cboth x (->+ () (values+ (boolean?) (any/c))) (λ () (values+ x x)))
+  (cboth x (->+ () (values+ (any/c) (boolean?))) (λ () (values+ x x)))
+
+  (cbad (->+ () (values+ (boolean? #:a any/c))) (λ () (values+ #f)))
+  (cboth x (->+ () (values+ (boolean? #:a any/c))) (λ () (values+ x #:a x)))
+  (cboth x (->+ () (values+ (any/c #:a boolean?))) (λ () (values+ x #:a x)))
+  (cboth x (->+ () (values+ (boolean?) (#:a boolean?))) (λ () (values+ x)))
+  (cboth x (->+ () (values+ (boolean?) (#:a any/c))) (λ () (values+ x)))
+  (cboth x (->+ () (values+ (boolean?) (#:a boolean?))) (λ () (values+ x #:a x)))
+  (cboth x (->+ () (values+ (any/c) (#:a boolean?))) (λ () (values+ x #:a x)))
+
+  (cboth x (->+ () (values+ (boolean?) #:rest (listof any/c))) (λ () (values+ x x x)))
+  (cboth x (->+ () (values+ (any/c) #:rest (listof boolean?))) (λ () (values+ x x x))))
