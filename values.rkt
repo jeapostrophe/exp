@@ -4,6 +4,8 @@
                      syntax/stx
                      racket/list
                      unstable/syntax)
+         racket/contract/base
+         racket/contract/combinator
          racket/list
          racket/match
          racket/package)
@@ -195,13 +197,14 @@
                      code)))
            ...)))
 
-  (define N (expt 10 6))
+  (define N (expt 10 1))
   (define (stress* fs)
     (define ts
       (for/list ([l*f (in-list fs)])
         (match-define (cons l f) l*f)
-        (for ([i (in-range 3)])
-          (collect-garbage))
+        (when #f
+          (for ([i (in-range 3)])
+            (collect-garbage)))
         (define-values (a ct rt gt)
           (time-apply
            (λ ()
@@ -211,11 +214,15 @@
         (cons l ct)))
     (define sts
       (sort ts < #:key cdr))
+    (define (/* x y)
+      (if (zero? y)
+        y
+        (/ x y)))
     (for ([l*t (in-list sts)])
       (match-define (cons l t) l*t)
       (printf "~a - ~a - ~a\n"
               (real->decimal-string
-               (/ t (cdr (first sts))))
+               (/* t (cdr (first sts))))
               l
               (real->decimal-string
                t))))
@@ -315,3 +322,55 @@
     (values 1 2 3 4 5 6 7)]))
 
 ;; XXX contracts
+(begin-for-syntax
+  (define-splicing-syntax-class dom
+    (pattern (~seq e:expr))
+    (pattern (~seq kw:keyword e:expr))))
+
+(define-syntax (->+ stx)
+  (syntax-parse stx
+    [(_ (m:dom ...)
+        ((~literal values+)
+         rm:dom ...
+         (~optional (~seq #:rest rr-ctc:expr)
+                    #:defaults ([rr-ctc #'any/c]))))
+     (syntax/loc stx
+       (let ([ms (list m ...)]
+             [rms (list rm ...)]
+             [rr-ctcv rr-ctc])
+         (make-contract
+          #:name '->+
+          #:first-order procedure?
+          #:projection
+          (λ (b)
+            (λ (f)
+              (if (procedure? f)
+                (λ args
+                  (unless (= (length args) (length ms))
+                    (raise-blame-error b args "expected ~e args" (length ms)))
+                  (apply f
+                         (for/list ([a (in-list args)])
+                           a)))
+                (raise-blame-error b f "expected procedure")))))))]))
+
+(module+ test
+  (require rackunit)
+
+  (define-syntax-rule (ctest c f)
+    ((contract c f 'pos 'neg)))
+  (define-syntax-rule (cok c f)
+    (check-not-exn (λ () (ctest c f))))
+  (define-syntax-rule (cbad c f)
+    (check-exn exn:fail:contract? (λ () (ctest c f))))
+  (define-syntax-rule (cboth x c f)
+    (let ([ci c]
+          [fi (λ (x) f)])
+      (cok ci (fi #t))
+      (cbad ci (fi 0))))
+
+  (cboth x (-> boolean?) (λ () x))
+  (cboth x (->* () (values boolean?)) (λ () x))
+  (cboth x (->+ () (values+ boolean?)) (λ () x))
+  (cboth x (->+ () (values+ boolean? boolean?)) (λ () (values+ x x)))
+  (cboth x (->+ () (values+ boolean? #:a boolean?)) (λ () (values+ x #:a x)))
+  (cboth x (->+ () (values+ boolean? #:rest (listof boolean?))) (λ () (values+ x x x))))
