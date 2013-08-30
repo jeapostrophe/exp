@@ -1,0 +1,42 @@
+\documentclass[letterpaper,twocolumn,12pt]{article}
+
+\usepackage[margin=0.1in]{geometry}
+
+\setlength{\columnsep}{5px}
+\setlength{\columnseprule}{2px}
+
+\usepackage{xparse}
+\usepackage{picture}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[space]{grffile}
+
+% \setlength{\fboxsep}{0pt}
+\DeclareExpandableDocumentCommand{\action}{m}{{\colorbox{gray!20}{\makebox[260px][c]{\huge#1}}}}
+
+\DeclareExpandableDocumentCommand{\exercise}{m m}{\makebox[260px][c]{\makebox[200px][c]{\raisebox{30px}{\LARGE #1}}\makebox[60px][r]{\includegraphics[height=60px,width=60px, keepaspectratio=true]{#2}}}}
+
+\begin{document}
+\begin{center}
+
+\q{What year did ARPANET migrate to TCP/IP, creating what would be the Internet?}
+\q{In 2013 lava is flowing from the Kilauea volcano on Hawaii's Big Island. What year did this eruption start?}
+\q{In what year was the final episode of M*A*S*H aired?}
+\q{In what year did Michael Jackson first perform the ``moonwalk''?}
+\q{In what year did Tokyo Disneyland open?}
+\q{In what year did the first man-made object leave the vicinity of the planets of the Solar System? (Bonus: What was the object? \ba{Pioneer 10})}
+\q{In what year did the product that became the Nintendo Entertainment System launch? (Bonus: What was its original name? \ba{The Nintendo Family Computer, or Famicom})}
+\q{In what year was GPS declassified for civilian use? (Bonus: Who made this announcement? \ba{President Ronald Reagan})}
+\q{In what year was the first African-American crowned Miss America? (Bonus: Who was it? \ba{Vanessa Williams})}
+\q{In what year was the GNU Project announced? (Bonus: What does GNU stand for? \ba{GNU's Not Unix})}
+\q{In what year was Martin Luther King, Jr. Day created?}
+\q{In what year was DARE launched? (Bonus: What does DARE stand for? \ba{Drug Abuse Resistance Education})}
+\q{In what year was the McNugget invented?}
+\q{In what year was the first minivan produced? (Bonus: What was it? \ba{The Dodge Caravan and Plymouth Voyager})}
+\q{In what year was the last DeLorean produced?}
+\q{In what year did the last King of Italy die? (Bonus: What was his name? \ba{Umberto II})}
+\q{In what year did the last survivor of the Titanic die? (Bonus: Who were they? \ba{Sid Daniels})}
+
+
+\end{center}
+\end{document}
