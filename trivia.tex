@@ -1,20 +1,15 @@
-\documentclass[letterpaper,twocolumn,12pt]{article}
+\documentclass[landscape,twocolumn,12pt]{article}
 
 \usepackage[margin=0.1in]{geometry}
-
-\setlength{\columnsep}{5px}
-\setlength{\columnseprule}{2px}
+\usepackage{xifthen}
 
 \usepackage{xparse}
-\usepackage{picture}
-\usepackage{xcolor}
-\usepackage{graphicx}
-\usepackage[space]{grffile}
 
-% \setlength{\fboxsep}{0pt}
-\DeclareExpandableDocumentCommand{\action}{m}{{\colorbox{gray!20}{\makebox[260px][c]{\huge#1}}}}
+\newcounter{qs}
 
-\DeclareExpandableDocumentCommand{\exercise}{m m}{\makebox[260px][c]{\makebox[200px][c]{\raisebox{30px}{\LARGE #1}}\makebox[60px][r]{\includegraphics[height=60px,width=60px, keepaspectratio=true]{#2}}}}
+\DeclareExpandableDocumentCommand{\q}{m}{\vspace*{\fill}\parbox[c][][c]{0.4\textwidth}{\Huge #1}\vspace*{\fill} \addtocounter{qs}{1} \ifthenelse{\value{qs} = 3}{\newpage \setcounter{qs}{0}}{}}
+
+\DeclareExpandableDocumentCommand{\ba}{m}{{\em #1}}
 
 \begin{document}
 \begin{center}
@@ -36,7 +31,25 @@
 \q{In what year was the last DeLorean produced?}
 \q{In what year did the last King of Italy die? (Bonus: What was his name? \ba{Umberto II})}
 \q{In what year did the last survivor of the Titanic die? (Bonus: Who were they? \ba{Sid Daniels})}
-
+\q{In what year was Aesop's Fables translated into Latin?}
+\q{What is the largest number such that all coprimes smaller than itself are prime?}
+\q{How many sides does a tricontagon have?}
+\q{What is the atomic number of zinc?}
+\q{How many major and minor keys are there in Western tonal music?}
+\q{What is the minimum age of United States senators?}
+\q{What wedding anniversary is the ``pearl'' anniversary?}
+\q{What is in the international calling code for Greece?}
+\q{How many tracks are on ``The White Album''? (Bonus: What is the 30th track? \ba{Good Night}) (Bonus Bonus: Who sings it? \ba{Starr})}
+\q{How many pieces of silver was Judas Iscariot paid?}
+\q{If you have scored twice on your opponent in tennis, how many points do you have?}
+\q{How many teams are in the MLB, NBA, and NHL?}
+\q{How many states were there in the United States in 1848? (Bonus: What was the 30th state? \ba{Wisconsin})}
+\q{In what year was  Kate Bosworth born? (Bonus: Who is she? \ba{She plays Lois Lane.})}
+\q{In what year was Michelle Branch born?}
+\q{In what year was Chris Hemsworth born? (Bonus: Who is he? \ba{He plays Thor.})}
+\q{In what year was Jon Lech Johnson born? (Bonus: Who is he? \ba{He cracked the DVD encryption system, as well as FairPlay, Apple Lossless. WMV9, among other DRM formats.})}
+\q{In what year did the creator of Tintin die? (Bonus: Who is it? \ba{George Prosper Remi})}
+\q{In what year did the heaviest human being ever recorded die? (Bonus: How heavy was he? \ba{1400 lbs}) (Bonus Bonus: How old was he? \ba{41})}
 
 \end{center}
 \end{document}
