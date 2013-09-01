@@ -838,15 +838,15 @@ given a prefix arg."
  mode-line-format
  '((:propertize "%p" face mode-line-folder-face)
    " "
-                                        ; Position, including warning for 80 columns
+   ;; Position, including warning for 80 columns
    (:propertize "%4l:" face mode-line-position-face)
    (:eval (propertize "%3c" 'face
                       (if (>= (current-column) 80)
                           'mode-line-80col-face
                         'mode-line-position-face)))
-                                        ; emacsclient [default -- keep?]
-                                        ;mode-line-client
-                                        ; read-only or modified status
+   ;; emacsclient [default -- keep?]
+   ;;mode-line-client
+   ;; read-only or modified status
    " "
    (:eval
     (cond (buffer-read-only
@@ -855,15 +855,15 @@ given a prefix arg."
            (propertize " ** " 'face 'mode-line-modified-face))
           (t "      ")))
    " "
-                                        ; directory and buffer/file name
+   ;; directory and buffer/file name
    ;;(:propertize (:eval (shorten-directory default-directory 5))
    ;;             face mode-line-folder-face)
    (:propertize (:eval (je/abbreviate-file-name (buffer-name)))
                 face mode-line-filename-face)
-                                        ; narrow [default -- keep?]
-                                        ;" %n "
-                                        ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
-                                        ;(vc-mode vc-mode)
+   ;; narrow [default -- keep?]
+   ;;" %n "
+   ;; mode indicators: vc, recursive edit, major mode, minor modes, process, global
+   ;;(vc-mode vc-mode)
    "  %["
    (:propertize mode-name
                 face mode-line-mode-face)
@@ -974,7 +974,7 @@ given a prefix arg."
                 tags-file-name
                 register-alist)))
 
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 ;; Broken in switch to Emacs 24
 ;;(add-to-list 'load-path "~/Dev/dist/nxhtml/util")
