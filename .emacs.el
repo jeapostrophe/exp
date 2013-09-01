@@ -4,8 +4,9 @@
 (byte-recompile-directory "~/.emacs.d/")
 
 ;; font & color
-(set-face-attribute 'default nil 
-                    :font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
+(set-face-attribute
+ 'default nil
+ :font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
 (require 'color-theme)
 (color-theme-initialize)
 (add-to-list 'load-path "~/Dev/dist/solarized/emacs-colors-solarized")
@@ -288,12 +289,12 @@ given a prefix arg."
 (server-start)
 
 ;;;;; line numbering
-                                        ;(global-linum-mode 1)
+;;(global-linum-mode 1)
 
-                                        ;(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode org-mode))
-                                        ;(defun linum-on ()
-                                        ;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
-                                        ;    (linum-mode 1)))
+;;(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode org-mode))
+;;(defun linum-on ()
+;;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
+;;    (linum-mode 1)))
 
 ;;;;; auto-fill
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -524,7 +525,7 @@ given a prefix arg."
   (desktop-save-in-desktop-dir)
   (save-some-buffers t))
 
-(defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
+;; (defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
 (global-set-key (kbd "s-S") 'je/save-all)
 
 ;; Org Mode
@@ -1022,12 +1023,12 @@ given a prefix arg."
 ;; XXX make this play nicer with C++
 
 ;; Auto saving
-                                        ;(autoload 'paredit-mode "paredit"
-                                        ;  "Minor mode for pseudo-structurally editing Lisp code." t)
-                                        ;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
-                                        ;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
-                                        ;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
-                                        ;(add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
+;;(autoload 'paredit-mode "paredit"
+;;  "Minor mode for pseudo-structurally editing Lisp code." t)
+;;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
+;;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
+;;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+;;(add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
 
 ;; Insert lambda
 (global-set-key (kbd "s-\\")
