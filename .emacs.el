@@ -991,7 +991,10 @@ given a prefix arg."
 (add-to-list 'load-path "~/Dev/dist/autopair-read-only")
 (require 'autopair)
 
-(add-hook 'scheme-mode-hook #'(lambda () (autopair-mode t) (flymake-mode t)))
+(add-hook 'scheme-mode-hook 
+          #'(lambda () 
+              ;; (flymake-mode t)
+              (autopair-mode t)))
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
 
 ;; CUA
@@ -1117,18 +1120,18 @@ given a prefix arg."
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
 
-(require 'flymake)
-(require 'flymake-cursor)
-(defun flymake-racket-init ()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "racket" (list "-qf" local-file))))
-(setq flymake-gui-warnings-enabled nil)
-(push '("\\.rkt\\'" flymake-racket-init)
-      flymake-allowed-file-name-masks)
+;; (require 'flymake)
+;; (require 'flymake-cursor)
+;; (defun flymake-racket-init ()
+;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                      'flymake-create-temp-inplace))
+;;          (local-file (file-relative-name
+;;                       temp-file
+;;                       (file-name-directory buffer-file-name))))
+;;     (list "racket" (list "-qf" local-file))))
+;; (setq flymake-gui-warnings-enabled nil)
+;; (push '("\\.rkt\\'" flymake-racket-init)
+;;       flymake-allowed-file-name-masks)
 
 ;; cg mode
 (add-to-list 'load-path "~/Dev/dist/cg-mode")
