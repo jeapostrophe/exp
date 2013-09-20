@@ -10,6 +10,9 @@ case $1 in
     class-off)
         xrandr --output DP2 --off
         ;;
+    sloop)
+        xrandr --output DP2 --mode 1280x1024
+        ;;
     m)
 # old was 1440x900, and this gets that exactly
         xrandr --output eDP1 --mode 2560x1600 --scale 0.5625x0.5625 --primary
