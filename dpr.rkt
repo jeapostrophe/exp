@@ -1,7 +1,6 @@
 #lang racket/base
 (require (for-syntax racket/base
                      syntax/parse)
-         racket/list
          racket/stxparam)
 
 (define-syntax-parameter queue-defer #f)
@@ -25,21 +24,48 @@
 (define current-panic (make-parameter #f))
 (define (recover)
   (define p (current-panic))
-  (and p 
+  (and p
        (set-exn:fail:panic-recovered?! p #t)
        (exn:fail:panic-v p)))
+
+(define-syntax (define/dpr-v1 stx)
+  (syntax-parse stx
+    [(_ (fun . fmls) . body)
+     (syntax/loc stx
+       (define (fun . fmls)
+         (define ds null)
+         (define (this-queue-defer f)
+           (set! ds (cons f ds)))
+         (define (run-defers)
+           (for ([d (in-list ds)])
+             (d)))
+         (begin0
+           (with-handlers ([exn:fail:panic?
+                            (λ (p)
+                              (parameterize ([current-panic p])
+                                (run-defers))
+                              (unless (exn:fail:panic-recovered? p)
+                                (raise p)))])
+             (let/ec this-return
+               (syntax-parameterize ([queue-defer #'this-queue-defer]
+                                     [return (make-rename-transformer #'this-return)])
+                 . body))
+             (run-defers)))))]))
 
 (define-syntax (define/dpr stx)
   (syntax-parse stx
     [(_ (fun . fmls) . body)
      (syntax/loc stx
        (define (fun . fmls)
-         (define ds empty)
+         (define ds null)
          (define (this-queue-defer f)
-           (set! ds (cons f ds)))
+           (set! ds (cons (box f) ds)))
          (define (run-defers)
-           (for ([d (in-list ds)])
-             (d)))
+           (for ([db (in-list ds)])
+             (define d (unbox db))
+             (set-box! db #f)
+             (when d
+               (d))))
          (begin0
            (with-handlers ([exn:fail:panic?
                             (λ (p)
@@ -64,7 +90,7 @@
       (define os (open-output-string))
       (check-equal? (parameterize ([current-output-port os])
                       (with-handlers ([exn:fail:panic?
-                                       (λ (p) 
+                                       (λ (p)
                                          (exn:fail:panic-v p))])
                         c))
                     e)
@@ -110,4 +136,14 @@
     (g (add1 i)))
 
   (test (main #t) (void) "Calling g.\nPrinting in g 0\nPrinting in g 1\nPrinting in g 2\nPrinting in g 3\nPanicking!\nDefer in g 3\nDefer in g 2\nDefer in g 1\nDefer in g 0\nRecovered in f 4\nReturned normally from f.\n")
-  (test (main #f) "4" "Calling g.\nPrinting in g 0\nPrinting in g 1\nPrinting in g 2\nPrinting in g 3\nPanicking!\nDefer in g 3\nDefer in g 2\nDefer in g 1\nDefer in g 0\n"))
+  (test (main #f) "4" "Calling g.\nPrinting in g 0\nPrinting in g 1\nPrinting in g 2\nPrinting in g 3\nPanicking!\nDefer in g 3\nDefer in g 2\nDefer in g 1\nDefer in g 0\n")
+
+  (define/dpr (panic-in-defer)
+    (defer (displayln 0))
+    (defer (displayln 1))
+    (defer
+      (displayln 2)
+      (panic '!))
+    (defer (displayln 3)))
+
+  (test (panic-in-defer) '! "3\n2\n1\n0\n"))
