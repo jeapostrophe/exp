@@ -1,6 +1,9 @@
 #lang racket/base
 (require web-server/web-server
+         web-server/http
          (prefix-in files: web-server/dispatchers/dispatch-files)
+         (prefix-in seq: web-server/dispatchers/dispatch-sequencer)
+         (prefix-in lift: web-server/dispatchers/dispatch-lift)
          web-server/dispatchers/filesystem-map
          racket/cmdline)
 
@@ -12,7 +15,8 @@
  #:args (base)
  (serve
   #:dispatch
-  (files:make #:url->path (make-url->path base))
+  (seq:make (files:make #:url->path (make-url->path base))
+            (lift:make (λ (req) (response/xexpr "Fail"))))
   #:port the-port))
 
 (do-not-return)
