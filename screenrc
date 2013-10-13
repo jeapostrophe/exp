@@ -103,6 +103,8 @@ screen -t irc forever irssi
 screen -t journal forever journalctl -f
 screen zsh_dir ~courses
 screen zsh_dir ~330
+screen zsh_dir ~330/notes
+screen zsh_dir ~/Downloads
 screen zsh_dir ~github/grade-samurai 
 screen zsh_dir ~github/grade-samurai/courses/2013-fall-330/
 screen zsh_dir ~430
@@ -116,4 +118,10 @@ screen zsh_dir ~gb
 screen zsh_dir ~gb
 screen zsh_dir ~github
 screen zsh_dir ~github
+screen zsh_dir ~github/rune
+screen zsh_dir ~github/rune
+screen zsh_dir ~github/racket2
+screen zsh_dir ~pkgi
+screen zsh_dir ~plt
+screen zsh_dir ~plt
 screen zsh_dir ~jay
