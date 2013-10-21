@@ -88,27 +88,7 @@
          (values changed? top (cons c ncs))]))
     (values #f
             top
-            cs)
-    #;
-    (let ()
-    (define before
-    (cell-can-be top))
-    (define after
-    (for/fold ([top-cb before])
-    ([n (in-sequences (in-list cs) (in-list ocs))])
-    (if (same-row? top n)
-    (set-subtract top-cb (cell-can-be n))
-    top-cb)))
-    (if (and (= 1 (set-count after))
-    (not (= (set-count before)
-    (set-count after))))
-    (values #t
-    (struct-copy cell top
-    [can-be after])
-    cs)
-    (values #f
-    top
-    cs)))))
+            cs)))
 
 (define (find-pivot f l)
   (let loop ([tried empty]
@@ -193,15 +173,27 @@
 (module+ main
   (draw-it!
    (solve-it
+    ;; (board
+    ;;  "53 | 7 |   "
+    ;;  "6  |195|   "
+    ;;  " 98|   | 6 "
+    ;;  "-----------"
+    ;;  "8  | 6 |  3"
+    ;;  "4  |8 3|  1"
+    ;;  "7  | 2 |  6"
+    ;;  "-----------"
+    ;;  " 6 |   |28 "
+    ;;  "   |419|  5"
+    ;;  "   | 8 | 79")
     (board
-     "53 | 7 |   "
-     "6  |195|   "
-     " 98|   | 6 "
+     " 7 | 2 |  5"
+     "  9| 87|  3"
+     " 6 |   | 4 "
      "-----------"
-     "8  | 6 |  3"
-     "4  |8 3|  1"
-     "7  | 2 |  6"
+     "   | 6 | 17"
+     "9 4|   |8 6"
+     "71 | 5 |   "
      "-----------"
-     " 6 |   |28 "
-     "   |419|  5"
-     "   | 8 | 79"))))
+     " 9 |   | 8 "
+     "5  |21 |4  "
+     "4  | 9 | 6 "))))
