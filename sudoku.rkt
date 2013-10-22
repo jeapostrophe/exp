@@ -65,27 +65,81 @@
           (seteq (string->number (string c))))))
 
 (define (propagate-one top cs)
-  (if (cell-solved? top)
-    (for/fold ([changed? #f] [_ top] [ncs empty])
-        ([c (in-list cs)])
-      (cond
-        [(neighbor-of? top c)
-         (define before
-           (cell-can-be c))
-         (define after
-           (set-subtract before (cell-can-be top)))
-         (if (= (set-count before)
-                (set-count after))
-           (values changed?
-                   top
-                   (cons c ncs))
-           (values #t
-                   top
-                   (cons (struct-copy cell c
-                                      [can-be after])
-                         ncs)))]
-        [else
-         (values changed? top (cons c ncs))]))
+  (let/ec return
+    ;; If this is solved, then push its constraints to neighbors
+    (when (cell-solved? top)
+      (define-values (changed? ncs)
+        (for/fold ([changed? #f] [ncs empty])
+            ([c (in-list cs)])
+          (cond
+            [(neighbor-of? top c)
+             (define before
+               (cell-can-be c))
+             (define after
+               (set-subtract before (cell-can-be top)))
+             (if (= (set-count before)
+                    (set-count after))
+               (values changed?
+                       (cons c ncs))
+               (values #t
+                       (cons (struct-copy cell c
+                                          [can-be after])
+                             ncs)))]
+            [else
+             (values changed? (cons c ncs))])))
+      (return changed? top ncs))
+
+    ;; If this is not solved, then look for cliques that force it to
+    ;; be one thing
+    (define (try-clique same-x?)
+      (define before (cell-can-be top))
+      (define after
+        (for/fold ([before before])
+            ([c (in-list cs)])
+          (if (same-x? top c)
+            (set-subtract before (cell-can-be c))
+            before)))
+      (when (= (set-count after) 1)
+        (return #t
+                (struct-copy cell top
+                             [can-be after])
+                cs)))
+
+    (try-clique same-row?)
+    (try-clique same-col?)
+    (try-clique same-box?)
+
+    ;; Look for two cells in our clique that have the same can-be sets
+    ;; and remove them from everything else
+    (define (only2-clique same-x?)
+      (define before (cell-can-be top))
+      (when (= (set-count before) 2)
+        (define other
+          (for/or ([c (in-list cs)])
+            (and (same-x? top c) (equal? before (cell-can-be c)) c)))
+        (when other
+          (define changed? #f)
+          (define ncs
+            (for/list ([c (in-list cs)])
+              (cond
+                [(and (not (eq? other c)) (same-x? top c))
+                 (define cbefore
+                   (cell-can-be c))
+                 (define cafter
+                   (set-subtract cbefore before))
+                 (unless (equal? cbefore cafter)
+                   (set! changed? #t))                 
+                 (struct-copy cell c
+                              [can-be cafter])]
+                [else
+                 c])))
+          (return changed? top
+                  ncs))))
+
+    (only2-clique same-row?)
+    (only2-clique same-col?)
+    (only2-clique same-box?)
+
     (values #f
             top
             cs)))
@@ -118,7 +172,7 @@
 
 (require 2htdp/image
          2htdp/universe)
-(define (fig s) (text s 12 "black"))
+(define (fig s) (text/font s 12 "black" #f 'modern 'normal 'normal #f))
 (define MIN-FIG (fig "1"))
 (define CELL-W (* 3 (image-width MIN-FIG)))
 (define CELL-H (* 3 (image-height MIN-FIG)))
@@ -127,10 +181,15 @@
 (define (draw-it! gs)
   (define (move-right ds)
     (match-define (draw-state before after) ds)
-    (if (stream-empty? (stream-rest after))
-      ds
-      (draw-state (cons (stream-first after) before)
-                  (stream-rest after))))
+    (cond
+      [(stream-empty? (stream-rest after))
+       ds]
+      [else
+       (printf "unfold\n")
+       (begin0
+         (draw-state (cons (stream-first after) before)
+                     (stream-rest after))
+         (printf "unfold done\n"))]))
   (define (draw-can-be can-be)
     (define (figi i)
       (if (set-member? can-be i)
@@ -171,20 +230,23 @@
             (on-draw draw-draw-state)))
 
 (module+ main
-  (draw-it!
-   (solve-it
-    ;; (board
-    ;;  "53 | 7 |   "
-    ;;  "6  |195|   "
-    ;;  " 98|   | 6 "
-    ;;  "-----------"
-    ;;  "8  | 6 |  3"
-    ;;  "4  |8 3|  1"
-    ;;  "7  | 2 |  6"
-    ;;  "-----------"
-    ;;  " 6 |   |28 "
-    ;;  "   |419|  5"
-    ;;  "   | 8 | 79")
+  ;; Wikipedia Example
+  (define b1
+    (board
+     "53 | 7 |   "
+     "6  |195|   "
+     " 98|   | 6 "
+     "-----------"
+     "8  | 6 |  3"
+     "4  |8 3|  1"
+     "7  | 2 |  6"
+     "-----------"
+     " 6 |   |28 "
+     "   |419|  5"
+     "   | 8 | 79"))
+
+  ;; "Hard" example
+  (define b2
     (board
      " 7 | 2 |  5"
      "  9| 87|  3"
@@ -196,4 +258,23 @@
      "-----------"
      " 9 |   | 8 "
      "5  |21 |4  "
-     "4  | 9 | 6 "))))
+     "4  | 9 | 6 "))
+
+  ;; "Evil" example
+  (define b3
+    (board
+     "  8|   | 45"
+     "   | 8 |9  "
+     "  2|4  |   "
+     "-----------"
+     "5  |  1|76 "
+     " 1 | 7 | 8 "
+     " 79|5  |  1"
+     "-----------"
+     "   |  7|4  "
+     "  7| 6 |   "
+     "65 |   |3  "))
+
+  (draw-it!
+   (solve-it
+    b3)))
