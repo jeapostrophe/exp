@@ -1,7 +1,6 @@
 #lang racket/base
 (require racket/match
          racket/list
-         racket/stream
          racket/set)
 
 (define anything (seteq 1 2 3 4 5 6 7 8 9))
@@ -128,7 +127,7 @@
                  (define cafter
                    (set-subtract cbefore before))
                  (unless (equal? cbefore cafter)
-                   (set! changed? #t))                 
+                   (set! changed? #t))
                  (struct-copy cell c
                               [can-be cafter])]
                 [else
@@ -160,15 +159,61 @@
 (define (propagate g)
   (find-pivot propagate-one g))
 
-(define (until-fixed-point f o)
+(define (until-fixed-point f o bad? end-f)
   (define-values (changed? no) (f o))
   (if changed?
-    (stream-cons no (until-fixed-point f no))
-    empty-stream))
+    (cons
+     no
+     (if (bad? no)
+       (end-f no)
+       (until-fixed-point f no bad? end-f)))
+    (end-f o)))
+
+(define (solved? g)
+  (andmap (λ (c) (= (set-count (cell-can-be c)) 1)) g))
+
+(define (failed-solution? g)
+  (ormap (λ (c) (= (set-count (cell-can-be c)) 0)) g))
 
 ;; solve-it : grid -> (listof grid)
 (define (solve-it g)
-  (until-fixed-point propagate g))
+  (let solve-loop
+      ([g g]
+       [backtrack!
+        (λ (i)
+          (error 'solve-it "Failed!"))])
+    (define (done? g)
+      (cond
+        [(solved? g)
+         empty]
+        [(failed-solution? g)
+         (backtrack! #f)]
+        [else
+         (search g)]))
+    (define (search g)
+      (define sg (sort g < #:key (λ (c) (set-count (cell-can-be c)))))
+      (let iter-loop ([before empty]
+                      [after sg])
+        (cond
+          [(empty? after)
+           (backtrack! #f)]
+          [else
+           (define c (first after))
+           (define cb (cell-can-be c))
+           (or (and (not (= (set-count cb) 1))
+                    (for/or ([o (in-set cb)])
+                      (let/ec new-backtrack!
+                        (define nc
+                          (struct-copy cell c
+                                       [can-be (seteq o)]))
+                        (solve-loop
+                         (cons
+                          nc
+                          (append before (rest after)))
+                         new-backtrack!))))
+               (iter-loop (cons c before)
+                          (rest after)))])))
+    (until-fixed-point propagate g failed-solution? done?)))
 
 (require 2htdp/image
          2htdp/universe)
@@ -177,19 +222,17 @@
 (define CELL-W (* 3 (image-width MIN-FIG)))
 (define CELL-H (* 3 (image-height MIN-FIG)))
 
-(struct draw-state (before after))
+(struct draw-state (i before after))
 (define (draw-it! gs)
   (define (move-right ds)
-    (match-define (draw-state before after) ds)
+    (match-define (draw-state i before after) ds)
     (cond
-      [(stream-empty? (stream-rest after))
+      [(empty? (rest after))
        ds]
       [else
-       (printf "unfold\n")
-       (begin0
-         (draw-state (cons (stream-first after) before)
-                     (stream-rest after))
-         (printf "unfold done\n"))]))
+       (draw-state (add1 i)
+                   (cons (first after) before)
+                   (rest after))]))
   (define (draw-can-be can-be)
     (define (figi i)
       (if (set-member? can-be i)
@@ -206,8 +249,8 @@
      (rectangle CELL-W CELL-H
                 "outline" "black")))
   (define (draw-draw-state ds)
-    (match-define (draw-state before after) ds)
-    (define g (stream-first after))
+    (match-define (draw-state i before after) ds)
+    (define g (first after))
     (for/fold ([i
                 (empty-scene (* CELL-W 11)
                              (* CELL-H 11))])
@@ -225,7 +268,7 @@
                 [   else  (+ y 2)]))
        "left" "top"
        i)))
-  (big-bang (draw-state empty gs)
+  (big-bang (draw-state 0 empty gs)
             (on-tick move-right 1/8)
             (on-draw draw-draw-state)))
 
@@ -275,6 +318,7 @@
      "  7| 6 |   "
      "65 |   |3  "))
 
-  (draw-it!
-   (solve-it
-    b3)))
+  (draw-state-i
+   (draw-it!
+    (solve-it
+     b3))))
