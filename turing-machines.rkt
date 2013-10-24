@@ -42,18 +42,18 @@
 (define (tape-move t b dir)
   (match-define (tape before after) t)
   (match dir
-    ['L
-     (match after
-       [(cons a-hd a-tl)
-        (tape (cons a-hd before) a-tl)]
-       [(list)
-        (tape (cons b before) empty)])]
-    ['R
+    ['L     
      (match before
        [(cons b-hd b-tl)
         (tape b-tl (cons b-hd after))]
        [(list)
         (tape empty (cons b after))])]
+    ['R
+     (match after
+       [(cons a-hd a-tl)
+        (tape (cons a-hd before) a-tl)]
+       [(list)
+        (tape (cons b before) empty)])]
     [_
      (error 'tape-move "Given direction (~e) other than L/R"
             dir)]))
@@ -79,15 +79,33 @@
      (define nn-t (tape-move n-t blank dir))
      (*state n-st nn-t)]))
 
-(define (step-n tm s n)
-  (if (zero? n)
-    s
-    (step-n tm (step tm s) (sub1 n))))
+(define (step-n tm s n
+                #:inform [inform-f void])
+  (inform-f s)
+  (cond
+    [(zero? n)
+     s]
+    [else
+     (define ns (step tm s))
+     (step-n tm ns (sub1 n)
+             #:inform inform-f)]))
 
-(define (run tm input steps)
+(define (run tm input steps
+             #:inform [inform-f void])
   (define initial-s
     (*state (*tm-initial tm) input))
-  (step-n tm initial-s steps))
+  (step-n tm initial-s steps
+          #:inform inform-f))
+
+(require racket/format
+         racket/string)
+(define (display-state s)
+  (match-define (*state st t) s)
+  (match-define (tape before after) t)
+  (printf "~a: ~a^~a\n" 
+          st
+          (string-append* (map ~a (reverse before)))
+          (string-append* (map ~a after))))
 
 (module+ test
   (define busy-beaver
@@ -107,4 +125,30 @@
 
   (run busy-beaver
        empty-tape
-       14))
+       14
+       #:inform display-state)
+
+  (define addition
+    (tm #:Q (0 1 2 3 4 HALT)
+        #:G (* _)
+        #:b _
+        #:S (0)
+        #:q0 0
+        #:F (HALT)
+        #:delta
+        [(0 _) -> (0 _ R)]
+        [(0 *) -> (1 * R)]
+        [(1 _) -> (2 * R)]
+        [(1 *) -> (1 * R)]
+        [(2 _) -> (3 _ L)]
+        [(2 *) -> (2 * R)]
+        [(3 _) -> (3 _ L)]
+        [(3 *) -> (4 _ L)]
+        [(4 _) -> (HALT _ R)]
+        [(4 *) -> (4 * L)]))
+
+  (run addition
+       (tape empty
+             '(* * * * * _ * * * * *))
+       24
+       #:inform display-state))
