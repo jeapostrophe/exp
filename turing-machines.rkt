@@ -128,6 +128,7 @@
        14
        #:inform display-state)
 
+  ;; http://turingmaschine.klickagent.ch/einband/?lang=en#5_+_5
   (define addition
     (tm #:Q (0 1 2 3 4 HALT)
         #:G (* _)
