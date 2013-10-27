@@ -61,6 +61,7 @@
          ,@(for/list ([p (in-list videos)]
                       [i (in-naturals)])
              (match-define (cons title href) p)
+             ;; (eprintf "~a\n" title)
              `(entry
                (title ([type "html"])
                       ,(cdata #f #f (format "<![CDATA[~a]]>" title)))
