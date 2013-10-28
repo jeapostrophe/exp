@@ -21,62 +21,66 @@
      (syntax/loc stx
        (*tm 'initial-state
             'blank
-            (λ (some-state)
-              (or (eq? some-state 'final-state) ...))
-            (λ (some-state some-symbol)
-              (match* (some-state some-symbol)
-                [('delta-state 'delta-symbol)
-                 (values 'next-state 'write-symbol 'head-movement)]
-                ...
-                [(_ _)
-                 (error 'tm-delta "Partial on ~v and ~v"
-                        some-state some-symbol)]))))]))
+            (make-hasheq
+             (list (cons 'final-state #t)
+                   ...))
+            (make-hash
+             (list (cons '(delta-state . delta-symbol)
+                         '(next-state write-symbol head-movement))
+                   ...))))]))
 
-(struct tape (before after))
-(define empty-tape (tape empty empty))
-(define (tape-read t b)
-  (match-define (tape before after) t)
+(struct tape (blank before after))
+(define (tape-first t)
+  (match-define (tape b before after) t)
   (match after
     [(cons h _) h]
     [(list) b]))
-(define (tape-move t b dir)
-  (match-define (tape before after) t)
-  (match dir
-    ['L     
-     (match before
-       [(cons b-hd b-tl)
-        (tape b-tl (cons b-hd after))]
-       [(list)
-        (tape empty (cons b after))])]
-    ['R
-     (match after
-       [(cons a-hd a-tl)
-        (tape (cons a-hd before) a-tl)]
-       [(list)
-        (tape (cons b before) empty)])]
-    [_
-     (error 'tape-move "Given direction (~e) other than L/R"
-            dir)]))
+(define (tape-rest t)
+  (match-define (tape b before after) t)
+  (match after
+    [(cons h r) r]
+    [(list) empty]))
+(define (tape-tser t)
+  (reverse (tape-before t)))
+
+(define (tape-move-left t)
+  (match-define (tape b before after) t)
+  (match before
+    [(cons b-hd b-tl)
+     (tape b b-tl (cons b-hd after))]
+    [(list)
+     (tape b empty (cons b after))]))
+(define (tape-move-right t)
+  (match-define (tape b before after) t)
+  (match after
+    [(cons a-hd a-tl)
+     (tape b (cons a-hd before) a-tl)]
+    [(list)
+     (tape b (cons b before) empty)]))
+
 (define (tape-write t w)
-  (match-define (tape before after) t)
+  (match-define (tape b before after) t)
   (match after
     [(cons h t)
-     (tape before (cons w t))]
+     (tape b before (cons w t))]
     [(list)
-     (tape before (list w))]))
+     (tape b before (list w))]))
 
 (struct *state (state tape))
 (define (step tm s)
-  (match-define (*tm _ blank final? delta) tm)
+  (match-define (*tm _ _ final? delta) tm)
   (match-define (*state st t) s)
   (cond
-    [(final? st)
+    [(hash-ref final? st #f)
      s]
     [else
-     (define h (tape-read t blank))
-     (define-values (n-st w dir) (delta st h))
+     (define h (tape-first t))
+     (match-define (list n-st w dir) (hash-ref delta (cons st h)))
      (define n-t (tape-write t w))
-     (define nn-t (tape-move n-t blank dir))
+     (define nn-t
+       (if (eq? 'L dir)
+         (tape-move-left n-t)
+         (tape-move-right n-t)))
      (*state n-st nn-t)]))
 
 (define (step-n tm s n
@@ -101,11 +105,11 @@
          racket/string)
 (define (display-state s)
   (match-define (*state st t) s)
-  (match-define (tape before after) t)
-  (printf "~a: ~a^~a\n" 
+  (printf "~a: ~a~a~a\n"
           st
-          (string-append* (map ~a (reverse before)))
-          (string-append* (map ~a after))))
+          (string-append* (map ~a (tape-tser t)))
+          (tape-first t)
+          (string-append* (map ~a (tape-rest t)))))
 
 (module+ test
   (define busy-beaver
@@ -124,7 +128,7 @@
         [(C 1) -> (HALT 1 R)]))
 
   (run busy-beaver
-       empty-tape
+       empty
        14
        #:inform display-state)
 
@@ -149,7 +153,6 @@
         [(4 *) -> (4 * L)]))
 
   (run addition
-       (tape empty
-             '(* * * * * _ * * * * *))
+       '(* * * * * _ * * * * *)
        24
        #:inform display-state))
