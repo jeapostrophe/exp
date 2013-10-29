@@ -23,7 +23,6 @@
         #:F (final-state ...)
         #:delta
         [(delta-state delta-symbol)
-         (~literal ->)
          (next-state write-symbol head-movement)]
         ...)
      (syntax/loc stx
@@ -157,12 +156,12 @@
         #:q0 A
         #:F (HALT)
         #:delta
-        [(A 0) -> (   B 1 R)]
-        [(A 1) -> (   C 1 L)]
-        [(B 0) -> (   A 1 L)]
-        [(B 1) -> (   B 1 R)]
-        [(C 0) -> (   B 1 L)]
-        [(C 1) -> (HALT 1 R)]))
+        [(A 0) (   B 1 R)]
+        [(A 1) (   C 1 L)]
+        [(B 0) (   A 1 L)]
+        [(B 1) (   B 1 R)]
+        [(C 0) (   B 1 L)]
+        [(C 1) (HALT 1 R)]))
 
   (run busy-beaver
        empty
@@ -182,22 +181,36 @@
         #:q0 consume-first-number
         #:F (HALT)
         #:delta
-        [(consume-first-number *) ->
+        [(consume-first-number *)
          (consume-first-number * R)]
-        [(consume-first-number /) ->
+        [(consume-first-number /)
          (consume-second-number * R)]
-        [(consume-second-number *) ->
+        [(consume-second-number *)
          (consume-second-number * R)]
-        [(consume-second-number _) ->
+        [(consume-second-number _)
          (override-last-* _ L)]
-        [(override-last-* *) ->
+        [(override-last-* *)
          (seek-beginning _ L)]
-        [(seek-beginning *) ->
+        [(seek-beginning *)
          (seek-beginning * L)]
-        [(seek-beginning _) ->
+        [(seek-beginning _)
          (HALT _ R)]))
 
   (run addition
        '(* * * * * / * * * * *)
        24
-       #:inform (make-display-state addition)))
+       #:inform (make-display-state addition))
+
+  (define addition-program
+    (tm-program
+     [consume-first-number
+      [* (consume-first-number * R)]
+      [/ (consume-second-number * R)]]
+     [consume-second-number
+      [* (consume-second-number * R)]
+      [_ (override-last-* _ L)]]
+     [override-last-*
+      [* (seek-beginning _ L)]]
+     [seek-beginning
+      [* (seek-beginning * L)]
+      [_ (HALT _ R)]])))
