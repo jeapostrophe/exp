@@ -1,5 +1,6 @@
 #lang racket/base
 (require (for-syntax racket/base
+                     racket/list
                      syntax/parse)
          racket/function
          racket/match
@@ -12,18 +13,23 @@
       (error 'id "~e" s))))
 (define-check check-LR '(L R))
 
+(begin-for-syntax
+  (define-syntax-class atom
+    (pattern x:identifier)
+    (pattern x:exact-nonnegative-integer)))
+
 (struct *tm (initial states inputs blank final? delta))
 (define-syntax (tm stx)
   (syntax-parse stx
-    [(_ #:Q (state ...)
-        #:G (sym ...)
-        #:b blank
-        #:S (input ...)
-        #:q0 initial-state
-        #:F (final-state ...)
+    [(_ #:Q (state:atom ...)
+        #:G (sym:atom ...)
+        #:b blank:atom
+        #:S (input:atom ...)
+        #:q0 initial-state:atom
+        #:F (final-state:atom ...)
         #:delta
-        [(delta-state delta-symbol)
-         (next-state write-symbol head-movement)]
+        [(delta-state:atom delta-symbol:atom)
+         (next-state:atom write-symbol:atom head-movement:atom)]
         ...)
      (syntax/loc stx
        (let ()
@@ -31,9 +37,10 @@
          (define-check check-Q '(state ...))
          (*tm (check-Q 'initial-state)
               '(state ...)
-              ;; Why should the blank not be included?
-              (list (check-G 'input) ... (check-G 'blank))
-              (check-G 'blank)
+              (list (check-G 'input) ...)
+              (if (memq 'blank '(input ...))
+                (error 'tm "Blank cannot be in input alphabet")
+                (check-G 'blank))
               (make-hasheq
                (list (cons (check-Q 'final-state) #t)
                      ...))
@@ -168,8 +175,7 @@
        14
        #:inform (make-display-state busy-beaver))
 
-  ;; http://turingmaschine.klickagent.ch/einband/?lang=en#5_+_5
-  (define addition
+  (define unary-addition
     (tm #:Q (consume-first-number
              consume-second-number
              override-last-*
@@ -196,12 +202,72 @@
         [(seek-beginning _)
          (HALT _ R)]))
 
-  (run addition
+  (run unary-addition
        '(* * * * * / * * * * *)
        24
-       #:inform (make-display-state addition))
+       #:inform (make-display-state unary-addition)))
 
-  (define addition-program
+(begin-for-syntax
+  (define (syntax->slist s)
+    (map syntax->datum (syntax->list s)))
+  (define-syntax-rule (in-syntax s)
+    (in-list (syntax->list s))))
+
+(define-syntax (implicit-tm stx)
+  (syntax-parse stx
+    [(_ [idelta-state:atom
+         [idelta-symbol:atom
+          (inext-state:atom iwrite-symbol:atom ihead-movement:atom)]
+         ...]
+        ...)
+     (with-syntax
+         ([(state ...)
+           (remove-duplicates
+            (cons 'HALT
+                  (append (syntax->slist #'(idelta-state ...))
+                          (syntax->slist #'(inext-state ... ...)))))]
+          [(sym ...)
+           (remove-duplicates
+            (cons '_
+                  (append (syntax->slist #'(idelta-symbol ... ...))
+                          (syntax->slist #'(iwrite-symbol ... ...)))))]
+          [(isym ...)
+           (remove '_
+                   (remove-duplicates
+                    (syntax->slist #'(idelta-symbol ... ...))))]
+          [delta-state0
+           (first (syntax->slist #'(idelta-state ...)))]
+          [((delta-state
+             delta-symbol
+             (next-state write-symbol head-movement))
+            ...)
+           (for*/list
+               ([i (in-syntax
+                    #'([idelta-state
+                        [idelta-symbol
+                         (inext-state
+                          iwrite-symbol
+                          ihead-movement)]
+                        ...]
+                       ...))]
+                [j (in-list
+                    (rest (syntax->list i)))])
+             (cons (first (syntax->list i))
+                   (syntax->list j)))])
+       (syntax/loc stx
+         (tm #:Q (state ...)
+             #:G (_ sym ...)
+             #:b _
+             #:S (isym ...)
+             #:q0 delta-state0
+             #:F (HALT)
+             #:delta
+             [(delta-state delta-symbol)
+              (next-state write-symbol head-movement)]
+             ...)))]))
+
+(module+ test
+  (define implicit-unary-addition
     (implicit-tm
      [consume-first-number
       [* (consume-first-number * R)]
@@ -213,4 +279,17 @@
       [* (seek-beginning _ L)]]
      [seek-beginning
       [* (seek-beginning * L)]
-      [_ (HALT _ R)]])))
+      [_ (HALT _ R)]]))
+
+  (run implicit-unary-addition
+       '(* * * * * / * * * * *)
+       24
+       #:inform (make-display-state implicit-unary-addition))
+
+  (define implicit-binary-addition
+    (implicit-tm))
+
+  (run implicit-binary-addition
+       '($ 0 0 1 0 $ 0 0 1 1)
+       24
+       #:inform (make-display-state implicit-binary-addition)))
