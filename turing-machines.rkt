@@ -429,27 +429,60 @@
 (define (beside* l)
   (cond
     [(empty? l) empty-image]
-    [(cons? (cdr l)) (car l)]
+    [(empty? (cdr l)) (car l)]
     [else
      (apply beside/align "bottom" l)]))
-(define (render-cell s)
-  (text (~a s) 12 "black"))
+(define SIZE-FONT 30)
+(define (render-cell s [focus? #f])
+  (define t
+    (text/font (~a s) SIZE-FONT
+               "black"
+               #f 'modern 'normal (if focus? 'bold 'normal) #f))
+  (define d 2)
+  (overlay/align
+   "middle" "middle"
+   t
+   (rectangle (image-width t) (image-height t) "solid" "white")
+   (rectangle (+ d (image-width t)) (+ d (image-height t)) "solid" 
+              (if focus? "red" "black"))))
+(define CELL-HEIGHT
+  (image-height (render-cell '0)))
+(define CELL-WIDTH
+  (image-width (render-cell '0)))
+(define SIZE-T CELL-HEIGHT)
 (define (draw-state l)
+  (define W 500)
+  (define H (* 5 CELL-HEIGHT))
   (define s (first l))
 
   (match-define (*state st t) s)
-  (beside* (map render-cell (tape-tser t)))
-  (render-cell (tape-first t))
-  (beside* (map render-cell (tape-rest t)))
 
-  (empty-scene 500 500))
+  (place-image/align
+   (above/align "middle"
+                (render-cell st)
+                (flip-vertical
+                 (triangle SIZE-T "solid" "black")))
+   (+ (/ W 2) (/ CELL-WIDTH 2))
+   (- (/ H 2) (* 2 CELL-HEIGHT))
+   "middle" "top"
+   (place-image/align
+    (beside* (map render-cell (tape-tser t)))
+    (/ W 2) (/ H 2)
+    "right" "top"
+    (place-image/align
+     (beside/align "bottom"
+                   (render-cell (tape-first t) #t)
+                   (beside* (map render-cell (tape-rest t))))
+     (/ W 2) (/ H 2)
+     "left" "top"
+     (empty-scene W H)))))
 
 (define (render tm input)
   (define l empty)
   (run* tm input #:inform (λ (i s) (set! l (cons s l))))
   (big-bang (reverse l)
             [on-draw draw-state]
-            [on-tick next-state]))
+            [on-tick next-state 1/10]))
 
 (module+ test
   (render implicit-binary-add
