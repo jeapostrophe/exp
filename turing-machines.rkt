@@ -418,7 +418,13 @@
    (run* implicit-binary-add
          '(0 0 1 1 0 + 0 1 0 1 1)
          #:inform (make-display-state implicit-binary-add))
-   '(1 0 0 0 1)))
+   '(1 0 0 0 1))
+
+  (check-equal?
+   (run* implicit-binary-add
+         '(0 1 1 + 0 1 1)
+         #:inform (make-display-state implicit-binary-add))
+   '(1 1 0)))
 
 ;; Rendering
 (require 2htdp/universe
@@ -519,7 +525,7 @@
    [on-key browse-key]))
 
 (module+ test
-  (when #f
+  (when #t
     (render implicit-binary-add
             '(0 0 1 1 0 + 0 1 0 1 1))))
 
