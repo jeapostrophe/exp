@@ -1,10 +1,18 @@
 #lang racket/base
 (require (for-syntax racket/base
                      syntax/parse)
+         racket/function
          racket/match
          racket/list)
 
-(struct *tm (initial blank final? delta))
+(define-syntax-rule (define-check id S)
+  (define (id s)
+    (if (memq s S)
+      s
+      (error 'id "~e" s))))
+(define-check check-LR '(L R))
+
+(struct *tm (initial states inputs blank final? delta))
 (define-syntax (tm stx)
   (syntax-parse stx
     [(_ #:Q (state ...)
@@ -19,15 +27,24 @@
          (next-state write-symbol head-movement)]
         ...)
      (syntax/loc stx
-       (*tm 'initial-state
-            'blank
-            (make-hasheq
-             (list (cons 'final-state #t)
-                   ...))
-            (make-hash
-             (list (cons '(delta-state . delta-symbol)
-                         '(next-state write-symbol head-movement))
-                   ...))))]))
+       (let ()
+         (define-check check-G '(sym ...))
+         (define-check check-Q '(state ...))
+         (*tm (check-Q 'initial-state)
+              '(state ...)
+              ;; Why should the blank not be included?
+              (list (check-G 'input) ... (check-G 'blank))
+              (check-G 'blank)
+              (make-hasheq
+               (list (cons (check-Q 'final-state) #t)
+                     ...))
+              (make-hash
+               (list (cons (cons (check-Q 'delta-state)
+                                 (check-G 'delta-symbol))
+                           (list (check-Q 'next-state)
+                                 (check-G 'write-symbol)
+                                 (check-LR 'head-movement)))
+                     ...)))))]))
 
 (struct tape (blank before after))
 (define (tape-first t)
@@ -68,14 +85,19 @@
 
 (struct *state (state tape))
 (define (step tm s)
-  (match-define (*tm _ _ final? delta) tm)
+  (match-define (*tm _ _ _ _ final? delta) tm)
   (match-define (*state st t) s)
   (cond
     [(hash-ref final? st #f)
      s]
     [else
      (define h (tape-first t))
-     (match-define (list n-st w dir) (hash-ref delta (cons st h)))
+     (match-define
+      (list n-st w dir)
+      (hash-ref delta (cons st h)
+                (λ ()
+                  (error 'step "No transition defined for ~v in ~v state"
+                         h st))))
      (define n-t (tape-write t w))
      (define nn-t
        (if (eq? 'L dir)
@@ -96,20 +118,35 @@
 
 (define (run tm input steps
              #:inform [inform-f void])
+  (define (valid-input? s)
+    (memq s (*tm-inputs tm)))
+  (for ([s (in-list input)])
+    (unless (valid-input? s)
+      (error 'run "Invalid input: ~e" s)))
+
   (define initial-s
-    (*state (*tm-initial tm) input))
+    (*state
+     (*tm-initial tm)
+     (tape (*tm-blank tm)
+           empty
+           input)))
   (step-n tm initial-s steps
           #:inform inform-f))
 
 (require racket/format
          racket/string)
-(define (display-state s)
-  (match-define (*state st t) s)
-  (printf "~a: ~a~a~a\n"
-          st
-          (string-append* (map ~a (tape-tser t)))
-          (tape-first t)
-          (string-append* (map ~a (tape-rest t)))))
+(define (make-display-state tm)
+  (define max-st-len
+    (apply max
+           (map (compose string-length symbol->string)
+                (*tm-states tm))))
+  (λ (s)
+    (match-define (*state st t) s)
+    (displayln
+     (~a (~a #:min-width max-st-len st) ": "
+         (string-append* (map ~a (tape-tser t)))
+         "[" (tape-first t) "]"
+         (string-append* (map ~a (tape-rest t)))))))
 
 (module+ test
   (define busy-beaver
@@ -130,29 +167,37 @@
   (run busy-beaver
        empty
        14
-       #:inform display-state)
+       #:inform (make-display-state busy-beaver))
 
   ;; http://turingmaschine.klickagent.ch/einband/?lang=en#5_+_5
   (define addition
-    (tm #:Q (0 1 2 3 4 HALT)
-        #:G (* _)
+    (tm #:Q (consume-first-number
+             consume-second-number
+             override-last-*
+             seek-beginning
+             HALT)
+        #:G (* _ /)
         #:b _
-        #:S (*)
-        #:q0 0
+        #:S (* /)
+        #:q0 consume-first-number
         #:F (HALT)
         #:delta
-        [(0 _) -> (0 _ R)]
-        [(0 *) -> (1 * R)]
-        [(1 _) -> (2 * R)]
-        [(1 *) -> (1 * R)]
-        [(2 _) -> (3 _ L)]
-        [(2 *) -> (2 * R)]
-        [(3 _) -> (3 _ L)]
-        [(3 *) -> (4 _ L)]
-        [(4 _) -> (HALT _ R)]
-        [(4 *) -> (4 * L)]))
+        [(consume-first-number *) ->
+         (consume-first-number * R)]
+        [(consume-first-number /) ->
+         (consume-second-number * R)]
+        [(consume-second-number *) ->
+         (consume-second-number * R)]
+        [(consume-second-number _) ->
+         (override-last-* _ L)]
+        [(override-last-* *) ->
+         (seek-beginning _ L)]
+        [(seek-beginning *) ->
+         (seek-beginning * L)]
+        [(seek-beginning _) ->
+         (HALT _ R)]))
 
   (run addition
-       '(* * * * * _ * * * * *)
+       '(* * * * * / * * * * *)
        24
-       #:inform display-state))
+       #:inform (make-display-state addition)))
