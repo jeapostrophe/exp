@@ -202,7 +202,7 @@
        #:inform (make-display-state addition))
 
   (define addition-program
-    (tm-program
+    (implicit-tm
      [consume-first-number
       [* (consume-first-number * R)]
       [/ (consume-second-number * R)]]
