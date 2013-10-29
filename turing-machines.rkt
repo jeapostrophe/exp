@@ -352,9 +352,9 @@
 
   (check-equal?
    (run* implicit-binary-sub1
-         '(0 0 1 0)
+         '(0 0 1 1)
          #:inform (make-display-state implicit-binary-sub1))
-   '(0 0 0 1))
+   '(0 0 1 0))
 
   (define implicit-binary-add
     (implicit-tm
@@ -527,25 +527,25 @@
   (define implicit-binary-add-mt
     (implicit-tm
      [no-carry
-      [(0 0 _) (no-carry (_ _ 0) R)]
-      [(1 0 _) (no-carry (_ _ 1) R)]
-      [(0 1 _) (no-carry (_ _ 1) R)]
-      [(1 1 _) (   carry (_ _ 0) R)]
-      [      _ (    HALT       _ L)]]
+      [(0 0) (no-carry 0 R)]
+      [(1 0) (no-carry 1 R)]
+      [(0 1) (no-carry 1 R)]
+      [(1 1) (   carry 0 R)]
+      [    _ (    HALT _ L)]]
      [carry
-      [(0 0 _) (no-carry (_ _ 1) R)]
-      [(0 1 _) (   carry (_ _ 0) R)]
-      [(1 0 _) (   carry (_ _ 0) R)]
-      [(1 1 _) (   carry (_ _ 1) R)]
-      [      _ (    HALT (_ _ 1) R)]]))
+      [(0 0) (no-carry 1 R)]
+      [(0 1) (   carry 0 R)]
+      [(1 0) (   carry 0 R)]
+      [(1 1) (   carry 1 R)]
+      [    _ (    HALT 1 R)]]))
 
   ;; 2 + 3 = 5
   (check-equal?
    (run* implicit-binary-add-mt
-         '((0 1 _) (1 1 _) (0 0 _) (0 0 _))
+         '((0 1) (1 1) (0 0) (0 0))
          #:inform (make-display-state implicit-binary-add-mt))
-   '((_ _ 1) (_ _ 0) (_ _ 1) (_ _ 0)))
+   '(1 0 1 0))
 
   (when #t
     (render implicit-binary-add-mt
-            '((0 1 _) (1 1 _) (0 0 _) (0 0 _)))))
+            '((0 1) (1 1) (0 0) (0 0)))))
