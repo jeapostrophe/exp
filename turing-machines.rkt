@@ -8,28 +8,23 @@
 
 (define-syntax-rule (define-check id S)
   (define (id s)
-    (if (memq s S)
+    (if (member s S)
       s
       (error 'id "~e" s))))
 (define-check check-LR '(L R))
 
-(begin-for-syntax
-  (define-syntax-class atom
-    (pattern x:identifier)
-    (pattern x:exact-nonnegative-integer)))
-
 (struct *tm (initial states inputs blank final? delta))
 (define-syntax (tm stx)
   (syntax-parse stx
-    [(_ #:Q (state:atom ...)
-        #:G (sym:atom ...)
-        #:b blank:atom
-        #:S (input:atom ...)
-        #:q0 initial-state:atom
-        #:F (final-state:atom ...)
+    [(_ #:Q (state ...)
+        #:G (sym ...)
+        #:b blank
+        #:S (input ...)
+        #:q0 initial-state
+        #:F (final-state ...)
         #:delta
-        [(delta-state:atom delta-symbol:atom)
-         (next-state:atom write-symbol:atom head-movement:atom)]
+        [(delta-state delta-symbol)
+         (next-state write-symbol head-movement)]
         ...)
      (syntax/loc stx
        (let ()
@@ -38,7 +33,7 @@
          (*tm (check-Q 'initial-state)
               '(state ...)
               (list (check-G 'input) ...)
-              (if (memq 'blank '(input ...))
+              (if (member 'blank '(input ...))
                 (error 'tm "Blank cannot be in input alphabet")
                 (check-G 'blank))
               (make-hasheq
@@ -141,7 +136,7 @@
 (define (run tm input steps
              #:inform [inform-f void])
   (define (valid-input? s)
-    (memq s (*tm-inputs tm)))
+    (member s (*tm-inputs tm)))
   (for ([s (in-list input)])
     (unless (valid-input? s)
       (error 'run "Invalid input: ~e" s)))
@@ -243,9 +238,9 @@
 
 (define-syntax (implicit-tm stx)
   (syntax-parse stx
-    [(_ [idelta-state:atom
-         [idelta-symbol:atom
-          (inext-state:atom iwrite-symbol:atom ihead-movement:atom)]
+    [(_ [idelta-state
+         [idelta-symbol
+          (inext-state iwrite-symbol ihead-movement)]
          ...]
         ...)
      (with-syntax
@@ -263,8 +258,7 @@
            (remove '_
                    (remove-duplicates
                     (syntax->slist #'(idelta-symbol ... ...))))]
-          [delta-state0
-           (first (syntax->slist #'(idelta-state ...)))]
+          [(delta-state0 _ ...) #'(idelta-state ...)]
           [((delta-state
              delta-symbol
              (next-state write-symbol head-movement))
@@ -314,6 +308,13 @@
          '(* * * * * + * * * * *)
          #:inform (make-display-state implicit-unary-addition))
    '(* * * * * * * * * *))
+
+  ;; 2 + 3 = 5
+  (check-equal?
+   (run* implicit-unary-addition
+         '(* * + * * *)
+         #:inform (make-display-state implicit-unary-addition))
+   '(* * * * *))
 
   (define implicit-binary-add1
     (implicit-tm
@@ -406,6 +407,7 @@
      [move-right-once
       [_ (HALT _ R)]]))
 
+  ;; 2 + 3 = 5
   (check-equal?
    (run* implicit-binary-add
          '(0 0 1 0 + 0 0 1 1)
@@ -422,10 +424,6 @@
 (require 2htdp/universe
          2htdp/image)
 
-(define (next-state l)
-  (match l
-    [(cons x (and nl (cons y r))) nl]
-    [_ l]))
 (define (beside* l)
   (cond
     [(empty? l) empty-image]
@@ -443,26 +441,25 @@
    "middle" "middle"
    t
    (rectangle (image-width t) (image-height t) "solid" "white")
-   (rectangle (+ d (image-width t)) (+ d (image-height t)) "solid" 
+   (rectangle (+ d (image-width t)) (+ d (image-height t)) "solid"
               (if focus? "red" "black"))))
 (define CELL-HEIGHT
   (image-height (render-cell '0)))
 (define CELL-WIDTH
   (image-width (render-cell '0)))
 (define SIZE-T CELL-HEIGHT)
-(define (draw-state l)
+(define (draw-state s)
   (define W 500)
   (define H (* 5 CELL-HEIGHT))
-  (define s (first l))
-
   (match-define (*state st t) s)
 
+  (define head-cell (render-cell (tape-first t) #t))
   (place-image/align
    (above/align "middle"
                 (render-cell st)
                 (flip-vertical
                  (triangle SIZE-T "solid" "black")))
-   (+ (/ W 2) (/ CELL-WIDTH 2))
+   (+ (/ W 2) (/ (image-width head-cell) 2))
    (- (/ H 2) (* 2 CELL-HEIGHT))
    "middle" "top"
    (place-image/align
@@ -471,19 +468,84 @@
     "right" "top"
     (place-image/align
      (beside/align "bottom"
-                   (render-cell (tape-first t) #t)
+                   head-cell
                    (beside* (map render-cell (tape-rest t))))
      (/ W 2) (/ H 2)
      "left" "top"
      (empty-scene W H)))))
 
+(struct browse (play? l r))
+(define (browse-draw b)
+  (draw-state (first (browse-r b))))
+(define (browse-step b)
+  (match-define (browse play? l r) b)
+  (if (browse-play? b)
+    (browse-step-right b)
+    b))
+(define (browse-step-right b)
+  (match-define (browse play? l r) b)
+  (match r
+    [(cons x (and nr (cons _ _)))
+     (browse play? (cons x l) nr)]
+    [_
+     b]))
+(define (browse-step-left b)
+  (match-define (browse play? l r) b)
+  (match l
+    [(cons x nl)
+     (browse play? nl (cons x r))]
+    [_
+     b]))
+(define (browse-key b ke)
+  (define nb
+    (struct-copy browse b [play? #f]))
+  (match ke
+    ["left"
+     (browse-step-left nb)]
+    ["right"
+     (browse-step-right nb)]
+    [" "
+     (struct-copy browse b [play? (not (browse-play? b))])]
+    [_ b]))
+
 (define (render tm input)
   (define l empty)
   (run* tm input #:inform (λ (i s) (set! l (cons s l))))
-  (big-bang (reverse l)
-            [on-draw draw-state]
-            [on-tick next-state 1/10]))
+  (big-bang
+   (browse #f empty (reverse l))
+   ;; (browse #f (rest l) (list (first l)))
+   [on-draw browse-draw]
+   [on-tick browse-step 1/10]
+   [on-key browse-key]))
 
 (module+ test
-  (render implicit-binary-add
-          '(0 0 1 1 0 + 0 1 0 1 1)))
+  (when #f
+    (render implicit-binary-add
+            '(0 0 1 1 0 + 0 1 0 1 1))))
+
+(module+ test
+  (define implicit-binary-add-mt
+    (implicit-tm
+     [no-carry
+      [(0 0 _) (no-carry (_ _ 0) R)]
+      [(1 0 _) (no-carry (_ _ 1) R)]
+      [(0 1 _) (no-carry (_ _ 1) R)]
+      [(1 1 _) (   carry (_ _ 0) R)]
+      [      _ (    HALT       _ L)]]
+     [carry
+      [(0 0 _) (no-carry (_ _ 1) R)]
+      [(0 1 _) (   carry (_ _ 0) R)]
+      [(1 0 _) (   carry (_ _ 0) R)]
+      [(1 1 _) (   carry (_ _ 1) R)]
+      [      _ (    HALT (_ _ 1) R)]]))
+
+  ;; 2 + 3 = 5
+  (check-equal?
+   (run* implicit-binary-add-mt
+         '((0 1 _) (1 1 _) (0 0 _) (0 0 _))
+         #:inform (make-display-state implicit-binary-add-mt))
+   '((_ _ 1) (_ _ 0) (_ _ 1) (_ _ 0)))
+
+  (when #t
+    (render implicit-binary-add-mt
+            '((0 1 _) (1 1 _) (0 0 _) (0 0 _)))))
