@@ -9,7 +9,7 @@
  :font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
 (require 'color-theme)
 (color-theme-initialize)
-(add-to-list 'load-path "~/Dev/dist/solarized/emacs-colors-solarized")
+(add-to-list 'load-path "~/Dev/dist/altercation/solarized/emacs-colors-solarized")
 (load "color-theme-solarized")
 (color-theme-solarized-light)
 

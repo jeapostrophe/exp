@@ -24,4 +24,4 @@ Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
 
-#include "/home/jay/Dev/dist/solarized/xresources-colors-solarized/Xresources"
+#include "/home/jay/Dev/dist/altercation/solarized/xresources-colors-solarized/Xresources"
