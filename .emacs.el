@@ -1013,7 +1013,7 @@ given a prefix arg."
 (put 'autopair-newline 'delete-selection t)
 
 ;; Rainbow delimiters
-(add-to-list 'load-path "~/Dev/dist/rainbow-delimiters")
+(add-to-list 'load-path "~/Dev/local/rainbow-delimiters")
 (require 'rainbow-delimiters)
 (global-rainbow-delimiters-mode t)
 
@@ -1134,7 +1134,7 @@ given a prefix arg."
 ;;       flymake-allowed-file-name-masks)
 
 ;; cg mode
-(add-to-list 'load-path "~/Dev/dist/cg-mode")
+(add-to-list 'load-path "~/Dev/local/cg-mode")
 (require 'cg-mode)
 (add-to-list 'auto-mode-alist '("\\.glsl$" . cg-mode))
 

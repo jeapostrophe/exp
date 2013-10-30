@@ -1,1 +1,14 @@
 Just a random collection of stuff
+
+.ackrc - config file for ack (a grep replacement)
+.conkerorrc - config file for conkeror (awesome Web browser)
+.emacs.d - config directory for emacs
+.emacs.el - config file for emacs
+.profile - common shell config
+.workout-plan - pictures for workout-plan
+.xmobarrc - config file for xmobbar (part of xmonad)
+.Xresources - X resources, mainly to get solarized urxvt
+.xsession - X start up script
+.zshrc - zsh config
+amazon-wishlist.rkt - dump wishlist from Amazon
+xmonad.hs - config file for xmonad
