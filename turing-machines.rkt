@@ -302,7 +302,7 @@
      [seek-beginning
       [* (seek-beginning * L)]
       [_ (HALT _ R)]]))
-
+  
   (check-equal?
    (run* implicit-unary-addition
          '(* * * * * + * * * * *)
@@ -355,6 +355,11 @@
          '(0 0 1 1)
          #:inform (make-display-state implicit-binary-sub1))
    '(0 0 1 0))
+
+  ;; (define (binary-add x y)
+  ;;   (if (zero? x)
+  ;;     y
+  ;;     (binary-add (sub1 x) (add1 y))))
 
   (define implicit-binary-add
     (implicit-tm
@@ -525,7 +530,7 @@
    [on-key browse-key]))
 
 (module+ test
-  (when #t
+  (when #f
     (render implicit-binary-add
             '(0 1 1 0 + 0 0 1 1))))
 
@@ -552,6 +557,6 @@
          #:inform (make-display-state implicit-binary-add-mt))
    '(1 0 1 0))
 
-  (when #f
+  (when #t
     (render implicit-binary-add-mt
             '((0 1) (1 1) (0 0) (0 0)))))
