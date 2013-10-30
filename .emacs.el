@@ -988,7 +988,7 @@ given a prefix arg."
 (delete-selection-mode 1)
 
 ;; Auto pair
-(add-to-list 'load-path "~/Dev/dist/autopair-read-only")
+(add-to-list 'load-path "~/Dev/dist/capitaomorte/autopair")
 (require 'autopair)
 
 (add-hook 'scheme-mode-hook 
