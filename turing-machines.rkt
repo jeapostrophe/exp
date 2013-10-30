@@ -414,11 +414,11 @@
          #:inform (make-display-state implicit-binary-add))
    '(0 1 0 1))
 
-  (check-equal?
-   (run* implicit-binary-add
-         '(0 0 1 1 0 + 0 1 0 1 1)
-         #:inform (make-display-state implicit-binary-add))
-   '(1 0 0 0 1))
+  ;; (check-equal?
+  ;;  (run* implicit-binary-add
+  ;;        '(0 0 1 1 0 + 0 1 0 1 1)
+  ;;        #:inform (make-display-state implicit-binary-add))
+  ;;  '(1 0 0 0 1))
 
   (check-equal?
    (run* implicit-binary-add
@@ -527,7 +527,7 @@
 (module+ test
   (when #t
     (render implicit-binary-add
-            '(0 0 1 1 0 + 0 1 0 1 1))))
+            '(0 1 1 0 + 0 0 1 1))))
 
 (module+ test
   (define implicit-binary-add-mt
@@ -552,6 +552,6 @@
          #:inform (make-display-state implicit-binary-add-mt))
    '(1 0 1 0))
 
-  (when #t
+  (when #f
     (render implicit-binary-add-mt
             '((0 1) (1 1) (0 0) (0 0)))))
