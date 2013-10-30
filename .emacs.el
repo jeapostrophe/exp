@@ -525,14 +525,14 @@ given a prefix arg."
   (desktop-save-in-desktop-dir)
   (save-some-buffers t))
 
-;; (defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
+(defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
 (global-set-key (kbd "s-S") 'je/save-all)
 
 ;; Org Mode
-(setq load-path (cons "~/Dev/dist/org-mode/lisp" load-path))
-(setq load-path (cons "~/Dev/dist/org-mode/contrib/lisp" load-path))
+(setq load-path (cons "~/Dev/local/org-mode/lisp" load-path))
+(setq load-path (cons "~/Dev/local/org-mode/contrib/lisp" load-path))
 (add-to-list 'Info-default-directory-list
-             (expand-file-name "~/Dev/dist/org-mode/doc"))
+             (expand-file-name "~/Dev/local/org-mode/doc"))
 (require 'org)
 (require 'org-faces)
 (require 'org-protocol)

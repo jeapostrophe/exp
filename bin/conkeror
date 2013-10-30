@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ROOT=~/Dev/dist/conkeror
+ROOT=~/Dev/local/conkeror
 
-export LD_LIBRARY_PATH=~/Dev/dist/conkeror/xulrunner:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=~/Dev/local/conkeror/xulrunner:${LD_LIBRARY_PATH}
 
 exec ${ROOT}/xulrunner/xulrunner-bin ${ROOT}/conkeror/application.ini "$@"
