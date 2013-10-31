@@ -11,4 +11,123 @@ Just a random collection of stuff
 .xsession - X start up script
 .zshrc - zsh config
 amazon-wishlist.rkt - dump wishlist from Amazon
+dpr.rkt - Go's defer-panic-recover in Racket
+ds-armor.rkt - optimizer for Dark Souls armor
+duplicate-finder-parallel.rkt - find duplicated files
+effort.rkt - grep for my todo record history
+enum.rkt - implementation of enums
+espeaker.rkt - live espeak console
+ethread.rkt - threads that preserve a single exit value for later
+fake-serve.rkt - serve a single MP3
+ff5-sram.rkt - SRAM hack for FF5
+fizzbuzz.rkt - fizzbuzz in racket
+flow.rkt - data-flow analysis definer
+foo - purely functional oo system with prototypes
+fp-rules.rkt - prototype of macros that run to fixed point
+grepw.rkt - basic version of grep but just for words
+gt5-events.rkt - manager for Gran Turismo 5 events
+interface - prototype of interface-in/out
+jdictate.rkt - screen scrap to create Japanese kanji Anki database
+k-from-end.rkt - implementation of stupid interview question
+kappend.rkt - version of list with O(1) append
+kernel.rkt - basic OS kernel with delim conts
+key2org.rkt - converter from Apple Keychain to org-mode
+keyex.ss - test of keystruct.ss
+keystruct.ss - early version of keyword structures
+l4-pr148.rkt - Professor Layton #4 Puzzle #148
+lazy-ex.ss - demo of lazy-marks.ss
+lazy-marks.ss - laziness that preserves the continuation marks of the promise creation site (so stack track is accurate)
+lazy.py - python isn't lazy
+lazy.ss - very basic implementation of laziness
+letwreck.rkt - my version of let/wreck
+linear.ss - linear logic theorem prover
+lsys.rkt - implementation of L-systems
+ltl.rkt - implementation of LTL checking 
+lz78.rkt - LZ78 compression implementation
+macro-incremental.rkt - demo of incrementally pushing macro marks
+macro-kohlbecker.rkt - macro examples from Kohlbecker
+macro.ss - evil macros
+macros-that-dont-work.c - examples of how C macros are broken
+minimal.el - emacs config just for org-mode
+namespace-ex - example of messing up generative structs with namespaces in Racket
+negspace.tex - negative space example in latex
+nick.rkt - all string generator
+nico.pl - downloader for NicoNico
+nsb2org.rkt - Netscape Bookmark format to org-mode
+nsmv - non-shared module variables
+of2org.rkt - convert OmniFocus to org-mode
+opt-arrow.rkt - macro for Typed Racket types (doesn't work because TR is lame)
+persona - planning system for Persona 3 and 4 fusion
+pkgs - experimental Racket package system (abandoned)
+pl4-p150.rkt - solution to Professor Layton #4 puzzle #150
+plist-dict.rkt - something with plist files
+podcaster.ss - temporary HTTP server for getting iTunes to load a podcast from a directory 
+prayer.rkt - enumerator for daily prayer schedules
+prime.cc - substitution analysis of prime checker in C++
+proofl.ss - basic theorem prover
+r - random benchmark?
+rackit.rkt - reddit.com in Racket
+rackunit-table.rkt - show a table as rackunit results
+ranking - ranking of video games
+reactive - alternative implementation of FrTime
+record.rkt - variant of struct that uses one export
+redex-challenge1.rkt - test case for experimental Redex technique
+redex-challenge2.rkt - test case for experimental Redex technique
+redex-challenge2b.rkt - test case for experimental Redex technique
+redex-challenge3.rkt - test case for experimental Redex technique
+redex-comp-ex.rkt - experimental Redex compiler (example)
+redex-comp-help.rkt - experimental Redex compiler (helper)
+redex-comp.rkt - experimental Redex compiler
+redex-structs.rkt - Redex with structs (faster)
+rof.rkt - optimize Resonance of Fate purchases
+rom-check.rkt - double check wahcade rom list
+rom-gba.sh - manage GBA roms
+rom-link2.rkt - set up links of roms for wahcade
+rom-sort.rkt - organize NES roms
+ror - demo of "Ruby on Rails" Racket macro
+rorth - Racket vesion of forth
+russian.rkt - screen scrape to create Russian database for Anki 
+screenrc - config for screen (terminal window manager)
+scut.ss - awesome version of "cut"
+sda.rkt - screen scrap SpeedDemosArchive marathons and creates RSS file (for miro podcast import)
+seqn-automaton.ss - dfa that consumes a sequence
+seqn.ss - experiment with sequences
+shower.rkt - generate an MP3 to take a shower to... efficiently!
+skyline-slow.rkt - solve the "skyline" problem (slowly)
+skyline.rkt - solve the "skyline" problem
+smart.fm.html - render a graph of smart.fm (defunct) data
+snes-sram-check.rkt - create SRAM files (properly sized) for SNES roms
+sortcp.rkt - copy a set of files into directories based on their first name (used for creating the FS on the PowerPak)
+sortdir.rkt - ensure a directory's contents are sorted on the file system [especially FAT]
+spec-encode.rkt - demo of syntax-parse based version of Naughty Dog's DC language
+spell.rkt - evil version of "guess what word i'm thinking of" that always beats you
+spstruct.ss - semipersistent structs
+ss-thread.ss - send/suspend using threads and not continuations
+sstruct-syn.rkt - improved version of struct (syntax class) [code was written before begin-for-syntax]
+sstruct-tests.rkt - improved version of struct (tests)
+sstruct.rkt - improved version of struct
+sstruct2.rkt - improved version of sstruct
+struct-copy-ish.rkt - variant of struct-copy
+struct-intro.rkt - dynamic struct-copy
+sudoku.rkt - sudoku solver
+superlist.ss - list with O(1) append
+swap-fold.rkt - foldr as foldl and back
+systemf.rkt - HOAS implementation of System-F
+temporal-clock.rkt - solver for FF13-2 temporal clock puzzles
+temporal-ctcs - original implementation of temporal contracts
+threading-arrow.rkt - An arrow macro like clojure
+tr-cheat - a language to trick Typed Racket into turning off contracts
+trivia.tex - trivia card renderer
+turing-machines.rkt - Turing Machine simulator
+tw.py - twitter to rss scraper
+undefined-dispatch-rules.rkt - a demonstration of #<undefined> interacting poorly with web-server/dispatch
+up.sh - script to push all git repos
+values.rkt - keyword and optional values
+values.ss - keyword and optional values (old)
+what-are-symbol-tables.rkt - a demo that tries to explain in code what symbol tables are
+wiki.rkt - a basic wiki
+word-count.tex - counter-example to LaTeX word counting via collatz conjecture
+workout-plan.rkt - generator for workout plan contents
+workout-plan.tex - wrapper for workout plan PDF
+workout.rkt - graph workout data
 xmonad.hs - config file for xmonad
