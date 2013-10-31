@@ -1,4 +1,4 @@
-Just a random collection of stuff
+Configuration files and experimental, one-off code
 
 .ackrc - config file for ack (a grep replacement)
 .conkerorrc - config file for conkeror (awesome Web browser)
@@ -11,6 +11,29 @@ Just a random collection of stuff
 .xsession - X start up script
 .zshrc - zsh config
 amazon-wishlist.rkt - dump wishlist from Amazon
+aml.ml - example of incremental ML
+anki-monster - plugin for Anki for kids
+av.ss - solver for AV connection layout
+benford.rkt - implementation of benford transformation
+bf-1.rkt - weird delim cont pipe thing
+bfs.rkt - breadth first search
+bin - tiny scripts
+blog-macro.ss - macro example for blog
+blogged.org - index of blogged ~exp entries
+boggle.rkt - boggle solver
+bom2se.rkt - Converts the Book of Mormon (JP) to Anki database
+cas-cad-e.rkt - case that is like C's switch
+cek.rkt - CEK machine
+condd.rkt - cond with embedded defines
+conflict.rkt - racklog example
+coq - example Coq code
+csv2org.rkt - CSV to org-mode for game list
+dark-souls.rkt - Dark Souls optimizer
+delim.ss - delim cont examples (Zipper)
+derivative.ss - symbolic deritive finder
+devmode - automatic restart of Racket Web server when implementation changes
+dir-serve.rkt - quick Web server for a directory
+dnd - iOS HTML D&D4e character sheet
 dpr.rkt - Go's defer-panic-recover in Racket
 ds-armor.rkt - optimizer for Dark Souls armor
 duplicate-finder-parallel.rkt - find duplicated files
