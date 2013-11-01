@@ -302,7 +302,7 @@
      [seek-beginning
       [* (seek-beginning * L)]
       [_ (HALT _ R)]]))
-  
+
   (check-equal?
    (run* implicit-unary-addition
          '(* * * * * + * * * * *)
@@ -419,11 +419,11 @@
          #:inform (make-display-state implicit-binary-add))
    '(0 1 0 1))
 
-  ;; (check-equal?
-  ;;  (run* implicit-binary-add
-  ;;        '(0 0 1 1 0 + 0 1 0 1 1)
-  ;;        #:inform (make-display-state implicit-binary-add))
-  ;;  '(1 0 0 0 1))
+  (check-equal?
+   (run* implicit-binary-add
+         '(0 0 1 1 0 + 0 1 0 1 1)
+         #:inform (make-display-state implicit-binary-add))
+   '(1 0 0 0 1))
 
   (check-equal?
    (run* implicit-binary-add
@@ -557,6 +557,84 @@
          #:inform (make-display-state implicit-binary-add-mt))
    '(1 0 1 0))
 
-  (when #t
+  (when #f
     (render implicit-binary-add-mt
             '((0 1) (1 1) (0 0) (0 0)))))
+
+(define-syntax-rule (define-tm-action right!)
+  (define-syntax (right! stx)
+    (raise-syntax-error 'right! "Illegal outside program-tm" stx)))
+
+(define-syntax-rule (define-tm-action* i ...)
+    (begin (define-tm-action i) ...))
+
+(define-tm-action* right! left! write!)
+
+(begin-for-syntax
+  (require racket/dict
+           syntax/id-table)
+
+  (define empty-env (make-immutable-free-id-table))
+  (define-splicing-syntax-class (ptm-e env)
+    #:attributes (state0)
+    #:literals (let case read right! left! write!)
+    [pattern (let loop:id () 
+               (~var body (ptm-e (dict-set env #'loop #t))))
+             #:attr state0 #'loop]
+    [pattern (case (read)
+               [(opt ...) . (~var body (ptm-e env))]
+               ...)
+             #:attr state0 #f]
+    [pattern (~seq (right!) (~var next (ptm-e env)))
+             #:attr state0 #f]
+    [pattern (~seq (left!) (~var next (ptm-e env)))
+             #:attr state0 #f]
+    [pattern (~seq (write! sym:expr) (~var next (ptm-e env)))
+             #:attr state0 #f]
+    [pattern (x:id)
+             #:attr state0 #f
+             #:fail-unless (dict-ref env #'x #f)
+             "defined function"]))
+
+(require racket/pretty)
+(define-syntax (program-tm stx)
+  (syntax-parse stx
+    [(_ (~var e (ptm-e empty-env)))
+     (syntax/loc stx
+       (begin
+         (pretty-print
+          '(tm #:Q (e.state .... HALT)
+               #:G (e.sym .... _)
+               #:b _
+               #:S (e.sym ....)
+               #:q0 e.state0
+               #:F (HALT)
+               #:delta
+               [(e.delta.state e.delta.sym) (e.delta.next e.delta.write e.delta.head)]
+               ....))
+       (error 'program-tm)))]))
+
+(module+ test
+  (define program-binary-add1
+    (program-tm
+     (let main ()
+       (case (read)
+         [(0 1) 
+          (right!)
+          (main)]
+         [(_)
+          (left!)
+          (let add1 ()
+            (case (read)
+              [(1)
+               (write! 0)
+               (left!)
+               (add1)]
+              [(_ 0)
+               (write! 1)]))]))))
+
+  (check-equal?
+   (run* program-binary-add1
+         '(0 0 1 0)
+         #:inform (make-display-state program-binary-add1))
+   '(0 0 1 1)))
