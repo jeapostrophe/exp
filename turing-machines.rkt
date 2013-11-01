@@ -10,10 +10,10 @@
   (define (id s)
     (if (member s S)
       s
-      (error 'id "~e" s))))
+      (error 'id "~v not in ~v" s S))))
 (define-check check-LR '(L R))
 
-(struct *tm (initial states inputs blank final? delta))
+(struct *tm (initial states inputs blank final? delta) #:transparent)
 (define-syntax (tm stx)
   (syntax-parse stx
     [(_ #:Q (state ...)
@@ -174,7 +174,8 @@
          " {" (~a i) "}"))))
 
 (module+ test
-  (require rackunit)
+  ;; xxx why do i need this?
+  (require (except-in rackunit define-check))
 
   (define busy-beaver
     (tm #:Q (A B C HALT)
@@ -606,26 +607,33 @@
                          [b (in-list (attribute body))])
                 (list 'input (cons o0 o1s)))
               (attribute body.delta))]
-    [pattern (right! (~var next (ptm-e current-state env)))
-             #:attr (sym 1) (attribute next.sym)
-             #:attr (state 1) (attribute next.state)
-             #:attr state0 current-state
-             #:attr (delta 1)
-             (append
-              (list (list 'head 'right!))
-              (attribute next.delta))]
     [pattern (left! (~var next (ptm-e current-state env)))
              #:attr (sym 1) (attribute next.sym)
-             #:attr (state 1) (attribute next.state)
-             #:attr state0 current-state
+             #:with this-state (generate-temporary 'left)
+             #:attr (state 1) (cons #'this-state (attribute next.state))
+             #:attr state0 #'this-state
              #:attr (delta 1)
-             (append
-              (list (list 'head 'left!))
-              (attribute next.delta))]
+             (λ (all-syms)
+               (append
+                (for/list ([a (in-list all-syms)])
+                  #`[(this-state #,a) (next.state0 #,a L)])
+                ((attribute next.delta) all-syms)))]
+    ;; xxx remove code copying
+    [pattern (right! (~var next (ptm-e current-state env)))
+             #:attr (sym 1) (attribute next.sym)
+             #:with this-state (generate-temporary 'right)
+             #:attr (state 1) (cons #'this-state (attribute next.state))
+             #:attr state0 #'this-state
+             #:attr (delta 1)
+             (λ (all-syms)
+               (append
+                (for/list ([a (in-list all-syms)])
+                  #`[(this-state #,a) (next.state0 #,a R)])
+                ((attribute next.delta) all-syms)))]
     [pattern (write! wsym:expr (~var next (ptm-e current-state env)))
              #:attr (sym 1) (cons #'wsym (attribute next.sym))
-             #:attr (state 1) (attribute next.state)
              #:with this-state (generate-temporary 'write)
+             #:attr (state 1) (cons #'this-state (attribute next.state))
              #:attr state0 #'this-state
              #:attr (delta 1)
              (λ (all-syms)
@@ -637,7 +645,7 @@
              #:attr (sym 1) empty
              #:attr (state 1) empty
              #:attr state0 #'HALT
-             #:attr (delta 1) 
+             #:attr (delta 1)
              (λ (all-syms)
                empty)]
     [pattern (x:id)
@@ -652,7 +660,7 @@
 (define-syntax (program-tm stx)
   (syntax-parse stx
     [(_ (~var e (ptm-e #f empty-env)))
-     (define all-syms 
+     (define all-syms
        (sym-tree->list (cons #'_ (attribute e.sym))))
      (with-syntax ([(sym ...)
                     (remove '_ all-syms)]
@@ -669,11 +677,57 @@
                  #:S (sym ...)
                  #:q0 e.state0
                  #:F (HALT)
-                 #:delta delta ...)))))]))
+                 #:delta delta ...))
+           (tm #:Q (state ... HALT)
+               #:G (sym ... _)
+               #:b _
+               #:S (sym ...)
+               #:q0 e.state0
+               #:F (HALT)
+               #:delta delta ...))))]))
 
 (module+ test
-  (program-tm (halt!))
-  (program-tm (write! 0 (halt!)))
+  (check-match (program-tm (halt!))
+               (*tm 'HALT (list 'HALT) (list)
+                    '_ (hash-table ('HALT #t))
+                    (hash-table)))
+  (check-match (program-tm (write! 0 (halt!)))
+               (*tm write-st (list write-st 'HALT) (list '0)
+                    '_ (hash-table ['HALT #t]) ht)
+               (begin
+                 (and (equal? (hash-ref ht (cons write-st '0))
+                              (list 'HALT '0 'L))
+                      (equal? (hash-ref ht (cons write-st '_))
+                              (list 'HALT '0 'L)))))
+  (check-match (program-tm (right! (halt!)))
+               (*tm right-st (list right-st 'HALT) (list)
+                    '_ (hash-table ['HALT #t]) ht)
+               (begin
+                 (and (equal? (hash-ref ht (cons right-st '_))
+                              (list 'HALT '_ 'R)))))
+  (check-match (program-tm (left! (halt!)))
+               (*tm right-st (list right-st 'HALT) (list)
+                    '_ (hash-table ['HALT #t]) ht)
+               (begin
+                 (and (equal? (hash-ref ht (cons right-st '_))
+                              (list 'HALT '_ 'L)))))
+
+  ;; xxx This is where it stops working. Basically, the write! should
+  ;; see the left! inside of it and use that to determine the
+  ;; direction to go in, rather than always assuming it goes left. So
+  ;; it merges the two commands together. I can either recognize this
+  ;; statically or I can make a dynamic protocol in the delta
+  ;; generators. I think the dyn proto would be better, but I can see
+  ;; it breaking with loops.
+  '
+  (check-match (program-tm (write! 0 (left! (halt!))))
+               (*tm write-st (list write-st 'HALT) (list '0)
+                    '_ (hash-table ['HALT #t]) ht)
+               (begin
+                 (and (equal? (hash-ref ht (cons write-st '0))
+                              (list 'HALT '0 'L))
+                      (equal? (hash-ref ht (cons write-st '_))
+                              (list 'HALT '0 'L)))))
 
   '
   (define program-binary-add1
