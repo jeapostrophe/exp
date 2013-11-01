@@ -566,73 +566,132 @@
     (raise-syntax-error 'right! "Illegal outside program-tm" stx)))
 
 (define-syntax-rule (define-tm-action* i ...)
-    (begin (define-tm-action i) ...))
+  (begin (define-tm-action i) ...))
 
-(define-tm-action* right! left! write!)
+(define-tm-action* right! left! write! halt!)
 
 (begin-for-syntax
   (require racket/dict
+           racket/list
+           racket/syntax
            syntax/id-table)
 
+  (define (sym-tree->list sym)
+    (remove-duplicates
+     (map syntax-e (flatten sym))))
+
   (define empty-env (make-immutable-free-id-table))
-  (define-splicing-syntax-class (ptm-e env)
-    #:attributes (state0)
-    #:literals (let case read right! left! write!)
-    [pattern (let loop:id () 
-               (~var body (ptm-e (dict-set env #'loop #t))))
-             #:attr state0 #'loop]
+  (define-syntax-class (ptm-e current-state env)
+    #:attributes (state0 (sym 1) (state 1) (delta 1))
+    #:literals (let case read right! left! write! halt!)
+    [pattern (let loop:id ()
+               (~var body (ptm-e #'loop (dict-set env #'loop #t))))
+             #:attr (sym 1) (attribute body.sym)
+             #:attr (state 1) (cons #'loop (attribute body.state))
+             #:attr state0 #'loop
+             #:attr (delta 1) (attribute body.delta)]
     [pattern (case (read)
-               [(opt ...) . (~var body (ptm-e env))]
+               [(opt0 opt1 ...) (~var body (ptm-e current-state env))]
                ...)
-             #:attr state0 #f]
-    [pattern (~seq (right!) (~var next (ptm-e env)))
-             #:attr state0 #f]
-    [pattern (~seq (left!) (~var next (ptm-e env)))
-             #:attr state0 #f]
-    [pattern (~seq (write! sym:expr) (~var next (ptm-e env)))
-             #:attr state0 #f]
+             #:attr (sym 1)
+             (list* (attribute opt0)
+                    (attribute opt1)
+                    (attribute body.sym))
+             #:attr (state 1) (attribute body.state)
+             #:attr state0 current-state
+             #:attr (delta 1)
+             (append
+              (for/list ([o0 (in-list (attribute opt0))]
+                         [o1s (in-list (attribute opt1))]
+                         [b (in-list (attribute body))])
+                (list 'input (cons o0 o1s)))
+              (attribute body.delta))]
+    [pattern (right! (~var next (ptm-e current-state env)))
+             #:attr (sym 1) (attribute next.sym)
+             #:attr (state 1) (attribute next.state)
+             #:attr state0 current-state
+             #:attr (delta 1)
+             (append
+              (list (list 'head 'right!))
+              (attribute next.delta))]
+    [pattern (left! (~var next (ptm-e current-state env)))
+             #:attr (sym 1) (attribute next.sym)
+             #:attr (state 1) (attribute next.state)
+             #:attr state0 current-state
+             #:attr (delta 1)
+             (append
+              (list (list 'head 'left!))
+              (attribute next.delta))]
+    [pattern (write! wsym:expr (~var next (ptm-e current-state env)))
+             #:attr (sym 1) (cons #'wsym (attribute next.sym))
+             #:attr (state 1) (attribute next.state)
+             #:with this-state (generate-temporary 'write)
+             #:attr state0 #'this-state
+             #:attr (delta 1)
+             (λ (all-syms)
+               (append
+                (for/list ([a (in-list all-syms)])
+                  #`[(this-state #,a) (next.state0 wsym L)])
+                ((attribute next.delta) all-syms)))]
+    [pattern (halt!)
+             #:attr (sym 1) empty
+             #:attr (state 1) empty
+             #:attr state0 #'HALT
+             #:attr (delta 1) 
+             (λ (all-syms)
+               empty)]
     [pattern (x:id)
-             #:attr state0 #f
+             #:attr (sym 1) empty
+             #:attr (state 1) empty
+             #:attr state0 current-state
              #:fail-unless (dict-ref env #'x #f)
-             "defined function"]))
+             "defined function"
+             #:attr (delta 1) empty]))
 
 (require racket/pretty)
 (define-syntax (program-tm stx)
   (syntax-parse stx
-    [(_ (~var e (ptm-e empty-env)))
-     (syntax/loc stx
-       (begin
-         (pretty-print
-          '(tm #:Q (e.state .... HALT)
-               #:G (e.sym .... _)
-               #:b _
-               #:S (e.sym ....)
-               #:q0 e.state0
-               #:F (HALT)
-               #:delta
-               [(e.delta.state e.delta.sym) (e.delta.next e.delta.write e.delta.head)]
-               ....))
-       (error 'program-tm)))]))
+    [(_ (~var e (ptm-e #f empty-env)))
+     (define all-syms 
+       (sym-tree->list (cons #'_ (attribute e.sym))))
+     (with-syntax ([(sym ...)
+                    (remove '_ all-syms)]
+                   [(state ...)
+                    (flatten (attribute e.state))]
+                   [(delta ...)
+                    ((attribute e.delta) all-syms)])
+       (syntax/loc stx
+         (begin
+           (pretty-print
+            '(tm #:Q (state ... HALT)
+                 #:G (sym ... _)
+                 #:b _
+                 #:S (sym ...)
+                 #:q0 e.state0
+                 #:F (HALT)
+                 #:delta delta ...)))))]))
 
 (module+ test
+  (program-tm (halt!))
+  (program-tm (write! 0 (halt!)))
+
+  '
   (define program-binary-add1
     (program-tm
      (let main ()
        (case (read)
-         [(0 1) 
-          (right!)
-          (main)]
+         [(0 1)
+          (right!
+           (main))]
          [(_)
-          (left!)
-          (let add1 ()
-            (case (read)
-              [(1)
-               (write! 0)
-               (left!)
-               (add1)]
-              [(_ 0)
-               (write! 1)]))]))))
-
+          (left!
+           (let add1 ()
+             (case (read)
+               [(1)
+                (write! 0 (left! (add1)))]
+               [(_ 0)
+                (write! 1 (halt!))])))]))))
+  '
   (check-equal?
    (run* program-binary-add1
          '(0 0 1 0)
