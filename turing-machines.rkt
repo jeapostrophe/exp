@@ -6,6 +6,8 @@
          racket/match
          racket/list)
 
+(define BOUND 400)
+
 (define-syntax-rule (define-check id S)
   (define ((id where) s)
     (if (member s S)
@@ -147,14 +149,14 @@
 
 (define (run* tm input
               #:inform [inform-f void])
-  (run tm input +inf.0 #:inform inform-f))
+  (run tm input BOUND #:inform inform-f))
 
 (require racket/format
          racket/string)
 (define (make-display-state tm)
   (define max-st-len
     (apply max
-           (map (compose string-length symbol->string)
+           (map (compose string-length ~a)
                 (*tm-states tm))))
   (λ (i s)
     (match-define (*state st t) s)
@@ -536,200 +538,161 @@
 
 (struct *itm (delta))
 (define (itm . d) (*ptm d))
-(define (itm->tm i)
-  )
+(define (itm->tm it #:and-then [and-then empty])
+  (match-define (*itm i) it)
+  (define all-syms
+    (remove-duplicates
+     (cons '_
+           (append (map second i)
+                   (map fourth i)
+                   and-then))))
+  (tm #:Q
+      (remove-duplicates
+       (cons 'HALT
+             (append (map first i)
+                     (map third i))))
+      #:G all-syms
+      #:b '_
+      #:S (remove '_ all-syms)
+      #:q0 (first (first i))
+      #:F '(HALT)
+      #:delta
+      (for/list ([i (in-list i)])
+        (match-define (list state input goto output head) i)
+        (list (list state input) (list goto output head)))))
 
+(struct *ptm (pdelta))
+(define (ptm . pd) (*ptm pd))
 (define tm:else (gensym 'else))
+(define (ptm->itm pt #:and-then [and-then empty])
+  (match-define (*ptm pd) pt)
+  (define all-syms
+    (remove tm:else
+            (remove-duplicates
+             (cons '_
+                   (append (map second pd)
+                           (map fourth pd)
+                           and-then)))))
+  (*itm
+   (append*
+    (for/list ([i (in-list pd)])
+      (match-define (list state input goto output head) i)
+      (cond
+        [(eq? tm:else input)
+         (define state-sym
+           (append-map (λ (s)
+                         (if (eq? (first s) state)
+                           (list (second s))
+                           empty))
+                       pd))
+         (for/list ([s (in-list (remove* state-sym all-syms))])
+           (list state s goto
+                 (if (eq? tm:else output)
+                   s
+                   output)
+                 head))]
+        [(eq? tm:else output)
+         (error 'ptm->itm
+                "tm:else not allowed in output unless input is also tm:else")]
+        [else
+         (list i)])))))
+
+(define (compile-ptm t #:and-then [and-then empty])
+  (itm->tm (ptm->itm t #:and-then and-then)
+           #:and-then and-then))
+
+(module+ test
+  (define-syntax-rule (check-tm tm input output)
+    (let ([tmv tm])
+      (check-equal?
+       (run* tmv input #:inform (make-display-state tmv))
+       output)))
+  (define-syntax-rule (check-ptm tm input output)
+    (let ([inputv input])
+      (check-tm (compile-ptm tm #:and-then inputv) inputv output))))
+
+;; xxx should i add that these 'read' to their name?
 
 (define (tm:write&move state input goto output head)
   (ptm (list state input goto output head)))
+(module+ test
+  (check-ptm (tm:write&move 'start 'X 'HALT 'Y 'R)
+             '(X Y Z)
+             '(Y Y Z)))
 
-(define-syntax-rule (define-tm-action right!)
-  (define-syntax (right! stx)
-    (raise-syntax-error 'right! "Illegal outside program-tm" stx)))
+(define (tm:combine . ps)
+  (match-define (list (*ptm pd) ...) ps)
+  (*ptm (append* pd)))
+(module+ test
+  (check-ptm (tm:combine (tm:write&move 'start 'X 'HALT 'Y 'R))
+             '(X Y Z)
+             '(Y Y Z))
+  (check-ptm (tm:combine (tm:write&move 0 'X 1 'Y 'R)
+                         (tm:write&move 1 'Y 'HALT 'X 'R))
+             '(X Y Z)
+             '(Y X Z)))
 
-(define-syntax-rule (define-tm-action* i ...)
-  (begin (define-tm-action i) ...))
+(define (tm:write&left state input goto output)
+  (tm:write&move state input goto output 'L))
+(define (tm:write&right state input goto output)
+  (tm:write&move state input goto output 'R))
+(module+ test
+  (check-ptm (tm:combine (tm:write&left 0 'X 1 'Y)
+                         (tm:write&right 1 '_ 'HALT 'X))
+             '(X Y Z)
+             '(X Y Y Z)))
 
-(define-tm-action* right! left! write! halt!)
+(define (tm:move state goto head)
+  (tm:write&move state tm:else goto tm:else head))
+(define (tm:left state goto)
+  (tm:move state goto 'L))
+(define (tm:right state goto)
+  (tm:move state goto 'R))
+(module+ test
+  (check-ptm (tm:combine (tm:right 0 1)
+                         (tm:right 1 2)
+                         (tm:write&left 2 tm:else 'HALT 'fin))
+             '(X Y Z)
+             '(X Y fin)))
 
-(begin-for-syntax
-  (require racket/dict
-           racket/list
-           racket/syntax
-           syntax/id-table)
+(define-syntax-rule (with-states (s ...) body)
+  (let ([s (gensym 's)] ...) body))
 
-  (define (sym-tree->list sym)
-    (remove-duplicates
-     (map syntax-e (flatten sym))))
+;; This is interesting because it leaves the tape and head unchanged.
+(define (tm:halt state)
+  (with-states (tmp)
+    (tm:combine (tm:left state tmp)
+                (tm:right tmp 'HALT))))
+(module+ test
+  (check-ptm (tm:halt 'start)
+             '(X Y Z)
+             '(X Y Z)))
 
-  (define empty-env (make-immutable-free-id-table))
-  (define-syntax-class (ptm-e current-state env)
-    #:attributes (state0 (sym 1) (state 1) (delta 1))
-    #:literals (let case read right! left! write! halt!)
-    [pattern (let loop:id ()
-               (~var body (ptm-e #'loop (dict-set env #'loop #t))))
-             #:attr (sym 1) (attribute body.sym)
-             #:attr (state 1) (cons #'loop (attribute body.state))
-             #:attr state0 #'loop
-             #:attr (delta 1) (attribute body.delta)]
-    [pattern (case (read)
-               [(opt0 opt1 ...) (~var body (ptm-e current-state env))]
-               ...)
-             #:attr (sym 1)
-             (list* (attribute opt0)
-                    (attribute opt1)
-                    (attribute body.sym))
-             #:attr (state 1) (attribute body.state)
-             #:attr state0 current-state
-             #:attr (delta 1)
-             (append
-              (for/list ([o0 (in-list (attribute opt0))]
-                         [o1s (in-list (attribute opt1))]
-                         [b (in-list (attribute body))])
-                (list 'input (cons o0 o1s)))
-              (attribute body.delta))]
-    [pattern (left! (~var next (ptm-e current-state env)))
-             #:attr (sym 1) (attribute next.sym)
-             #:with this-state (generate-temporary 'left)
-             #:attr (state 1) (cons #'this-state (attribute next.state))
-             #:attr state0 #'this-state
-             #:attr (delta 1)
-             (λ (all-syms)
-               (append
-                (for/list ([a (in-list all-syms)])
-                  #`[(this-state #,a) (next.state0 #,a L)])
-                ((attribute next.delta) all-syms)))]
-    ;; xxx remove code copying
-    [pattern (right! (~var next (ptm-e current-state env)))
-             #:attr (sym 1) (attribute next.sym)
-             #:with this-state (generate-temporary 'right)
-             #:attr (state 1) (cons #'this-state (attribute next.state))
-             #:attr state0 #'this-state
-             #:attr (delta 1)
-             (λ (all-syms)
-               (append
-                (for/list ([a (in-list all-syms)])
-                  #`[(this-state #,a) (next.state0 #,a R)])
-                ((attribute next.delta) all-syms)))]
-    [pattern (write! wsym:expr (~var next (ptm-e current-state env)))
-             #:attr (sym 1) (cons #'wsym (attribute next.sym))
-             #:with this-state (generate-temporary 'write)
-             #:attr (state 1) (cons #'this-state (attribute next.state))
-             #:attr state0 #'this-state
-             #:attr (delta 1)
-             (λ (all-syms)
-               (append
-                (for/list ([a (in-list all-syms)])
-                  #`[(this-state #,a) (next.state0 wsym L)])
-                ((attribute next.delta) all-syms)))]
-    [pattern (halt!)
-             #:attr (sym 1) empty
-             #:attr (state 1) empty
-             #:attr state0 #'HALT
-             #:attr (delta 1)
-             (λ (all-syms)
-               empty)]
-    [pattern (x:id)
-             #:attr (sym 1) empty
-             #:attr (state 1) empty
-             #:attr state0 current-state
-             #:fail-unless (dict-ref env #'x #f)
-             "defined function"
-             #:attr (delta 1) empty]))
+(define (tm:goto state input goto)
+  (with-states (tmp)
+    (tm:combine (tm:write&right state input tmp input)
+                (tm:left tmp goto))))
 
-(require racket/pretty)
-(define-syntax (program-tm stx)
-  (syntax-parse stx
-    [(_ (~var e (ptm-e #f empty-env)))
-     (define all-syms
-       (sym-tree->list (cons #'_ (attribute e.sym))))
-     (with-syntax ([(sym ...)
-                    (remove '_ all-syms)]
-                   [(state ...)
-                    (flatten (attribute e.state))]
-                   [(delta ...)
-                    ((attribute e.delta) all-syms)])
-       (syntax/loc stx
-         (begin
-           (pretty-print
-            '(tm #:Q (state ... HALT)
-                 #:G (sym ... _)
-                 #:b _
-                 #:S (sym ...)
-                 #:q0 e.state0
-                 #:F (HALT)
-                 #:delta delta ...))
-           (tm #:Q '(state ... HALT)
-               #:G '(sym ... _)
-               #:b '_
-               #:S '(sym ...)
-               #:q0 'e.state0
-               #:F '(HALT)
-               #:delta '(delta ...)))))]))
+(define (tm:write state output goto)
+  (with-states (tmp)
+    (tm:combine (tm:write&left state tm:else tmp output)
+                (tm:right tmp goto))))
+(define (tm:right-until state stop-input goto)
+  (tm:combine (tm:goto state stop-input goto)
+              (tm:right state state)))
+(define (tm:write&left-until state output stop-input goto)
+  (tm:combine (tm:goto state stop-input goto)
+              (tm:write&left state tm:else state output)))
 
 (module+ test
-  (check-match (program-tm (halt!))
-               (*tm 'HALT (list 'HALT) (list)
-                    '_ (hash-table ('HALT #t))
-                    (hash-table)))
-  (check-match (program-tm (write! 0 (halt!)))
-               (*tm write-st (list write-st 'HALT) (list '0)
-                    '_ (hash-table ['HALT #t]) ht)
-               (begin
-                 (and (equal? (hash-ref ht (cons write-st '0))
-                              (list 'HALT '0 'L))
-                      (equal? (hash-ref ht (cons write-st '_))
-                              (list 'HALT '0 'L)))))
-  (check-match (program-tm (right! (halt!)))
-               (*tm right-st (list right-st 'HALT) (list)
-                    '_ (hash-table ['HALT #t]) ht)
-               (begin
-                 (and (equal? (hash-ref ht (cons right-st '_))
-                              (list 'HALT '_ 'R)))))
-  (check-match (program-tm (left! (halt!)))
-               (*tm right-st (list right-st 'HALT) (list)
-                    '_ (hash-table ['HALT #t]) ht)
-               (begin
-                 (and (equal? (hash-ref ht (cons right-st '_))
-                              (list 'HALT '_ 'L)))))
-
-  ;; xxx This is where it stops working. Basically, the write! should
-  ;; see the left! inside of it and use that to determine the
-  ;; direction to go in, rather than always assuming it goes left. So
-  ;; it merges the two commands together. I can either recognize this
-  ;; statically or I can make a dynamic protocol in the delta
-  ;; generators. I think the dyn proto would be better, but I can see
-  ;; it breaking with loops.
-  '
-  (check-match (program-tm (write! 0 (left! (halt!))))
-               (*tm write-st (list write-st 'HALT) (list '0)
-                    '_ (hash-table ['HALT #t]) ht)
-               (begin
-                 (and (equal? (hash-ref ht (cons write-st '0))
-                              (list 'HALT '0 'L))
-                      (equal? (hash-ref ht (cons write-st '_))
-                              (list 'HALT '0 'L)))))
-
-  '
   (define program-binary-add1
-    (program-tm
-     (let main ()
-       (case (read)
-         [(0 1)
-          (right!
-           (main))]
-         [(_)
-          (left!
-           (let add1 ()
-             (case (read)
-               [(1)
-                (write! 0 (left! (add1)))]
-               [(_ 0)
-                (write! 1 (halt!))])))]))))
-  '
-  (check-equal?
-   (run* program-binary-add1
-         '(0 0 1 0)
-         #:inform (make-display-state program-binary-add1))
-   '(0 0 1 1)))
+    (compile-ptm
+     (tm:combine
+      (tm:right-until 'main '_ 'pre-add1)
+      (tm:left 'pre-add1 'find-last-zero)
+      (tm:write&left-until 'find-last-zero '0 '0 'write-1)
+      (tm:write 'write-1 '1 'HALT))))
+
+  (check-tm program-binary-add1
+            '(0 0 1 0)
+            '(0 0 1 1)))

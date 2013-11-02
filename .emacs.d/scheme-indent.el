@@ -102,3 +102,5 @@
 (put 'for/hash 'scheme-indent-function 1)
 
 (put 'nest 'scheme-indent-function 1)
+
+(put 'with-states 'scheme-indent-function 1)
