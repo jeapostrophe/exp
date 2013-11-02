@@ -124,4 +124,6 @@ screen zsh_dir ~github/racket2
 screen zsh_dir ~pkgi
 screen zsh_dir ~plt
 screen zsh_dir ~plt
+screen zsh_dir ~papers/job-search-2013
+screen zsh_dir ~/Downloads
 screen zsh_dir ~jay

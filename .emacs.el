@@ -974,7 +974,7 @@ given a prefix arg."
                 tags-file-name
                 register-alist)))
 
-;; (desktop-save-mode 1)
+(desktop-save-mode 1)
 
 ;; Broken in switch to Emacs 24
 ;;(add-to-list 'load-path "~/Dev/dist/nxhtml/util")
