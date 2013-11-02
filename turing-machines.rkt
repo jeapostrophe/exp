@@ -7,45 +7,37 @@
          racket/list)
 
 (define-syntax-rule (define-check id S)
-  (define (id s)
+  (define ((id where) s)
     (if (member s S)
       s
-      (error 'id "~v not in ~v" s S))))
+      (error 'id "~a: ~v not in ~v" where s S))))
 (define-check check-LR '(L R))
 
 (struct *tm (initial states inputs blank final? delta) #:transparent)
-(define-syntax (tm stx)
-  (syntax-parse stx
-    [(_ #:Q (state ...)
-        #:G (sym ...)
-        #:b blank
-        #:S (input ...)
-        #:q0 initial-state
-        #:F (final-state ...)
-        #:delta
-        [(delta-state delta-symbol)
-         (next-state write-symbol head-movement)]
-        ...)
-     (syntax/loc stx
-       (let ()
-         (define-check check-G '(sym ...))
-         (define-check check-Q '(state ...))
-         (*tm (check-Q 'initial-state)
-              '(state ...)
-              (list (check-G 'input) ...)
-              (if (member 'blank '(input ...))
-                (error 'tm "Blank cannot be in input alphabet")
-                (check-G 'blank))
-              (make-hasheq
-               (list (cons (check-Q 'final-state) #t)
-                     ...))
-              (make-hash
-               (list (cons (cons (check-Q 'delta-state)
-                                 (check-G 'delta-symbol))
-                           (list (check-Q 'next-state)
-                                 (check-G 'write-symbol)
-                                 (check-LR 'head-movement)))
-                     ...)))))]))
+(define (tm #:Q Q #:G G #:b blank #:S inputs
+            #:q0 initial-state #:F final-state
+            #:delta delta)
+  (define-check check-G G)
+  (define-check check-Q Q)
+  (*tm ((check-Q 'initial-state) initial-state)
+       Q
+       (map (check-G 'inputs) inputs)
+       (if (member blank inputs)
+         (error 'tm "Blank cannot be in input alphabet")
+         ((check-G 'blank) blank))
+       (for/hash ([fs (in-list final-state)])
+         (values ((check-Q 'final-state) fs) #t))
+       (for/hash ([d (in-list delta)])
+         (match-define
+          `[(,delta-state ,delta-symbol)
+            (,next-state ,write-symbol ,head-movement)]
+          d)
+         (values
+          (cons ((check-Q 'delta-state) delta-state)
+                ((check-G 'delta-symbol) delta-symbol))
+          (list ((check-Q 'next-state) next-state)
+                ((check-G 'write-symbol) write-symbol)
+                ((check-LR 'head-movement) head-movement))))))
 
 (define (truncate-trailing x l)
   (let loop ([y empty] [m empty] [l l])
@@ -178,19 +170,19 @@
   (require (except-in rackunit define-check))
 
   (define busy-beaver
-    (tm #:Q (A B C HALT)
-        #:G (0 1)
-        #:b 0
-        #:S (1)
-        #:q0 A
-        #:F (HALT)
+    (tm #:Q '(A B C HALT)
+        #:G '(0 1)
+        #:b '0
+        #:S '(1)
+        #:q0 'A
+        #:F '(HALT)
         #:delta
-        [(A 0) (   B 1 R)]
-        [(A 1) (   C 1 L)]
-        [(B 0) (   A 1 L)]
-        [(B 1) (   B 1 R)]
-        [(C 0) (   B 1 L)]
-        [(C 1) (HALT 1 R)]))
+        '([(A 0) (   B 1 R)]
+          [(A 1) (   C 1 L)]
+          [(B 0) (   A 1 L)]
+          [(B 1) (   B 1 R)]
+          [(C 0) (   B 1 L)]
+          [(C 1) (HALT 1 R)])))
 
   (check-equal?
    (run* busy-beaver
@@ -199,31 +191,31 @@
    '(1 1 1 1 1 1))
 
   (define unary-addition
-    (tm #:Q (consume-first-number
-             consume-second-number
-             override-last-*
-             seek-beginning
-             HALT)
-        #:G (* _ /)
-        #:b _
-        #:S (* /)
-        #:q0 consume-first-number
-        #:F (HALT)
+    (tm #:Q '(consume-first-number
+              consume-second-number
+              override-last-*
+              seek-beginning
+              HALT)
+        #:G '(* _ /)
+        #:b '_
+        #:S '(* /)
+        #:q0 'consume-first-number
+        #:F '(HALT)
         #:delta
-        [(consume-first-number *)
-         (consume-first-number * R)]
-        [(consume-first-number /)
-         (consume-second-number * R)]
-        [(consume-second-number *)
-         (consume-second-number * R)]
-        [(consume-second-number _)
-         (override-last-* _ L)]
-        [(override-last-* *)
-         (seek-beginning _ L)]
-        [(seek-beginning *)
-         (seek-beginning * L)]
-        [(seek-beginning _)
-         (HALT _ R)]))
+        '([(consume-first-number *)
+           (consume-first-number * R)]
+          [(consume-first-number /)
+           (consume-second-number * R)]
+          [(consume-second-number *)
+           (consume-second-number * R)]
+          [(consume-second-number _)
+           (override-last-* _ L)]
+          [(override-last-* *)
+           (seek-beginning _ L)]
+          [(seek-beginning *)
+           (seek-beginning * L)]
+          [(seek-beginning _)
+           (HALT _ R)])))
 
   (check-equal?
    (run* unary-addition
@@ -231,78 +223,58 @@
          #:inform (make-display-state unary-addition))
    '(* * * * * * * * * *)))
 
-(begin-for-syntax
-  (define (syntax->slist s)
-    (map syntax->datum (syntax->list s)))
-  (define-syntax-rule (in-syntax s)
-    (in-list (syntax->list s))))
-
-(define-syntax (implicit-tm stx)
-  (syntax-parse stx
-    [(_ [idelta-state
-         [idelta-symbol
-          (inext-state iwrite-symbol ihead-movement)]
-         ...]
-        ...)
-     (with-syntax
-         ([(state ...)
-           (remove-duplicates
-            (cons 'HALT
-                  (append (syntax->slist #'(idelta-state ...))
-                          (syntax->slist #'(inext-state ... ...)))))]
-          [(sym ...)
-           (remove-duplicates
-            (cons '_
-                  (append (syntax->slist #'(idelta-symbol ... ...))
-                          (syntax->slist #'(iwrite-symbol ... ...)))))]
-          [(isym ...)
-           (remove '_
-                   (remove-duplicates
-                    (syntax->slist #'(idelta-symbol ... ...))))]
-          [(delta-state0 _ ...) #'(idelta-state ...)]
-          [((delta-state
-             delta-symbol
-             (next-state write-symbol head-movement))
-            ...)
-           (for*/list
-               ([i (in-syntax
-                    #'([idelta-state
-                        [idelta-symbol
-                         (inext-state
-                          iwrite-symbol
-                          ihead-movement)]
-                        ...]
-                       ...))]
-                [j (in-list
-                    (rest (syntax->list i)))])
-             (cons (first (syntax->list i))
-                   (syntax->list j)))])
-       (syntax/loc stx
-         (tm #:Q (state ...)
-             #:G (_ sym ...)
-             #:b _
-             #:S (isym ...)
-             #:q0 delta-state0
-             #:F (HALT)
-             #:delta
-             [(delta-state delta-symbol)
-              (next-state write-symbol head-movement)]
-             ...)))]))
+(define (implicit-tm implicit-delta)
+  (when (empty? implicit-delta)
+    (error 'implicit-tm "Requires at least one state"))
+  (match-define
+   `([,idelta-state
+      [,idelta-symbol
+       (,inext-state ,iwrite-symbol ,ihead-movement)]
+      ...]
+     ...)
+   implicit-delta)
+  (tm #:Q
+      (remove-duplicates
+       (cons 'HALT
+             (append* idelta-state
+                      inext-state)))
+      #:G
+      (remove-duplicates
+       (cons '_
+             (append (append* idelta-symbol)
+                     (append* iwrite-symbol))))
+      #:b '_
+      #:S (remove '_ (remove-duplicates (append* idelta-symbol)))
+      #:q0 (first idelta-state)
+      #:F '(HALT)
+      #:delta
+      (append*
+       (for/list ([delta-state (in-list idelta-state)]
+                  [ids (in-list idelta-symbol)]
+                  [ins (in-list inext-state)]
+                  [iws (in-list iwrite-symbol)]
+                  [ihm (in-list ihead-movement)])
+         (for/list ([delta-symbol (in-list ids)]
+                    [next-state (in-list ins)]
+                    [write-symbol (in-list iws)]
+                    [head-movement (in-list ihm)])
+           `[(,delta-state ,delta-symbol)
+             (,next-state ,write-symbol ,head-movement)])))))
 
 (module+ test
   (define implicit-unary-addition
     (implicit-tm
-     [consume-first-number
-      [* (consume-first-number * R)]
-      [+ (consume-second-number * R)]]
-     [consume-second-number
-      [* (consume-second-number * R)]
-      [_ (override-last-* _ L)]]
-     [override-last-*
-      [* (seek-beginning _ L)]]
-     [seek-beginning
-      [* (seek-beginning * L)]
-      [_ (HALT _ R)]]))
+     '([consume-first-number
+        [* (consume-first-number * R)]
+        [+ (consume-second-number * R)]]
+       [consume-second-number
+        [* (consume-second-number * R)]
+        [_ (override-last-* _ L)]]
+       [override-last-*
+        [* (seek-beginning _ L)]]
+       [seek-beginning
+        [* (seek-beginning * L)]
+        [_ (HALT _ R)]])))
 
   (check-equal?
    (run* implicit-unary-addition
@@ -319,13 +291,13 @@
 
   (define implicit-binary-add1
     (implicit-tm
-     [find-end
-      [0 (find-end 0 R)]
-      [1 (find-end 1 R)]
-      [_ (zero-until-0 _ L)]]
-     [zero-until-0
-      [1 (zero-until-0 0 L)]
-      [0 (HALT 1 L)]]))
+     '([find-end
+        [0 (find-end 0 R)]
+        [1 (find-end 1 R)]
+        [_ (zero-until-0 _ L)]]
+       [zero-until-0
+        [1 (zero-until-0 0 L)]
+        [0 (HALT 1 L)]])))
 
   (check-equal?
    (run* implicit-binary-add1
@@ -335,21 +307,21 @@
 
   (define implicit-binary-sub1
     (implicit-tm
-     [ones-complement
-      [0 (ones-complement 1 R)]
-      [1 (ones-complement 0 R)]
-      [_ (add1:zero-until-0 _ L)]]
-     [add1:zero-until-0
-      [1 (add1:zero-until-0 0 L)]
-      [0 (add1:find-end 1 R)]]
-     [add1:find-end
-      [0 (add1:find-end 0 R)]
-      [1 (add1:find-end 1 R)]
-      [_ (ones-complementR _ L)]]
-     [ones-complementR
-      [0 (ones-complementR 1 L)]
-      [1 (ones-complementR 0 L)]
-      [_ (HALT _ R)]]))
+     '([ones-complement
+        [0 (ones-complement 1 R)]
+        [1 (ones-complement 0 R)]
+        [_ (add1:zero-until-0 _ L)]]
+       [add1:zero-until-0
+        [1 (add1:zero-until-0 0 L)]
+        [0 (add1:find-end 1 R)]]
+       [add1:find-end
+        [0 (add1:find-end 0 R)]
+        [1 (add1:find-end 1 R)]
+        [_ (ones-complementR _ L)]]
+       [ones-complementR
+        [0 (ones-complementR 1 L)]
+        [1 (ones-complementR 0 L)]
+        [_ (HALT _ R)]])))
 
   (check-equal?
    (run* implicit-binary-sub1
@@ -364,54 +336,54 @@
 
   (define implicit-binary-add
     (implicit-tm
-     [check-if-zero
-      [0 (check-if-zero 0 R)]
-      [1 (seek-left&sub1 1 L)]
-      [+ (seek-left&zero _ L)]]
-     [seek-left&sub1
-      [0 (seek-left&sub1 0 L)]
-      [1 (seek-left&sub1 1 L)]
-      [_ (sub1:ones-complement _ R)]]
-     [sub1:ones-complement
-      [0 (sub1:ones-complement 1 R)]
-      [1 (sub1:ones-complement 0 R)]
-      [+ (sub1:add1:zero-until-0 + L)]]
-     [sub1:add1:zero-until-0
-      [1 (sub1:add1:zero-until-0 0 L)]
-      [0 (sub1:add1:find-end 1 R)]]
-     [sub1:add1:find-end
-      [0 (sub1:add1:find-end 0 R)]
-      [1 (sub1:add1:find-end 1 R)]
-      [+ (sub1:ones-complementR + L)]]
-     [sub1:ones-complementR
-      [0 (sub1:ones-complementR 1 L)]
-      [1 (sub1:ones-complementR 0 L)]
-      [_ (seek-right&add1 _ R)]]
-     [seek-right&add1
-      [0 (seek-right&add1 0 R)]
-      [1 (seek-right&add1 1 R)]
-      [+ (add1:find-end + R)]]
-     [add1:find-end
-      [0 (add1:find-end 0 R)]
-      [1 (add1:find-end 1 R)]
-      [_ (add1:zero-until-0 _ L)]]
-     [add1:zero-until-0
-      [1 (add1:zero-until-0 0 L)]
-      [0 (seek-left&continue 1 L)]]
-     [seek-left&continue
-      [0 (seek-left&continue 0 L)]
-      [1 (seek-left&continue 1 L)]
-      [+ (seek-left&continue + L)]
-      [_ (check-if-zero _ R)]]
-     [seek-left&zero
-      [0 (seek-left&zero _ L)]
-      [_ (seek-start _ R)]]
-     [seek-start
-      [_ (seek-start _ R)]
-      [0 (move-right-once 0 L)]
-      [1 (move-right-once 1 L)]]
-     [move-right-once
-      [_ (HALT _ R)]]))
+     '([check-if-zero
+        [0 (check-if-zero 0 R)]
+        [1 (seek-left&sub1 1 L)]
+        [+ (seek-left&zero _ L)]]
+       [seek-left&sub1
+        [0 (seek-left&sub1 0 L)]
+        [1 (seek-left&sub1 1 L)]
+        [_ (sub1:ones-complement _ R)]]
+       [sub1:ones-complement
+        [0 (sub1:ones-complement 1 R)]
+        [1 (sub1:ones-complement 0 R)]
+        [+ (sub1:add1:zero-until-0 + L)]]
+       [sub1:add1:zero-until-0
+        [1 (sub1:add1:zero-until-0 0 L)]
+        [0 (sub1:add1:find-end 1 R)]]
+       [sub1:add1:find-end
+        [0 (sub1:add1:find-end 0 R)]
+        [1 (sub1:add1:find-end 1 R)]
+        [+ (sub1:ones-complementR + L)]]
+       [sub1:ones-complementR
+        [0 (sub1:ones-complementR 1 L)]
+        [1 (sub1:ones-complementR 0 L)]
+        [_ (seek-right&add1 _ R)]]
+       [seek-right&add1
+        [0 (seek-right&add1 0 R)]
+        [1 (seek-right&add1 1 R)]
+        [+ (add1:find-end + R)]]
+       [add1:find-end
+        [0 (add1:find-end 0 R)]
+        [1 (add1:find-end 1 R)]
+        [_ (add1:zero-until-0 _ L)]]
+       [add1:zero-until-0
+        [1 (add1:zero-until-0 0 L)]
+        [0 (seek-left&continue 1 L)]]
+       [seek-left&continue
+        [0 (seek-left&continue 0 L)]
+        [1 (seek-left&continue 1 L)]
+        [+ (seek-left&continue + L)]
+        [_ (check-if-zero _ R)]]
+       [seek-left&zero
+        [0 (seek-left&zero _ L)]
+        [_ (seek-start _ R)]]
+       [seek-start
+        [_ (seek-start _ R)]
+        [0 (move-right-once 0 L)]
+        [1 (move-right-once 1 L)]]
+       [move-right-once
+        [_ (HALT _ R)]])))
 
   ;; 2 + 3 = 5
   (check-equal?
@@ -538,18 +510,18 @@
 (module+ test
   (define implicit-binary-add-mt
     (implicit-tm
-     [no-carry
-      [(0 0) (no-carry 0 R)]
-      [(1 0) (no-carry 1 R)]
-      [(0 1) (no-carry 1 R)]
-      [(1 1) (   carry 0 R)]
-      [    _ (    HALT _ L)]]
-     [carry
-      [(0 0) (no-carry 1 R)]
-      [(0 1) (   carry 0 R)]
-      [(1 0) (   carry 0 R)]
-      [(1 1) (   carry 1 R)]
-      [    _ (    HALT 1 R)]]))
+     '([no-carry
+        [(0 0) (no-carry 0 R)]
+        [(1 0) (no-carry 1 R)]
+        [(0 1) (no-carry 1 R)]
+        [(1 1) (   carry 0 R)]
+        [    _ (    HALT _ L)]]
+       [carry
+        [(0 0) (no-carry 1 R)]
+        [(0 1) (   carry 0 R)]
+        [(1 0) (   carry 0 R)]
+        [(1 1) (   carry 1 R)]
+        [    _ (    HALT 1 R)]])))
 
   ;; 2 + 3 = 5
   (check-equal?
@@ -561,6 +533,16 @@
   (when #f
     (render implicit-binary-add-mt
             '((0 1) (1 1) (0 0) (0 0)))))
+
+(struct *itm (delta))
+(define (itm . d) (*ptm d))
+(define (itm->tm i)
+  )
+
+(define tm:else (gensym 'else))
+
+(define (tm:write&move state input goto output head)
+  (ptm (list state input goto output head)))
 
 (define-syntax-rule (define-tm-action right!)
   (define-syntax (right! stx)
@@ -678,13 +660,13 @@
                  #:q0 e.state0
                  #:F (HALT)
                  #:delta delta ...))
-           (tm #:Q (state ... HALT)
-               #:G (sym ... _)
-               #:b _
-               #:S (sym ...)
-               #:q0 e.state0
-               #:F (HALT)
-               #:delta delta ...))))]))
+           (tm #:Q '(state ... HALT)
+               #:G '(sym ... _)
+               #:b '_
+               #:S '(sym ...)
+               #:q0 'e.state0
+               #:F '(HALT)
+               #:delta '(delta ...)))))]))
 
 (module+ test
   (check-match (program-tm (halt!))
