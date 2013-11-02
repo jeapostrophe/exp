@@ -687,12 +687,100 @@
 (module+ test
   (define program-binary-add1
     (compile-ptm
-     (tm:combine
-      (tm:right-until 'main '_ 'pre-add1)
-      (tm:left 'pre-add1 'find-last-zero)
-      (tm:write&left-until 'find-last-zero '0 '0 'write-1)
-      (tm:write 'write-1 '1 'HALT))))
+     (with-states (main pre-add1 find-last-zero write-1)
+       (tm:combine
+        (tm:right-until main '_ pre-add1)
+        (tm:left pre-add1 find-last-zero)
+        (tm:write&left-until find-last-zero '0 '0 write-1)
+        (tm:write write-1 '1 'HALT)))))
 
   (check-tm program-binary-add1
             '(0 0 1 0)
             '(0 0 1 1)))
+
+(define (tm:right* state how-many goto)
+  (if (zero? how-many)
+    (tm:goto state tm:else goto)
+    (with-states (tmp)
+      (tm:combine (tm:right state tmp)
+                  (tm:right* tmp (sub1 how-many) goto)))))
+
+(define (tm:read-from state possible-syms generator)
+  (apply
+   tm:combine
+   (for/list ([sym (in-list possible-syms)])
+     (with-states (sym-state)
+       (tm:combine (tm:goto state sym sym-state)
+                   (generator sym sym-state))))))
+
+(module+ test
+  (define-syntax-rule (check-tms tm is os)
+    (check-tm tm (string->list is) (string->list os)))
+
+  (define numbers (string->list "0123456789"))
+  (define program-dec-add
+    (compile-ptm
+     #:and-then (string->list "()+ ")
+     (tm:combine
+      ;; xxx change to find lhs's right-most number
+      (tm:right* 'main 3 'lhs)
+      (tm:read-from
+       'lhs numbers
+       (λ (lhs lhs-state)
+         (with-states (find-rhs rhs)
+           (tm:combine
+            ;; xxx change to find rhs's right-most number
+            (tm:right* lhs-state 2 rhs)
+            (tm:read-from
+             rhs numbers
+             (λ (rhs rhs-state)
+               (with-states (tmp1 tmp2 write-ans write-ans2 reset-head)
+                 (tm:combine
+                  (tm:right rhs-state tmp1)
+                  (tm:write tmp1 '_ tmp2)
+                  (tm:write&left-until tmp2 '_ #\( write-ans)
+                  (match (string->list
+                          (number->string
+                           (+ (string->number (string lhs))
+                              (string->number (string rhs)))))
+                    [(list ans)
+                     (tm:write write-ans ans 'HALT)]
+                    [(list #\1 ans)
+                     (tm:combine
+                      (tm:write&right write-ans tm:else write-ans2 #\1)
+                      (tm:write write-ans2 ans reset-head)
+                      (tm:left reset-head 'HALT))]))))))))))))
+
+  ;; Single digit
+  (check-tms program-dec-add
+             "(+ 2 1)"
+             "3")
+  ;; Single digit + carry
+  (check-tms program-dec-add
+             "(+ 9 2)"
+             "11")
+  (check-tms program-dec-add
+             "(+ 9 9)"
+             "18")
+
+  (length (*tm-states program-dec-add))
+  (exit 0)
+
+  ;; xxx would it be better to be like a stack machine?
+
+  ;; Multi-digit
+  (check-tms program-dec-add
+             "(+ 21 11)"
+             "32")
+  ;; Multi-digit + carry
+  (check-tms program-dec-add
+             "(+ 16 16)"
+             "32")  
+  ;; Multi-digit + carry + expand
+  (check-tms program-dec-add
+             "(+ 20 90)"
+             "110")
+
+  (check-tms program-dec-add
+             "(+ (+ 10 10) 90)"
+             "110"))
