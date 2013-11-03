@@ -727,7 +727,7 @@
   (apply
    tm:combine
    (for/list ([sym (in-list possible-syms)])
-     (with-states "read-from" (sym-state)
+     (with-states (format "read-from(~a)" sym) (sym-state)
        (tm:combine (tm:goto state sym sym-state)
                    (generator sym sym-state))))))
 
@@ -741,52 +741,88 @@
     (check-tm tm (string->list is) (string->list os)))
 
   (define numbers (string->list "0123456789"))
+
+  ;; xxx implement algorithm in racket first
+  (define (char-num? c)
+    (member c numbers))
+  (define (racket-dec-add s)
+    (define l (string->list s))
+
+    (define (find-last-digit mark last l k)
+      (let find-lhs ([l l])
+        (cond
+          [(char-num? (first l))
+           (let find-space ([l l])
+             (cond
+               [(char=? last (second l))
+                (cons (cons mark (first l))
+                      (k (rest l)))]
+               [else
+                (cons (first l) (find-space (rest l)))]))]
+          [else
+           (cons (first l) (find-lhs (rest l)))])))
+
+    (find-last-digit 'lhs #\space l
+                     (λ (l)
+                       (find-last-digit 'rhs #\) l
+                                        (λ (l) l)))))
+
   (define program-dec-add
     (compile-ptm
      #:and-then (string->list "()+ ")
      (with-states "dec-add" (main op seek-lhs lhs)
        (tm:combine
-        ;; xxx change to find lhs's right-most number
         (tm:right-stop-when main #\space op)
-        (tm:right* op 2 seek-lhs)
-        (tm:right-stop-when seek-lhs #\space lhs)
         (tm:read-from
-         lhs numbers
-         (λ (lhs lhs-state)
-           (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
-             (tm:combine
-              (tm:right-stop-when lhs-state #\) rhs)
-              (tm:read-from
-               rhs numbers
-               (λ (rhs rhs-state)
-                 (with-states (format "rhs(~a)" rhs)
-                     (tmp1 tmp2 write-ans write-ans2 reset-head)
-                   (tm:combine
-                    (tm:right rhs-state tmp1)
-                    (tm:write tmp1 '_ tmp2)
-                    (tm:write&left-until tmp2 '_ #\( write-ans)
-                    (match (string->list
-                            (number->string
-                             (+ (string->number (string lhs))
-                                (string->number (string rhs)))))
-                      [(list ans)
-                       (tm:write write-ans ans 'HALT)]
-                      [(list #\1 ans)
-                       (tm:combine
-                        (tm:write&right write-ans tm:else write-ans2 #\1)
-                        (tm:write write-ans2 ans reset-head)
-                        (tm:left reset-head 'HALT))])))))))))))))
+         op (string->list "+")
+         (λ (op op-state)
+           (match op
+             [#\+
+              ;; xxx skip over more spaces than 1?
+              (tm:combine
+               (tm:right* op-state 2 seek-lhs)
+               (tm:right-stop-when seek-lhs #\space lhs)
+               (tm:read-from
+                lhs numbers
+                (λ (lhs lhs-state)
+                  (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
+                    (tm:combine
+                     (tm:right-stop-when lhs-state #\) rhs)
+                     (tm:read-from
+                      rhs numbers
+                      (λ (rhs rhs-state)
+                        (with-states (format "rhs(~a)" rhs)
+                            (tmp1 tmp2 write-ans write-ans2 reset-head)
+                          (tm:combine
+                           (tm:right rhs-state tmp1)
+                           (tm:write tmp1 '_ tmp2)
+                           (tm:write&left-until tmp2 '_ #\( write-ans)
+                           (match (string->list
+                                   (number->string
+                                    (+ (string->number (string lhs))
+                                       (string->number (string rhs)))))
+                             [(list ans)
+                              (tm:write write-ans ans 'HALT)]
+                             [(list #\1 ans)
+                              (tm:combine
+                               (tm:write&right write-ans tm:else write-ans2 #\1)
+                               (tm:write write-ans2 ans reset-head)
+                               (tm:left reset-head 'HALT))]))))))))))])))))))
+
+  (define-syntax-rule (check-add i o)
+    (begin (check-tms program-dec-add i o)
+           (check-equal? (racket-dec-add i) o)))
 
   ;; Single digit
-  (check-tms program-dec-add
-             "(+ 2 1)"
+  (check-add "(+ 2 1)"
              "3")
+
+  (exit 0)
+
   ;; Single digit + carry
-  (check-tms program-dec-add
-             "(+ 9 2)"
+  (check-add "(+ 9 2)"
              "11")
-  (check-tms program-dec-add
-             "(+ 9 9)"
+  (check-add "(+ 9 9)"
              "18")
 
   (length (*tm-states program-dec-add))
@@ -795,18 +831,14 @@
   ;; xxx would it be better to be like a stack machine/forth?
 
   ;; Multi-digit
-  (check-tms program-dec-add
-             "(+ 21 11)"
-             "32")
+  (check-add "(+ 12 34)"
+             "46")
   ;; Multi-digit + carry
-  (check-tms program-dec-add
-             "(+ 16 16)"
+  (check-add "(+ 16 16)"
              "32")
   ;; Multi-digit + carry + expand
-  (check-tms program-dec-add
-             "(+ 20 90)"
+  (check-add "(+ 20 90)"
              "110")
 
-  (check-tms program-dec-add
-             "(+ (+ 10 10) 90)"
+  (check-add "(+ (+ 10 10) 90)"
              "110"))
