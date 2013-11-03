@@ -655,12 +655,30 @@
              '(X Y Z)
              '(X Y fin)))
 
-(define-syntax-rule (with-states (s ...) body)
-  (let ([s (gensym 's)] ...) body))
+(define current-state-prefix (make-parameter ""))
+(define (state-join x y)
+  (if (string=? "" x)
+    y
+    (format "~a ~a" x y)))
+
+(define next-state 0)
+(define (state-format i)
+  (set! next-state (add1 next-state))
+  (format "~a:~a"
+          next-state
+          (state-join
+           (current-state-prefix)
+           i)))
+(define-syntax-rule (with-states label (s ...) body)
+  (parameterize ([current-state-prefix
+                  (state-join (current-state-prefix) label)])
+    (let ([s (state-format 's)]
+          ...)
+      body)))
 
 ;; This is interesting because it leaves the tape and head unchanged.
 (define (tm:halt state)
-  (with-states (tmp)
+  (with-states "halt" (tmp)
     (tm:combine (tm:left state tmp)
                 (tm:right tmp 'HALT))))
 (module+ test
@@ -669,12 +687,12 @@
              '(X Y Z)))
 
 (define (tm:goto state input goto)
-  (with-states (tmp)
+  (with-states "goto" (tmp)
     (tm:combine (tm:write&right state input tmp input)
                 (tm:left tmp goto))))
 
 (define (tm:write state output goto)
-  (with-states (tmp)
+  (with-states "write" (tmp)
     (tm:combine (tm:write&left state tm:else tmp output)
                 (tm:right tmp goto))))
 (define (tm:right-until state stop-input goto)
@@ -687,7 +705,7 @@
 (module+ test
   (define program-binary-add1
     (compile-ptm
-     (with-states (main pre-add1 find-last-zero write-1)
+     (with-states "binary-add1" (main pre-add1 find-last-zero write-1)
        (tm:combine
         (tm:right-until main '_ pre-add1)
         (tm:left pre-add1 find-last-zero)
@@ -701,7 +719,7 @@
 (define (tm:right* state how-many goto)
   (if (zero? how-many)
     (tm:goto state tm:else goto)
-    (with-states (tmp)
+    (with-states (format "right*(~a)" how-many) (tmp)
       (tm:combine (tm:right state tmp)
                   (tm:right* tmp (sub1 how-many) goto)))))
 
@@ -709,9 +727,14 @@
   (apply
    tm:combine
    (for/list ([sym (in-list possible-syms)])
-     (with-states (sym-state)
+     (with-states "read-from" (sym-state)
        (tm:combine (tm:goto state sym sym-state)
                    (generator sym sym-state))))))
+
+(define (tm:right-stop-when state end-sym goto)
+  (with-states "right-stop-when" (tmp)
+    (tm:combine (tm:right-until state end-sym tmp)
+                (tm:left tmp goto))))
 
 (module+ test
   (define-syntax-rule (check-tms tm is os)
@@ -721,35 +744,38 @@
   (define program-dec-add
     (compile-ptm
      #:and-then (string->list "()+ ")
-     (tm:combine
-      ;; xxx change to find lhs's right-most number
-      (tm:right* 'main 3 'lhs)
-      (tm:read-from
-       'lhs numbers
-       (λ (lhs lhs-state)
-         (with-states (find-rhs rhs)
-           (tm:combine
-            ;; xxx change to find rhs's right-most number
-            (tm:right* lhs-state 2 rhs)
-            (tm:read-from
-             rhs numbers
-             (λ (rhs rhs-state)
-               (with-states (tmp1 tmp2 write-ans write-ans2 reset-head)
-                 (tm:combine
-                  (tm:right rhs-state tmp1)
-                  (tm:write tmp1 '_ tmp2)
-                  (tm:write&left-until tmp2 '_ #\( write-ans)
-                  (match (string->list
-                          (number->string
-                           (+ (string->number (string lhs))
-                              (string->number (string rhs)))))
-                    [(list ans)
-                     (tm:write write-ans ans 'HALT)]
-                    [(list #\1 ans)
-                     (tm:combine
-                      (tm:write&right write-ans tm:else write-ans2 #\1)
-                      (tm:write write-ans2 ans reset-head)
-                      (tm:left reset-head 'HALT))]))))))))))))
+     (with-states "dec-add" (main op seek-lhs lhs)
+       (tm:combine
+        ;; xxx change to find lhs's right-most number
+        (tm:right-stop-when main #\space op)
+        (tm:right* op 2 seek-lhs)
+        (tm:right-stop-when seek-lhs #\space lhs)
+        (tm:read-from
+         lhs numbers
+         (λ (lhs lhs-state)
+           (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
+             (tm:combine
+              (tm:right-stop-when lhs-state #\) rhs)
+              (tm:read-from
+               rhs numbers
+               (λ (rhs rhs-state)
+                 (with-states (format "rhs(~a)" rhs)
+                     (tmp1 tmp2 write-ans write-ans2 reset-head)
+                   (tm:combine
+                    (tm:right rhs-state tmp1)
+                    (tm:write tmp1 '_ tmp2)
+                    (tm:write&left-until tmp2 '_ #\( write-ans)
+                    (match (string->list
+                            (number->string
+                             (+ (string->number (string lhs))
+                                (string->number (string rhs)))))
+                      [(list ans)
+                       (tm:write write-ans ans 'HALT)]
+                      [(list #\1 ans)
+                       (tm:combine
+                        (tm:write&right write-ans tm:else write-ans2 #\1)
+                        (tm:write write-ans2 ans reset-head)
+                        (tm:left reset-head 'HALT))])))))))))))))
 
   ;; Single digit
   (check-tms program-dec-add
@@ -766,7 +792,7 @@
   (length (*tm-states program-dec-add))
   (exit 0)
 
-  ;; xxx would it be better to be like a stack machine?
+  ;; xxx would it be better to be like a stack machine/forth?
 
   ;; Multi-digit
   (check-tms program-dec-add
@@ -775,7 +801,7 @@
   ;; Multi-digit + carry
   (check-tms program-dec-add
              "(+ 16 16)"
-             "32")  
+             "32")
   ;; Multi-digit + carry + expand
   (check-tms program-dec-add
              "(+ 20 90)"
