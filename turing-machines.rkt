@@ -598,8 +598,8 @@
          (list i)])))))
 
 (define (compile-ptm t #:and-then [and-then empty])
-  (itm->tm (ptm->itm t #:and-then and-then)
-           #:and-then and-then))
+  (define it (ptm->itm t #:and-then and-then))
+  (itm->tm it #:and-then and-then))
 
 (module+ test
   (define-syntax-rule (check-tm tm input output)
@@ -655,23 +655,17 @@
              '(X Y Z)
              '(X Y fin)))
 
-(define current-state-prefix (make-parameter ""))
-(define (state-join x y)
-  (if (string=? "" x)
-    y
-    (format "~a ~a" x y)))
+(define current-state-prefix (make-parameter empty))
+(define (snoc l x)
+  (append l (list x)))
 
 (define next-state 0)
 (define (state-format i)
   (set! next-state (add1 next-state))
-  (format "~a:~a"
-          next-state
-          (state-join
-           (current-state-prefix)
-           i)))
+  (cons next-state (snoc (current-state-prefix) i)))
 (define-syntax-rule (with-states label (s ...) body)
   (parameterize ([current-state-prefix
-                  (state-join (current-state-prefix) label)])
+                  (snoc (current-state-prefix) label)])
     (let ([s (state-format 's)]
           ...)
       body)))
@@ -736,141 +730,119 @@
     (tm:combine (tm:right-until state end-sym tmp)
                 (tm:left tmp goto))))
 
+(require racket/system)
+(define (draw-ptm! ptm f)
+  (match-define (*ptm pd) ptm)
+  (with-output-to-file f
+    #:exists 'replace
+    (λ ()
+      (printf "strict digraph {\n")
+      
+      (struct obj (children more))
+      (define (new-obj)
+        (obj (box empty) (make-hash)))
+      (define (store! o path e)
+        (match path
+          [(cons f sub-path)
+           (hash-update! (obj-more o) f
+                         (λ (msub-o)
+                           (define sub-o
+                             (or msub-o
+                                 (new-obj)))
+                           (store! sub-o sub-path e)
+                           sub-o)
+                         #f)]
+          [_
+           (define b (obj-children o))
+           (set-box! b (cons e (unbox b)))]))
+
+      (define top (new-obj))      
+      (for ([p (in-list pd)])
+        (match-define (list state input goto output head) p)
+        (store! top (cdr state) p))
+
+      (define (print-obj o)
+        (match-define (obj (box children) path->o) o)
+        (for ([p (in-list children)])
+          (match-define (list state input goto output head) p)
+          (printf "~s -> ~s\n" (~a state) (~a goto)))
+        (for ([(k o) (in-hash path->o)])
+          (printf "subgraph ~s {\n" (~a k))
+          (print-obj o)
+          (printf "}\n")))
+      (print-obj top)
+
+      (printf "}")))
+  (system* "/usr/bin/dot"
+           "-Tpdf"
+           f
+           "-o"
+           (path-replace-suffix f #".pdf")))
+
 (module+ test
   (define-syntax-rule (check-tms tm is os)
     (check-tm tm (string->list is) (string->list os)))
 
   (define numbers (string->list "0123456789"))
+  (define itm-dec-add
+    (with-states "dec-add" (main op seek-lhs lhs)
+      (tm:combine
+       (tm:right-stop-when main #\space op)
+       (tm:read-from
+        op (string->list "+")
+        (λ (op op-state)
+          (match op
+            [#\+
+             ;; xxx skip over more spaces than 1?
+             (tm:combine
+              (tm:right* op-state 2 seek-lhs)
+              (tm:right-stop-when seek-lhs #\space lhs)
+              (tm:read-from
+               lhs numbers
+               (λ (lhs lhs-state)
+                 (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
+                   (tm:combine
+                    (tm:right-stop-when lhs-state #\) rhs)
+                    (tm:read-from
+                     rhs numbers
+                     (λ (rhs rhs-state)
+                       (with-states (format "rhs(~a)" rhs)
+                           (tmp1 tmp2 write-ans write-ans2 reset-head)
+                         (tm:combine
+                          (tm:right rhs-state tmp1)
+                          (tm:write tmp1 '_ tmp2)
+                          (tm:write&left-until tmp2 '_ #\( write-ans)
+                          (match (string->list
+                                  (number->string
+                                   (+ (string->number (string lhs))
+                                      (string->number (string rhs)))))
+                            [(list ans)
+                             (tm:write write-ans ans 'HALT)]
+                            [(list #\1 ans)
+                             (tm:combine
+                              (tm:write&right write-ans tm:else write-ans2 #\1)
+                              (tm:write write-ans2 ans reset-head)
+                              (tm:left reset-head 'HALT))]))))))))))]))))))
 
-  ;; xxx implement algorithm in racket first
-  (define (char-num? c)
-    (member c numbers))
-  (define (racket-dec-add s)
-    (define l (string->list s))
-
-    (define (find-last-digit mark last l k)
-      (let find-lhs ([l l])
-        (cond
-          [(char-num? (first l))
-           (let find-space ([l l])
-             (cond
-               [(char=? last (second l))
-                (cons (cons mark (first l))
-                      (k (rest l)))]
-               [else
-                (cons (first l) (find-space (rest l)))]))]
-          [else
-           (cons (first l) (find-lhs (rest l)))])))
-
-    (define initial-labeling
-      (find-last-digit 'lhs #\space l
-                       (λ (l)
-                         (find-last-digit 'rhs #\) l
-                                          (λ (l) l)))))
-
-    (let main-loop ([l initial-labeling])
-      (define repeat? #t)
-      (define nl
-        (let lhs-loop ([l l])
-          (cond
-            [(cons? (first l))
-             (define fst (cdr (first l)))
-             (if (char-num? fst)
-               (cons fst
-                   (let rhs-loop ([l (rest l)])
-                     (cond
-                       [(cons? (first l))
-                        (define snd (cdr (first l)))
-                        (define rst (rest (rest l)))
-                        (define carry? (first (rest l)))
-                        (match carry?
-                          [#\)
-                           (match (string->list
-                                   (number->string
-                                    (+ (string->number (string fst))
-                                       (string->number (string snd)))))
-                             [(list a b)
-                              (list* a b rst)]
-                             [(list b)
-                              (list* #\0 b rst)])])]
-                       [(cons? (second l))
-                        (cons (cons 'rhs (first l))
-                              (rhs-loop (rest l)))]
-                       [else
-                        (cons (first l)
-                              (rhs-loop (rest l)))])))
-               (begin (set! repeat? #f)
-                      l))]
-            [(cons? (second l))
-             (cons (cons 'lhs (first l))
-                   (lhs-loop (rest l)))]
-            [else
-             (cons (first l)
-                   (lhs-loop (rest l)))])))
-
-      (if repeat?
-        (main-loop nl)
-        nl)))
+  (draw-ptm! itm-dec-add "/home/jay/Downloads/dec-add.dot")
 
   (define program-dec-add
     (compile-ptm
      #:and-then (string->list "()+ ")
-     (with-states "dec-add" (main op seek-lhs lhs)
-       (tm:combine
-        (tm:right-stop-when main #\space op)
-        (tm:read-from
-         op (string->list "+")
-         (λ (op op-state)
-           (match op
-             [#\+
-              ;; xxx skip over more spaces than 1?
-              (tm:combine
-               (tm:right* op-state 2 seek-lhs)
-               (tm:right-stop-when seek-lhs #\space lhs)
-               (tm:read-from
-                lhs numbers
-                (λ (lhs lhs-state)
-                  (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
-                    (tm:combine
-                     (tm:right-stop-when lhs-state #\) rhs)
-                     (tm:read-from
-                      rhs numbers
-                      (λ (rhs rhs-state)
-                        (with-states (format "rhs(~a)" rhs)
-                            (tmp1 tmp2 write-ans write-ans2 reset-head)
-                          (tm:combine
-                           (tm:right rhs-state tmp1)
-                           (tm:write tmp1 '_ tmp2)
-                           (tm:write&left-until tmp2 '_ #\( write-ans)
-                           (match (string->list
-                                   (number->string
-                                    (+ (string->number (string lhs))
-                                       (string->number (string rhs)))))
-                             [(list ans)
-                              (tm:write write-ans ans 'HALT)]
-                             [(list #\1 ans)
-                              (tm:combine
-                               (tm:write&right write-ans tm:else write-ans2 #\1)
-                               (tm:write write-ans2 ans reset-head)
-                               (tm:left reset-head 'HALT))]))))))))))])))))))
+     itm-dec-add))
 
   (define-syntax-rule (check-add i o)
-    (begin (check-tms program-dec-add i o)
-           (check-equal? (racket-dec-add i) o)))
+    (check-tms program-dec-add i o))
 
   ;; Single digit
   (check-add "(+ 2 1)"
              "3")
-
-  (exit 0)
-
   ;; Single digit + carry
   (check-add "(+ 9 2)"
              "11")
   (check-add "(+ 9 9)"
              "18")
 
-  (length (*tm-states program-dec-add))
   (exit 0)
 
   ;; xxx would it be better to be like a stack machine/forth?
