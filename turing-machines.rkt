@@ -779,9 +779,9 @@
       (for ([p (in-list pd)])
         (match-define (list state input goto output head) p)
         (store! top 
-                (consolidate (cdr state))
-                (list (consolidate (cdr state)) input 
-                      (consolidate (cdr* goto))
+                (cdr state)
+                (list (cdr state) input 
+                      (cdr* goto)
                       output head)))
 
       (define (print-obj o)
