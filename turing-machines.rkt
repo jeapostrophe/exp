@@ -756,16 +756,39 @@
            (define b (obj-children o))
            (set-box! b (cons e (unbox b)))]))
 
+      (define consolidate1
+        (match-lambda
+         [(regexp #"^read-from" (list _))
+          "read-from"]
+         [(regexp #"^lhs" (list _))
+          "lhs"]
+         [(regexp #"^rhs" (list _))
+          "rhs"]
+         [x x]))
+      (define (consolidate p)
+        (if (list? p)
+          (map consolidate1 p)
+          p))
+
+      (define (cdr* x)
+        (if (cons? x) (cdr x) x))
+      (define (car* x)
+        (if (cons? x) (car x) x))
+
       (define top (new-obj))      
       (for ([p (in-list pd)])
         (match-define (list state input goto output head) p)
-        (store! top (cdr state) p))
+        (store! top 
+                (consolidate (cdr state))
+                (list (consolidate (cdr state)) input 
+                      (consolidate (cdr* goto))
+                      output head)))
 
       (define (print-obj o)
         (match-define (obj (box children) path->o) o)
         (for ([p (in-list children)])
           (match-define (list state input goto output head) p)
-          (printf "~s -> ~s\n" (~a state) (~a goto)))
+          (printf "~s -> ~s\n" (~a (cdr* state)) (~a (cdr* goto))))
         (for ([(k o) (in-hash path->o)])
           (printf "subgraph ~s {\n" (~a k))
           (print-obj o)
@@ -784,6 +807,14 @@
     (check-tm tm (string->list is) (string->list os)))
 
   (define numbers (string->list "0123456789"))
+
+  ;; xxx first mark the lhs/rhs
+  
+  ;; xxx then, add them and write the answer to the right of the rhs
+  ;; while moving the marks
+
+  ;; xxx then check the marks and see if they are on numbers and if
+  ;; not clear everything from the rhs mark to the left (
   (define itm-dec-add
     (with-states "dec-add" (main op seek-lhs lhs)
       (tm:combine
@@ -824,7 +855,8 @@
                               (tm:write write-ans2 ans reset-head)
                               (tm:left reset-head 'HALT))]))))))))))]))))))
 
-  (draw-ptm! itm-dec-add "/home/jay/Downloads/dec-add.dot")
+  (when #f
+    (draw-ptm! itm-dec-add "/home/jay/Downloads/dec-add.dot"))
 
   (define program-dec-add
     (compile-ptm
