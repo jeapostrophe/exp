@@ -762,10 +762,55 @@
           [else
            (cons (first l) (find-lhs (rest l)))])))
 
-    (find-last-digit 'lhs #\space l
-                     (λ (l)
-                       (find-last-digit 'rhs #\) l
-                                        (λ (l) l)))))
+    (define initial-labeling
+      (find-last-digit 'lhs #\space l
+                       (λ (l)
+                         (find-last-digit 'rhs #\) l
+                                          (λ (l) l)))))
+
+    (let main-loop ([l initial-labeling])
+      (define repeat? #t)
+      (define nl
+        (let lhs-loop ([l l])
+          (cond
+            [(cons? (first l))
+             (define fst (cdr (first l)))
+             (if (char-num? fst)
+               (cons fst
+                   (let rhs-loop ([l (rest l)])
+                     (cond
+                       [(cons? (first l))
+                        (define snd (cdr (first l)))
+                        (define rst (rest (rest l)))
+                        (define carry? (first (rest l)))
+                        (match carry?
+                          [#\)
+                           (match (string->list
+                                   (number->string
+                                    (+ (string->number (string fst))
+                                       (string->number (string snd)))))
+                             [(list a b)
+                              (list* a b rst)]
+                             [(list b)
+                              (list* #\0 b rst)])])]
+                       [(cons? (second l))
+                        (cons (cons 'rhs (first l))
+                              (rhs-loop (rest l)))]
+                       [else
+                        (cons (first l)
+                              (rhs-loop (rest l)))])))
+               (begin (set! repeat? #f)
+                      l))]
+            [(cons? (second l))
+             (cons (cons 'lhs (first l))
+                   (lhs-loop (rest l)))]
+            [else
+             (cons (first l)
+                   (lhs-loop (rest l)))])))
+
+      (if repeat?
+        (main-loop nl)
+        nl)))
 
   (define program-dec-add
     (compile-ptm
