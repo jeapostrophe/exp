@@ -27,24 +27,27 @@
 (define-syntax-rule (check-not-equal? x y)
   (ru:check (negate res-equal?) (->values x) (->values y)))
 (define-syntax-rule (check-not-false x)
-  (ru:test-begin
-   (define xv (->values x))
-   (ru:check-pred res:values? xv)
-   (define len (length (res:values-vs xv)))
-   (if (= len 1)
-     (ru:check-not-false (first (res:values-vs xv)))
-     (ru:check-not-equal? len 1))))
+  (let ()
+    (define xv (->values x))
+    (cond
+      [(res:values? xv)
+       (define len (length (res:values-vs xv)))
+       (if (= len 1)
+         (ru:check-not-false (first (res:values-vs xv)))
+         (ru:check-not-equal? len 1))]
+      [else
+       (ru:check-pred res:values? xv)])))
 (define-syntax-rule (check-false x)
-  (ru:test-begin
-   (define xv (->values x))
-   (cond
-     [(res:values? xv)
-      (define len (length (res:values-vs xv)))
-      (if (= len 1)
-        (ru:check-false (first (res:values-vs xv)))
-        (ru:check-not-equal? len 1))]
-     [else
-      (ru:check-pred res:exn? xv)])))
+  (let ()
+    (define xv (->values x))
+    (cond
+      [(res:values? xv)
+       (define len (length (res:values-vs xv)))
+       (if (= len 1)
+         (ru:check-false (first (res:values-vs xv)))
+         (ru:check-not-equal? len 1))]
+      [else
+       (ru:check-pred res:exn? xv)])))
 
 (define (exn-match x b)
   (match b
@@ -60,10 +63,11 @@
    (λ (x) (exn-match x b))
    (λ () a)))
 (define-syntax-rule (check-not-exn a b)
-  (ru:test-begin
-   (define av (->values a))
-   (when (res:exn? av)
-     (ru:check-false (exn-match (res:exn-x av) b)))))
+  (let ()
+    (define av (->values a))
+    (if (res:exn? av)
+      (ru:check-false (exn-match (res:exn-x av) b))
+      (ru:check-pred res:values? av))))
 
 (begin-for-syntax
   (define-splicing-syntax-class test
