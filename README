@@ -141,6 +141,7 @@ temporal-ctcs - original implementation of temporal contracts
 threading-arrow.rkt - An arrow macro like clojure
 tr-cheat - a language to trick Typed Racket into turning off contracts
 trivia.tex - trivia card renderer
+ttt.rkt - a basic model of tic-tac-toe
 turing-machines.rkt - Turing Machine simulator
 tw.py - twitter to rss scraper
 undefined-dispatch-rules.rkt - a demonstration of #<undefined> interacting poorly with web-server/dispatch
