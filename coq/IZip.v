@@ -3,6 +3,13 @@ Inductive list (X:Type) : Type :=
 | cons : forall (x:X) (l:list X),
            list X.
 
+Fixpoint length {X:Type} (l:list X) :=
+match l with
+| nil => 0
+| cons _ l =>
+  S (length l)
+end.
+
 Fixpoint zip A B (l1:list A) (l2:list B) : list (A*B) :=
 match l1 with
 | nil => nil (A*B)
@@ -14,25 +21,42 @@ match l1 with
   end
 end.
 
-Inductive ilist (X:Type) : nat -> Type :=
+Inductive ilist (X:Set) : nat -> Set :=
 | Nil : ilist X 0
 | Cons : forall n (x:X),
            ilist X n ->
            ilist X (S n).
 
-Fixpoint erase {X:Type} {n:nat} (l:ilist X n) : list X :=
+Fixpoint erase {X:Set} {n:nat} (l:ilist X n) : list X :=
 match l with
 | Nil => nil X
 | Cons _ x l =>
   cons X x (erase l)
 end.
 
+Lemma erase_len :
+  forall X n (l:ilist X n),
+    length (erase l) = n.
+Proof.
+  intros X. induction n as [|n].
+  intros l. inversion l.
+
 Theorem izip :
   forall A B n (l1 : ilist A n) (l2 : ilist B n),
     { l3 : ilist (A*B) n |
       zip A B (erase l1) (erase l2) = erase l3  }.
 Proof.
-  intros A B n.
+  intros A B.
+  induction n as [|n]; simpl.
+
+  intros l1 l2. exists (Nil (A*B)).
+  
+
+  destruct l1. Focus 2.
+
+  destruct l1.
+  inversion l1.
+
   induction l1 as [|n1 e1 l1]; simpl.
 
   intros l2. exists (Nil (A*B)). simpl. trivial.
