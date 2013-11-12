@@ -23,7 +23,7 @@ boggle.rkt - boggle solver [Blogged: 2012-05-14]
 bom2se.rkt - Converts the Book of Mormon (JP) to Anki database
 cas-cad-e.rkt - case that is like C's switch [Blogged: 2013-06-24]
 cek.rkt - CEK machine
-condd.rkt - cond with embedded defines
+condd.rkt - cond with embedded defines [Blogged: 2013-11-12]
 conflict.rkt - racklog example
 coq - example Coq code
 csv2org.rkt - CSV to org-mode for game list

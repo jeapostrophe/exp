@@ -68,13 +68,12 @@
 (define-syntax (switch stx)
   (syntax-parse stx
     [(_)
-     (syntax/loc stx
+     (quasisyntax/loc stx
        (error 'switch "Fell through without else clause"))]
     [(_ #:else e:expr ...+)
      (syntax/loc stx
        (begin e ...))]
-    [(_ (~and (~seq x ...)
-              (~not (~seq x:switch-clause ...)))
+    [(_ (~and x (~not y:keyword)) ...
         sc:switch-clause . tail)
      (quasisyntax/loc stx
        (let ()
@@ -84,15 +83,38 @@
               (switch . tail)))))]))
 
 (module+ test
-  (chk #:exn (switch) "Fell through"
-       (switch #:else 1) 1
-       (switch #:else 1 2) 2
-       (switch #:cond [1 2]) 2
-       (switch #:cond [#f 1] #:else 2) 2
-       (switch #:cond [1 (define x 2) x]) 2
-       (switch #:cond [#f 1] #:cond [2 3] #:else 4) 3
+  (chk #:exn (switch)
+       "Fell through"
+
+       (switch #:else 1)
+       1
+
+       (switch #:else 1 2)
+       2
+
+       (switch #:cond [1 2])
+       2
+
+       (switch #:cond [#f 1] #:else 2)
+       2
+
+       (switch #:cond [1 (define x 2) x])
+       2
+
+       (switch #:cond [#f 1] #:cond [2 3] #:else 4)
+       3
+
        (switch (define one 1)
                #:cond [#f 1]
                (define two 2)
                #:cond [two (+ one one one)]
-               #:else 4) 3))
+               #:else 4)
+       3
+
+       (switch (define-syntax-rule (one) 1)
+               #:cond [#f 1]
+               (define two 2)
+               (set! two 3)
+               #:cond [two (+ (one) two)]
+               #:else 4)
+       4))
