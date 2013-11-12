@@ -1,9 +1,0 @@
-* 2013-06-24 -- cas-cad-e
-* 2013-05-27 -- threading-arrow
-* 2013-05-20 -- rorth
-* 2012-08-06 -- shower
-* 2012-07-12 -- kernel.rkt
-* 2012-06-18 -- bf-1.rkt
-* 2012-06-05 -- word-count.tex, negspace.tex
-* 2012-05-22 -- lz78.rkt
-* 2012-05-14 -- boggle.rkt

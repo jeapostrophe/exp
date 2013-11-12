@@ -15,14 +15,13 @@ aml.ml - example of incremental ML
 anki-monster - plugin for Anki for kids
 av.ss - solver for AV connection layout
 benford.rkt - implementation of benford transformation
-bf-1.rkt - weird delim cont pipe thing
+bf-1.rkt - weird delim cont pipe thing [Blogged: 2012-06-18]
 bfs.rkt - breadth first search
 bin - tiny scripts
 blog-macro.ss - macro example for blog
-blogged.org - index of blogged ~exp entries
-boggle.rkt - boggle solver
+boggle.rkt - boggle solver [Blogged: 2012-05-14]
 bom2se.rkt - Converts the Book of Mormon (JP) to Anki database
-cas-cad-e.rkt - case that is like C's switch
+cas-cad-e.rkt - case that is like C's switch [Blogged: 2013-06-24]
 cek.rkt - CEK machine
 condd.rkt - cond with embedded defines
 conflict.rkt - racklog example
@@ -53,7 +52,7 @@ interface - prototype of interface-in/out
 jdictate.rkt - screen scrap to create Japanese kanji Anki database
 k-from-end.rkt - implementation of stupid interview question
 kappend.rkt - version of list with O(1) append
-kernel.rkt - basic OS kernel with delim conts
+kernel.rkt - basic OS kernel with delim conts [Blogged: 2012-07-12]
 key2org.rkt - converter from Apple Keychain to org-mode
 keyex.ss - test of keystruct.ss
 keystruct.ss - early version of keyword structures
@@ -66,14 +65,14 @@ letwreck.rkt - my version of let/wreck
 linear.ss - linear logic theorem prover
 lsys.rkt - implementation of L-systems
 ltl.rkt - implementation of LTL checking 
-lz78.rkt - LZ78 compression implementation
+lz78.rkt - LZ78 compression implementation [Blogged: 2012-05-22]
 macro-incremental.rkt - demo of incrementally pushing macro marks
 macro-kohlbecker.rkt - macro examples from Kohlbecker
 macro.ss - evil macros
 macros-that-dont-work.c - examples of how C macros are broken
 minimal.el - emacs config just for org-mode
 namespace-ex - example of messing up generative structs with namespaces in Racket
-negspace.tex - negative space example in latex
+negspace.tex - negative space example in latex [Blogged: 2012-06-05]
 nick.rkt - all string generator
 nico.pl - downloader for NicoNico
 nsb2org.rkt - Netscape Bookmark format to org-mode
@@ -108,14 +107,14 @@ rom-gba.sh - manage GBA roms
 rom-link2.rkt - set up links of roms for wahcade
 rom-sort.rkt - organize NES roms
 ror - demo of "Ruby on Rails" Racket macro
-rorth - Racket vesion of forth
+rorth - Racket vesion of forth [Blogged: 2013-05-20]
 russian.rkt - screen scrape to create Russian database for Anki 
 screenrc - config for screen (terminal window manager)
 scut.ss - awesome version of "cut"
 sda.rkt - screen scrap SpeedDemosArchive marathons and creates RSS file (for miro podcast import)
 seqn-automaton.ss - dfa that consumes a sequence
 seqn.ss - experiment with sequences
-shower.rkt - generate an MP3 to take a shower to... efficiently!
+shower.rkt - generate an MP3 to take a shower to... efficiently! [Blogged: 2012-08-06]
 skyline-slow.rkt - solve the "skyline" problem (slowly)
 skyline.rkt - solve the "skyline" problem
 smart.fm.html - render a graph of smart.fm (defunct) data
@@ -138,7 +137,7 @@ swap-fold.rkt - foldr as foldl and back
 systemf.rkt - HOAS implementation of System-F
 temporal-clock.rkt - solver for FF13-2 temporal clock puzzles
 temporal-ctcs - original implementation of temporal contracts
-threading-arrow.rkt - An arrow macro like clojure
+threading-arrow.rkt - An arrow macro like clojure [Blogged: 2013-05-27]
 tr-cheat - a language to trick Typed Racket into turning off contracts
 trivia.tex - trivia card renderer
 ttt.rkt - a basic model of tic-tac-toe
@@ -150,7 +149,7 @@ values.rkt - keyword and optional values
 values.ss - keyword and optional values (old)
 what-are-symbol-tables.rkt - a demo that tries to explain in code what symbol tables are
 wiki.rkt - a basic wiki
-word-count.tex - counter-example to LaTeX word counting via collatz conjecture
+word-count.tex - counter-example to LaTeX word counting via collatz conjecture [Blogged: 2012-06-05]
 workout-plan.rkt - generator for workout plan contents
 workout-plan.tex - wrapper for workout plan PDF
 workout.rkt - graph workout data
