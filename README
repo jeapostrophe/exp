@@ -62,7 +62,7 @@ lazy-marks.ss - laziness that preserves the continuation marks of the promise cr
 lazy.py - python isn't lazy
 lazy.ss - very basic implementation of laziness
 letwreck.rkt - my version of let/wreck
-life.rkt - conway's game of life
+life.rkt - conway's game of life [blogged: 2013-11-18]
 linear.ss - linear logic theorem prover
 lsys.rkt - implementation of L-systems
 ltl.rkt - implementation of LTL checking 

@@ -61,8 +61,8 @@
   d)
 
 (module+ test-bench
-  ;;          safe: cpu time: 1843 real time: 1842 gc time: 36
-  ;; unsafe+inline: cpu time: 1683 real time: 1682 gc time: 82
+  ;;      original: cpu time: 1843 real time: 1842 gc time: 36
+  ;; dishv-ref/set: cpu time: 1683 real time: 1682 gc time: 82
   ;;     neighbors: cpu time:  530 real time:  531 gc time: 0
   (define (let-there-be-life s)
     (define seed (string->dish s))
@@ -109,3 +109,5 @@
     ..........O.....O.......O...........
     ...........O...O....................
     ............OO......................"))
+
+;; xxx run on GPU?
