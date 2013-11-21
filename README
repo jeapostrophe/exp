@@ -57,6 +57,7 @@ key2org.rkt - converter from Apple Keychain to org-mode
 keyex.ss - test of keystruct.ss
 keystruct.ss - early version of keyword structures
 l4-pr148.rkt - Professor Layton #4 Puzzle #148
+layout - structure layout customization
 lazy-ex.ss - demo of lazy-marks.ss
 lazy-marks.ss - laziness that preserves the continuation marks of the promise creation site (so stack track is accurate)
 lazy.py - python isn't lazy
