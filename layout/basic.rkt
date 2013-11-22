@@ -130,3 +130,9 @@
            (cons (+ 4) 8)
            (cons (+ 4) 1))
      (bytes 1 1 4 8 4 1)))
+
+(define x (make-cstruct-type (list _int8 _int)))
+(ctype-basetype x)
+(ctype-sizeof x)
+(ctype-alignof x)
+(ctype->layout x)

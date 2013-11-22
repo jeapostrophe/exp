@@ -111,3 +111,4 @@
     ............OO......................"))
 
 ;; xxx run on GPU?
+;; xxx use bit packing on a row?
