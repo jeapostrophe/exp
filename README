@@ -10,6 +10,7 @@ Configuration files and experimental, one-off code
 .Xresources - X resources, mainly to get solarized urxvt
 .xsession - X start up script
 .zshrc - zsh config
+aggressive-timeout.rkt - aggressive timeout enforcer
 amazon-wishlist.rkt - dump wishlist from Amazon
 aml.ml - example of incremental ML
 anki-monster - plugin for Anki for kids
