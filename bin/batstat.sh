@@ -18,6 +18,8 @@ else
         TIME="??:??"
     elif acpi -b | grep Full &> /dev/null ; then
         TIME="     "
+    elif acpi -b | grep "zero rate" &> /dev/null ; then
+        TIME="     "
     else
         TIME=$(acpi -b | perl -ne 's/^.+(..:..):...+$/\1/; print;')
     fi
