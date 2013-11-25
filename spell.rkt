@@ -49,7 +49,8 @@
   (with-input-from-file dict-raw
     (λ ()
       (for ([l (in-lines)])
-        (when ((string-length l) . > . MIN)
+        (when (and ((string-length l) . > . MIN)
+                   (regexp-match #rx"^[a-zA-Z]+$" l))
           (word-list-add! *wl* (string-downcase l))))))
 
   (with-output-to-file dict-compiled
