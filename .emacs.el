@@ -414,7 +414,7 @@ given a prefix arg."
             ("glsl" . "cgc -noentry -oglsl")
             ;; XXX rkt to rk switch
             ("rkt" . "rkt")
-            ("txt" . "checkwriting")
+            ("txt" . "ctxt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
             ("tex" . "pdflatex")))
