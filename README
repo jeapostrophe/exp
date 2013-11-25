@@ -125,7 +125,7 @@ snes-sram-check.rkt - create SRAM files (properly sized) for SNES roms
 sortcp.rkt - copy a set of files into directories based on their first name (used for creating the FS on the PowerPak)
 sortdir.rkt - ensure a directory's contents are sorted on the file system [especially FAT]
 spec-encode.rkt - demo of syntax-parse based version of Naughty Dog's DC language
-spell.rkt - evil version of "guess what word i'm thinking of" that always beats you
+spell.rkt - evil version of "guess what word i'm thinking of" that always beats you [Blogged: 2013/11/25]
 spstruct.ss - semipersistent structs
 ss-thread.ss - send/suspend using threads and not continuations
 sstruct-syn.rkt - improved version of struct (syntax class) [code was written before begin-for-syntax]
