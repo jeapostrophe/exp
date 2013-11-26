@@ -399,21 +399,23 @@ given a prefix arg."
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
 ;; DrRacket-like compiler
+(defcustom je/racket-test-p t
+  "Whether rkt or rk is run"
+  :type 'boolean)
 (defun run-current-file (writep)
   "Execute or compile the current file."
   (interactive)
   (let (suffixMap fname suffix progName cmdStr)
     ;; a keyed list of file suffix to comand-line program path/name
     (setq suffixMap
-          '(("java" . "javai")
+          `(("java" . "javai")
             ("c" . "cci")
             ("sh" . "zsh")
             ("py" . "python")
             ("cc" . "ccci")
             ("cg" . "cgc -noentry")
             ("glsl" . "cgc -noentry -oglsl")
-            ;; XXX rkt to rk switch
-            ("rkt" . "rkt")
+            ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
             ("txt" . "ctxt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
