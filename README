@@ -15,6 +15,7 @@ amazon-wishlist.rkt - dump wishlist from Amazon
 aml.ml - example of incremental ML
 anki-monster - plugin for Anki for kids
 av.ss - solver for AV connection layout
+basic-lazy.rkt - basic laziness for student
 benford.rkt - implementation of benford transformation
 bf-1.rkt - weird delim cont pipe thing [Blogged: 2012-06-18]
 bfs.rkt - breadth first search
