@@ -9,6 +9,7 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import XMonad.Actions.GridSelect
 import XMonad.Layout.WindowNavigation
+import XMonad.Hooks.ManageHelpers
 
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ]
 
@@ -37,12 +38,18 @@ myGSConfig = defaultGSConfig
   { gs_navigate = myNavigation
   }
 
-myLayoutHook = windowNavigation Tall ||| Full ||| windowNavigation (Mirror Tall)
+myLayoutHook = wntiled ||| Mirror wntiled ||| Full
+ where tiled = Tall nmaster delta ratio
+       wntiled = windowNavigation tiled
+       nmaster = 1
+       ratio = 1/2
+       delta = 3/100
 
 main = do
   xmproc <- spawnPipe "exec xmobarj ~/.xmobarrc"
   xmonad $ defaultConfig
-       { manageHook = manageDocks <+> manageHook defaultConfig,
+       { manageHook = manageDocks 
+                  <+> manageHook defaultConfig,
          layoutHook = avoidStruts $ myLayoutHook,
          logHook = dynamicLogWithPP xmobarPP
                    { ppOutput = hPutStrLn xmproc,
@@ -54,10 +61,11 @@ main = do
                      ppTitle = xmobarColor "#93a1a1" "" . shorten 70 . (\s -> ": " ++ s)},
          modMask = mod4Mask,
          borderWidth = 1,
-         workspaces = myWorkspaces, 
+         workspaces = myWorkspaces,
+         focusFollowsMouse = False, 
          terminal = "urxvtc -e screen -UxS lightning",
-         normalBorderColor = "#ffffff",
-         focusedBorderColor = "#073642" }
+         normalBorderColor = "#fdf6e3",
+         focusedBorderColor = "#073642" } 
        `additionalKeys`
        [((m .|. mod4Mask, k), windows $ f i)
         | (i, k) <- zip myWorkspaces ([xK_1 .. xK_9] ++ [xK_0])
@@ -66,7 +74,14 @@ main = do
        [ ("M4-;", spawn "jpn-on"),
          ("M4-'", spawn "jpn-off"),
          ("M4-S-z", spawn "gnome-screensaver-command --lock"),
+         ("M4-S-<Left>", sendMessage $ Swap L),
+         ("M4-S-<Right>", sendMessage $ Swap R),
+         ("M4-S-<Up>", sendMessage $ Swap U),
+         ("M4-S-<Down>", sendMessage $ Swap D),
          ("M4-<Left>", sendMessage $ Go L),
+         ("M4-<Right>", sendMessage $ Go R),
+         ("M4-<Up>", sendMessage $ Go U),
+         ("M4-<Down>", sendMessage $ Go D),
          ("M4-<Space>", spawn "exec dmenu.sh"),
          ("M4-`", sendMessage NextLayout),
          ("M4-S-w", spawn "exec conkeror -new chrome://"),

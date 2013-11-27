@@ -604,6 +604,10 @@ given a prefix arg."
 (org-defkey org-mode-map [(shift down)]        nil)
 (org-defkey org-mode-map [(shift left)]        nil)
 (org-defkey org-mode-map [(shift right)]       nil)
+(org-defkey org-mode-map [(control shift up)]          nil)
+(org-defkey org-mode-map [(control shift down)]        nil)
+(org-defkey org-mode-map [(control shift left)]        nil)
+(org-defkey org-mode-map [(control shift right)]       nil)
 
 (setq org-hide-leading-stars t)
 (setq org-return-follows-link t)
