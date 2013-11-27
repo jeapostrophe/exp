@@ -8,6 +8,7 @@ import System.IO
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import XMonad.Actions.GridSelect
+import XMonad.Layout.WindowNavigation
 
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ]
 
@@ -36,11 +37,13 @@ myGSConfig = defaultGSConfig
   { gs_navigate = myNavigation
   }
 
+myLayoutHook = windowNavigation Tall ||| Full ||| windowNavigation (Mirror Tall)
+
 main = do
   xmproc <- spawnPipe "exec xmobarj ~/.xmobarrc"
   xmonad $ defaultConfig
        { manageHook = manageDocks <+> manageHook defaultConfig,
-         layoutHook = avoidStruts $ layoutHook defaultConfig,
+         layoutHook = avoidStruts $ myLayoutHook,
          logHook = dynamicLogWithPP xmobarPP
                    { ppOutput = hPutStrLn xmproc,
                      ppHiddenNoWindows = xmobarColor "#dc322f" "",
@@ -63,6 +66,7 @@ main = do
        [ ("M4-;", spawn "jpn-on"),
          ("M4-'", spawn "jpn-off"),
          ("M4-S-z", spawn "gnome-screensaver-command --lock"),
+         ("M4-<Left>", sendMessage $ Go L),
          ("M4-<Space>", spawn "exec dmenu.sh"),
          ("M4-`", sendMessage NextLayout),
          ("M4-S-w", spawn "exec conkeror -new chrome://"),
