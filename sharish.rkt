@@ -2,10 +2,9 @@
 (require (for-syntax racket/base
                      syntax/parse)
          racket/mpair
-         racket/list
          racket/match)
 
-(struct placeholder (sealed? value)
+(struct placeholder (extracted? fillers value)
         #:transparent
         #:mutable)
 
@@ -13,40 +12,58 @@
   (letrec ([x x]) x))
 
 (define (empty-placeholder)
-  (placeholder #f undefined))
+  (placeholder #f null undefined))
 (define (placeholder-fill! ph v)
-  (when (placeholder-sealed? ph)
-    (error 'placeholder-fill! "Cannot fill after seal: ~e" ph))
+  (when (placeholder-extracted? ph)
+    (error 'placeholder-fill! "Cannot fill after extraction: ~e" ph))
   (set-placeholder-value! ph v))
-(define (placeholder-seal! ph)
-  (when (placeholder-sealed? ph)
-    (error 'placeholder-seal! "Cannot seal twice: ~e" ph))
-  (set-placeholder-sealed?! ph #t))
 (define (placeholder-extract ph)
-  (unless (placeholder-sealed? ph)
-    (error 'placeholder-extract "Cannot extract until sealed ~e" ph))
+  (unless (placeholder-extracted? ph)
+    (let loop ([v ph] [fill! void])
+      (displayln v)
+      (match v
+        [(or (== undefined) (? number?) (? boolean?) (? null?))
+         (fill! v)]
+        [(? vector?)
+         (for ([i (in-naturals)]
+               [e (in-vector v)])
+           (loop e (λ (x) (vector-set! v i x))))
+         (fill! v)]
+        [(? box?)
+         (loop (unbox v) (λ (x) (set-box! v x)))
+         (fill! v)]
+        [(mcons a d)
+         (loop a (λ (x) (set-mcar! v x)))
+         (loop d (λ (x) (set-mcdr! v x)))
+         (fill! v)]
+        [(? placeholder?)
+         (cond
+           [(placeholder-extracted? v)
+            (fill! (placeholder-value v))]
+           [else
+            (define first-time? (null? (placeholder-fillers v)))
+            (set-placeholder-fillers! v (cons fill! (placeholder-fillers v)))
+            (when first-time?
+              (loop (placeholder-value v)
+                    (λ (x)
+                      (for ([fill! (in-list (placeholder-fillers v))])
+                        (fill! x))
+                      (set-placeholder-extracted?! v #t))))])]
+        [(app (λ (x) (call-with-values (λ () (struct-info x)) list))
+              (list (? struct-type? st) #f))
+         (define-values
+           (name
+            init-field-cnt auto-field-cnt
+            accessor-proc mutator-proc
+            immutable-k-list super-type skipped?)
+           (struct-type-info st))
+         (for ([i (in-range init-field-cnt)])
+           (loop (accessor-proc v i)
+                 (λ (x)
+                   (mutator-proc v i x))))
+         (fill! v)])))
 
-  (define seen? (make-hasheq))
-  (define ans undefined)
-  (let loop ([v ph] [fill! (λ (ans-v) (set! ans ans-v))])
-    (displayln v)
-    (match v
-      [(or (? number?) (? boolean?))
-       (fill! v)]
-      [(mcons a d)
-       (define m (mcons undefined undefined))
-       (fill! m)
-       (loop a (λ (x) (set-mcar! m x)))
-       (loop d (λ (x) (set-mcdr! m x)))]
-      [(? placeholder?)
-       (define first-time? (not (hash-has-key? seen? v)))
-       (hash-update! seen? v (λ (more) (cons fill! more)) empty)
-       (when first-time?
-         (loop (placeholder-value v)
-               (λ (final-v)
-                 (for ([fill! (in-list (hash-ref seen? v))])
-                   (fill! final-v)))))]))
-  ans)
+  (placeholder-value ph))
 
 (define-syntax (sharish stx)
   (syntax-parse stx
@@ -56,8 +73,6 @@
          (begin
            (placeholder-fill! x xe)
            ...
-           (placeholder-seal! x)
-           ...
            (set! x (placeholder-extract x))
            ...
            xb)))]))
@@ -65,7 +80,7 @@
 (module+ test
   (require rackunit/chk)
 
-  (struct posn (x y))
+  (struct posn (x y) #:mutable #:transparent)
   (sharish ([a (mcons  1 x)]
             [b (mcons #t x)]
             [c (mcons  a x)]
@@ -73,7 +88,7 @@
             [e (box d)]
             [f (posn d e)]
             [x (mlist a b c d e f x)])
-           
+
            (chk #:t (eq? 1 (mcar a))
                 #:t (eq? x (mcdr a))
                 #:t (eq? #t (mcar b))
