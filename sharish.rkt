@@ -1,11 +1,8 @@
 #lang racket/base
-(require (for-syntax racket/base
-                     syntax/parse)
-         racket/mpair
+(require racket/mpair
          racket/match)
 
 (struct placeholder (extracted? fillers value)
-        #:transparent
         #:mutable)
 
 (define undefined
@@ -17,65 +14,56 @@
   (when (placeholder-extracted? ph)
     (error 'placeholder-fill! "Cannot fill after extraction: ~e" ph))
   (set-placeholder-value! ph v))
-(define (placeholder-extract ph)
-  (unless (placeholder-extracted? ph)
-    (let loop ([v ph] [fill! void])
-      (displayln v)
-      (match v
-        [(or (== undefined) (? number?) (? boolean?) (? null?))
-         (fill! v)]
-        [(? vector?)
-         (for ([i (in-naturals)]
-               [e (in-vector v)])
-           (loop e (λ (x) (vector-set! v i x))))
-         (fill! v)]
-        [(? box?)
-         (loop (unbox v) (λ (x) (set-box! v x)))
-         (fill! v)]
-        [(mcons a d)
-         (loop a (λ (x) (set-mcar! v x)))
-         (loop d (λ (x) (set-mcdr! v x)))
-         (fill! v)]
-        [(? placeholder?)
-         (cond
-           [(placeholder-extracted? v)
-            (fill! (placeholder-value v))]
-           [else
-            (define first-time? (null? (placeholder-fillers v)))
-            (set-placeholder-fillers! v (cons fill! (placeholder-fillers v)))
-            (when first-time?
-              (loop (placeholder-value v)
-                    (λ (x)
-                      (for ([fill! (in-list (placeholder-fillers v))])
-                        (fill! x))
-                      (set-placeholder-extracted?! v #t))))])]
-        [(app (λ (x) (call-with-values (λ () (struct-info x)) list))
-              (list (? struct-type? st) #f))
-         (define-values
-           (name
-            init-field-cnt auto-field-cnt
-            accessor-proc mutator-proc
-            immutable-k-list super-type skipped?)
-           (struct-type-info st))
-         (for ([i (in-range init-field-cnt)])
-           (loop (accessor-proc v i)
-                 (λ (x)
-                   (mutator-proc v i x))))
-         (fill! v)])))
+(define (placeholder-extract! v fill!)
+  (define loop placeholder-extract!)
+  (match v
+    [(or (== undefined) (? number?) (? boolean?) (? null?))
+     (fill! v)]
+    [(? vector?)
+     (for ([i (in-naturals)]
+           [e (in-vector v)])
+       (loop e (λ (x) (vector-set! v i x))))
+     (fill! v)]
+    [(box bv)
+     (loop bv (λ (x) (set-box! v x)))
+     (fill! v)]
+    [(mcons a d)
+     (loop a (λ (x) (set-mcar! v x)))
+     (loop d (λ (x) (set-mcdr! v x)))
+     (fill! v)]
+    [(? placeholder?)
+     (cond
+       [(placeholder-extracted? v)
+        (fill! (placeholder-value v))]
+       [else
+        (define first-time? (null? (placeholder-fillers v)))
+        (set-placeholder-fillers! v (cons fill! (placeholder-fillers v)))
+        (when first-time?
+          (loop (placeholder-value v)
+                (λ (x)
+                  (for ([fill! (in-list (placeholder-fillers v))])
+                    (fill! x))
+                  (set-placeholder-extracted?! v #t))))])]
+    [(app (λ (x) (call-with-values (λ () (struct-info x)) list))
+          (list (? struct-type? st) #f))
+     (define-values
+       (name
+        init-field-cnt auto-field-cnt
+        accessor-proc mutator-proc
+        immutable-k-list super-type skipped?)
+       (struct-type-info st))
+     (for ([i (in-range init-field-cnt)])
+       (loop (accessor-proc v i)
+             (λ (x)
+               (mutator-proc v i x))))
+     (fill! v)]))
 
-  (placeholder-value ph))
-
-(define-syntax (sharish stx)
-  (syntax-parse stx
-    [(_ ([x:id xe] ...) xb)
-     (syntax/loc stx
-       (let ([x (empty-placeholder)] ...)
-         (begin
-           (placeholder-fill! x xe)
-           ...
-           (set! x (placeholder-extract x))
-           ...
-           xb)))]))
+(define-syntax-rule (sharish ([x xe] ...) xb)
+  (let ([x (empty-placeholder)] ...)
+    (begin
+      (placeholder-fill! x xe) ...
+      (placeholder-extract! x (λ (xv) (set! x xv))) ...
+      xb)))
 
 (module+ test
   (require rackunit/chk)
