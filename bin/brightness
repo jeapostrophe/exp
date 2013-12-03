@@ -2,6 +2,6 @@
 
 case $1 in
     down) xbacklight - 5 ;;
-    up) xbacklight = 100 ;;
+    up) xbacklight = 80 ;;
     upish) xbacklight + 5 ;;
 esac
