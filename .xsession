@@ -38,7 +38,7 @@ if [ "$1" = "default" ] ; then
 
 	miro &
 
-	google-chrome &
+	google-chrome-stable &
 fi
 
 exec xmonad
