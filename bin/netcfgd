@@ -9,7 +9,7 @@ CURRENT() {
 }
 
 status () {
- echo $1 > ${STATUS_FILE}
+    echo $1 > ${STATUS_FILE}
 }
 
 main() {
@@ -68,10 +68,6 @@ else
             cat $STATUS_FILE
             ;;
         status)
-            case $(cat $STATUS_FILE) in
-                down) echo "<fc=#dc322f>$(CURRENT)</fc>" ;;
-                up) echo "<fc=#268bd2>$(CURRENT)</fc>" ;;
-            esac  
             ;;
         *)
             echo "setting connection to $1"
@@ -79,3 +75,12 @@ else
             ;;
     esac
 fi
+
+PIPE=~jay/.netcfgd-pipe
+if [ ! -e ${PIPE} ] ; then
+    mkfifo ${PIPE}
+fi
+case $(cat $STATUS_FILE) in
+    down) echo "<fc=#dc322f>$(CURRENT)</fc>" > ${PIPE};;
+    up) echo "<fc=#268bd2>$(CURRENT)</fc>" > ${PIPE} ;;
+esac

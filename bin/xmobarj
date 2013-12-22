@@ -7,4 +7,9 @@ export LANGUAGE=$LANG
 export LC_ALL=$LANG
 export LC_TIME=$LANG
 export LC_CTYPE=$LANG
+
+~/bin/volume status &
+~/bin/mpc_status.sh &
+~/bin/netcfgd status &
+
 exec /usr/bin/xmobar $*

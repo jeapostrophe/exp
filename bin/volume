@@ -1,21 +1,26 @@
 #!/usr/bin/sh
 
+PIPE=~/.volume-pipe
 OLD=~/.volume
 cur=$(amixer get Master | tail -1 | awk -F"[" '{print $1}' | perl -ne 's/^.* ([0-9]+) *$/\1/; print;')
 
 case $1 in
-   mute)
+    mute)
         if [ "${cur}" = "0" ] ; then
             amixer set Master $(cat $OLD)
         else
             echo ${cur} > ${OLD}
-            amixer set Master 0 
-        fi 
+            amixer set Master 0
+        fi
         ;;
-   down) amixer set Master 5%- ;;
-     up) amixer set Master 5%+ ;;
+    down) amixer set Master 5%- ;;
+    up) amixer set Master 5%+ ;;
     cur) echo ${cur} ;;
- status) 
-        curp=$(amixer get Master | tail -1 | awk -F"[" '{print $2}' | awk -F% '{print $1}')        
-        printf "%3s%%\n" ${curp} ;;
+    status) ;;
 esac
+
+if [ ! -e ${PIPE} ] ; then
+    mkfifo ${PIPE}
+fi
+curp=$(amixer get Master | tail -1 | awk -F"[" '{print $2}' | awk -F% '{print $1}')
+printf "%3s%%\n" ${curp} > ${PIPE}
