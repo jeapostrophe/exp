@@ -1190,11 +1190,12 @@ given a prefix arg."
  ;; If there is more than one, they won't work right.
  '(doc-view-continuous t)
  '(ibuffer-default-sorting-mode (quote filename/process))
- '(ibuffer-display-summary nil))
+ '(ibuffer-display-summary nil)
+ '(safe-local-variable-values (quote ((coq-prog-args "-emacs-U" "-R" ".." "Braun") (coq-prog-args "-emacs-U" "-R" "." "Braun")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(fringe ((((class color) (background "#fdf6e3")) nil)))
- '(org-column ((t (:background "#fdf6e3" :foreground  "#657b83")))))
+ '(org-column ((t (:background "#fdf6e3" :foreground "#657b83")))))
