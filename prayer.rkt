@@ -109,8 +109,8 @@
   (foldl insert empty l))
 
 (module+ main
-  (require web-server/servlet-env
-           web-server/http)
+  (require json
+           racket/runtime-path)
 
   (define schedules
     (optimize
@@ -120,64 +120,13 @@
                  [t (in-list (remove* (list b l d) choices))])
        (list b l d t))))
 
-  (define how-many-schedules
-    (length schedules))
+  (displayln (length schedules))
 
-  (define (schedule-of-time t)
-    (list-ref schedules
-              (modulo (date-year-day t)
-                      how-many-schedules)))
+  (define-runtime-path prayer.json "prayer.json")
 
-  (define how-many-days 7)
-  (define days
-    (vector "Sunday"
-            "Monday"
-            "Tuesday"
-            "Wednesday"
-            "Thursday"
-            "Friday"
-            "Saturday"))
-
-  (define (next-times)
-    (for/list ([i (in-range how-many-days)])
-      (seconds->date (+ (current-seconds) (* 24 60 60 i)))))
-
-  (define (next-schedules)
-    (for/list ([t (in-list (next-times))])
-      (schedule-of-time t)))
-
-  (define (start req)
-    (define ts (next-times))
-    (define these-schedules
-      (next-schedules))
-    (response/xexpr
-     `(html
-       (head
-        (title "Prayer Chart")
-        (style
-            "table tr td:nth-child(1) {
-                                    font-weight: bold;
-                                                 text-align: right;
-                                                 }"))
-       (body
-        (table
-         (thead
-          (th "Occasion")
-          ,@(for/list ([t (in-list ts)])
-              `(th ,(vector-ref days (date-week-day t)))))
-         (tbody
-          (tr (td "Breakfast")
-              ,@(map (compose tdize first) these-schedules))
-          (tr (td "Lunch")
-              ,@(map (compose tdize second) these-schedules))
-          (tr (td "Dinner")
-              ,@(map (compose tdize third) these-schedules))
-          (tr (td "Bed-time")
-              ,@(map (compose tdize fourth) these-schedules))))))))
-
-  (serve/servlet
-   start
-   #:listen-ip #f
-   #:command-line? #t
-   #:servlet-regexp #rx""
-   #:port 9005))
+  (with-output-to-file prayer.json
+    #:exists 'replace
+    (λ () 
+      (printf "var schedules = \n")
+      (write-json schedules)
+      (printf ";\n"))))

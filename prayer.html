@@ -1,4 +1,40 @@
-<html><head><title>Prayer Chart</title><style>table tr td:nth-child(1) {
-                                    font-weight: bold;
-                                                 text-align: right;
-                                                 }</style></head><body><table><thead><th>Occasion</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th></thead><tbody><tr><td>Breakfast</td><td>Mommy</td><td>Frog</td><td>Peach</td><td>Peach</td><td>Frog</td><td>Frog</td><td>Peach</td></tr><tr><td>Lunch</td><td>Daddy</td><td>Mommy</td><td>Frog</td><td>Daddy</td><td>Mommy</td><td>Daddy</td><td>Mommy</td></tr><tr><td>Dinner</td><td>Frog</td><td>Peach</td><td>Daddy</td><td>Mommy</td><td>Daddy</td><td>Mommy</td><td>Daddy</td></tr><tr><td>Bed-time</td><td>Peach</td><td>Daddy</td><td>Mommy</td><td>Frog</td><td>Peach</td><td>Peach</td><td>Frog</td></tr></tbody></table></body></html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+  <head>
+    <title>Prayer Chart</title>
+    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="prayer.json"></script>
+    <script src="prayer.js"></script>
+    <style>
+      table tr:nth-child(1) td {
+      font-weight: bold;
+      text-align: center;
+      }
+
+      table tr td:nth-child(1) {
+      font-weight: bold;
+      text-align: right;
+      }</style>
+  </head>
+  <body>
+    <table>
+      <tbody>
+        <tr>
+          <td>Occasion</td>
+        </tr>
+        <tr>
+          <td>Breakfast</td>
+        </tr>
+        <tr>
+          <td>Lunch</td>
+        </tr>
+        <tr>
+          <td>Dinner</td>
+        </tr>
+        <tr>
+          <td>Bed-time</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

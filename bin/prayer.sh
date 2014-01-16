@@ -1,7 +1,7 @@
 #!/bin/zsh
 . ~/.zshrc
 
-DEST=~blogs/jeapstrophe.github.com-ng/blog/family
+DEST=~blogs/jeapostrophe.github.com-ng/blog/family
 
 racket -t ~exp/prayer.rkt
 for i in prayer.json prayer.js prayer.html ; do
