@@ -29,7 +29,7 @@
 (module+ main
   (require racket/cmdline)
 
-  (define start "http://marathon.speeddemosarchive.com/history")
+  (define start "http://gamesdonequick.com/history")
   (define output-path
     (command-line #:program "sda" #:args (p) p))
 
@@ -38,10 +38,13 @@
      (call/input-url (string->url start) get-pure-port
                      html->xexp)))
 
+  (printf "~a\n" (length years))
+
   (define videos
     (append-map
      (λ (a)
        (define-values (href title) (a->href*title a))
+       (printf "~a ~a\n" title href)
        (scrape-archive title href))
      years))  
 
