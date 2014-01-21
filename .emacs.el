@@ -204,6 +204,7 @@
              (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
              ;; Edit files in dired with "e", which previously did what "RET" did
              (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
+(setq dired-listing-switches "-alh")
 
 ;;;;; emacs-lisp-mode
 
