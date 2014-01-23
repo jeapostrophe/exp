@@ -10,6 +10,7 @@ import qualified XMonad.StackSet as W
 import XMonad.Actions.GridSelect
 import XMonad.Layout.WindowNavigation
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ]
 
@@ -47,7 +48,7 @@ myLayoutHook = wntiled ||| Mirror wntiled ||| Full
 
 main = do
   xmproc <- spawnPipe "exec xmobarj ~/.xmobarrc"
-  xmonad $ defaultConfig
+  xmonad $ ewmh defaultConfig
        { manageHook = manageDocks 
                   <+> manageHook defaultConfig,
          layoutHook = avoidStruts $ myLayoutHook,
