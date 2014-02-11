@@ -21,6 +21,8 @@ start-pulseaudio-x11 &
 synclient PalmDetect=1
 syndaemon -t -k -i 2 -d &
 
+minidlnad -f ~/.config/minidlna.conf -P /tmp/minidlna.pid
+
 if (screen -list | grep lightning) ; then
 	echo Screen exists
 else
