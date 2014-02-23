@@ -18,7 +18,7 @@ ibus-daemon --xim &
 
 start-pulseaudio-x11 &
 
-synclient PalmDetect=1 TapButton1=0 TapButton2=0 TapButton3=0 MaxTapMove=0 MaxTapTime=0
+synsetup
 syndaemon -t -k -i 2 -d &
 
 minidlnad -f ~/.config/minidlna.conf -P /tmp/minidlna.pid
