@@ -88,7 +88,10 @@ persona - planning system for Persona 3 and 4 fusion
 pkgs - experimental Racket package system (abandoned)
 pl4-p150.rkt - solution to Professor Layton #4 puzzle #150
 plist-dict.rkt - something with plist files
-podcaster.ss - temporary HTTP server for getting iTunes to load a podcast from a directory 
+podcaster.ss - temporary HTTP server for getting iTunes to load a podcast from a directory
+prayer.html - prayer html
+prayer.js - prayer js code
+prayer.json - prayer json data
 prayer.rkt - enumerator for daily prayer schedules
 prime.cc - substitution analysis of prime checker in C++
 proofl.ss - basic theorem prover
