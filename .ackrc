@@ -1,3 +1,4 @@
 --type-set
 racket=.rkt,.rktd,.scrbl
 --ignore-dir=root
+--ignore-file=is:.Core.h.cache
