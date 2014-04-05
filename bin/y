@@ -3,13 +3,18 @@
 (require racket/match
          racket/list
          racket/system
-         racket/date)
+         racket/date
+         web-server/http)
 
 (define VLC-PATH
   (find-executable-path "vlc"))
+(define LYNX-PATH
+  (find-executable-path "lynx"))
+(define HOME (find-system-path 'home-dir))
+(define ROOT (build-path HOME "Downloads" "YouTube"))
 
 (define (y-files-all)
-  (define ps (directory-list))
+  (define ps (directory-list ROOT))
   (define fs (filter file-exists? ps))
   (define sfs (sort fs <= #:key file-or-directory-modify-seconds))
   (map path->string sfs))
@@ -39,17 +44,73 @@
      #f]
     [else
      (define f (first fs))
-     (system* VLC-PATH f)
-     (y-mark-played! f)
+     (define r (system* VLC-PATH f))
+     (printf "~a -> ~a\n" f r)
+     ;; (y-mark-played! f)
      #t]))
 
 (define (y-play-all)
   (and (y-play)
        (y-play-all)))
 
+(define (y-http req)
+  (response/xexpr
+   #:preamble #"<!DOCTYPE html>"
+   `(html
+     (head (title "y"))
+     (body
+      (table
+       ,@(for/list ([f (in-list (y-files-all))])
+           (define fp (build-path ROOT f))
+           (define msecs (file-or-directory-modify-seconds fp))
+           (define mdate (seconds->date msecs))
+           `(tr (td ,(date->string mdate #t))
+                (td ,f))))))))
+
 (module+ main
-  (define HOME (find-system-path 'home-dir))
-  (define ROOT (build-path HOME "Downloads" "YouTube"))
+  (require db
+           racket/path)
+  (define conn
+    (sqlite3-connect #:database (build-path HOME ".miro" "sqlitedb")
+                     #:mode 'read-only))
+  (define rs
+    (rows-result-rows
+     (query conn "select filename,entry_title,torrent_title from item")))
+  (for ([r (in-list rs)])
+    (match-define (vector fn et tt) r)
+    (unless (sql-null? fn)
+      (define f (file-name-from-path fn))
+      (displayln f))))
+
+(module+ maint
+  (require web-server/web-server
+           web-server/servlet-dispatch
+           racket/async-channel
+           racket/port)
+
+  (date-display-format 'iso-8601)
+
+  (define cch (make-async-channel))
+  (define kill-www
+    (parameterize ([current-output-port (open-output-nowhere)]
+                   [current-error-port (open-output-nowhere)])
+      (serve #:dispatch (dispatch/servlet y-http)
+             #:port 0
+             #:listen-ip #f
+             #:confirmation-channel cch)))
+
+  (define PORT (async-channel-get cch))
+  (define-values
+    (lynx-sp stdout stdin stderr)
+    (subprocess (current-output-port)
+                (current-input-port)
+                (current-error-port)
+                LYNX-PATH
+                (format "http://127.0.0.1:~a" PORT)))
+
+  (subprocess-wait lynx-sp)
+
+  '
   (void
    (parameterize ([current-directory ROOT]
                   [date-display-format 'iso-8601])
