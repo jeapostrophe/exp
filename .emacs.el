@@ -1189,6 +1189,7 @@ given a prefix arg."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(dired-listing-switches "-alhoD")
  '(doc-view-continuous t)
  '(ibuffer-default-sorting-mode (quote filename/process))
  '(ibuffer-display-summary nil)
