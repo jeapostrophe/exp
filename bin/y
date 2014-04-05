@@ -2,35 +2,81 @@
 #lang racket/base
 (require racket/match
          racket/list
+         racket/format
+         racket/port
          racket/system
          racket/date
+         web-server/servlet
          web-server/http)
 
 (define VLC-PATH
   (find-executable-path "vlc"))
 (define LYNX-PATH
-  (find-executable-path "lynx"))
+  (find-executable-path "links"))
+(define FFPROBE-PATH
+  (find-executable-path "ffprobe"))
 (define HOME (find-system-path 'home-dir))
+;; xxx generalize from URL?
 (define ROOT (build-path HOME "Downloads" "YouTube"))
+
+(define (ffprobe p)
+  (define-values (sp o i e)
+    (subprocess #f #f #f FFPROBE-PATH "-show_format" p))
+  (subprocess-wait sp)
+  (string->number
+   (second
+    (for/or ([x (in-list (port->lines o))])
+      (regexp-match #rx"^duration=(.*?)$" x)))))
+(define LEN-CACHE (make-hash))
+(define (yf-len a-yf)
+  (define p (yf-path a-yf))
+  (match-define
+   (cons when len)
+   (hash-ref! LEN-CACHE p
+              (λ ()
+                (cons (yf-msecs a-yf)
+                      (ffprobe p)))))
+  (cond
+    [(= when (yf-msecs a-yf))
+     len]
+    [else
+     (hash-remove! LEN-CACHE p)
+     (yf-len a-yf)]))
+
+(struct yf (status name path msecs))
+(define (yf-played? a-yf)
+  (not (eq? 'U (yf-status a-yf))))
+(define (yf-mdates a-yf)
+  (parameterize ([date-display-format 'iso-8601])
+    (date->string (seconds->date (yf-msecs a-yf)))))
+(define (yf-lens a-yf)
+  (define MINUTES 60)
+  (define   HOURS (* 60 MINUTES))
+  (define L (inexact->exact (floor (yf-len a-yf))))
+  (define-values (H HR) (quotient/remainder L HOURS))
+  (define-values (M S) (quotient/remainder HR MINUTES))
+  (~a (~a #:width 2 #:pad-string "0" H) ":"
+      (~a #:width 2 #:pad-string "0" M) ":"
+      (~a #:width 2 #:pad-string "0" S)))
 
 (define (y-files-all)
   (define ps (directory-list ROOT))
-  (define fs (filter file-exists? ps))
-  (define sfs (sort fs <= #:key file-or-directory-modify-seconds))
-  (map path->string sfs))
+  (define fs
+    (parameterize ([current-directory ROOT])
+      (filter file-exists? ps)))
+  (define yfs
+    (for/list ([pp (in-list fs)])
+      (define p (build-path ROOT pp))
+      (define f (path->string pp))
+      (define msecs (file-or-directory-modify-seconds p))
+      (yf (string->symbol (string (string-ref f 0)))
+          (substring f 1)
+          p
+          msecs)))
+  (sort yfs <= #:key yf-msecs))
 
 (define (y-files-unplayed)
-  (filter (λ (p)
-            (char=? #\U (string-ref p 0)))
-          (y-files-all)))
-
-(define (y-list)
-  (for ([f (in-list (y-files-all))])
-    (define msecs (file-or-directory-modify-seconds f))
-    (define mdate (seconds->date msecs))
-    (printf "~a: ~a\n"
-            (date->string mdate #t)
-            f)))
+  (filter-not yf-played? (y-files-all)))
 
 (define (y-mark-played! f)
   (rename-file-or-directory
@@ -53,21 +99,46 @@
   (and (y-play)
        (y-play-all)))
 
-(define (y-http req)
-  (response/xexpr
-   #:preamble #"<!DOCTYPE html>"
-   `(html
-     (head (title "y"))
-     (body
-      (table
-       ,@(for/list ([f (in-list (y-files-all))])
-           (define fp (build-path ROOT f))
-           (define msecs (file-or-directory-modify-seconds fp))
-           (define mdate (seconds->date msecs))
-           `(tr (td ,(date->string mdate #t))
-                (td ,f))))))))
+(define (play! f)
+  (printf "Playing ~a\n" f))
+(define (play-from! f)
+  (printf "Playing from ~a\n" f))
 
-(module+ main
+(define (y-http req)
+  (send/suspend/dispatch
+   (λ (embed/url)
+     (define (do f . args)
+       (embed/url
+        (λ (req)
+          (apply f args)
+          (y-http req))))
+     (response/xexpr
+      #:preamble #"<!DOCTYPE html>"
+      `(html
+        (head (title "y"))
+        (body
+         (div (span "delete played"))
+         (table
+          ([id "playlist"])
+          ,@(for/list ([f (in-list (y-files-all))])
+              `(tr (td ,(yf-mdates f))
+                   (td ,(match (yf-status f)
+                          ['U "new"]
+                          ['R "old"]
+                          ['S "saved"]))
+                   (td (a ([href ,(do play! f)])
+                          ,(yf-name f))
+                       (a ([href ,(do play-from! f)])
+                          "(from)"))
+                   (td ,(yf-lens f))
+                   (td
+                    ,(match (yf-status f)
+                       ['U "played"]
+                       ['R `(span "unplayed"
+                                  "save")]
+                       ['S "unsave"])))))))))))
+
+(module+ main-miro-rename
   (require db
            racket/path)
   (define conn
@@ -80,45 +151,24 @@
     (match-define (vector fn et tt) r)
     (unless (sql-null? fn)
       (define f (file-name-from-path fn))
-      (displayln f))))
+      (define Uf (build-path ROOT (string-append "U" (path->string f))))
+      (when (file-exists? Uf)
+        (define nt
+          (cond
+            [(not (sql-null? tt))
+             tt]
+            [(not (sql-null? et))
+             et]
+            [else
+             (error 'y "no title: ~a\n" fn)]))
+        (rename-file-or-directory
+         Uf
+         (build-path ROOT (format "U~a" nt)))))))
 
-(module+ maint
-  (require web-server/web-server
-           web-server/servlet-dispatch
-           racket/async-channel
-           racket/port)
+(module+ main
+  (require web-server/servlet-env)
 
-  (date-display-format 'iso-8601)
-
-  (define cch (make-async-channel))
-  (define kill-www
-    (parameterize ([current-output-port (open-output-nowhere)]
-                   [current-error-port (open-output-nowhere)])
-      (serve #:dispatch (dispatch/servlet y-http)
-             #:port 0
-             #:listen-ip #f
-             #:confirmation-channel cch)))
-
-  (define PORT (async-channel-get cch))
-  (define-values
-    (lynx-sp stdout stdin stderr)
-    (subprocess (current-output-port)
-                (current-input-port)
-                (current-error-port)
-                LYNX-PATH
-                (format "http://127.0.0.1:~a" PORT)))
-
-  (subprocess-wait lynx-sp)
-
-  '
-  (void
-   (parameterize ([current-directory ROOT]
-                  [date-display-format 'iso-8601])
-     (match (current-command-line-arguments)
-       [(or (vector)
-            (vector (or "l" "ls" "list")))
-        (y-list)]
-       [(vector (or "n" "next"))
-        (y-play)]
-       [(vector (or "a" "all"))
-        (y-play-all)]))))
+  (serve/servlet y-http
+                 #:launch-browser? #f
+                 #:servlet-regexp #rx""
+                 #:port 7331))
