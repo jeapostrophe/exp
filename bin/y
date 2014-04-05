@@ -44,6 +44,8 @@
      (yf-len a-yf)]))
 
 (struct yf (status name path msecs))
+(define (yf-equal? x y)
+  (equal? (yf-name x) (yf-name y)))
 (define (yf-played? a-yf)
   (not (eq? 'U (yf-status a-yf))))
 (define (yf-mdates a-yf)
@@ -74,69 +76,110 @@
           p
           msecs)))
   (sort yfs <= #:key yf-msecs))
-
 (define (y-files-unplayed)
   (filter-not yf-played? (y-files-all)))
 
-(define (y-mark-played! f)
-  (rename-file-or-directory
-   f
-   (string-append "R" (substring f 1))))
+(define (make-y-http)
+  (define current-vlc-lock (make-semaphore 1))
+  (define current-vlc-yf #f)
+  (define continuous? #f)
+  (define (is-current-vlc-yf? f)
+    (and current-vlc-yf
+         (yf-equal? current-vlc-yf f)))
 
-(define (y-play)
-  (define fs (y-files-unplayed))
-  (cond
-    [(empty? fs)
-     #f]
-    [else
-     (define f (first fs))
-     (define r (system* VLC-PATH f))
-     (printf "~a -> ~a\n" f r)
-     ;; (y-mark-played! f)
-     #t]))
+  (define (play! f)
+    (when (semaphore-try-wait? current-vlc-lock)
+      (set! current-vlc-yf f)
+      (define-values
+        (sp o i e)
+        (subprocess
+         (current-output-port) (current-input-port) (current-error-port)
+         VLC-PATH
+         "--fullscreen"
+         (yf-path f)
+         "vlc://quit"))
+      (thread
+       (λ ()
+         (subprocess-wait sp)
+         (set! current-vlc-yf #f)
+         (mark! f 'R)
+         (semaphore-post current-vlc-lock)
+         (when continuous? (play-next! f))))))
+  (define (play-next! f)
+    (define fs (y-files-all))
+    (define f-and (member f fs yf-equal?))
+    (when (and f-and (cons? (rest f-and)))
+      (play! (first (rest f-and)))))
 
-(define (y-play-all)
-  (and (y-play)
-       (y-play-all)))
+  (define (clean!)
+    (for ([f (in-list (y-files-all))]
+          #:when (eq? 'R (yf-status f)))
+      (delete-file (yf-path f))))
+  (define (mark! f s)
+    (unless (is-current-vlc-yf? f)
+      (define old (yf-path f))
+      (define n (yf-name f))
+      (define new
+        (build-path ROOT
+                    (string-append (symbol->string s) n)))
+      (rename-file-or-directory old new)))
+  (define (toggle-continuous?!)
+    (set! continuous? (not continuous?)))
 
-(define (play! f)
-  (printf "Playing ~a\n" f))
-(define (play-from! f)
-  (printf "Playing from ~a\n" f))
+  (define (y-http req)
+    (send/suspend/dispatch
+     (λ (embed/url)
+       (define (do f . args)
+         (embed/url
+          (λ (req)
+            (apply f args)
+            (redirect-to "/"))))
+       (response/xexpr
+        #:preamble #"<!DOCTYPE html>"
+        `(html
+          (head (title "y"))
+          (body
+           (div
+            (span
+             ,(date->string (current-date) #t) ":"
+             " "
+             ,(if current-vlc-yf
+                "playing "
+                "")
+             (a
+              ([href ,(do toggle-continuous?!)]
+               [style
+                   ,(if continuous?
+                      "font-weight: bold"
+                      "text-decoration: line-through")])
+              "continuous")
+             " "
+             (a ([href ,(do clean!)]) "clean")))
+           (table
+            ,@(for/list ([f (in-list (y-files-all))])
+                `(tr (td ,(yf-mdates f))
+                     (td (a ([href ,(do play! f)])
+                            ,(yf-name f)))
+                     (td ,(yf-lens f))
+                     (td
+                      ,(if (is-current-vlc-yf? f)
+                         "P"
+                         "")
+                      ,(match (yf-status f)
+                         ['U "U"]
+                         ['R "R"]
+                         ['S "S"])
+                      ,@(let ()
+                          (define menu
+                            (match (yf-status f)
+                              ['U (list (cons "R" (do mark! f 'R)))]
+                              ['R (list (cons "U" (do mark! f 'U))
+                                        (cons "S" (do mark! f 'S)))]
+                              ['S (list (cons "R" (do mark! f 'R)))]))
+                          (for/list ([l*u (in-list menu)])
+                            `(a ([href ,(cdr l*u)]) ,(car l*u))))))))))))))
 
-(define (y-http req)
-  (send/suspend/dispatch
-   (λ (embed/url)
-     (define (do f . args)
-       (embed/url
-        (λ (req)
-          (apply f args)
-          (y-http req))))
-     (response/xexpr
-      #:preamble #"<!DOCTYPE html>"
-      `(html
-        (head (title "y"))
-        (body
-         (div (span "delete played"))
-         (table
-          ([id "playlist"])
-          ,@(for/list ([f (in-list (y-files-all))])
-              `(tr (td ,(yf-mdates f))
-                   (td ,(match (yf-status f)
-                          ['U "new"]
-                          ['R "old"]
-                          ['S "saved"]))
-                   (td (a ([href ,(do play! f)])
-                          ,(yf-name f))
-                       (a ([href ,(do play-from! f)])
-                          "(from)"))
-                   (td ,(yf-lens f))
-                   (td
-                    ,(match (yf-status f)
-                       ['U "played"]
-                       ['R `(span "unplayed"
-                                  "save")]
-                       ['S "unsave"])))))))))))
+  y-http)
 
 (module+ main-miro-rename
   (require db
@@ -168,7 +211,17 @@
 (module+ main
   (require web-server/servlet-env)
 
-  (serve/servlet y-http
-                 #:launch-browser? #f
-                 #:servlet-regexp #rx""
-                 #:port 7331))
+  (match (current-command-line-arguments)
+    [(vector)
+     (serve/servlet (make-y-http)
+                    #:launch-browser? #f
+                    #:servlet-regexp #rx""
+                    #:port 7331)]
+    [(vector x)
+     (parameterize ([current-directory ROOT])
+       (system* (find-executable-path "youtube-dl")
+                "--continue"
+                "--embed-subs"
+                "--output"
+                "U%(uploader)s - %(title)s.%(ext)s"
+                x))]))

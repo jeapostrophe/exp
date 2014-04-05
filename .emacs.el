@@ -200,6 +200,8 @@
 ;;;;; Dired
 (require 'dired-details+)
 (require 'dired-sort-menu+)
+(setq ls-lisp-format-time-list '("%Y.%m.$d %H:%M:%S" "%Y.%m.$d %H:%M:%S")
+      ls-lisp-use-localized-time-format t)
 (setq dired-guess-shell-alist-user
       (list
        (list "\\.mp4$" "vlc")))
