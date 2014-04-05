@@ -1,0 +1,63 @@
+#!/usr/bin/env racket
+#lang racket/base
+(require racket/match
+         racket/list
+         racket/system
+         racket/date)
+
+(define VLC-PATH
+  (find-executable-path "vlc"))
+
+(define (y-files-all)
+  (define ps (directory-list))
+  (define fs (filter file-exists? ps))
+  (define sfs (sort fs <= #:key file-or-directory-modify-seconds))
+  (map path->string sfs))
+
+(define (y-files-unplayed)
+  (filter (λ (p)
+            (char=? #\U (string-ref p 0)))
+          (y-files-all)))
+
+(define (y-list)
+  (for ([f (in-list (y-files-all))])
+    (define msecs (file-or-directory-modify-seconds f))
+    (define mdate (seconds->date msecs))
+    (printf "~a: ~a\n"
+            (date->string mdate #t)
+            f)))
+
+(define (y-mark-played! f)
+  (rename-file-or-directory
+   f
+   (string-append "R" (substring f 1))))
+
+(define (y-play)
+  (define fs (y-files-unplayed))
+  (cond
+    [(empty? fs)
+     #f]
+    [else
+     (define f (first fs))
+     (system* VLC-PATH f)
+     (y-mark-played! f)
+     #t]))
+
+(define (y-play-all)
+  (and (y-play)
+       (y-play-all)))
+
+(module+ main
+  (define HOME (find-system-path 'home-dir))
+  (define ROOT (build-path HOME "Downloads" "YouTube"))
+  (void
+   (parameterize ([current-directory ROOT]
+                  [date-display-format 'iso-8601])
+     (match (current-command-line-arguments)
+       [(or (vector)
+            (vector (or "l" "ls" "list")))
+        (y-list)]
+       [(vector (or "n" "next"))
+        (y-play)]
+       [(vector (or "a" "all"))
+        (y-play-all)]))))

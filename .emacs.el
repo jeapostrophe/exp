@@ -198,6 +198,11 @@
 (setq comint-buffer-maximum-size (expt 2 16))
 
 ;;;;; Dired
+(require 'dired-details+)
+(require 'dired-sort-menu+)
+(setq dired-guess-shell-alist-user
+      (list
+       (list "\\.mp4$" "vlc")))
 (add-hook 'dired-mode-hook
           '(lambda ()
              ;; Only open one dired buffer at most
@@ -205,6 +210,7 @@
              ;; Edit files in dired with "e", which previously did what "RET" did
              (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
 (setq dired-listing-switches "-alh")
+;; xxx change dired-find-alternate-file
 
 ;;;;; emacs-lisp-mode
 
@@ -1181,6 +1187,11 @@ given a prefix arg."
     See `sort-regexp-fields'."
   (interactive "*P\nr")
   (sort-regexp-fields reverse "[A-Za-z0-9\\.]+" "\\&" beg end))
+
+;; elpa
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; customs
 
