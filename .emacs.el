@@ -198,8 +198,6 @@
 (setq comint-buffer-maximum-size (expt 2 16))
 
 ;;;;; Dired
-(require 'dired-details+)
-(require 'dired-sort-menu+)
 (setq ls-lisp-format-time-list '("%Y.%m.$d %H:%M:%S" "%Y.%m.$d %H:%M:%S")
       ls-lisp-use-localized-time-format t)
 (setq dired-guess-shell-alist-user
