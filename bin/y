@@ -12,6 +12,8 @@
          web-server/servlet
          web-server/http)
 
+;; time --time=mtime -r SRC -d DIFF DEST
+
 (define-runtime-path y.css
   "../y.css")
 
@@ -49,7 +51,17 @@
      (hash-remove! LEN-CACHE p)
      (yf-len a-yf)]))
 
+(define (regexp-remove rxs s)
+  (if (empty? rxs)
+    s
+    (regexp-remove
+     (rest rxs)
+     (regexp-replace (first rxs) s ""))))
+
 (struct yf (status name path msecs))
+(define (yf-dname a-yf)
+  (regexp-remove (list #rx".part$" #rx".mp4$")
+                 (yf-name a-yf)))
 (define (yf-equal? x y)
   (equal? (yf-name x) (yf-name y)))
 (define (yf-played? a-yf)
@@ -157,11 +169,13 @@
           (λ (req)
             (apply f args)
             (redirect-to "/"))))
+       (define yfs (y-files-all))
        (response/xexpr
         #:preamble #"<!DOCTYPE html>"
         `(html
-          ;; xxx add nice css, buttons, etc
-          (head (title "y")
+          (head (title ,(format "y (~a of ~a)"
+                                (count yf-unplayed? yfs)
+                                (length yfs)))
                 (style ,(cdata #f #f (file->string y.css))))
           (body
            (div
@@ -185,17 +199,19 @@
              (a ([href ,(do restart!)]) "restart")))
            (table
             ([id "playlist"])
-            ,@(for/list ([f (in-list (y-files-all))])
+            ,@(for/list ([f (in-list yfs)])
                 `(tr ([id ,(if (is-current-vlc-yf? f)
                              "playing"
                              "")]
                       [class ,(format "item status_~a" (yf-status f))])
-                     (td ,(yf-mdates f))
+                     (td
+                      ,(symbol->string (yf-status f)) nbsp
+                      ,(yf-mdates f))
                      (td
                       ,(if (eq? 'P (yf-status f))
-                         `,(yf-name f)
+                         `,(yf-dname f)
                          `(a ([href ,(do play! f)])
-                             ,(yf-name f))))
+                             ,(yf-dname f))))
                      (td ,(yf-lens f))
                      (td
                       ,@(let ()
@@ -203,9 +219,9 @@
                             (match (yf-status f)
                               ['P empty]
                               ['U (list (cons "R" (do mark! f 'R)))]
-                              ['R (list (cons "U" (do mark! f 'U))
-                                        (cons "S" (do mark! f 'S)))]
-                              ['S (list (cons "R" (do mark! f 'R)))]))
+                              ;; xxx too squished for now
+                              ['R (list (cons "S" (do mark! f 'S)))]
+                              ['S (list (cons "U" (do mark! f 'U)))]))
                           (for/list ([l*u (in-list menu)])
                             `(a ([href ,(cdr l*u)]) ,(car l*u))))))))))))))
 

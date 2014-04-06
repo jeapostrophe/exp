@@ -2,10 +2,10 @@ html, body {
     margin: 1px;
     padding: 0px;
     border: 0px;
-    font-size: 11pt;
+    font-size: 10pt;
     vertical-align: baseline;
 
-    font-family: "DejaVu Sans";
+    font-family: "DejaVu Sans Mono", monospace;
 
     color: #657b83;
     background-color: #fdf6e3;
@@ -30,19 +30,21 @@ span a.continuous_off {
     text-decoration: line-through;
 }
 
+table#playlist tr td {
+    vertical-align: top;
+}
 table#playlist tr.item#playing {
-    color: #d33682;
+    color: #268bd2;
 }
 table#playlist tr.item.status_P {
-    color: #dc322f;
+    color: #859900;    
 }
 table#playlist tr.item.status_U {
     color: inherit;
 }
 table#playlist tr.item.status_R {
-    color: gray;
-    font-style: italic;
+    color: #dc322f;
 }
 table#playlist tr.item.status_S {
-    color: #268bd2;
+    color: #b58900;
 }
