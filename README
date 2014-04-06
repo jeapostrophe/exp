@@ -163,3 +163,4 @@ workout-plan.rkt - generator for workout plan contents
 workout-plan.tex - wrapper for workout plan PDF
 workout.rkt - graph workout data
 xmonad.hs - config file for xmonad
+y.css - style sheet for y

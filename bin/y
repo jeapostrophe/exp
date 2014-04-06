@@ -1,13 +1,19 @@
 #!/usr/bin/env racket
 #lang racket/base
-(require racket/match
+(require racket/runtime-path
+         racket/match
          racket/list
          racket/format
          racket/port
          racket/system
          racket/date
+         racket/file
+         xml
          web-server/servlet
          web-server/http)
+
+(define-runtime-path y.css
+  "../y.css")
 
 (define VLC-PATH
   (find-executable-path "vlc"))
@@ -155,29 +161,36 @@
         #:preamble #"<!DOCTYPE html>"
         `(html
           ;; xxx add nice css, buttons, etc
-          (head (title "y"))
+          (head (title "y")
+                (style ,(cdata #f #f (file->string y.css))))
           (body
            (div
+            ([id "header"])
+            (span ([class "date"])
+                  ,(date->string (current-date) #t) ":")
             (span
-             ,(date->string (current-date) #t) ":"
-             " "
              ,(if current-vlc-yf
-                "playing "
-                "")
+                `(a ([href "#playing"]) "playing")
+                ""))
+            (span
              (a
               ([href ,(do toggle-continuous?!)]
-               [style
-                   ,(if continuous?
-                      "font-weight: bold"
-                      "text-decoration: line-through")])
-              "continuous")
-             " "
-             (a ([href ,(do clean!)]) "clean")
-             " "
+               [class ,(format "continuous_~a"
+                               (if continuous?
+                                 "on" "off"))])
+              "continuous"))
+            (span
+             (a ([href ,(do clean!)]) "clean"))
+            (span
              (a ([href ,(do restart!)]) "restart")))
            (table
+            ([id "playlist"])
             ,@(for/list ([f (in-list (y-files-all))])
-                `(tr (td ,(yf-mdates f))
+                `(tr ([id ,(if (is-current-vlc-yf? f)
+                             "playing"
+                             "")]
+                      [class ,(format "item status_~a" (yf-status f))])
+                     (td ,(yf-mdates f))
                      (td
                       ,(if (eq? 'P (yf-status f))
                          `,(yf-name f)
@@ -185,14 +198,6 @@
                              ,(yf-name f))))
                      (td ,(yf-lens f))
                      (td
-                      ,(if (is-current-vlc-yf? f)
-                         "!"
-                         "")
-                      ,(match (yf-status f)
-                         ['U "U"]
-                         ['P "P"]
-                         ['R "R"]
-                         ['S "S"])
                       ,@(let ()
                           (define menu
                             (match (yf-status f)
@@ -205,33 +210,6 @@
                             `(a ([href ,(cdr l*u)]) ,(car l*u))))))))))))))
 
   y-http)
-
-(module+ main-miro-rename
-  (require db
-           racket/path)
-  (define conn
-    (sqlite3-connect #:database (build-path HOME ".miro" "sqlitedb")
-                     #:mode 'read-only))
-  (define rs
-    (rows-result-rows
-     (query conn "select filename,entry_title,torrent_title from item")))
-  (for ([r (in-list rs)])
-    (match-define (vector fn et tt) r)
-    (unless (sql-null? fn)
-      (define f (file-name-from-path fn))
-      (define Uf (build-path ROOT (string-append "U" (path->string f))))
-      (when (file-exists? Uf)
-        (define nt
-          (cond
-            [(not (sql-null? tt))
-             tt]
-            [(not (sql-null? et))
-             et]
-            [else
-             (error 'y "no title: ~a\n" fn)]))
-        (rename-file-or-directory
-         Uf
-         (build-path ROOT (format "U~a" nt)))))))
 
 (module+ main
   (require web-server/servlet-env)

@@ -1,0 +1,48 @@
+html, body {
+    margin: 1px;
+    padding: 0px;
+    border: 0px;
+    font-size: 11pt;
+    vertical-align: baseline;
+
+    font-family: "DejaVu Sans";
+
+    color: #657b83;
+    background-color: #fdf6e3;
+}
+
+div#header {
+    text-align: center;
+}
+div#header span {
+    margin-right: 1em;
+}
+
+a {
+    color: inherit; 
+    text-decoration: inherit;
+}
+
+span a.continuous_on {
+    font-weight: bold;
+}
+span a.continuous_off {
+    text-decoration: line-through;
+}
+
+table#playlist tr.item#playing {
+    color: #d33682;
+}
+table#playlist tr.item.status_P {
+    color: #dc322f;
+}
+table#playlist tr.item.status_U {
+    color: inherit;
+}
+table#playlist tr.item.status_R {
+    color: gray;
+    font-style: italic;
+}
+table#playlist tr.item.status_S {
+    color: #268bd2;
+}
