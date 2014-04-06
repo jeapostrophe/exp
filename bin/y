@@ -77,9 +77,9 @@
   (define L (inexact->exact (floor (yf-len a-yf))))
   (define-values (H HR) (quotient/remainder L HOURS))
   (define-values (M S) (quotient/remainder HR MINUTES))
-  (~a (~a #:width 2 #:pad-string "0" H) ":"
-      (~a #:width 2 #:pad-string "0" M) ":"
-      (~a #:width 2 #:pad-string "0" S)))
+  (~a (~a #:width 2 #:pad-string "0" #:align 'right H) ":"
+      (~a #:width 2 #:pad-string "0" #:align 'right M) ":"
+      (~a #:width 2 #:pad-string "0" #:align 'right S)))
 
 (define (y-files-all)
   (define ps (directory-list ROOT))
@@ -158,8 +158,9 @@
   (define (toggle-continuous?!)
     (set! continuous? (not continuous?)))
   (define (restart!)
-    (local-require mzlib/os)
-    (system (format "kill -9 ~a" (getpid))))
+    (unless current-vlc-yf
+      (local-require mzlib/os)
+      (system (format "kill -9 ~a" (getpid)))))
 
   (define (y-http req)
     (send/suspend/dispatch
