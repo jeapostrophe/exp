@@ -11,12 +11,12 @@
 
 (define VLC-PATH
   (find-executable-path "vlc"))
-(define LYNX-PATH
-  (find-executable-path "links"))
 (define FFPROBE-PATH
   (find-executable-path "ffprobe"))
 (define HOME (find-system-path 'home-dir))
 ;; xxx generalize from URL?
+;; xxx recursive showing
+;; xxx polite vs impolite
 (define ROOT (build-path HOME "Downloads" "YouTube"))
 
 (define (ffprobe p)
@@ -47,7 +47,9 @@
 (define (yf-equal? x y)
   (equal? (yf-name x) (yf-name y)))
 (define (yf-played? a-yf)
-  (not (eq? 'U (yf-status a-yf))))
+  (member (yf-status a-yf) '(R S)))
+(define (yf-unplayed? a-yf)
+  (eq? 'U (yf-status a-yf)))
 (define (yf-mdates a-yf)
   (parameterize ([date-display-format 'iso-8601])
     (date->string (seconds->date (yf-msecs a-yf)))))
@@ -71,13 +73,17 @@
       (define p (build-path ROOT pp))
       (define f (path->string pp))
       (define msecs (file-or-directory-modify-seconds p))
-      (yf (string->symbol (string (string-ref f 0)))
+      (yf (cond
+            [(regexp-match #rx".part$" f)
+             'P]
+            [else
+             (string->symbol (string (string-ref f 0)))])
           (substring f 1)
           p
           msecs)))
   (sort yfs <= #:key yf-msecs))
 (define (y-files-unplayed)
-  (filter-not yf-played? (y-files-all)))
+  (filter yf-unplayed? (y-files-all)))
 
 (define (make-y-http)
   (define current-vlc-lock (make-semaphore 1))
@@ -90,26 +96,33 @@
   (define (play! f)
     (when (semaphore-try-wait? current-vlc-lock)
       (set! current-vlc-yf f)
+      (printf "Starting VLC on ~a\n" (yf-name f))
       (define-values
         (sp o i e)
         (subprocess
          (current-output-port) (current-input-port) (current-error-port)
          VLC-PATH
-         "--fullscreen"
          (yf-path f)
          "vlc://quit"))
       (thread
        (λ ()
+         (printf "Waiting on VLC\n")
          (subprocess-wait sp)
+         (printf "VLC Done\n")
          (set! current-vlc-yf #f)
-         (mark! f 'R)
          (semaphore-post current-vlc-lock)
-         (when continuous? (play-next! f))))))
+         (with-handlers ([exn:fail? void])
+           (mark! f 'R))
+         (when continuous?
+           (play-next! f))))))
   (define (play-next! f)
+    (printf "Continuous play...\n")
     (define fs (y-files-all))
     (define f-and (member f fs yf-equal?))
-    (when (and f-and (cons? (rest f-and)))
-      (play! (first (rest f-and)))))
+    (when f-and
+      (define f-and-un (filter yf-unplayed? (rest f-and)))
+      (unless (empty? f-and-un)
+        (play! (first f-and-un)))))
 
   (define (clean!)
     (for ([f (in-list (y-files-all))]
@@ -117,6 +130,7 @@
       (delete-file (yf-path f))))
   (define (mark! f s)
     (unless (is-current-vlc-yf? f)
+      (printf "Marking ~a as ~a\n" (yf-name f) s)
       (define old (yf-path f))
       (define n (yf-name f))
       (define new
@@ -125,6 +139,9 @@
       (rename-file-or-directory old new)))
   (define (toggle-continuous?!)
     (set! continuous? (not continuous?)))
+  (define (restart!)
+    (local-require mzlib/os)
+    (system (format "kill -9 ~a" (getpid))))
 
   (define (y-http req)
     (send/suspend/dispatch
@@ -137,6 +154,7 @@
        (response/xexpr
         #:preamble #"<!DOCTYPE html>"
         `(html
+          ;; xxx add nice css, buttons, etc
           (head (title "y"))
           (body
            (div
@@ -154,24 +172,31 @@
                       "text-decoration: line-through")])
               "continuous")
              " "
-             (a ([href ,(do clean!)]) "clean")))
+             (a ([href ,(do clean!)]) "clean")
+             " "
+             (a ([href ,(do restart!)]) "restart")))
            (table
             ,@(for/list ([f (in-list (y-files-all))])
                 `(tr (td ,(yf-mdates f))
-                     (td (a ([href ,(do play! f)])
-                            ,(yf-name f)))
+                     (td
+                      ,(if (eq? 'P (yf-status f))
+                         `,(yf-name f)
+                         `(a ([href ,(do play! f)])
+                             ,(yf-name f))))
                      (td ,(yf-lens f))
                      (td
                       ,(if (is-current-vlc-yf? f)
-                         "P"
+                         "!"
                          "")
                       ,(match (yf-status f)
                          ['U "U"]
+                         ['P "P"]
                          ['R "R"]
                          ['S "S"])
                       ,@(let ()
                           (define menu
                             (match (yf-status f)
+                              ['P empty]
                               ['U (list (cons "R" (do mark! f 'R)))]
                               ['R (list (cons "U" (do mark! f 'U))
                                         (cons "S" (do mark! f 'S)))]
