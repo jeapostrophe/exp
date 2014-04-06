@@ -164,6 +164,7 @@
 
   (define (y-http req)
     (send/suspend/dispatch
+     ;; xxx use dispatch
      (λ (embed/url)
        (define (do f . args)
          (embed/url
