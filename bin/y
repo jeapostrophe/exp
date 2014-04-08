@@ -31,10 +31,14 @@
   (define-values (sp o i e)
     (subprocess #f #f #f FFPROBE-PATH "-show_format" p))
   (subprocess-wait sp)
-  (string->number
-   (second
+  (define duration-s
     (for/or ([x (in-list (port->lines o))])
-      (regexp-match #rx"^duration=(.*?)$" x)))))
+      (regexp-match #rx"^duration=(.*?)$" x)))
+  (or (and duration-s
+           (string->number
+            (second
+             duration-s)))
+      0))
 (define LEN-CACHE (make-hash))
 (define (yf-len a-yf)
   (define p (yf-path a-yf))
