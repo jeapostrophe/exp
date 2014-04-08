@@ -12,7 +12,9 @@
          web-server/servlet
          web-server/http)
 
-;; time --time=mtime -r SRC -d DIFF DEST
+;; xxx time --time=mtime -r SRC -d DIFF DEST
+
+;; xxx embed videos rather than VLC?
 
 (define-runtime-path y.css
   "../y.css")
