@@ -36,6 +36,9 @@
   (define duration-s
     (for/or ([x (in-list (port->lines o))])
       (regexp-match #rx"^duration=(.*?)$" x)))
+  (close-input-port o)
+  (close-input-port e)
+  (close-output-port i)
   (or (and duration-s
            (string->number
             (second
