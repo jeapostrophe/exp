@@ -12,7 +12,7 @@
          web-server/servlet
          web-server/http)
 
-;; xxx time --time=mtime -r SRC -d DIFF DEST
+;; xxx touch --time=mtime -r SRC -d DIFF DEST
 
 ;; xxx embed videos rather than VLC?
 
