@@ -4,6 +4,23 @@
          sxml
          sxml/html)
 
+(define POS
+  (hash
+   "a" "article"
+   "v" "verb"
+   "c" "conjunction"
+   "i" "preposition"
+   "t" "infinitive marker"
+   "p" "pronoun"
+   "d" "determiner"
+   "x" "???"
+   "r" "adverb"
+   "m" "number"
+   "n" "noun"
+   "e" "existential there"
+   "j" "adjective"
+   "u" "interjection"))
+
 (define (parse p)
   (define x (call-with-input-file p html->xexp))
   (define trs ((sxpath '(// (table (@ (equal? (id "table1")))
@@ -14,8 +31,8 @@
   (for ([i (in-naturals)]
         [tr (in-list (rest (rest trs)))])
     (match tr
-      [`(tr "\r\n" (td (@ (align "center")) ,rank) "\r\n" (td (& nbsp) (& nbsp) (& nbsp) ,word) "\r\n" (td (@ (align "center")) ,pos) "\r\n" (td (@ (align "center")) ,freq) "\r\n" (td (@ (align "center")) ,dispersion) "\r\n")
-       (printf "~a. ~a (~a)\n" rank word pos)]
+      [`(tr "\r\n" (td (@ (align "center")) ,rank) "\r\n" (td (& nbsp) (& nbsp) (& nbsp) ,word) "\r\n" (td (@ (align "center")) ,pos) . ,_)
+       (printf "~a\t~a\t~a\n" rank word (hash-ref POS pos (λ () (error 'coca "Missing pos ~v for ~v" pos word))))]
       [_
        (error 'coca "Failed on row ~a, ~e" i tr)])))
 
