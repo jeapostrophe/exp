@@ -1,0 +1,11 @@
+#!/usr/bin/env racket
+#lang racket/base
+
+(for/fold ([last #f])
+    ([f (in-list
+         (sort (vector->list (current-command-line-arguments))
+               string-ci<=?))])
+  (when last
+    (define next (+ 1 last))
+    (file-or-directory-modify-seconds f next))
+  (file-or-directory-modify-seconds f))
