@@ -31,19 +31,18 @@ void trie_display( trie* cur, marks *prev_ms ) {
   struct marks my_ms;
   my_ms.prev = prev_ms;
   if ( cur->count ) {
-    printf("%2d ", cur->count );
+    printf("%3d ", cur->count );
     display_marks(prev_ms);
     printf("\n"); }
   for ( int i = 0; i < 256; i++ ) {
     trie* next = cur->next[i];
-    if ( next != NULL ) {
+    if ( next ) {
       my_ms.c = i;
       trie_display(next, &my_ms); } } }
 
 void uniq ( char *f ) {
   FILE *IN = fopen(f, "r");
-  if ( ! IN ) {
-    return; }
+  if ( ! IN ) { return; }
 
   trie *top = trie_allocate();
   int c;
@@ -58,9 +57,10 @@ void uniq ( char *f ) {
       seen = true;
       cur = trie_lookup(cur, c); } }
   fclose(IN);
+
   trie_display(top, NULL); }
 
-void main (int argc, char **argv) {
+int main (int argc, char **argv) {
   if ( argc == 1 ) {
     uniq("/home/jay/.emacs.el"); }
   else {
