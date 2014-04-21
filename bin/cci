@@ -7,7 +7,7 @@ cecho () {
 
 cd "$(dirname "$FILE")" && \
 cecho Compiling... && \
-gcc "$FILE" -o "$FILE.bin" && \
+gcc --std=c11 "$FILE" -o "$FILE.bin" && \
 cecho Running... && \
 "${FILE}.bin" && \
 cecho Cleaning up... && \
