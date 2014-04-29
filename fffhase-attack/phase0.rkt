@@ -3,4 +3,5 @@
          "phase1.rkt")
 
 (macro)
-(printf "dynamic: global is ~a\n" (global))
+(printf "dynamic: unsafe-global is ~a\n" (unsafe-global))
+(printf "dynamic: safe-global is ~a\n" (safe-global))
