@@ -8,6 +8,7 @@ typedef struct trie {
 } trie;
 
 trie* trie_allocate () {
+  // Use calloc because it 0s memory
   return calloc(sizeof(trie), 1); }
 
 trie* trie_lookup( trie* cur, int c ) {
