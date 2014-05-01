@@ -1,0 +1,42 @@
+#!/usr/bin/env racket
+#lang racket/base
+(require racket/system
+         racket/match
+         racket/string)
+
+(define CDB (find-executable-path "calibredb"))
+
+(define (set-plan id val)
+  (system* CDB "set_custom" "plan" id (if val "true" "false")))
+
+(module+ main
+  (define-values (list:sp list:out list:in list:err)
+    (subprocess #f #f #f CDB "list"
+                "--fields=*read,*plan,authors,pubdate"
+                "--line-width=5000"
+                "--separator=\t"))
+
+  (define authors->recent-id (make-hash))
+
+  (for ([p (in-lines list:out)])
+    (match (map string-trim (string-split p "\t"))
+      [(or (list "id" "*read" "*plan" "authors" "pubdate") (list))
+       (void)]
+      [(list id read plan authors pubdate)
+       (unless (string=? read "True")
+         (hash-update!
+          authors->recent-id
+          authors
+          (λ (old)
+            (if (or (not old)
+                    (string-ci<=? pubdate (vector-ref old 1)))
+              (vector id pubdate)
+              old))
+          #f))
+       (when (string=? plan "True")
+         (set-plan id #f))]))
+
+  (for ([(authors vec) (in-hash authors->recent-id)])
+    (match-define (vector id pubdate) vec)
+    (printf "! ~v\n" (vector id authors pubdate))
+    (set-plan id #t)))
