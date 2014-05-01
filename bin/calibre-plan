@@ -17,6 +17,7 @@
                 "--separator=\t"))
 
   (define authors->recent-id (make-hash))
+  (define changes (make-hash))
 
   (for ([p (in-lines list:out)])
     (match (map string-trim (string-split p "\t"))
@@ -30,13 +31,25 @@
           (λ (old)
             (if (or (not old)
                     (string-ci<=? pubdate (vector-ref old 1)))
-              (vector id pubdate)
+              (vector id pubdate authors)
               old))
           #f))
        (when (string=? plan "True")
-         (set-plan id #f))]))
+         (hash-set! changes id '(to-false)))]))
 
-  (for ([(authors vec) (in-hash authors->recent-id)])
-    (match-define (vector id pubdate) vec)
+  (for ([vec (in-list (sort (hash-values authors->recent-id)
+                            string-ci<=?
+                            #:key (λ (v) (vector-ref v 1))))]
+        [k (in-range 5)])
+    (match-define (vector id pubdate authors) vec)
     (printf "! ~v\n" (vector id authors pubdate))
-    (set-plan id #t)))
+    (hash-update! changes id (λ (old) (cons 'to-true old)) '()))
+
+  (for ([(id change) (in-hash changes)])
+    (match change
+      ['(to-true to-false)
+       (void)]
+      ['(to-true)
+       (set-plan id #t)]
+      ['(to-false)
+       (set-plan id #f)])))
