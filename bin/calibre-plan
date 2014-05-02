@@ -65,7 +65,7 @@
                (sort (hash-values authors->recent-id)
                      string-ci<=?
                      #:key book-info-pubdate)))]
-        [k (in-range 5)])
+        [k (in-range 6)])
     (match-define (book-info id active authors pubdate) vec)
     (printf "! ~v\n" vec)
     (hash-cons! changes id 'to-true))
