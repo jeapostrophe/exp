@@ -4,6 +4,9 @@
          racket/match
          racket/string)
 
+;; xxx active
+;; xxx wiggle
+
 (define CDB (find-executable-path "calibredb"))
 
 (define (set-plan id val)
