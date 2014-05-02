@@ -1,16 +1,31 @@
 #!/usr/bin/env racket
 #lang racket/base
 (require racket/system
+         racket/list
          racket/match
          racket/string)
 
 ;; xxx active
-;; xxx wiggle
 
 (define CDB (find-executable-path "calibredb"))
 
 (define (set-plan id val)
   (system* CDB "set_custom" "plan" id (if val "true" "false")))
+
+(define (wiggle l)
+  (if (empty? l)
+    empty
+    (cons (first l)
+          (waggle (rest l)))))
+
+(define (waggle l)
+  (if (empty? l)
+    empty
+    (let ()
+      (define rl (reverse l))
+      (define rrl (reverse (rest rl)))
+      (cons (first rl)
+            (wiggle rrl)))))
 
 (module+ main
   (define-values (list:sp list:out list:in list:err)
@@ -40,9 +55,11 @@
        (when (string=? plan "True")
          (hash-set! changes id '(to-false)))]))
 
-  (for ([vec (in-list (sort (hash-values authors->recent-id)
-                            string-ci<=?
-                            #:key (λ (v) (vector-ref v 1))))]
+  (for ([vec (in-list
+              (wiggle
+               (sort (hash-values authors->recent-id)
+                     string-ci<=?
+                     #:key (λ (v) (vector-ref v 1)))))]
         [k (in-range 5)])
     (match-define (vector id pubdate authors) vec)
     (printf "! ~v\n" (vector id authors pubdate))
