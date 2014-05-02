@@ -73,9 +73,12 @@
   (for ([(id change) (in-hash changes)])
     (match change
       [(or '(to-true to-false)
-           '(to-true must-true to-false))
+           '(to-true must-true to-false)
+           '(must-true to-false))
        (void)]
-      ['(to-true)
+      [(or '(to-true)
+           '(to-true must-true)
+           '(must-true))
        (set-plan id #t)]
       ['(to-false)
        (set-plan id #f)])))
