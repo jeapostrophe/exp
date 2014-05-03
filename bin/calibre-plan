@@ -45,7 +45,8 @@
       [(or (list "id" "*read" "*plan" "*active" "authors" "pubdate") (list))
        (void)]
       [(list id read plan active authors pubdate)
-       (unless (string=? read "True")
+       (unless (or (string=? active "True")
+                   (string=? read "True"))
          (hash-update!
           authors->recent-id
           authors
@@ -65,7 +66,7 @@
                (sort (hash-values authors->recent-id)
                      string-ci<=?
                      #:key book-info-pubdate)))]
-        [k (in-range 6)])
+        [k (in-range 5)])
     (match-define (book-info id active authors pubdate) vec)
     (printf "! ~v\n" vec)
     (hash-cons! changes id 'to-true))
