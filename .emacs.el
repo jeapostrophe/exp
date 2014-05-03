@@ -251,6 +251,7 @@
  'ansi-color-for-comint-mode-on)
 
 ;;;;; Tramp
+(require 'tramp)
 (setq tramp-default-method "ssh")
 
 ;;;;; vc
