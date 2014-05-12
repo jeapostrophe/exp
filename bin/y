@@ -251,7 +251,7 @@
      (parameterize ([current-directory ROOT])
        (system* (find-executable-path "youtube-dl")
                 "--continue"
-                "--embed-subs"
+                "--ignore-errors"
                 "--output"
                 "U%(uploader)s - %(title)s.%(ext)s"
                 x))]))
