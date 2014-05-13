@@ -31,6 +31,15 @@
 (struct book-info (id active authors pubdate) #:transparent)
 
 (module+ main
+  (require racket/cmdline)
+
+  (define N 5)
+
+  (command-line #:program "calibre-plan"
+                #:args maybe-n
+                (when (cons? maybe-n)
+                  (set! N (string->number (first maybe-n)))))
+
   (define-values (list:sp list:out list:in list:err)
     (subprocess #f #f #f CDB "list"
                 "--fields=*read,*plan,*active,authors,pubdate"
@@ -66,7 +75,7 @@
                (sort (hash-values authors->recent-id)
                      string-ci<=?
                      #:key book-info-pubdate)))]
-        [k (in-range 5)])
+        [k (in-range N)])
     (match-define (book-info id active authors pubdate) vec)
     (printf "! ~v\n" vec)
     (hash-cons! changes id 'to-true))
