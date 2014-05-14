@@ -1,0 +1,3 @@
+#!/bin/sh
+
+y $* &>/dev/null &
