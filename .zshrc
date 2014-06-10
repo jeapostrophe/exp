@@ -56,7 +56,7 @@ function set-eterm-dir {
     echo -e "\033AnSiTh" "$(hostname $hostname_options)" # Using the -f option can cause problems on some OSes.
 }
 
-        # Track directory, username, and cwd for remote logons.
+# Track directory, username, and cwd for remote logons.
 if [ "$TERM" = "eterm-color" ]; then
     precmd () { set-eterm-dir }
 elif [[ "$TERM" =~ "screen" ]] ; then
