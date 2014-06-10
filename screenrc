@@ -97,11 +97,11 @@ bindkey ^k next
 bindkey ^d kill
 bindkey ^n screen
 
-screen -t alsamixer forever alsamixer
-screen -t powertop forever sudo powertop
-screen -t irc forever irssi
-screen -t y forever y
-screen -t journal forever journalctl -f
+#screen -t alsamixer forever alsamixer
+#screen -t powertop forever sudo powertop
+#screen -t irc forever irssi
+#screen -t y forever y
+#screen -t journal forever journalctl -f
 screen zsh_dir ~courses
 screen zsh_dir ~330
 screen zsh_dir ~330/notes

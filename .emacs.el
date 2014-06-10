@@ -9,6 +9,7 @@
  :font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
 (require 'color-theme)
 (color-theme-initialize)
+(color-theme-hober)
 (add-to-list 'load-path "~/Dev/dist/altercation/solarized/emacs-colors-solarized")
 (load "color-theme-solarized")
 (color-theme-solarized-light)
@@ -29,7 +30,8 @@
 (when t
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-  (scroll-bar-mode -1))
+  (when (fboundp 'scroll-bar-mode)
+    (scroll-bar-mode -1)))
 
 ;; Bell
 (setq ring-bell-function 'ignore)
@@ -39,7 +41,7 @@
 (setq use-dialog-box nil)
 
 ;; Don't open new annoying windows under X, use the echo area
-(when t
+(when (fboundp 'tooltip-mode)
   (tooltip-mode -1))
 
 ;; Don't display the 'Welcome to GNU Emacs' buffer on startup
@@ -200,9 +202,6 @@
 ;;;;; Dired
 (setq ls-lisp-format-time-list '("%Y.%m.$d %H:%M:%S" "%Y.%m.$d %H:%M:%S")
       ls-lisp-use-localized-time-format t)
-(setq dired-guess-shell-alist-user
-      (list
-       (list "\\.mp4$" "vlc")))
 (add-hook 'dired-mode-hook
           '(lambda ()
              ;; Only open one dired buffer at most
@@ -1052,18 +1051,19 @@ given a prefix arg."
                 (lambda () (interactive nil) (insert "λ")))
 
 ;; iBus
-(require 'ibus)
-(setq ibus-python-shell-command-name
-      "python2")
-(add-hook 'after-init-hook 'ibus-mode-on)
-(setq ibus-cursor-color
-      '("red" "blue" "limegreen"))
-(add-hook 'after-make-frame-functions
-          (lambda (new-frame)
-            (select-frame new-frame)
-            (or ibus-mode (ibus-mode-on))))
-(ibus-define-common-key ?\S-\s nil)
-(global-set-key (kbd "M-s-;") 'ibus-toggle)
+(when nil
+  (require 'ibus)
+  (setq ibus-python-shell-command-name
+        "python2")
+  (add-hook 'after-init-hook 'ibus-mode-on)
+  (setq ibus-cursor-color
+        '("red" "blue" "limegreen"))
+  (add-hook 'after-make-frame-functions
+            (lambda (new-frame)
+              (select-frame new-frame)
+              (or ibus-mode (ibus-mode-on))))
+  (ibus-define-common-key ?\S-\s nil)
+  (global-set-key (kbd "M-s-;") 'ibus-toggle))
 
 ;; Eli Calc
 (autoload 'calculator "calculator"
@@ -1154,7 +1154,7 @@ given a prefix arg."
 
 ;; proof general
 (load-file
- "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
+ "/opt/local/share/ProofGeneral/generic/proof-site.el")
 ;; XXX make these local to the proof mode
 ;; proof-display-three-b
 ;; proof-shell-exit
@@ -1170,7 +1170,7 @@ given a prefix arg."
     (proof-display-three-b 'hybrid))
 
 ;; haskell
-(load "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode-autoloads.el")
+;; (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode-autoloads.el")
 
 ;;
 (defun je/insert-$ (cmd)
@@ -1195,7 +1195,6 @@ given a prefix arg."
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; customs
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

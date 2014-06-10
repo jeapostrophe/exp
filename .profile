@@ -1,4 +1,4 @@
-export PATH=$HOME/.cabal/bin:$PATH
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 export SVNROOT=$HOME/Dev/scm
 export PROJS=$SVNROOT/github.jeapostrophe/work
@@ -14,12 +14,12 @@ export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/pkgs/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
 
-. /etc/locale.conf
+#. /etc/locale.conf
 export GTK_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
 
-alias ls='ls --color=auto'
+alias ls='ls -G'
 alias r='racket -il xrepl'
 alias oew=emacsclient
 alias oe='emacsclient -nc'

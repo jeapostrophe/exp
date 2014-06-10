@@ -80,7 +80,7 @@ chpwd () {
     # Save what directory we are in for the future
     write_zdir
     # Show recently modified files
-    ls -t | head -$RECENTFILES | tr '\n' '\0' | xargs -0 ls -d --color=auto
+    ls -t | head -$RECENTFILES | tr '\n' '\0' | xargs -0 ls -Gd
 }
 
 if [ $(pwd) = ${HOME} ] ; then
