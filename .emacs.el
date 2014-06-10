@@ -21,6 +21,8 @@
 
 ;;;; Emacs' interface
 
+(setq ns-pop-up-frames t)
+
 (setq initial-buffer-choice "~/.emacs.el")
 
 ;; Don't get weird properties when pasting
@@ -167,14 +169,14 @@
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 ;; Found these in one place
-(setq ansi-color-names-vector
-      ["black" "#dc322f" "#859900" "#b58900"
-       "#268bd2" "#d33682" "#2aa198" "white"])
-(ansi-color-map-update 'ansi-color-names-vector ansi-color-names-vector)
+;; (setq ansi-color-names-vector
+;;      ["black" "#dc322f" "#859900" "#b58900"
+;;       "#268bd2" "#d33682" "#2aa198" "white"])
+;; (ansi-color-map-update 'ansi-color-names-vector ansi-color-names-vector)
 ;; http://emacsworld.blogspot.com/2009/02/setting-term-mode-colours.html
-(setq ansi-term-color-vector
-      [unspecified "#000000" "#963F3C" "#859900" "#b58900"
-                   "#0082FF" "#FF2180" "#57DCDB" "#FFFFFF"])
+;; (setq ansi-term-color-vector
+;;      [unspecified "#000000" "#963F3C" "#859900" "#b58900"
+;;                   "#0082FF" "#FF2180" "#57DCDB" "#FFFFFF"])
 
 ;;;;; conf-mode
 (add-to-list 'auto-mode-alist '("\\.gitconfig$" . conf-mode))
