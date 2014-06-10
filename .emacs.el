@@ -678,6 +678,9 @@ given a prefix arg."
 (global-set-key
  (kbd "<s-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
+(global-set-key
+ (kbd "<f1>")
+ (lambda () (interactive) (org-capture nil "t")))
 
 (setq org-agenda-before-sorting-filter-function 'je/todo-color)
 (setq org-agenda-cmp-user-defined 'je/agenda-sort)
