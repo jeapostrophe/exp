@@ -22,6 +22,7 @@
 ;;;; Emacs' interface
 
 (setq ns-pop-up-frames t)
+(setq confirm-kill-emacs 'yes-or-no-p)
 
 (setq initial-buffer-choice "~/.emacs.el")
 
