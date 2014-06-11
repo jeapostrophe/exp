@@ -1,4 +1,5 @@
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=/Applications/MacPorts/Emacs.app/Contents/MacOS/bin/:$PATH
 
 export SVNROOT=$HOME/Dev/scm
 export PROJS=$SVNROOT/github.jeapostrophe/work
