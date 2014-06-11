@@ -1,6 +1,6 @@
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # SCREEN SETTINGS
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 startup_message off
 #nethack on
@@ -16,9 +16,9 @@ vbell_msg "   Wuff  ----  Wuff!!  "
 # define a bigger scrollback, default is 100 lines
 defscrollback 1024
 
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # SCREEN KEYBINDINGS
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Remove some stupid / dangerous key bindings
 bind ^k
@@ -89,6 +89,7 @@ defnonblock 5
 # screen -t daemon 9 tail -f /var/log/daemon.log
 
 bindkey ^` windowlist
+bindkey ^b windowlist
 # ^[ is special in a terminal, so it can't work, but maybe it's okay because it's not really "back/forward
 bindkey ^j prev
 bindkey ^k next

@@ -23,11 +23,7 @@ syndaemon -t -k -i 2 -d &
 
 minidlnad -f ~/.config/minidlna.conf -P /tmp/minidlna.pid
 
-if (screen -list | grep lightning) ; then
-	echo Screen exists
-else
-	screen -UdmS lightning &
-fi
+screen-init
 
 if [ "$1" = "default" ] ; then
     mpd ~/.mpdconf &

@@ -1,3 +1,4 @@
+set backupskip=/tmp/*,/private/tmp/*
 set backspace=indent,eol,start
 nnoremap <Esc>A <up>
 nnoremap <Esc>B <down>

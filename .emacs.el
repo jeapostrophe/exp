@@ -353,6 +353,7 @@ given a prefix arg."
 (progn
   (global-set-key (kbd "C-x C-b") 'ibuffer))
 (define-key global-map (kbd "C-`") 'ibuffer)
+(define-key global-map (kbd "C-b") 'ibuffer)
 (define-key global-map (kbd "M-`") 'iswitchb-buffer)
 (define-key global-map (kbd "M-<tab>") 'other-window)
 
