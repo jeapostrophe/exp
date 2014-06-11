@@ -21,6 +21,8 @@
 
 (define VLC-PATH
   (find-executable-path "vlc"))
+(define MPLAYER-PATH
+  (find-executable-path "mplayer"))
 (define FFPROBE-PATH
   (find-executable-path "ffprobe"))
 (define HOME (find-system-path 'home-dir))
@@ -128,9 +130,8 @@
         (sp o i e)
         (subprocess
          (current-output-port) (current-input-port) (current-error-port)
-         VLC-PATH
-         (yf-path f)
-         "vlc://quit"))
+         ;; VLC-PATH (yf-path f) "vlc://quit"
+         MPLAYER-PATH "-fs" (yf-path f)))
       (thread
        (λ ()
          (printf "Waiting on VLC\n")

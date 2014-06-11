@@ -1017,7 +1017,7 @@ given a prefix arg."
 
 ;; CUA
 (setq cua-enable-cua-keys nil)           ;; don't add C-x,C-c,C-v
-(cua-mode t)                             ;; for rectangles, CUA is nice
+;; (cua-mode t)                             ;; for rectangles, CUA is nice
 
 (add-hook 'term-mode-hook
           #'(lambda () (setq autopair-dont-activate t)))
