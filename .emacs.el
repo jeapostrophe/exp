@@ -4,9 +4,10 @@
 (byte-recompile-directory "~/.emacs.d/")
 
 ;; font & color
-(set-face-attribute
- 'default nil
- :font "Bitstream Vera Sans Mono:pixelsize=13:scalable=true:antialias=true")
+(set-face-attribute 'default nil 
+                    :font "Menlo Regular"
+                    :height 120)
+
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-hober)
