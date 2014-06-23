@@ -1174,6 +1174,10 @@ given a prefix arg."
 (global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
+(global-set-key (kbd "M-s-÷") 'proof-goto-point)
+(global-set-key (kbd "M-s-≤") 'proof-undo-last-successful-command)
+(global-set-key (kbd "M-s-≥") 'proof-assert-next-command-interactive)
+
 (setq proof-three-window-mode-policy 'hybrid)
 (if nil
     (proof-display-three-b 'hybrid))
