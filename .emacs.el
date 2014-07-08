@@ -696,10 +696,18 @@ given a prefix arg."
       '(("t" "Todo list" todo "TODO"
          ())))
 
+(defun je/org-finalize-agenda-hook ()  
+  (goto-char (point-min))
+
+  (when je/org-agenda/filter-ctxt
+    (insert je/org-agenda/filter-ctxt)
+    (center-line))
+
+  (remove-text-properties
+   (point-min) (point-max) '(mouse-face t)))
+
 (add-hook 'org-finalize-agenda-hook
-          (lambda ()
-            (remove-text-properties
-             (point-min) (point-max) '(mouse-face t))))
+          'je/org-finalize-agenda-hook)
 
 ;;; These are the default colours from OmniFocus
 (defface je/due
@@ -797,8 +805,11 @@ given a prefix arg."
 
     (if (or (and je-schedule-flag? (< tn sta))
             (and je/org-agenda/filter-ctxt
-                 (member/eq je/org-agenda/filter-ctxt
-                            (org-entry-get ma "TAGS"))))
+                 (let ((tags (org-entry-get ma "TAGS")))
+                   (and tags
+                       (not 
+                        (member/eq je/org-agenda/filter-ctxt
+                                   tags))))))
         nil
       a)))
 
@@ -828,7 +839,7 @@ given a prefix arg."
   "Open up the org-mode todo list (work)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt ":Home:")
+    (setq je/org-agenda/filter-ctxt ":Work:")
     (je/todo-list)))
 (global-set-key (kbd "s-O") 'je/todo-list/work)
 
@@ -836,7 +847,7 @@ given a prefix arg."
   "Open up the org-mode todo list (home)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt ":Work:")
+    (setq je/org-agenda/filter-ctxt ":Home:")
     (je/todo-list)))
 (global-set-key (kbd "s-h") 'je/todo-list/home)
 
