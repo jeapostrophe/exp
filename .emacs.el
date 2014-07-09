@@ -700,7 +700,7 @@ given a prefix arg."
   (goto-char (point-min))
 
   (when je/org-agenda/filter-ctxt
-    (insert je/org-agenda/filter-ctxt)
+    (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
     (center-line))
 
   (remove-text-properties
@@ -803,6 +803,7 @@ given a prefix arg."
        'je/distant))
      a)
 
+    ;; Implement filtering here
     (if (or (and je-schedule-flag? (< tn sta))
             (and je/org-agenda/filter-ctxt
                  (let ((tags (org-entry-get ma "TAGS")))
@@ -835,11 +836,29 @@ given a prefix arg."
     (je/todo-list)))
 (global-set-key (kbd "s-o") 'je/todo-list/all)
 
+(defun je/org-agenda/filter-ctxt-toggle (n)
+  (cond
+   ((member n je/org-agenda/filter-ctxt)
+    (setq je/org-agenda/filter-ctxt 
+          (je/filter-out je/org-agenda/filter-ctxt n)))
+   (t
+    (add-to-list 'je/org-agenda/filter-ctxt n))))
+
+(defun je/filter-out (l o)
+  (cond
+   (l 
+    (cond
+     ((equal (car l) o)
+      (je/filter-out (cdr l) o))
+     (t
+      (cons (car l) (je/filter-out (cdr l) o)))))
+   (t l)))
+
 (defun je/todo-list/work ()
   "Open up the org-mode todo list (work)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt ":Work:")
+    (je/org-agenda/filter-ctxt-toggle ":Work:")
     (je/todo-list)))
 (global-set-key (kbd "s-O") 'je/todo-list/work)
 
@@ -847,9 +866,17 @@ given a prefix arg."
   "Open up the org-mode todo list (home)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt ":Home:")
+    (je/org-agenda/filter-ctxt-toggle ":Home:")
     (je/todo-list)))
 (global-set-key (kbd "s-h") 'je/todo-list/home)
+
+(defun je/org/toggle-internet ()
+  "toggle internet status in org"
+  (interactive)
+  (progn
+    (je/org-agenda/filter-ctxt-toggle ":Internet:")
+    (je/todo-list)))
+(global-set-key (kbd "M-s-^") 'je/org/toggle-internet)
 
 (defun je/agenda-sort (a b)
   "Sorting strategy for agenda items."
