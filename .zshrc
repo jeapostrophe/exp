@@ -27,9 +27,9 @@ hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk
 hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
 
 hash -d courses=~work/courses
-hash -d 630=~courses/2013/spring/630
-hash -d 430=~courses/2013/winter/430
-hash -d 330=~courses/2013/fall/330
+hash -d 203=~courses/2014/fall/203
+hash -d 241=~courses/2014/fall/241
+hash -d 250=~courses/2015/spring/250
 
 export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 

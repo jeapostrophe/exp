@@ -698,10 +698,10 @@ given a prefix arg."
 
 (defun je/org-finalize-agenda-hook ()  
   (goto-char (point-min))
-
-  (when je/org-agenda/filter-ctxt
-    (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
-    (center-line))
+  (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
+  ;; xxx strike through
+  (mapcar (lambda (n) (insert "!" n " ")) je/org-agenda/filter-ctxt-not)
+  (center-line)
 
   (remove-text-properties
    (point-min) (point-max) '(mouse-face t)))
@@ -803,16 +803,45 @@ given a prefix arg."
        'je/distant))
      a)
 
-    ;; Implement filtering here
-    (if (or (and je-schedule-flag? (< tn sta))
-            (and je/org-agenda/filter-ctxt
-                 (let ((tags (org-entry-get ma "TAGS")))
-                   (and tags
-                       (not 
-                        (member/eq je/org-agenda/filter-ctxt
-                                   tags))))))
+    ;; Lame to implement filtering here
+    (if (or 
+         ;; If we care about the schedule, and this is after now, then
+         ;; drop it.
+         (and je-schedule-flag? (< tn sta))
+         (let ((tags (org-entry-get ma "TAGS")))
+           ;; If there are tags, implement filtering
+           (and tags
+                (or
+                 ;; If all its tags are not what we care about
+                 (and je/org-agenda/filter-ctxt
+                      (je/andmap
+                       (lambda (f)
+                         (not (member/eq f tags)))
+                       je/org-agenda/filter-ctxt))
+
+                 ;; OR
+                 
+                 ;; If any of its tags are what we want to ignore
+                 (je/ormap
+                  (lambda (f)
+                    (member/eq f tags))
+                  je/org-agenda/filter-ctxt-not)))))
         nil
       a)))
+
+(defun je/andmap (f l)
+  (cond
+   (l
+    (and (funcall f (car l))
+         (je/andmap f (cdr l))))
+   (t t)))
+
+(defun je/ormap (f l)
+  (cond
+   (l
+    (or (funcall f (car l))
+         (je/ormap f (cdr l))))
+   (t nil)))
 
 (defun member/eq (o l)
   (or (equal o l)
@@ -827,12 +856,14 @@ given a prefix arg."
     (org-agenda-columns)))
 
 (defvar je/org-agenda/filter-ctxt nil)
+(defvar je/org-agenda/filter-ctxt-not nil)
 
 (defun je/todo-list/all ()
   "Open up the org-mode todo list (all)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt nil)
+    (setq je/org-agenda/filter-ctxt nil
+          je/org-agenda/filter-ctxt-not nil)
     (je/todo-list)))
 (global-set-key (kbd "s-o") 'je/todo-list/all)
 
@@ -840,7 +871,11 @@ given a prefix arg."
   (cond
    ((member n je/org-agenda/filter-ctxt)
     (setq je/org-agenda/filter-ctxt 
-          (je/filter-out je/org-agenda/filter-ctxt n)))
+          (je/filter-out je/org-agenda/filter-ctxt n))
+    (add-to-list 'je/org-agenda/filter-ctxt-not n))
+   ((member n je/org-agenda/filter-ctxt-not)
+    (setq je/org-agenda/filter-ctxt-not
+          (je/filter-out je/org-agenda/filter-ctxt-not n)))
    (t
     (add-to-list 'je/org-agenda/filter-ctxt n))))
 
@@ -877,6 +912,8 @@ given a prefix arg."
     (je/org-agenda/filter-ctxt-toggle ":Internet:")
     (je/todo-list)))
 (global-set-key (kbd "M-s-^") 'je/org/toggle-internet)
+
+(global-set-key (kbd "s-j") 'je/todo-list)
 
 (defun je/agenda-sort (a b)
   "Sorting strategy for agenda items."
