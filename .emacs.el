@@ -808,7 +808,8 @@ given a prefix arg."
          ;; If we care about the schedule, and this is after now, then
          ;; drop it.
          (and je-schedule-flag? (< tn sta))
-         (let ((tags (org-entry-get ma "TAGS")))
+         (let* ((tag-str (or (org-entry-get ma "TAGS") ""))
+                (tags (org-split-string tag-str ":")))
            ;; If there are tags, implement filtering
            (and tags
                 (or
@@ -893,7 +894,7 @@ given a prefix arg."
   "Open up the org-mode todo list (work)"
   (interactive)
   (progn
-    (je/org-agenda/filter-ctxt-toggle ":Work:")
+    (je/org-agenda/filter-ctxt-toggle "Work")
     (je/todo-list)))
 (global-set-key (kbd "s-O") 'je/todo-list/work)
 
@@ -901,7 +902,7 @@ given a prefix arg."
   "Open up the org-mode todo list (home)"
   (interactive)
   (progn
-    (je/org-agenda/filter-ctxt-toggle ":Home:")
+    (je/org-agenda/filter-ctxt-toggle "Home")
     (je/todo-list)))
 (global-set-key (kbd "s-h") 'je/todo-list/home)
 
@@ -909,7 +910,7 @@ given a prefix arg."
   "toggle internet status in org"
   (interactive)
   (progn
-    (je/org-agenda/filter-ctxt-toggle ":Internet:")
+    (je/org-agenda/filter-ctxt-toggle "Internet")
     (je/todo-list)))
 (global-set-key (kbd "M-s-^") 'je/org/toggle-internet)
 
