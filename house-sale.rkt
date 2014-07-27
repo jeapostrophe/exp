@@ -98,16 +98,16 @@
      #:unknowns
      IMPROVEMENTS
      #:constraints
-     (= BUY-PRICE 290000)
+     (= BUY-PRICE 285000)
      (= BUY-COSTS (+ 7000 11500))
      (= SELL-COSTS% 0.06)
      (= SELL-COSTSk 3000)
-     (= MULTIPLIER 2.5)
+     (= MULTIPLIER 1.5)
      (= SELL-PRICE
         (+ BUY-PRICE
            (* MULTIPLIER IMPROVEMENTS)))
      (= PROCEEDS
-        0)
+        -21000)
      (= PROCEEDS
         (- SELL-PRICE
            BUY-PRICE
