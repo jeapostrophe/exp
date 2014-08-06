@@ -33,7 +33,7 @@
 (module+ main
   (require racket/cmdline)
 
-  (define N 5)
+  (define N 6)
 
   (command-line #:program "calibre-plan"
                 #:args maybe-n
