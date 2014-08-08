@@ -46,6 +46,7 @@
             (second
              duration-s)))
       0))
+;; xxx save on disk
 (define LEN-CACHE (make-hash))
 (define (yf-len a-yf)
   (define p (yf-path a-yf))
@@ -92,35 +93,47 @@
       (~a #:width 2 #:pad-string "0" #:align 'right M) ":"
       (~a #:width 2 #:pad-string "0" #:align 'right S)))
 
-(define (y-files-all)
+(define (y-files-raw)
   (define ps (directory-list ROOT))
   (define fs
     (parameterize ([current-directory ROOT])
       (filter file-exists? ps)))
-  (define yfs
-    (for/list ([pp (in-list fs)])
-      (define p (build-path ROOT pp))
-      (define f (path->string pp))
-      (define msecs (file-or-directory-modify-seconds p))
-      (yf (cond
-            [(regexp-match #rx".part$" f)
-             'P]
-            [else
-             (string->symbol (string (string-ref f 0)))])
-          (substring f 1)
-          p
-          msecs)))
-  (sort yfs <= #:key yf-msecs))
-(define (y-files-unplayed)
-  (filter yf-unplayed? (y-files-all)))
+  (for/list ([pp (in-list fs)])
+    (define p (build-path ROOT pp))
+    (define f (path->string pp))
+    (define msecs (file-or-directory-modify-seconds p))
+    (yf (cond
+          [(regexp-match #rx".part$" f)
+           'P]
+          [else
+           (string->symbol (string (string-ref f 0)))])
+        (substring f 1)
+        p
+        msecs)))
 
 (define (make-y-http)
   (define current-vlc-lock (make-semaphore 1))
   (define current-vlc-yf #f)
   (define continuous? #f)
+  (define sort-style 'date)
   (define (is-current-vlc-yf? f)
     (and current-vlc-yf
          (yf-equal? current-vlc-yf f)))
+
+  (define (toggle-sort-style!)
+    (set! sort-style 
+          (match sort-style
+            ['date 'time]
+            ['time 'date])))
+
+  (define (y-files-all)
+    (sort (y-files-raw) <= 
+          #:key 
+          (match sort-style
+            ['date yf-msecs]
+            ['time yf-len])))
+  (define (y-files-unplayed)
+    (filter yf-unplayed? (y-files-all)))
 
   (define (play! f)
     (when (semaphore-try-wait? current-vlc-lock)
@@ -198,6 +211,10 @@
              ,(if current-vlc-yf
                 `(a ([href "#playing"]) "playing")
                 ""))
+            (span
+             (a
+              ([href ,(do toggle-sort-style!)])
+              ,(format "sort: ~a" sort-style)))
             (span
              (a
               ([href ,(do toggle-continuous?!)]
