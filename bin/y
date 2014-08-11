@@ -27,12 +27,32 @@
   (eprintf "Sending ~v to VLC\n" rc-cmd)
   (fprintf TO-VLC "~a\r\n" rc-cmd)
   (fprintf TO-VLC "~a\r\n" "logout")
-  (eprintf "Flushing...\n")
   (flush-output TO-VLC)
-  (eprintf "Closing...\n")
   (close-output-port TO-VLC)
-  (eprintf "Reading...\n")
-  (port->string FROM-VLC))
+  (define out (port->string FROM-VLC))
+  (close-input-port FROM-VLC)
+  (eprintf "Read ~v from VLC\n" out)  
+  out)
+
+(define (vlc-playing?)
+  (equal? "1\r\n" (vlc-rc! "is_playing")))
+(define (vlc-clear!)
+  (vlc-rc! "clear"))
+(define (vlc-add! f)
+  (vlc-rc! (format "add ~a" f)))
+(define (vlc-seek! s)
+  (vlc-rc! (format "seek ~a" s)))
+(define (vlc-play!)
+  (vlc-rc! "play"))
+(define (read-num ip)
+  (define v (read ip))
+  (if (number? v)
+    v
+    #f))
+(define (vlc-current-length)
+  (read-num (open-input-string (vlc-rc! "get_length"))))
+(define (vlc-current-time)
+  (read-num (open-input-string (vlc-rc! "get_time"))))
 
 (define MPLAYER-PATH
   (find-executable-path "mplayer"))
@@ -70,13 +90,17 @@
      (regexp-replace (first rxs) s ""))))
 
 (struct yf (status name path mtime len-mtime len prog) #:mutable #:prefab)
-(define (file->value* p f)
-  (if (file-exists? p)
-    (file->value p)
-    (f)))
+
+(define THE-DB (make-hash))
+(define (load-db!)
+  (when (file-exists? DB)
+    (for ([(k v) (in-hash (file->value DB))])
+      (hash-set! THE-DB k v))))
+(load-db!)
+(define (dump-db!)
+  (write-to-file THE-DB DB #:exists 'replace))
 
 (define (y-files-raw)
-  (define db (file->value* DB make-hash))
   ;; Add files from disk
   (let ()
     (define ps
@@ -86,11 +110,11 @@
       (parameterize ([current-directory ROOT])
         (filter file-exists? ps)))
     (for ([pp (in-list fs)])
-      (unless (hash-has-key? db pp)
+      (unless (hash-has-key? THE-DB pp)
         (define p (build-path ROOT pp))
         (define f pp)
         (define msecs (file-or-directory-modify-seconds p))
-        (hash-set! db
+        (hash-set! THE-DB
                    pp
                    (yf (cond
                          [(regexp-match #rx".part$" f)
@@ -105,12 +129,12 @@
                        0)))))
   ;; Remove files not on disk
   (let ()
-    (for ([pp (in-hash-keys db)])
+    (for ([pp (in-list (hash-keys THE-DB))])
       (unless (file-exists? (build-path ROOT pp))
-        (hash-remove! db pp))))
+        (hash-remove! THE-DB pp))))
   ;; Update lens from disk
   (let ()
-    (for ([(pp a-yf) (in-hash db)])
+    (for ([(pp a-yf) (in-hash THE-DB)])
       (define p (yf-path a-yf))
       (define msecs (file-or-directory-modify-seconds p))
       (define old-len-time (yf-len-mtime a-yf))
@@ -119,8 +143,8 @@
         (set-yf-mtime! a-yf msecs)
         (set-yf-len-mtime! a-yf msecs)
         (set-yf-len! a-yf new-len))))
-  (write-to-file db DB #:exists 'replace)
-  (hash-values db))
+  (dump-db!)
+  (hash-values THE-DB))
 
 (define (yf-dname a-yf)
   (regexp-remove (list #rx".part$" #rx".mp4$")
@@ -149,6 +173,7 @@
   (len->lens (yf-prog a-yf)))
 
 (define (make-y-http)
+  (define current-vlc-lock (make-semaphore 1))
   (define current-vlc-yf #f)
   (define continuous? #f)
   (define sort-style 'date)
@@ -173,25 +198,38 @@
 
   (define (play! f)
     (unless (vlc-playing?)
-      (set! current-vlc-yf f)
-      (printf "Starting VLC on ~a\n" (yf-name f))
-      (define-values
-        (sp o i e)
-        (subprocess
-         (current-output-port) (current-input-port) (current-error-port)
-         ;; VLC-PATH (yf-path f) "vlc://quit"
-         MPLAYER-PATH "-fs" (yf-path f)))
-      (thread
-       (λ ()
-         (printf "Waiting on VLC\n")
-         (subprocess-wait sp)
-         (printf "VLC Done\n")
-         (set! current-vlc-yf #f)
-         (semaphore-post current-vlc-lock)
-         (with-handlers ([exn:fail? void])
-           (mark! f 'R))
-         (when continuous?
-           (play-next! f))))))
+      (when (semaphore-try-wait? current-vlc-lock)
+        (set! current-vlc-yf f)
+        (printf "Starting VLC on ~a\n" (yf-name f))
+        (vlc-clear!)
+        (vlc-add! (yf-path f))
+        (vlc-seek! (yf-prog f))
+        (vlc-play!)
+        (thread
+         (λ ()
+           (printf "Waiting on VLC\n")
+           (define len
+             (let loop ()
+               (define l (vlc-current-length))
+               (if (or (not l) (zero? l))
+                 (loop)
+                 l)))
+           (let loop ()
+             (define t (vlc-current-time))
+             (when t
+               (set-yf-prog! f t)
+               (dump-db!)
+               (unless (= len t)
+                 (sleep 1)
+                 (loop))))
+           (printf "VLC Done\n")
+           (set! current-vlc-yf #f)
+           (semaphore-post current-vlc-lock)
+           (when (= len (yf-prog f))
+             (with-handlers ([exn:fail? void])
+               (mark! f 'R))
+             (when continuous?
+               (play-next! f))))))))
   (define (play-next! f)
     (printf "Continuous play...\n")
     (define fs (y-files-all))
@@ -277,7 +315,7 @@
                          `,(yf-dname f)
                          `(a ([href ,(do play! f)])
                              ,(yf-dname f))))
-                     (td 
+                     (td
                       ,(if (zero? (yf-prog f))
                          `(span nbsp nbsp nbsp
                                 nbsp nbsp nbsp
