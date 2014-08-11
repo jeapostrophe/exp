@@ -54,7 +54,7 @@
      (rest rxs)
      (regexp-replace (first rxs) s ""))))
 
-(struct yf (status name path mtime len-mtime len) #:mutable #:prefab)
+(struct yf (status name path mtime len-mtime len prog) #:mutable #:prefab)
 (define (file->value* p f)
   (if (file-exists? p)
     (file->value p)
@@ -85,6 +85,7 @@
                        (substring f 1)
                        (path->string p)
                        msecs
+                       0
                        0
                        0)))))
   ;; Remove files not on disk
@@ -118,15 +119,19 @@
 (define (yf-mdates a-yf)
   (parameterize ([date-display-format 'iso-8601])
     (date->string (seconds->date (yf-mtime a-yf)))))
-(define (yf-lens a-yf)
+(define (len->lens len)
   (define MINUTES 60)
   (define   HOURS (* 60 MINUTES))
-  (define L (inexact->exact (floor (yf-len a-yf))))
+  (define L (inexact->exact (floor len)))
   (define-values (H HR) (quotient/remainder L HOURS))
   (define-values (M S) (quotient/remainder HR MINUTES))
   (~a (~a #:width 2 #:pad-string "0" #:align 'right H) ":"
       (~a #:width 2 #:pad-string "0" #:align 'right M) ":"
       (~a #:width 2 #:pad-string "0" #:align 'right S)))
+(define (yf-lens a-yf)
+  (len->lens (yf-len a-yf)))
+(define (yf-progs a-yf)
+  (len->lens (yf-prog a-yf)))
 
 (define (make-y-http)
   (define current-vlc-lock (make-semaphore 1))
@@ -258,7 +263,14 @@
                          `,(yf-dname f)
                          `(a ([href ,(do play! f)])
                              ,(yf-dname f))))
-                     (td ,(yf-lens f))
+                     (td 
+                      ,(if (zero? (yf-prog f))
+                         `(span nbsp nbsp nbsp
+                                nbsp nbsp nbsp
+                                nbsp nbsp nbsp
+                                nbsp
+                                ,(yf-lens f))
+                         `(span ,(yf-progs f) "/" ,(yf-lens f))))
                      (td
                       ,@(let ()
                           (define menu
