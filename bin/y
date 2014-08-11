@@ -19,17 +19,17 @@
 (define-runtime-path y.css
   "../y.css")
 
-(define VLC-PATH
-  (find-executable-path "vlc"))
 (define MPLAYER-PATH
   (find-executable-path "mplayer"))
 (define FFPROBE-PATH
   (find-executable-path "ffprobe"))
 (define HOME (find-system-path 'home-dir))
+
 ;; xxx generalize from URL?
 ;; xxx recursive showing
 ;; xxx polite vs impolite
 (define ROOT (build-path HOME "Downloads" "YouTube"))
+(define DB (build-path ROOT ".db"))
 
 (define (ffprobe p)
   (define-values (sp o i e)
@@ -46,22 +46,6 @@
             (second
              duration-s)))
       0))
-;; xxx save on disk
-(define LEN-CACHE (make-hash))
-(define (yf-len a-yf)
-  (define p (yf-path a-yf))
-  (match-define
-   (cons when len)
-   (hash-ref! LEN-CACHE p
-              (λ ()
-                (cons (yf-msecs a-yf)
-                      (ffprobe p)))))
-  (cond
-    [(= when (yf-msecs a-yf))
-     len]
-    [else
-     (hash-remove! LEN-CACHE p)
-     (yf-len a-yf)]))
 
 (define (regexp-remove rxs s)
   (if (empty? rxs)
@@ -70,7 +54,58 @@
      (rest rxs)
      (regexp-replace (first rxs) s ""))))
 
-(struct yf (status name path msecs))
+(struct yf (status name path mtime len-mtime len) #:mutable #:prefab)
+(define (file->value* p f)
+  (if (file-exists? p)
+    (file->value p)
+    (f)))
+
+(define (y-files-raw)
+  (define db (file->value* DB make-hash))
+  ;; Add files from disk
+  (let ()
+    (define ps
+      (filter (λ (x) (not (equal? ".db" x)))
+              (map path->string (directory-list ROOT))))
+    (define fs
+      (parameterize ([current-directory ROOT])
+        (filter file-exists? ps)))
+    (for ([pp (in-list fs)])
+      (unless (hash-has-key? db pp)
+        (define p (build-path ROOT pp))
+        (define f pp)
+        (define msecs (file-or-directory-modify-seconds p))
+        (hash-set! db
+                   pp
+                   (yf (cond
+                         [(regexp-match #rx".part$" f)
+                          'P]
+                         [else
+                          (string->symbol (string (string-ref f 0)))])
+                       (substring f 1)
+                       (path->string p)
+                       msecs
+                       0
+                       0)))))
+  ;; Remove files not on disk
+  (let ()
+    (for ([pp (in-hash-keys db)])
+      (unless (file-exists? (build-path ROOT pp))
+        (hash-remove! db pp))))
+  ;; Update lens from disk
+  (let ()
+    (for ([(pp a-yf) (in-hash db)])
+      (define p (yf-path a-yf))
+      (define msecs (file-or-directory-modify-seconds p))
+      (define old-len-time (yf-len-mtime a-yf))
+      (unless (= msecs old-len-time)
+        (define new-len (ffprobe p))
+        (set-yf-mtime! a-yf msecs)
+        (set-yf-len-mtime! a-yf msecs)
+        (set-yf-len! a-yf new-len))))
+  (write-to-file db DB #:exists 'replace)
+  (hash-values db))
+
 (define (yf-dname a-yf)
   (regexp-remove (list #rx".part$" #rx".mp4$")
                  (yf-name a-yf)))
@@ -82,7 +117,7 @@
   (eq? 'U (yf-status a-yf)))
 (define (yf-mdates a-yf)
   (parameterize ([date-display-format 'iso-8601])
-    (date->string (seconds->date (yf-msecs a-yf)))))
+    (date->string (seconds->date (yf-mtime a-yf)))))
 (define (yf-lens a-yf)
   (define MINUTES 60)
   (define   HOURS (* 60 MINUTES))
@@ -92,24 +127,6 @@
   (~a (~a #:width 2 #:pad-string "0" #:align 'right H) ":"
       (~a #:width 2 #:pad-string "0" #:align 'right M) ":"
       (~a #:width 2 #:pad-string "0" #:align 'right S)))
-
-(define (y-files-raw)
-  (define ps (directory-list ROOT))
-  (define fs
-    (parameterize ([current-directory ROOT])
-      (filter file-exists? ps)))
-  (for/list ([pp (in-list fs)])
-    (define p (build-path ROOT pp))
-    (define f (path->string pp))
-    (define msecs (file-or-directory-modify-seconds p))
-    (yf (cond
-          [(regexp-match #rx".part$" f)
-           'P]
-          [else
-           (string->symbol (string (string-ref f 0)))])
-        (substring f 1)
-        p
-        msecs)))
 
 (define (make-y-http)
   (define current-vlc-lock (make-semaphore 1))
@@ -121,16 +138,16 @@
          (yf-equal? current-vlc-yf f)))
 
   (define (toggle-sort-style!)
-    (set! sort-style 
+    (set! sort-style
           (match sort-style
             ['date 'time]
             ['time 'date])))
 
   (define (y-files-all)
-    (sort (y-files-raw) <= 
-          #:key 
+    (sort (y-files-raw) <=
+          #:key
           (match sort-style
-            ['date yf-msecs]
+            ['date yf-mtime]
             ['time yf-len])))
   (define (y-files-unplayed)
     (filter yf-unplayed? (y-files-all)))
