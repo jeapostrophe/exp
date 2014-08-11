@@ -10,14 +10,29 @@
          racket/file
          xml
          web-server/servlet
-         web-server/http)
+         web-server/http
+         unstable/socket)
 
 ;; xxx touch --time=mtime -r SRC -d DIFF DEST
 
 ;; xxx embed videos rather than VLC?
 
-(define-runtime-path y.css
-  "../y.css")
+(define-runtime-path y.css "../y.css")
+
+(define VLC-SOCK-PATH "/tmp/vlc.sock")
+
+(define (vlc-rc! rc-cmd)
+  (define-values (FROM-VLC TO-VLC)
+    (unix-socket-connect VLC-SOCK-PATH))
+  (eprintf "Sending ~v to VLC\n" rc-cmd)
+  (fprintf TO-VLC "~a\r\n" rc-cmd)
+  (fprintf TO-VLC "~a\r\n" "logout")
+  (eprintf "Flushing...\n")
+  (flush-output TO-VLC)
+  (eprintf "Closing...\n")
+  (close-output-port TO-VLC)
+  (eprintf "Reading...\n")
+  (port->string FROM-VLC))
 
 (define MPLAYER-PATH
   (find-executable-path "mplayer"))
@@ -134,7 +149,6 @@
   (len->lens (yf-prog a-yf)))
 
 (define (make-y-http)
-  (define current-vlc-lock (make-semaphore 1))
   (define current-vlc-yf #f)
   (define continuous? #f)
   (define sort-style 'date)
@@ -158,7 +172,7 @@
     (filter yf-unplayed? (y-files-all)))
 
   (define (play! f)
-    (when (semaphore-try-wait? current-vlc-lock)
+    (unless (vlc-playing?)
       (set! current-vlc-yf f)
       (printf "Starting VLC on ~a\n" (yf-name f))
       (define-values
