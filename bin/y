@@ -38,6 +38,8 @@
   (equal? "1\r\n" (vlc-rc! "is_playing")))
 (define (vlc-clear!)
   (vlc-rc! "clear"))
+(define (vlc-stop!)
+  (vlc-rc! "stop"))
 (define (vlc-add! f)
   (vlc-rc! (format "add ~a" f)))
 (define (vlc-seek! s)
@@ -223,6 +225,8 @@
                  (sleep 1)
                  (loop))))
            (printf "VLC Done\n")
+           (vlc-stop!)
+           (vlc-clear!)
            (set! current-vlc-yf #f)
            (semaphore-post current-vlc-lock)
            (when (= len (yf-prog f))
@@ -315,14 +319,9 @@
                          `,(yf-dname f)
                          `(a ([href ,(do play! f)])
                              ,(yf-dname f))))
-                     (td
-                      ,(if (zero? (yf-prog f))
-                         `(span nbsp nbsp nbsp
-                                nbsp nbsp nbsp
-                                nbsp nbsp nbsp
-                                nbsp
-                                ,(yf-lens f))
-                         `(span ,(yf-progs f) "/" ,(yf-lens f))))
+                     (td ,(if (zero? (yf-prog f)) "" (yf-progs f)))
+                     (td ,(if (zero? (yf-prog f)) "" "/"))
+                     (td ,(yf-lens f))
                      (td
                       ,@(let ()
                           (define menu
