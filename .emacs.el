@@ -300,8 +300,8 @@ given a prefix arg."
 
 (server-start)
 
-(require 'edit-server)
-(edit-server-start)
+;;(require 'edit-server)
+;;(edit-server-start)
 
 ;;;;; line numbering
 ;;(global-linum-mode 1)
