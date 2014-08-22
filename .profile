@@ -28,6 +28,7 @@ alias oe='emacsclient -nc'
 alias opene=oe
 alias o=open
 alias rd="raco docs"
+alias git=hub
 
 export EMACS_SERVER_PORT=50000
 export EMACS_SERVER_FILE=~/.emacs.d/server/lightning
