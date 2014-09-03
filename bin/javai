@@ -13,6 +13,6 @@ javac "$FILE" && \
 cecho New class files are: && \
 ls -1 *.class && \
 cecho Running... && \
-java "$(basename "${FILE}" .java)" && \
+java C"$(basename "${FILE}" .java)" && \
 cecho Cleaning up... && \
 rm *.class
