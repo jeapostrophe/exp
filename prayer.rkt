@@ -10,7 +10,7 @@
   `(td ,v))
 
 (define choices
-  (list "Daddy" "Mommy" "Frog" "Peach"))
+  (list "Daddy" "Mommy" "Frog" "Peach" "Hazel"))
 
 (define (any-same? l r)
   (ormap equal? l r))
@@ -114,8 +114,8 @@
 
   (define schedules
     (optimize
-     (for*/list ([b (in-list (remove* (list "Daddy") choices))]
-                 [l (in-list (remove* (list b) choices))]
+     (for*/list ([l (in-list (remove* (list "Daddy") choices))]
+                 [b (in-list (remove* (list l) choices))]
                  [d (in-list (remove* (list b l) choices))]
                  [t (in-list (remove* (list b l d) choices))])
        (list b l d t))))
