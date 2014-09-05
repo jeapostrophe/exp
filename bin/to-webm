@@ -1,5 +1,5 @@
 #!/bin/bash
 
-INPUT=$(basename ${1} .mkv)
+INPUT=$(basename ${1} .mov)
 
-ffmpeg -y -i ${INPUT}.mkv -c:a libvorbis -c:v libvpx ${INPUT}.webm
+ffmpeg -y -i ${INPUT}.mov -c:a libvorbis -c:v libvpx ${INPUT}.webm
