@@ -2,7 +2,7 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/Applications/MacPorts/Emacs.app/Contents/MacOS/bin/:$PATH
 export PATH=/opt/local/libexec/perl5.16/:$PATH
 
-export DYLD_LIBRARY_PATH=/opt/local/lib/:$DYLD_LIBRARY_PATH
+#export DYLD_FALLBACK_LIBRARY_PATH=/opt/local/lib/:$DYLD_FALLBACK_LIBRARY_PATH
 
 export SVNROOT=$HOME/Dev/scm
 export PROJS=$SVNROOT/github.jeapostrophe/work
