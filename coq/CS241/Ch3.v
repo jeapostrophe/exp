@@ -1,3 +1,31 @@
+Variable X Y Z : Prop.
+
+Lemma ex:
+  (X -> Y) /\ (Y -> Z) ->
+  (X -> Z).
+Proof.
+  intuition.
+Qed.
+
+(*
+Proof.
+  intros H.
+  destruct H.
+  intros x.
+  apply H0.
+  apply H.
+  apply x.
+Qed.
+*)
+
+Print ex.
+
+(*
+(define (ex h)
+ (lambda (x)
+   ((second h) ((first h) x))))
+*)
+
 Require Import Reals.
 Require Import Psatz.
 
@@ -22,6 +50,7 @@ Proof.
   Print Rlt_gt.
   eapply Rlt_gt.
   unfold Rpower.
+  Print exp_pos.
   apply exp_pos.
 Qed.
 
@@ -33,8 +62,10 @@ Lemma Rpower_mult_mult:
 Proof.
   intros x y z lt_x lt_y.
   unfold Rpower.
+  Print exp_plus.
   rewrite <- exp_plus.
   rewrite <- Rmult_plus_distr_l.
+  Print ln_mult.
   rewrite ln_mult; auto.
 Qed.
 
