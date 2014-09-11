@@ -1,4 +1,5 @@
 Require Import Reals.
+Require Import Psatz.
 
 Local Open Scope R_scope.
 
@@ -13,6 +14,29 @@ Definition theta (f:R -> R) (g:R -> R) :=
          c_1 * g n <= f n /\ 
          f n <= c_2 * g n).
 
+Lemma Rpower_gt0:
+  forall x y,
+    Rpower x y > 0.
+Proof.
+  intros x y.
+  eapply Rlt_gt.
+  unfold Rpower.
+  apply exp_pos.
+Qed.
+
+Lemma Rpower_mult_mult:
+  forall x y z,
+    0 < x ->
+    0 < y -> 
+    Rpower x z * Rpower y z = Rpower (x * y) z.
+Proof.
+  intros x y z lt_x lt_y.
+  unfold Rpower.
+  rewrite <- exp_plus.
+  rewrite <- Rmult_plus_distr_l.
+  rewrite ln_mult; auto.
+Qed.
+
 Theorem Pr_3p1_2:
   forall (a b:R),
     b > 0 ->
@@ -25,12 +49,46 @@ Proof.
  
  exists (Rpower (1/2) B).
  exists (Rpower (3/2) B).
- exists (2 * Rabs A).
- split.
+ exists (2 * Rabs A + 1).
  
  (* 1/2^B is positive *)
+ split. apply Rpower_gt0.
+
+ (* 3/2^B is positive *)
+ split. apply Rpower_gt0.
+
+ (* 2|A| + 1 > 0 *)
+ split.
  eapply Rlt_gt.
- unfold Rpower.
+ apply Rle_lt_0_plus_1. 
+ replace (2 * Rabs A) with (Rabs A + Rabs A).
+ eapply Rle_trans.
+ apply Rabs_pos.
+ apply Rabs_triang.
+ field.
+ 
+ (* Ineqs *)
+ intros N Nge.
 
+ split; [idtac | split].
 
- eapply Rpower_lt.
+ (* pos *)
+ rewrite Rpower_mult_mult.
+ left. apply Rgt_lt. apply Rpower_gt0.
+ lra.
+ unfold Rge in Nge.
+ destruct Nge as [Ngt | Neq].
+ apply Rgt_lt.
+
+ replace 0 with (0 * 0); [ idtac | field ].
+ apply Rmult_le_compat.
+ apply Rle_refl.
+ apply Rle_refl.
+
+ unfold Rle. left. unfold Rpower. apply exp_pos.
+ unfold Rle. left. unfold Rpower. apply exp_pos.
+
+ (* left *)
+ replace (Rpower (1 / 2) B * Rpower N B) with
+         (Rpower ((1/2)*N) B).
+ 

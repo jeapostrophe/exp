@@ -1254,6 +1254,7 @@ given a prefix arg."
 (global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
 (global-set-key (kbd "M-s-÷") 'proof-goto-point)
+(global-set-key (kbd "M-s-π") 'proof-goto-point)
 (global-set-key (kbd "M-s-≤") 'proof-undo-last-successful-command)
 (global-set-key (kbd "M-s-≥") 'proof-assert-next-command-interactive)
 
