@@ -19,6 +19,7 @@ Lemma Rpower_gt0:
     Rpower x y > 0.
 Proof.
   intros x y.
+  Print Rlt_gt.
   eapply Rlt_gt.
   unfold Rpower.
   apply exp_pos.
@@ -72,16 +73,25 @@ Proof.
 
  split; [idtac | split].
 
- (* pos *)
- rewrite Rpower_mult_mult.
- left. apply Rgt_lt. apply Rpower_gt0.
- lra.
- unfold Rge in Nge.
+ assert (N > 0) as Npos.
+ apply Rlt_gt.
+ apply Rge_le in Nge.
  destruct Nge as [Ngt | Neq].
- apply Rgt_lt.
+ eapply Rlt_trans; [ idtac | apply Ngt ].
+ apply Rle_lt_0_plus_1.
+ eapply Rle_trans.
+ apply Rabs_pos.
 
- replace 0 with (0 * 0); [ idtac | field ].
+ replace 0 with (0 * 0); [idtac | field].
  apply Rmult_le_compat.
+ apply Rle_refl.
+ apply Rle_refl.
+ lra.
+
+ SearchAbout Rlt 0.
+ unfold Rle in Nge.
+
+ (* pos *)
  apply Rle_refl.
  apply Rle_refl.
 
@@ -89,6 +99,8 @@ Proof.
  unfold Rle. left. unfold Rpower. apply exp_pos.
 
  (* left *)
+ rewrite Rpower_mult_mult.
+
  replace (Rpower (1 / 2) B * Rpower N B) with
          (Rpower ((1/2)*N) B).
  
