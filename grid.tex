@@ -1,0 +1,50 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+\chead{}
+\cfoot{}
+
+\usepackage[landscape, top=1.5cm, bottom=1.5cm, left=0.75cm, right=0.75cm]{geometry}
+
+\usepackage{multicol}
+
+\newenvironment{cday}[1]
+{ \noindent\begin{minipage}[t][\textheight][t]{0.10\textwidth} #1 
+
+~ \\
+}
+{ \end{minipage} \vfill }
+
+\newcommand{\ab}{\fbox{\small\strut} }
+
+\newcommand{\bact}{\vspace{7.25em} \\ }
+
+\newcommand{\act}[1]{#1
+
+\vspace{1.1em}
+
+\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab\ab
+
+~ \\
+}
+
+\begin{document}
+\begin{multicols}{7}
+\begin{cday}{Monday}\act{Scriptures}\act{Exercise}\act{FHE}\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\begin{cday}{Tuesday}\act{Scriptures}\act{Exercise}\bact\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\begin{cday}{Wednesday}\act{Scriptures}\act{Exercise}\bact\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\begin{cday}{Thursday}\act{Scriptures}\act{Exercise}\bact\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\begin{cday}{Friday}\act{Scriptures}\act{Exercise}\bact\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\begin{cday}{Saturday}\act{Scriptures}\act{Exercise}\bact\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\begin{cday}{Sunday}\act{Scriptures}\act{Exercise}\bact\act{Read to
+    Hazel}\act{Read to Peach}\act{Read to Frog}\end{cday}
+\end{multicols}
+\end{document}
