@@ -425,6 +425,7 @@ given a prefix arg."
     ;; a keyed list of file suffix to comand-line program path/name
     (setq suffixMap
           `(("java" . "javai")
+            ("ll" . "llvmi")
             ("c" . "cci")
             ("sh" . "zsh")
             ("py" . "python")

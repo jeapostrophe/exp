@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+FILE=$(basename $1 .ll)
+
+echo Compiling
+llvm-as ${FILE}.ll
+llvm-nm ${FILE}.bc
+llc -O3 ${FILE}.bc -o ${FILE}.s
+cat ${FILE}.s
+echo
+
+echo Interpreting with lli
+lli -O3 ${FILE}.bc
+echo $?
+
+echo Compiling and running
+llc -O3 -filetype=obj ${FILE}.bc -o ${FILE}.o
+nm ${FILE}.o
+clang ${FILE}.o -o ${FILE}.exe
+./${FILE}.exe
+echo $?
