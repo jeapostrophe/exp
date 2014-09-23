@@ -8,8 +8,10 @@
 
 ;; font & color
 (set-face-attribute 'default nil 
-                    :font "Triplicate T4c Regular"
+                    :font "Triplicate_T4c"
                     :height 120)
+
+"-apple-Triplicate_T4c-medium-normal-normal-*-13-*-*-*-p-0-iso10646-1"
 
 (require 'color-theme)
 (color-theme-initialize)
