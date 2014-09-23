@@ -3,6 +3,9 @@
 (add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
 
+(add-to-list 'load-path "~/Dev/dist/greghendershott/racket-mode/")
+(require 'racket-mode)
+
 ;; font & color
 (set-face-attribute 'default nil 
                     :font "Menlo Regular"
@@ -318,14 +321,14 @@ given a prefix arg."
 (require 'multi-term)
 (setq multi-term-program "/usr/bin/zsh")
 
-;;;;; quack
-;;(require 'quack)
-(add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
-(add-to-list 'auto-mode-alist '("\\.rktl$" . scheme-mode))
-(add-to-list 'auto-mode-alist '("\\.scrbl$" . scheme-mode))
-(add-to-list 'auto-mode-alist '("\\.rktd$" . scheme-mode))
-(add-to-list 'auto-mode-alist '("\\.ss$" . scheme-mode))
-(add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
+;;;;; racket-mode
+
+(add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.rktl$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.scrbl$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.rktd$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.ss$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.scm$" . racket-mode))
 
 ;;;; Platform specific settings
 
@@ -1093,7 +1096,7 @@ given a prefix arg."
 (add-to-list 'load-path "~/Dev/dist/capitaomorte/autopair")
 (require 'autopair)
 
-(add-hook 'scheme-mode-hook 
+(add-hook 'racket-mode-hook 
           #'(lambda () 
               ;; (flymake-mode t)
               (autopair-mode t)))
@@ -1133,7 +1136,7 @@ given a prefix arg."
 ;;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
 ;;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
 ;;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
-;;(add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
+;;(add-hook 'racket-mode-hook           (lambda () (paredit-mode +1)))
 
 ;; Insert lambda
 (global-set-key (kbd "s-\\")
@@ -1203,7 +1206,7 @@ given a prefix arg."
 (setq uniquify-min-dir-content 90
       uniquify-buffer-name-style 'forward)
 
-;; scheme
+;; racket
 (load-file "~/.emacs.d/scheme-indent.el")
 
 ;; use tex input mode all the time
@@ -1297,6 +1300,11 @@ given a prefix arg."
  '(doc-view-continuous t)
  '(ibuffer-default-sorting-mode (quote filename/process))
  '(ibuffer-display-summary nil)
+ '(racket-mode-pretty-lambda t)
+ '(racket-mode-rackjure-indent nil)
+ '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
+ '(racket-use-company-mode nil)
+ '(raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco")
  '(safe-local-variable-values (quote ((coq-prog-args "-emacs-U" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun") (coq-prog-args "-emacs-U" "-R" ".." "Braun") (coq-prog-args "-emacs-U" "-R" "." "Braun")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -1304,4 +1312,7 @@ given a prefix arg."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(fringe ((((class color) (background "#fdf6e3")) nil)))
- '(org-column ((t (:background "#fdf6e3" :foreground "#657b83")))))
+ '(org-column ((t (:background "#fdf6e3" :foreground "#657b83"))))
+ '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
+ '(racket-paren-face ((t (:foreground "#93a1a1"))))
+ '(racket-selfeval-face ((t (:foreground "#859900")))))
