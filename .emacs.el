@@ -8,7 +8,7 @@
 
 ;; font & color
 (set-face-attribute 'default nil 
-                    :font "Menlo Regular"
+                    :font "Triplicate T4c Regular"
                     :height 120)
 
 (require 'color-theme)
