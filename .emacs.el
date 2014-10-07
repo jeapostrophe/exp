@@ -1169,8 +1169,8 @@ given a prefix arg."
 ;;(require 'mime-w3m)
 
 ;; v-center
-(require 'centered-cursor-mode)
-(global-centered-cursor-mode +1)
+;; (require 'centered-cursor-mode)
+;; (global-centered-cursor-mode +1)
 
 ;; highlight current line (needs to be after v-center)
 ;; (global-hl-line-mode 1)
