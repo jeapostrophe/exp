@@ -2,16 +2,18 @@
 (require math/base
          plot)
 
+(define (insert-cost n inverted?)
+  (if inverted?
+      n
+      1))
+
 (define (isort-cost n is)
   (cond
    [(zero? n)
     0]
    [else
-    (if (first is)
-        (+ (sub1 n)
-           (isort-cost (sub1 n) (rest is)))
-        (+ 1
-           (isort-cost (sub1 n) (rest is))))]))
+    (+ (insert-cost (sub1 n) (first is))
+       (isort-cost (sub1 n) (rest is)))]))
 
 (define (average l)
   (if (empty? l)
@@ -23,9 +25,6 @@
 
 (define (perms-with-m-trues-and-n-elements n m)
   (remove-duplicates (permutations (list-with-m-trues-and-n-elements n m))))
-
-(module+ test
-  (remove-duplicates (permutations (list-with-m-trues-and-n-elements 5 3))))
 
 (module+ main
   (plot-new-window? #t)
