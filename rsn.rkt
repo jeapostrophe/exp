@@ -20,31 +20,43 @@
         (system* (find-executable-path "unrar") "x" (build-path src set))))))
 
 (define (bytes->cstr bs)
-  (bytes->string/utf-8
-   (subbytes bs 0
-             (for/or ([b (in-bytes bs)]
-                      [i (in-naturals)])
-               (and (zero? b) i)))))
+  (subbytes bs 0
+            (or (for/or ([b (in-bytes bs)]
+                         [i (in-naturals)])
+                  (and (zero? b) i))
+                (bytes-length bs))))
 
-(define (rename p)
-  (for ([d (in-list (directory-list p))])
-    (define dp (build-path p d))
-    (for ([s (in-list (directory-list dp))]
+(define (rename rp np)
+  (for ([d (in-list (directory-list rp))])
+    (define drp (build-path rp d))
+    (define dnp (build-path np d))
+    (make-directory* dnp)
+    (for ([s (in-list (directory-list drp))]
           #:when (regexp-match #rx"spc$" s))
-      (define sp (build-path dp s))
+      (printf "\t~a/~a\n" d s)
+      (define tr
+        (second (regexp-match #rx"^[a-zA-Z0-9]+-(.+) *\\.spc" s)))
+      (define sp (build-path drp s))
       (define ip (open-input-file sp))
       (file-position ip #x2E)
-      (define ns (bytes->cstr (read-bytes 32 ip)))
+      (define ns
+        (regexp-replace* #rx"/" (bytes->cstr (read-bytes 32 ip)) "-"))
       (close-input-port ip)
-      (define nsp (build-path dp (format "~a.spc" ns)))
-      (rename-file-or-directory sp nsp))))
+      (define nsp (build-path dnp (format "~a. ~a.spc" tr ns)))
+      (define nsp+
+        (if (file-exists? nsp)
+            (build-path dnp (format "~a. ~a (copy).spc" tr ns))
+            nsp))
+      (with-handlers ([exn:fail? (λ (x) (displayln (exn-message x)))])
+        (rename-file-or-directory sp nsp+)))))
 
 (module+ main
   (require racket/cmdline)
   (when #t
     (command-line #:program "rsn"
-                  #:args (dest)
-                  (rename (path->complete-path dest))))
+                  #:args (rd src dest nice)
+                  (rename (path->complete-path dest)
+                          (path->complete-path nice))))
   (when #f
     (command-line #:program "rsn"
                   #:args (rd src dest)
