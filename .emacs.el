@@ -320,8 +320,8 @@ given a prefix arg."
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;;;; multi-term ()
-(require 'multi-term)
-(setq multi-term-program "/usr/bin/zsh")
+;; (require 'multi-term)
+;; (setq multi-term-program "/usr/bin/zsh")
 
 ;;;;; racket-mode
 
