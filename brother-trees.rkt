@@ -109,6 +109,13 @@
            (tree:n0)
            l))
 
+  (define (brother->avl t)
+    (match t
+      [(tree:n0) t]
+      [(tree:n1 t) (brother->avl t)]
+      [(tree:n2 l k v r)
+       (tree:n2 (brother->avl l) k v (brother->avl r))]))
+
   (for ([n (in-range 16)])
     (define base-l (for/list ([i (in-range (add1 n))]) i))
     (define l
@@ -120,10 +127,24 @@
       (slide
        (naive-layered
         (layout t))))
+    (define brother-t
+      (from-list l insert void))
+    (define simple-t
+      (from-list l simple-insert void))
+    (define avl-t
+      (brother->avl brother-t))
+    (define t-w client-w)
+    (define t-h (* .2 client-h))
+    (define (render t)
+      (scale-to-fit
+       (naive-layered
+        (layout
+         t))
+       t-w t-h))
     (slide
-     (naive-layered
-      (layout
-       (from-list l insert void)))
-     (naive-layered
-      (layout
-       (from-list l simple-insert void))))))
+     (t "Simple")
+     (render simple-t)
+     (t "Brother")
+     (render brother-t)
+     (t "AVL")
+     (render avl-t))))
