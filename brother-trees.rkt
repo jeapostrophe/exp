@@ -92,10 +92,10 @@
 
   (define (layout t)
     (match t
-      [(tree:n0) (tree-layout)]
+      [(tree:n0) #f]
       [(tree:n1 t) (tree-layout (layout t))]
       [(tree:n2 l k v r)
-       (tree-layout #:pict (text (format "~v = ~v" k v))
+       (tree-layout #:pict (hc-append (text (format "~a=" k)) v)
                     (layout l)
                     (layout r))]))
 
@@ -103,7 +103,9 @@
 
   (define (from-list l insert inform!)
     (foldr (λ (k t)
-             (define n (insert t k #t))
+             (define v
+               (standard-fish 10 5 #:color (list-ref '("black" "blue" "DarkOrchid" "green" "red" "olive" "chocolate" "salmon" "orange" "cadet blue" "khaki" "honeydew" "bisque" "lavenderblush" "Violet" "Lime") k)))
+             (define n (insert t k v))
              (inform! n)
              n)
            (tree:n0)
@@ -119,7 +121,7 @@
   (for ([n (in-range 16)])
     (define base-l (for/list ([i (in-range (add1 n))]) i))
     (define l
-      (match 0
+      (match 1
         [0 base-l]
         [1 (shuffle base-l)]
         [2 (reverse base-l)]))
