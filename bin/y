@@ -106,7 +106,8 @@
   ;; Add files from disk
   (let ()
     (define ps
-      (filter (λ (x) (not (equal? ".db" x)))
+      (filter (λ (x) (and (not (equal? ".db" x))
+                          (not (equal? ".DS_Store" x))))
               (map path->string (directory-list ROOT))))
     (define fs
       (parameterize ([current-directory ROOT])
