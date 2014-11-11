@@ -7,6 +7,7 @@
          racket/port
          racket/system
          racket/date
+         racket/string
          racket/file
          xml
          web-server/servlet
@@ -31,7 +32,7 @@
   (close-output-port TO-VLC)
   (define out (port->string FROM-VLC))
   (close-input-port FROM-VLC)
-  (eprintf "Read ~v from VLC\n" out)  
+  (eprintf "Read ~v from VLC\n" out)
   out)
 
 (define (vlc-playing?)
@@ -49,8 +50,8 @@
 (define (read-num ip)
   (define v (read ip))
   (if (number? v)
-    v
-    #f))
+      v
+      #f))
 (define (vlc-current-length)
   (read-num (open-input-string (vlc-rc! "get_length"))))
 (define (vlc-current-time)
@@ -86,10 +87,10 @@
 
 (define (regexp-remove rxs s)
   (if (empty? rxs)
-    s
-    (regexp-remove
-     (rest rxs)
-     (regexp-replace (first rxs) s ""))))
+      s
+      (regexp-remove
+       (rest rxs)
+       (regexp-replace (first rxs) s ""))))
 
 (struct yf (status name path mtime len-mtime len prog) #:mutable #:prefab)
 
@@ -120,10 +121,10 @@
         (hash-set! THE-DB
                    pp
                    (yf (cond
-                         [(regexp-match #rx".part$" f)
-                          'P]
-                         [else
-                          (string->symbol (string (string-ref f 0)))])
+                        [(regexp-match #rx".part$" f)
+                         'P]
+                        [else
+                         (string->symbol (string (string-ref f 0)))])
                        (substring f 1)
                        (path->string p)
                        msecs
@@ -152,6 +153,10 @@
 (define (yf-dname a-yf)
   (regexp-remove (list #rx".part$" #rx".mp4$")
                  (yf-name a-yf)))
+(define (yf-dshow a-yf)
+  (first (string-split (yf-dname a-yf) " - ")))
+(define (yf-dtitle a-yf)
+  (string-append* (add-between (rest (string-split (yf-dname a-yf) " - ")) " - ")))
 (define (yf-equal? x y)
   (equal? (yf-name x) (yf-name y)))
 (define (yf-played? a-yf)
@@ -179,23 +184,29 @@
   (define current-vlc-lock (make-semaphore 1))
   (define current-vlc-yf #f)
   (define continuous? #f)
-  (define sort-style 'date)
+  (define sort-style 'show)
   (define (is-current-vlc-yf? f)
     (and current-vlc-yf
          (yf-equal? current-vlc-yf f)))
 
-  (define (toggle-sort-style!)
-    (set! sort-style
-          (match sort-style
-            ['date 'time]
-            ['time 'date])))
+  (define (set-sort-style! s)
+    (set! sort-style s))
 
   (define (y-files-all)
-    (sort (y-files-raw) <=
+    (sort (y-files-raw)
+          (match sort-style
+            ['date <=]
+            ['time <=]
+            ['show
+             (λ (x y)
+               (if (string=? (yf-dshow x) (yf-dshow y))
+                   (<= (yf-mtime x) (yf-mtime y))
+                   (string-ci<=? (yf-dshow x) (yf-dshow y))))])
           #:key
           (match sort-style
             ['date yf-mtime]
-            ['time yf-len])))
+            ['time yf-len]
+            ['show (λ (x) x)])))
   (define (y-files-unplayed)
     (filter yf-unplayed? (y-files-all)))
 
@@ -215,8 +226,8 @@
              (let loop ()
                (define l (vlc-current-length))
                (if (or (not l) (zero? l))
-                 (loop)
-                 l)))
+                   (loop)
+                   l)))
            (let loop ()
              (define t (vlc-current-time))
              (when t
@@ -288,18 +299,14 @@
                   ,(date->string (current-date) #t) ":")
             (span
              ,(if current-vlc-yf
-                `(a ([href "#playing"]) "playing")
-                ""))
-            (span
-             (a
-              ([href ,(do toggle-sort-style!)])
-              ,(format "sort: ~a" sort-style)))
+                  `(a ([href "#playing"]) "playing")
+                  ""))
             (span
              (a
               ([href ,(do toggle-continuous?!)]
                [class ,(format "continuous_~a"
                                (if continuous?
-                                 "on" "off"))])
+                                   "on" "off"))])
               "continuous"))
             (span
              (a ([href ,(do clean!)]) "clean"))
@@ -307,33 +314,49 @@
              (a ([href ,(do restart!)]) "restart")))
            (table
             ([id "playlist"])
-            ,@(for/list ([f (in-list yfs)])
-                `(tr ([id ,(if (is-current-vlc-yf? f)
-                             "playing"
-                             "")]
-                      [class ,(format "item status_~a" (yf-status f))])
-                     (td
-                      ,(symbol->string (yf-status f)) nbsp
-                      ,(yf-mdates f))
-                     (td
-                      ,(if (eq? 'P (yf-status f))
-                         `,(yf-dname f)
+            (thead
+             (tr (th ,(if (eq? sort-style 'date)
+                          `(span ([class "sort_selected"]) "Date")
+                          `(a ([href ,(do set-sort-style! 'date)]) "Date")))
+                 (th ,(if (eq? sort-style 'show)
+                          `(span ([class "sort_selected"]) "Show")
+                          `(a ([href ,(do set-sort-style! 'show)]) "Show")))
+                 (th "Title")
+                 (th nbsp)
+                 (th nbsp)
+                 (th ,(if (eq? sort-style 'time)
+                          `(span ([class "sort_selected"]) "Length")
+                          `(a ([href ,(do set-sort-style! 'time)]) "Length")))
+                 (th nbsp)))
+            (tbody
+             ,@(for/list ([f (in-list yfs)])
+                 `(tr ([id ,(if (is-current-vlc-yf? f)
+                                "playing"
+                                "")]
+                       [class ,(format "item status_~a" (yf-status f))])
+                   (td
+                    ,(symbol->string (yf-status f)) nbsp
+                    ,(yf-mdates f))
+                   (td ,(yf-dshow f))
+                   (td
+                    ,(if (eq? 'P (yf-status f))
+                         `,(yf-dtitle f)
                          `(a ([href ,(do play! f)])
-                             ,(yf-dname f))))
-                     (td ,(if (zero? (yf-prog f)) "" (yf-progs f)))
-                     (td ,(if (zero? (yf-prog f)) "" "/"))
-                     (td ,(yf-lens f))
-                     (td
-                      ,@(let ()
-                          (define menu
-                            (match (yf-status f)
-                              ['P empty]
-                              ['U (list (cons "R" (do mark! f 'R)))]
-                              ;; xxx too squished for now
-                              ['R (list (cons "S" (do mark! f 'S)))]
-                              ['S (list (cons "U" (do mark! f 'U)))]))
-                          (for/list ([l*u (in-list menu)])
-                            `(a ([href ,(cdr l*u)]) ,(car l*u))))))))))))))
+                           ,(yf-dtitle f))))
+                   (td ,(if (zero? (yf-prog f)) "" (yf-progs f)))
+                   (td ,(if (zero? (yf-prog f)) "" "/"))
+                   (td ,(yf-lens f))
+                   (td
+                    ,@(let ()
+                        (define menu
+                          (match (yf-status f)
+                            ['P empty]
+                            ['U (list (cons "R" (do mark! f 'R)))]
+                            ;; xxx too squished for now
+                            ['R (list (cons "S" (do mark! f 'S)))]
+                            ['S (list (cons "U" (do mark! f 'U)))]))
+                        (for/list ([l*u (in-list menu)])
+                          `(a ([href ,(cdr l*u)]) ,(car l*u)))))))))))))))
 
   y-http)
 

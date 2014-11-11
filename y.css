@@ -23,6 +23,10 @@ a {
     text-decoration: inherit;
 }
 
+span.sort_selected {
+    text-decoration: underline;
+}
+
 span a.continuous_on {
     font-weight: bold;
 }
