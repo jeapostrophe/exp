@@ -34,9 +34,23 @@ span a.continuous_off {
     text-decoration: line-through;
 }
 
+table#playlist {
+    margin-left: 2%;
+    width: 96%;
+}
+
 table#playlist tr td {
     vertical-align: top;
 }
+
+table#playlist tr td:nth-child(3) {
+    vertical-align: middle;
+    font-size: 81%;
+}
+table#playlist tr td:nth-child(2) {
+    text-align: center;
+}
+
 table#playlist tr.item#playing {
     color: #268bd2;
 }
