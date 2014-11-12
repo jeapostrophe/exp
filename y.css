@@ -45,7 +45,7 @@ table#playlist tr td {
 
 table#playlist tr td:nth-child(3) {
     vertical-align: middle;
-    font-size: 81%;
+    width: 50%;
 }
 table#playlist tr td:nth-child(2) {
     text-align: center;
