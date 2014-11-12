@@ -505,7 +505,7 @@
    [on-key browse-key]))
 
 (module+ test
-  (when #f
+  (when #t
     (render implicit-binary-add
             '(0 1 1 0 + 0 0 1 1))))
 
@@ -532,7 +532,7 @@
          #:inform (make-display-state implicit-binary-add-mt))
    '(1 0 1 0))
 
-  (when #f
+  (when #t
     (render implicit-binary-add-mt
             '((0 1) (1 1) (0 0) (0 0)))))
 
@@ -796,7 +796,7 @@
       (print-obj top)
 
       (printf "}")))
-  (system* "/usr/bin/dot"
+  (system* "/opt/local/bin/dot"
            "-Tpdf"
            f
            "-o"
@@ -804,7 +804,11 @@
 
 (module+ test
   (define-syntax-rule (check-tms tm is os)
-    (check-tm tm (string->list is) (string->list os)))
+    (let ()
+      (define is-l (string->list is))
+      (define os-l (string->list os))
+      (render tm is-l)
+      (check-tm tm is-l os-l)))
 
   (define numbers (string->list "0123456789"))
 
@@ -855,7 +859,7 @@
                               (tm:write write-ans2 ans reset-head)
                               (tm:left reset-head 'HALT))]))))))))))]))))))
 
-  (when #f
+  (when #t
     (draw-ptm! itm-dec-add "/home/jay/Downloads/dec-add.dot"))
 
   (define program-dec-add
