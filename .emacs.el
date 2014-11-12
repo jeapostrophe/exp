@@ -325,6 +325,7 @@ given a prefix arg."
 
 ;;;;; racket-mode
 
+(add-to-list 'auto-mode-alist '("\\.dc$" . racket-mode))
 (add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
 (add-to-list 'auto-mode-alist '("\\.rktl$" . racket-mode))
 (add-to-list 'auto-mode-alist '("\\.scrbl$" . racket-mode))
@@ -438,6 +439,7 @@ given a prefix arg."
             ("cg" . "cgc -noentry")
             ("glsl" . "cgc -noentry -oglsl")
             ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
+            ("dc" . ,(if je/racket-test-p "rkt" "rk"))
             ("txt" . "ctxt")
             ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
