@@ -434,15 +434,19 @@
 (define CELL-WIDTH
   (image-width (render-cell '0)))
 (define SIZE-T CELL-HEIGHT)
+(define (scale-to-fit i w h)
+  (scale/xy (min 1 (/ w (image-width i)))
+            (/ h (image-height i))            
+            i))
 (define (draw-state s)
-  (define W 500)
+  (define W 800)
   (define H (* 5 CELL-HEIGHT))
   (match-define (*state st t) s)
 
   (define head-cell (render-cell (tape-first t) #t))
   (place-image/align
    (above/align "middle"
-                (render-cell st)
+                (scale-to-fit (render-cell st) (- W (* 2 CELL-WIDTH)) CELL-HEIGHT)
                 (flip-vertical
                  (triangle SIZE-T "solid" "black")))
    (+ (/ W 2) (/ (image-width head-cell) 2))
