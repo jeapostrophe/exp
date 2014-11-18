@@ -11,8 +11,8 @@
 (define-syntax-rule (define-check id S)
   (define ((id where) s)
     (if (member s S)
-      s
-      (error 'id "~a: ~v not in ~v" where s S))))
+        s
+        (error 'id "~a: ~v not in ~v" where s S))))
 (define-check check-LR '(L R))
 
 (struct *tm (initial states inputs blank final? delta) #:transparent)
@@ -25,8 +25,8 @@
        Q
        (map (check-G 'inputs) inputs)
        (if (member blank inputs)
-         (error 'tm "Blank cannot be in input alphabet")
-         ((check-G 'blank) blank))
+           (error 'tm "Blank cannot be in input alphabet")
+           ((check-G 'blank) blank))
        (for/hash ([fs (in-list final-state)])
          (values ((check-Q 'final-state) fs) #t))
        (for/hash ([d (in-list delta)])
@@ -44,13 +44,13 @@
 (define (truncate-trailing x l)
   (let loop ([y empty] [m empty] [l l])
     (cond
-      [(empty? l)
-       (reverse y)]
-      [(eq? x (first l))
-       (loop y (list* x m) (rest l))]
-      [else
-       (define ny (list* (first l) m))
-       (loop ny ny (rest l))])))
+     [(empty? l)
+      (reverse y)]
+     [(eq? x (first l))
+      (loop y (list* x m) (rest l))]
+     [else
+      (define ny (list* (first l) m))
+      (loop ny ny (rest l))])))
 
 (struct tape (blank before after))
 (define (tape-first t)
@@ -97,35 +97,35 @@
   (match-define (*tm _ _ _ _ final? delta) tm)
   (match-define (*state st t) s)
   (cond
-    [(hash-ref final? st #f)
-     s]
-    [else
-     (define h (tape-first t))
-     (match-define
-      (list n-st w dir)
-      (hash-ref delta (cons st h)
-                (λ ()
-                  (error 'step "No transition defined for ~v in ~v state"
-                         h st))))
-     (define n-t (tape-write t w))
-     (define nn-t
-       (if (eq? 'L dir)
-         (tape-move-left n-t)
-         (tape-move-right n-t)))
-     (*state n-st nn-t)]))
+   [(hash-ref final? st #f)
+    s]
+   [else
+    (define h (tape-first t))
+    (match-define
+     (list n-st w dir)
+     (hash-ref delta (cons st h)
+               (λ ()
+                 (error 'step "No transition defined for ~v in ~v state"
+                        h st))))
+    (define n-t (tape-write t w))
+    (define nn-t
+      (if (eq? 'L dir)
+          (tape-move-left n-t)
+          (tape-move-right n-t)))
+    (*state n-st nn-t)]))
 
 (define (step-n tm s n
                 #:inform [inform-f void])
   (let loop ([i 0] [n n] [s s])
     (inform-f i s)
     (cond
-      [(zero? n)
-       s]
-      [else
-       (define ns (step tm s))
-       (if (eq? s ns)
-         s
-         (loop (add1 i) (sub1 n) ns))])))
+     [(zero? n)
+      s]
+     [else
+      (define ns (step tm s))
+      (if (eq? s ns)
+          s
+          (loop (add1 i) (sub1 n) ns))])))
 
 (define (run tm input steps
              #:inform [inform-f void])
@@ -412,10 +412,10 @@
 
 (define (beside* l)
   (cond
-    [(empty? l) empty-image]
-    [(empty? (cdr l)) (car l)]
-    [else
-     (apply beside/align "bottom" l)]))
+   [(empty? l) empty-image]
+   [(empty? (cdr l)) (car l)]
+   [else
+    (apply beside/align "bottom" l)]))
 (define SIZE-FONT 30)
 (define (render-cell s [focus? #f])
   (define t
@@ -436,54 +436,61 @@
 (define SIZE-T CELL-HEIGHT)
 (define (scale-to-fit i w h)
   (scale/xy (min 1 (/ w (image-width i)))
-            (/ h (image-height i))            
+            (/ h (image-height i))
             i))
-(define (draw-state s)
+(define (draw-state tm s)
   (define W 800)
   (define H (* 5 CELL-HEIGHT))
   (match-define (*state st t) s)
 
   (define head-cell (render-cell (tape-first t) #t))
   (place-image/align
-   (above/align "middle"
-                (scale-to-fit (render-cell st) (- W (* 2 CELL-WIDTH)) CELL-HEIGHT)
-                (flip-vertical
-                 (triangle SIZE-T "solid" "black")))
-   (+ (/ W 2) (/ (image-width head-cell) 2))
-   (- (/ H 2) (* 2 CELL-HEIGHT))
-   "middle" "top"
+   (text/font
+    (format "States: ~a" (length (*tm-states tm))) SIZE-FONT
+    "black"
+    #f 'modern 'normal 'normal #f)
+   W H
+   "right" "bottom"
    (place-image/align
-    (beside* (map render-cell (tape-tser t)))
-    (/ W 2) (/ H 2)
-    "right" "top"
+    (above/align "middle"
+                 (scale-to-fit (render-cell st) (- W (* 2 CELL-WIDTH)) CELL-HEIGHT)
+                 (flip-vertical
+                  (triangle SIZE-T "solid" "black")))
+    (+ (/ W 2) (/ (image-width head-cell) 2))
+    (- (/ H 2) (* 2 CELL-HEIGHT))
+    "middle" "top"
     (place-image/align
-     (beside/align "bottom"
-                   head-cell
-                   (beside* (map render-cell (tape-rest t))))
+     (beside* (map render-cell (tape-tser t)))
      (/ W 2) (/ H 2)
-     "left" "top"
-     (empty-scene W H)))))
+     "right" "top"
+     (place-image/align
+      (beside/align "bottom"
+                    head-cell
+                    (beside* (map render-cell (tape-rest t))))
+      (/ W 2) (/ H 2)
+      "left" "top"
+      (empty-scene W H))))))
 
-(struct browse (play? l r))
+(struct browse (info play? l r))
 (define (browse-draw b)
-  (draw-state (first (browse-r b))))
+  (draw-state (browse-info b) (first (browse-r b))))
 (define (browse-step b)
-  (match-define (browse play? l r) b)
+  (match-define (browse i play? l r) b)
   (if (browse-play? b)
-    (browse-step-right b)
-    b))
+      (browse-step-right b)
+      b))
 (define (browse-step-right b)
-  (match-define (browse play? l r) b)
+  (match-define (browse i play? l r) b)
   (match r
     [(cons x (and nr (cons _ _)))
-     (browse play? (cons x l) nr)]
+     (browse i play? (cons x l) nr)]
     [_
      b]))
 (define (browse-step-left b)
-  (match-define (browse play? l r) b)
+  (match-define (browse i play? l r) b)
   (match l
     [(cons x nl)
-     (browse play? nl (cons x r))]
+     (browse i play? nl (cons x r))]
     [_
      b]))
 (define (browse-key b ke)
@@ -502,7 +509,7 @@
   (define l empty)
   (run* tm input #:inform (λ (i s) (set! l (cons s l))))
   (big-bang
-   (browse #f empty (reverse l))
+   (browse tm #f empty (reverse l))
    ;; (browse #f (rest l) (list (first l)))
    [on-draw browse-draw]
    [on-tick browse-step 1/10]
@@ -582,24 +589,24 @@
     (for/list ([i (in-list pd)])
       (match-define (list state input goto output head) i)
       (cond
-        [(eq? tm:else input)
-         (define state-sym
-           (append-map (λ (s)
-                         (if (eq? (first s) state)
-                           (list (second s))
-                           empty))
-                       pd))
-         (for/list ([s (in-list (remove* state-sym all-syms))])
-           (list state s goto
-                 (if (eq? tm:else output)
-                   s
-                   output)
-                 head))]
-        [(eq? tm:else output)
-         (error 'ptm->itm
-                "tm:else not allowed in output unless input is also tm:else")]
-        [else
-         (list i)])))))
+       [(eq? tm:else input)
+        (define state-sym
+          (append-map (λ (s)
+                        (if (eq? (first s) state)
+                            (list (second s))
+                            empty))
+                      pd))
+        (for/list ([s (in-list (remove* state-sym all-syms))])
+          (list state s goto
+                (if (eq? tm:else output)
+                    s
+                    output)
+                head))]
+       [(eq? tm:else output)
+        (error 'ptm->itm
+               "tm:else not allowed in output unless input is also tm:else")]
+       [else
+        (list i)])))))
 
 (define (compile-ptm t #:and-then [and-then empty])
   (define it (ptm->itm t #:and-then and-then))
@@ -677,8 +684,8 @@
 ;; This is interesting because it leaves the tape and head unchanged.
 (define (tm:halt state)
   (with-states "halt" (tmp)
-    (tm:combine (tm:left state tmp)
-                (tm:right tmp 'HALT))))
+               (tm:combine (tm:left state tmp)
+                           (tm:right tmp 'HALT))))
 (module+ test
   (check-ptm (tm:halt 'start)
              '(X Y Z)
@@ -686,13 +693,13 @@
 
 (define (tm:goto state input goto)
   (with-states "goto" (tmp)
-    (tm:combine (tm:write&right state input tmp input)
-                (tm:left tmp goto))))
+               (tm:combine (tm:write&right state input tmp input)
+                           (tm:left tmp goto))))
 
 (define (tm:write state output goto)
-  (with-states "write" (tmp)
-    (tm:combine (tm:write&left state tm:else tmp output)
-                (tm:right tmp goto))))
+  (with-states (format "write(~a)" output) (tmp)
+               (tm:combine (tm:write&left state tm:else tmp output)
+                           (tm:right tmp goto))))
 (define (tm:right-until state stop-input goto)
   (tm:combine (tm:goto state stop-input goto)
               (tm:right state state)))
@@ -704,11 +711,11 @@
   (define program-binary-add1
     (compile-ptm
      (with-states "binary-add1" (main pre-add1 find-last-zero write-1)
-       (tm:combine
-        (tm:right-until main '_ pre-add1)
-        (tm:left pre-add1 find-last-zero)
-        (tm:write&left-until find-last-zero '0 '0 write-1)
-        (tm:write write-1 '1 'HALT)))))
+                  (tm:combine
+                   (tm:right-until main '_ pre-add1)
+                   (tm:left pre-add1 find-last-zero)
+                   (tm:write&left-until find-last-zero '0 '0 write-1)
+                   (tm:write write-1 '1 'HALT)))))
 
   (check-tm program-binary-add1
             '(0 0 1 0)
@@ -716,23 +723,23 @@
 
 (define (tm:right* state how-many goto)
   (if (zero? how-many)
-    (tm:goto state tm:else goto)
-    (with-states (format "right*(~a)" how-many) (tmp)
-      (tm:combine (tm:right state tmp)
-                  (tm:right* tmp (sub1 how-many) goto)))))
+      (tm:goto state tm:else goto)
+      (with-states (format "right*(~a)" how-many) (tmp)
+                   (tm:combine (tm:right state tmp)
+                               (tm:right* tmp (sub1 how-many) goto)))))
 
 (define (tm:read-from state possible-syms generator)
   (apply
    tm:combine
    (for/list ([sym (in-list possible-syms)])
      (with-states (format "read-from(~a)" sym) (sym-state)
-       (tm:combine (tm:goto state sym sym-state)
-                   (generator sym sym-state))))))
+                  (tm:combine (tm:goto state sym sym-state)
+                              (generator sym sym-state))))))
 
 (define (tm:right-stop-when state end-sym goto)
   (with-states "right-stop-when" (tmp)
-    (tm:combine (tm:right-until state end-sym tmp)
-                (tm:left tmp goto))))
+               (tm:combine (tm:right-until state end-sym tmp)
+                           (tm:left tmp goto))))
 
 (require racket/system)
 (define (draw-ptm! ptm f)
@@ -741,7 +748,7 @@
     #:exists 'replace
     (λ ()
       (printf "strict digraph {\n")
-      
+
       (struct obj (children more))
       (define (new-obj)
         (obj (box empty) (make-hash)))
@@ -771,20 +778,20 @@
          [x x]))
       (define (consolidate p)
         (if (list? p)
-          (map consolidate1 p)
-          p))
+            (map consolidate1 p)
+            p))
 
       (define (cdr* x)
         (if (cons? x) (cdr x) x))
       (define (car* x)
         (if (cons? x) (car x) x))
 
-      (define top (new-obj))      
+      (define top (new-obj))
       (for ([p (in-list pd)])
         (match-define (list state input goto output head) p)
-        (store! top 
+        (store! top
                 (cdr state)
-                (list (cdr state) input 
+                (list (cdr state) input
                       (cdr* goto)
                       output head)))
 
@@ -817,7 +824,7 @@
   (define numbers (string->list "0123456789"))
 
   ;; xxx first mark the lhs/rhs
-  
+
   ;; xxx then, add them and write the answer to the right of the rhs
   ;; while moving the marks
 
@@ -825,43 +832,43 @@
   ;; not clear everything from the rhs mark to the left (
   (define itm-dec-add
     (with-states "dec-add" (main op seek-lhs lhs)
-      (tm:combine
-       (tm:right-stop-when main #\space op)
-       (tm:read-from
-        op (string->list "+")
-        (λ (op op-state)
-          (match op
-            [#\+
-             ;; xxx skip over more spaces than 1?
-             (tm:combine
-              (tm:right* op-state 2 seek-lhs)
-              (tm:right-stop-when seek-lhs #\space lhs)
-              (tm:read-from
-               lhs numbers
-               (λ (lhs lhs-state)
-                 (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
-                   (tm:combine
-                    (tm:right-stop-when lhs-state #\) rhs)
-                    (tm:read-from
-                     rhs numbers
-                     (λ (rhs rhs-state)
-                       (with-states (format "rhs(~a)" rhs)
-                           (tmp1 tmp2 write-ans write-ans2 reset-head)
-                         (tm:combine
-                          (tm:right rhs-state tmp1)
-                          (tm:write tmp1 '_ tmp2)
-                          (tm:write&left-until tmp2 '_ #\( write-ans)
-                          (match (string->list
-                                  (number->string
-                                   (+ (string->number (string lhs))
-                                      (string->number (string rhs)))))
-                            [(list ans)
-                             (tm:write write-ans ans 'HALT)]
-                            [(list #\1 ans)
-                             (tm:combine
-                              (tm:write&right write-ans tm:else write-ans2 #\1)
-                              (tm:write write-ans2 ans reset-head)
-                              (tm:left reset-head 'HALT))]))))))))))]))))))
+                 (tm:combine
+                  (tm:right-stop-when main #\space op)
+                  (tm:read-from
+                   op (string->list "+")
+                   (λ (op op-state)
+                     (match op
+                       [#\+
+                        ;; xxx skip over more spaces than 1?
+                        (tm:combine
+                         (tm:right* op-state 2 seek-lhs)
+                         (tm:right-stop-when seek-lhs #\space lhs)
+                         (tm:read-from
+                          lhs numbers
+                          (λ (lhs lhs-state)
+                            (with-states (format "lhs(~a)" lhs) (seek-rhs rhs)
+                                         (tm:combine
+                                          (tm:right-stop-when lhs-state #\) rhs)
+                                          (tm:read-from
+                                           rhs numbers
+                                           (λ (rhs rhs-state)
+                                             (with-states (format "rhs(~a)" rhs)
+                                               (tmp1 tmp2 write-ans write-ans2 reset-head)
+                                               (tm:combine
+                                                (tm:right rhs-state tmp1)
+                                                (tm:write tmp1 '_ tmp2)
+                                                (tm:write&left-until tmp2 '_ #\( write-ans)
+                                                (match (string->list
+                                                        (number->string
+                                                         (+ (string->number (string lhs))
+                                                            (string->number (string rhs)))))
+                                                  [(list ans)
+                                                   (tm:write write-ans ans 'HALT)]
+                                                  [(list #\1 ans)
+                                                   (tm:combine
+                                                    (tm:write&right write-ans tm:else write-ans2 #\1)
+                                                    (tm:write write-ans2 ans reset-head)
+                                                    (tm:left reset-head 'HALT))]))))))))))]))))))
 
   (when #t
     (draw-ptm! itm-dec-add "/home/jay/Downloads/dec-add.dot"))
