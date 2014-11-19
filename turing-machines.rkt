@@ -870,7 +870,7 @@
                                                     (tm:write write-ans2 ans reset-head)
                                                     (tm:left reset-head 'HALT))]))))))))))]))))))
 
-  (when #t
+  (when #f
     (draw-ptm! itm-dec-add "/home/jay/Downloads/dec-add.dot"))
 
   (define program-dec-add
