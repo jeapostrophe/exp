@@ -1,0 +1,2 @@
+#!/bin/sh
+exec racket -e '(require racket/pretty)' -e "(pretty-print-columns $(tput cols))" -e '(pretty-print (read))'
