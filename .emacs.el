@@ -1309,7 +1309,12 @@ given a prefix arg."
  '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
  '(racket-use-company-mode nil)
  '(raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco")
- '(safe-local-variable-values (quote ((coq-prog-args "-emacs-U" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun") (coq-prog-args "-emacs-U" "-R" ".." "Braun") (coq-prog-args "-emacs-U" "-R" "." "Braun")))))
+ '(safe-local-variable-values
+   (quote
+    ((coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
+     (coq-prog-args "-emacs-U" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
+     (coq-prog-args "-emacs-U" "-R" ".." "Braun")
+     (coq-prog-args "-emacs-U" "-R" "." "Braun")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
