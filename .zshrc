@@ -151,6 +151,10 @@ function racketdoclink() {
     ln -s $DEST ~/.racket/doc
 }
 
+function rfc() {
+  cd `racket -l find-collection/run $1`
+}
+
 #racketdoclink
 
 export REPORTTIME=10
