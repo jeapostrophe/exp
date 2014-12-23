@@ -1266,6 +1266,8 @@ given a prefix arg."
 (global-set-key (kbd "M-s-≤") 'proof-undo-last-successful-command)
 (global-set-key (kbd "M-s-≥") 'proof-assert-next-command-interactive)
 
+(setq proof-shell-process-connection-type nil)
+
 (setq proof-three-window-mode-policy 'hybrid)
 (if nil
     (proof-display-three-b 'hybrid))
