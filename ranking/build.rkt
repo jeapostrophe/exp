@@ -393,7 +393,12 @@
               (2compose (list->cmp
                          (list #f "N" "Y/C" "Y"))
                         (node-prop "Completed" #f))
-              (2compose number-cmp node-last-played)
+              (let ([c (2compose number-cmp node-last-played)])
+                (λ (a b)
+                  (if (and (equal? "Queue" ((node-prop "Status" #f) a))
+                           (equal? "Queue" ((node-prop "Status" #f) b)))
+                      'eq
+                      (c a b))))
               (2compose string-cmp node-props-release)
               (2compose wordy-cmp node-label))))
            "SortNormal"))
