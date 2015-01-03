@@ -654,6 +654,18 @@ given a prefix arg."
 (setq org-use-property-inheritance nil)
 (setq org-agenda-todo-keyword-format "")
 
+(setq org-agenda-prefix-format
+      '((agenda . " %i %-12:c%?-12t% s")
+        (timeline . "  % s")
+        (todo . "%-12:c")
+        (tags . " %i %-12:c")
+        (search . " %i %-12:c")))
+(setq org-prefix-format-compiled nil)
+
+(setq org-agenda-use-tag-inheritance nil)
+(setq org-agenda-dim-blocked-tasks nil)
+(setq org-agenda-ignore-drawer-properties '(effort appt category))
+
 (setq org-todo-keywords
       '((sequence "TODO" "DONE")))
 
@@ -697,6 +709,7 @@ given a prefix arg."
  (kbd "<f1>")
  (lambda () (interactive) (org-capture nil "t")))
 
+(setq org-agenda-before-sorting-filter-function nil)
 (setq org-agenda-before-sorting-filter-function 'je/todo-color)
 (setq org-agenda-cmp-user-defined 'je/agenda-sort)
 (setq org-agenda-sorting-strategy '(user-defined-up))
@@ -778,12 +791,11 @@ given a prefix arg."
          (a-day (if da (time-to-days (seconds-to-time ta)) 0))
          (sta (if sa (org-time-string-to-seconds sa) 0)))
 
-    ;; Remove the TODO
-    ;; use  (setq org-agenda-todo-keyword-format "") instead?
+    ;; Remove the leading *s
     (put-text-property
      0 (length a)
      'txt
-     (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
+     (replace-regexp-in-string "^\** * TODO *" "" (get-text-property 0 'txt a))
      a)
 
     ;; Remove the old face
