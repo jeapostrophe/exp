@@ -829,8 +829,6 @@ given a prefix arg."
        'je/distant))
      a)
 
-    (message a)
-
     ;; Lame to implement filtering here
     (if (or 
          ;; If we care about the schedule, and this is after now, then
@@ -883,6 +881,17 @@ given a prefix arg."
   (progn
     (org-agenda "" "t")
     (org-agenda-columns)))
+
+(setq org-agenda-columns-show-summaries nil)
+(setq org-agenda-columns-compute-summary-properties nil)
+
+(defun je/column-display (ctitle value)
+  (cond
+   ((equal ctitle "ITEM")
+    (replace-regexp-in-string "^\** " "" value))
+   (t
+    value)))
+(setq org-columns-modify-value-for-display-function 'je/column-display)
 
 (defvar je/org-agenda/filter-ctxt nil)
 (defvar je/org-agenda/filter-ctxt-not nil)
