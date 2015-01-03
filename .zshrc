@@ -154,7 +154,10 @@ function racketdoclink() {
 function rfc() {
   cd `racket -l find-collection/run $1`
 }
+alias am=mathomatic
+alias e="mathomatic -e --"
 
 #racketdoclink
+
 
 export REPORTTIME=10

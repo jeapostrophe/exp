@@ -92,7 +92,10 @@
         ;; is a close parentheses type character. Otherwise, there's not
         ;; really any point, and `blink-matching-open' would just echo
         ;; "Mismatched parentheses", which gets really annoying.
-        (if (char-equal (char-syntax (char-before (point))) ?\))
+        (if (and (point)
+                 (char-before (point))
+                 (char-syntax (char-before (point)))
+                 (char-equal (char-syntax (char-before (point))) ?\)))
             (setq matching-text (blink-matching-open)))
         (if (not (null matching-text))
             (message matching-text)))))
@@ -795,7 +798,7 @@ given a prefix arg."
     (put-text-property
      0 (length a)
      'txt
-     (replace-regexp-in-string "^\** * TODO *" "" (get-text-property 0 'txt a))
+     (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
      a)
 
     ;; Remove the old face
@@ -825,6 +828,8 @@ given a prefix arg."
       (t
        'je/distant))
      a)
+
+    (message a)
 
     ;; Lame to implement filtering here
     (if (or 
