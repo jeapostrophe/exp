@@ -779,6 +779,10 @@ given a prefix arg."
   :group 'org-faces)
 (set-face-foreground 'je/distant "#93a1a1")
 
+(defvar je/left-col 40)
+(defun je/columate (a b)
+  (format "%s %s" a b))
+
 (defvar je-schedule-flag? t)
 (setq je-schedule-flag? t)
 (defun je/todo-color (a)
@@ -795,11 +799,9 @@ given a prefix arg."
          (sta (if sa (org-time-string-to-seconds sa) 0)))
 
     ;; Remove the leading *s
-    (put-text-property
-     0 (length a)
-     'txt
-     (replace-regexp-in-string "^TODO *" "" (get-text-property 0 'txt a))
-     a)
+    (setq a (replace-regexp-in-string "^brain: *" "" a))
+    (if da
+        (setq a (je/columate a da)))
 
     ;; Remove the old face
     (remove-text-properties
@@ -880,7 +882,8 @@ given a prefix arg."
 
   (progn
     (org-agenda "" "t")
-    (org-agenda-columns)))
+    ;; (org-agenda-columns)
+    ))
 
 (setq org-agenda-columns-show-summaries nil)
 (setq org-agenda-columns-compute-summary-properties nil)
