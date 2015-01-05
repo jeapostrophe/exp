@@ -779,9 +779,16 @@ given a prefix arg."
   :group 'org-faces)
 (set-face-foreground 'je/distant "#93a1a1")
 
-(defvar je/left-col 40)
-(defun je/columate (a b)
-  (format "%s %s" a b))
+(defvar je/left-col 0)
+(setq je/left-col 60)
+(defun je/columate (a d)
+  (if (> (length a) je/left-col)
+      (setq a (concat (substring a 0 je/left-col) "...")))
+  (setq d (replace-regexp-in-string "^<" "" d))
+  (setq d (replace-regexp-in-string ">$" "" d))
+  (setq d (concat d (make-string (- 26 (length d)) ? )))
+  (let ((pad (make-string (- 90 (length a) (length d)) ? )))
+    (concat a pad d)))
 
 (defvar je-schedule-flag? t)
 (setq je-schedule-flag? t)
@@ -879,15 +886,10 @@ given a prefix arg."
 (defun je/todo-list ()
   "Open up the org-mode todo list"
   (interactive)
-
-  (progn
-    (org-agenda "" "t")
-    ;; (org-agenda-columns)
-    ))
+  (org-agenda "" "t"))
 
 (setq org-agenda-columns-show-summaries nil)
 (setq org-agenda-columns-compute-summary-properties nil)
-
 (defun je/column-display (ctitle value)
   (cond
    ((equal ctitle "ITEM")
