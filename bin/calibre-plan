@@ -25,6 +25,11 @@
       (cons (first rl)
             (wiggle rrl)))))
 
+(define (evenly N l)
+  (define L (length l))
+  (for/list ([i (in-range N)])
+    (list-ref l (round (* (/ i N) L)))))
+
 (define (hash-cons! ht k v)
   (hash-update! ht k (λ (old) (cons v old)) empty))
 
@@ -71,11 +76,11 @@
          (hash-cons! changes id 'must-true))]))
 
   (for ([vec (in-list
-              (wiggle
+              (evenly
+               N
                (sort (hash-values authors->recent-id)
                      string-ci<=?
-                     #:key book-info-pubdate)))]
-        [k (in-range N)])
+                     #:key book-info-pubdate)))])
     (match-define (book-info id active authors pubdate) vec)
     (printf "! ~v\n" vec)
     (hash-cons! changes id 'to-true))
