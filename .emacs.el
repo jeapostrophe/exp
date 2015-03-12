@@ -1358,3 +1358,5 @@ given a prefix arg."
  '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
  '(racket-paren-face ((t (:foreground "#93a1a1"))))
  '(racket-selfeval-face ((t (:foreground "#859900")))))
+
+(fringe-mode 0)
