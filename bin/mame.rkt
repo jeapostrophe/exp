@@ -10,12 +10,14 @@
 (define last-path (build-path mame-dir "last.rktd"))
 
 (define games
-  `("futari15"
+  `("tgm2p"
+    
+    "futari15"
     "deathsml"
     ["bublbobl_orig.zip" "bublbobl.zip" "bublbobl"]
     "espgal2"
     
-    "miexchng"
+    "miexchng"    
     
     "futariblj"
     "dsmbl"
