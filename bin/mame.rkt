@@ -14,13 +14,15 @@
     "futari15"
     "deathsml"
     ["bublbobl_orig.zip" "bublbobl.zip" "bublbobl"]
-    "espgal2"
+    ;; "espgal2"
     
     "miexchng"
     "futariblj"
     "dsmbl"
     ["bublcave.zip" "bublbobl.zip" "bublbobl"]
-    "ddpdfk"))
+    ;;"ddpdfk"
+    ;;"rsgun"
+    ))
 
 (module+ main
   (define last-one
