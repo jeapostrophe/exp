@@ -11,20 +11,16 @@
 
 (define games
   `("tgm2p"
-    
     "futari15"
     "deathsml"
     ["bublbobl_orig.zip" "bublbobl.zip" "bublbobl"]
     "espgal2"
     
-    "miexchng"    
-    
+    "miexchng"
     "futariblj"
     "dsmbl"
     ["bublcave.zip" "bublbobl.zip" "bublbobl"]
-    "ddpdfk"
-    
-    "rsgun"))
+    "ddpdfk"))
 
 (module+ main
   (define last-one
