@@ -1,0 +1,27 @@
+#!/bin/bash
+R=/Users/jay/Documents/RetroArch
+
+cd ${R}
+wget --mirror --no-parent --continue http://buildbot.libretro.com/assets/ http://buildbot.libretro.com/nightly/osx-x86_64/latest/
+
+B=$R/buildbot.libretro.com
+
+unzipto() {
+    FROM=$1
+    TO=$2
+
+    unzip -o -d $TO $FROM
+}
+
+unzipto $B/assets/assets.zip $R/assets
+unzipto $B/assets/autoconf.zip $R/autoconfig
+unzipto $B/assets/cheats.zip $R/cht
+unzipto $B/assets/database-cursors.zip $R/cursors
+unzipto $B/assets/database-rdb.zip $R/rdb
+cp -f $B/assets/info/*.info $R/info
+unzipto $B/assets/overlays.zip $R/overlays
+unzipto $B/assets/shaders_cg.zip $R/shaders_cg
+
+for i in $B/nightly/osx-x86_64/latest/*.zip ; do
+    unzip -o -d $R/modules $i
+done
