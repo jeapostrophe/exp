@@ -806,7 +806,7 @@ given a prefix arg."
          (sta (if sa (org-time-string-to-seconds sa) 0)))
 
     ;; Remove the leading *s
-    (setq a (replace-regexp-in-string "^brain: *" "" a))
+    (setq a (replace-regexp-in-string "^[^ ]*: *" "" a))
     (if da
         (setq a (je/columate a da)))
 
