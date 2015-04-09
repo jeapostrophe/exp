@@ -1,0 +1,7 @@
+#/bin/bash
+FILE=$1
+
+cd "$(dirname "$FILE")" && \
+javac "$FILE" &>/dev/null && \
+java C"$(basename "${FILE}" .java)" && \
+rm *.class
