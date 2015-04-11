@@ -1,10 +1,11 @@
 ;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
 
-(add-to-list 'load-path "~/.emacs.d/")
+;;(add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
 
-(add-to-list 'load-path "~/Dev/dist/greghendershott/racket-mode/")
-(require 'racket-mode)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; font & color
 (set-face-attribute 'default nil 
@@ -327,6 +328,7 @@ given a prefix arg."
 ;; (setq multi-term-program "/usr/bin/zsh")
 
 ;;;;; racket-mode
+;;(require 'racket-mode)
 
 (add-to-list 'auto-mode-alist '("\\.dc$" . racket-mode))
 (add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
@@ -1128,8 +1130,8 @@ given a prefix arg."
 (delete-selection-mode 1)
 
 ;; Auto pair
-(add-to-list 'load-path "~/Dev/dist/capitaomorte/autopair")
-(require 'autopair)
+;;(add-to-list 'load-path "~/Dev/dist/capitaomorte/autopair")
+;;(require 'autopair)
 
 (add-hook 'racket-mode-hook 
           #'(lambda () 
@@ -1153,9 +1155,9 @@ given a prefix arg."
 (put 'autopair-newline 'delete-selection t)
 
 ;; Rainbow delimiters
-(add-to-list 'load-path "~/Dev/local/rainbow-delimiters")
-(require 'rainbow-delimiters)
-(global-rainbow-delimiters-mode t)
+;;(add-to-list 'load-path "~/Dev/local/rainbow-delimiters")
+;;(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; Twelf
 ;;(setq twelf-root "/Users/jay/Dev/dist/Twelf/")
@@ -1322,11 +1324,6 @@ given a prefix arg."
     See `sort-regexp-fields'."
   (interactive "*P\nr")
   (sort-regexp-fields reverse "[A-Za-z0-9\\.]+" "\\&" beg end))
-
-;; elpa
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; customs
 (custom-set-variables
