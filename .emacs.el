@@ -1336,9 +1336,9 @@ given a prefix arg."
  '(ibuffer-display-summary nil)
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
- '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
+ '(racket-racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
  '(racket-use-company-mode nil)
- '(raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco")
+ '(racket-raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco")
  '(safe-local-variable-values
    (quote
     ((coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
