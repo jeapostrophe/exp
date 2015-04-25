@@ -45,6 +45,10 @@ Definition is_day (d:Day) (x:Month * Day) : bool :=
 Definition ValidDate (m:Month) (d:Day) :=
   In (m,d) options.
 
+Ltac invalid_date VD :=
+  (contradict VD; unfold ValidDate;
+      simpl In; intros IN; intuition; congruence).
+
 (* Albert doesn't know the date from the month alone *)
 
 Definition AlbertInitial (m:Month) (d:Day) :=
@@ -106,12 +110,15 @@ Proof.
   apply in_eq.
 Qed.
 
-(* But now Bernard knows *)
+(* But now Bernard knows, i.e. the same day does not occur in both of
+   the two remaining months of the options *)
 
 Definition BernardKnows (m:Month) (d:Day) :=
   forall m1 m2,
     m = m1 \/ m = m2 ->
     ~ (In (m1, d) options /\ In (m2, d) options).
+
+(* This implies that the day is not D_14 *)
 
 Lemma BernardKnows_discards_14 :
   forall m d,
@@ -123,33 +130,59 @@ Proof.
   intros m d VD AVB BK.
   remember AVB as BK'. clear HeqBK'.
   apply BK in BK'. clear BK.
+
+  destruct AVB; subst m;
+    destruct d;
+      try (invalid_date VD).
+
+  contradict BK'.
+  simpl In. split; intuition.
+
+  auto.
+
+  contradict BK'.
+  simpl In. split; intuition.
   
-  destruct m; try (destruct AVB; congruence); clear AVB.
-
-  destruct d;
-    try (contradict VD; unfold ValidDate;
-      simpl In; intros IN; intuition; congruence).
-
-  contradict BK'.
-  simpl In. split; intuition.
-
   auto.
-
-  destruct d;
-    try (contradict VD; unfold ValidDate;
-      simpl In; intros IN; intuition; congruence).
-
-  contradict BK'.
-  simpl In. split; intuition.
-  auto.
+  
   auto.
 Qed.
 
-(* But now Albert knows *)
+(* But now Albert knows which means that the month he was told (the
+   real month) doesn't have more than one of the available dates,
+   because otherwise he wouldn't be able to know *)
 
 Definition AlbertKnows (m:Month) (d:Day) :=
-  forall m1 m2,
-    m = m1 \/
+  forall d1 d2 d3,
+    d = d1 \/ d = d2 \/ d = d3 ->
+    (* Only d3 is there *) ~ (In (m,d1) options /\ In (m,d2) options) /\
+    (* Only d1 is there *) ~ (In (m,d2) options /\ In (m,d3) options) /\
+    (* Only d2 is there *) ~ (In (m,d3) options /\ In (m,d1) options).
+
+Lemma AlbertKnows_discards_August :
+  forall m d,
+    ValidDate m d ->
+    m = July \/ m = August ->
+    d = D_15 \/ d = D_16 \/ d = D_17 ->
+    AlbertKnows m d ->
+    m = July.
+Proof.
+  intros m d VD AVB BKR AK.
+  remember BKR as AK'. clear HeqAK'.
+  apply AK in AK'. clear AK.
+  destruct AK' as [AK'1 [AK'2 AK'3]].
+
+  destruct AVB; subst m.
+  auto.
+  
+  destruct BKR as [BKR | [BKR | BKR]]; subst d.
+
+  contradict AK'3. simpl In. split; intuition.
+
+  invalid_date VD.
+  
+  contradict AK'3. simpl In. split; intuition.
+Qed.
 
 Theorem Problem:
   forall m d,
@@ -165,68 +198,21 @@ Theorem Problem:
        that is shared on July and August and if the answer was shared,
        then he'd be toast *)
     BernardKnows m d ->
+    (* Now Albert can figure out that it was the 15, 16, or 17, but he
+       knows the month, so now he knows *)
+    AlbertKnows m d ->
     (* Thus the only day is July 16th. *)
     ((m = July) /\ d = D_16).
 Proof.
-  intros m d VD AI AVB BK.
-
+  intros m d VD AI AVB BK AK.
+  clear AI.
   apply AlbertVersusBernard_discards_MayJune in AVB.
-  remember AVB as BK'. clear HeqBK'.
-  apply BK in BK'. clear BK.
+  apply BernardKnows_discards_14 in BK; auto.
+  apply AlbertKnows_discards_August in AK; auto.
 
-  destruct m; try (destruct AVB; congruence); clear AVB.
-
-  destruct d;
-    try (contradict VD; unfold ValidDate;
-      simpl In; intros IN; intuition; congruence).
-
-  contradict BK'.
-  simpl In. split; intuition.
+  subst m.
+  destruct BK as [BK | [BK | BK]]; subst;
+    try (invalid_date VD).
 
   auto.
-
-  destruct d;
-    try (contradict VD; unfold ValidDate;
-      simpl In; intros IN; intuition; congruence).
-
-  contradict BK'.
-  simpl In. split; intuition.
-
-  destruct m, d; congruence.
-  
-  unfold BernardKnows in BK.
-  apply AVB in BK.
-  
-  intros m d VALID. simpl map.
-  destruct m; intros A1 A2 B1; simpl filter in A1, A2; simpl length in A1.
-
-  assert False; try contradiction.
-  remember (A2 May D_19) as A2'.
-  simpl count_occ in A2'.
-  assert (~ 1 > 1).
-   intros H. inversion H. inversion H1.
-  apply H. apply A2'.
-  apply in_cons. 
-  apply in_cons.
-  apply in_eq.
-  
-  assert False; try contradiction.
-  remember (A2 June D_18) as A2'.
-  simpl count_occ in A2'.
-  assert (~ 1 > 1).
-   intros H. inversion H. inversion H1.
-  apply H. apply A2'.
-  apply in_cons. 
-  apply in_eq.
-
-  destruct d; auto;
-    try (contradict VALID;
-      intros I; simpl In in I;
-        clear A1 A2 B1; intuition; congruence).
-
-  simpl filter in B1 at 1.
-
-  admit.
-
-  admit.
 Qed.
