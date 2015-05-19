@@ -1341,7 +1341,9 @@ given a prefix arg."
  '(racket-use-company-mode nil)
  '(safe-local-variable-values
    (quote
-    ((prover-cmd . "racket prover.rkt")
+    ((prover-cmd . ". ~/.profile; racket prover.rkt")
+     (prover-cmd . "pwd")
+     (prover-cmd . "racket prover.rkt")
      (coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
      (coq-prog-args "-emacs-U" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
      (coq-prog-args "-emacs-U" "-R" ".." "Braun")
