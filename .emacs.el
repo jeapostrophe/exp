@@ -1337,11 +1337,12 @@ given a prefix arg."
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
  '(racket-racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
- '(racket-use-company-mode nil)
  '(racket-raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco")
+ '(racket-use-company-mode nil)
  '(safe-local-variable-values
    (quote
-    ((coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
+    ((prover-cmd . "racket prover.rkt")
+     (coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
      (coq-prog-args "-emacs-U" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
      (coq-prog-args "-emacs-U" "-R" ".." "Braun")
      (coq-prog-args "-emacs-U" "-R" "." "Braun")))))
