@@ -1341,7 +1341,8 @@ given a prefix arg."
  '(racket-use-company-mode nil)
  '(safe-local-variable-values
    (quote
-    ((prover-cmd . "/bin/cat")
+    ((prover-cmd . ". ~/.profile; racket mctop.rkt")
+     (prover-cmd . "/bin/cat")
      (prover-cmd . ". ~/.profile; racket prover.rkt")
      (prover-cmd . "pwd")
      (prover-cmd . "racket prover.rkt")
