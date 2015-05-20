@@ -1341,7 +1341,8 @@ given a prefix arg."
  '(racket-use-company-mode nil)
  '(safe-local-variable-values
    (quote
-    ((prover-cmd . ". ~/.profile; racket prover.rkt")
+    ((prover-cmd . "/bin/cat")
+     (prover-cmd . ". ~/.profile; racket prover.rkt")
      (prover-cmd . "pwd")
      (prover-cmd . "racket prover.rkt")
      (coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
@@ -1358,5 +1359,8 @@ given a prefix arg."
  '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
  '(racket-paren-face ((t (:foreground "#93a1a1"))))
  '(racket-selfeval-face ((t (:foreground "#859900")))))
+
+(add-to-list 'load-path "~/Dev//scm/github.jeapostrophe/prover-mode")
+(load "prover")
 
 (fringe-mode 0)
