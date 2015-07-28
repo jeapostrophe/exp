@@ -101,8 +101,7 @@ bindkey ^n screen
 screen -t irc forever irssi
 screen -t y forever y
 screen zsh_dir ~courses
-screen zsh_dir ~203
-screen zsh_dir ~250
+screen zsh_dir ~305
 screen zsh_dir ~work/papers/c-from-cm-journal
 screen zsh_dir ~gb
 screen zsh_dir ~gb
@@ -113,6 +112,5 @@ screen zsh_dir ~github/racket2
 screen zsh_dir ~pkgi
 screen zsh_dir ~plt
 screen zsh_dir ~plt
-screen zsh_dir ~papers/job-search-2014
 screen zsh_dir ~/Downloads
 screen zsh_dir ~jay
