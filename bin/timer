@@ -1,0 +1,26 @@
+#! /usr/bin/env racket
+#lang racket/base
+(require racket/format)
+
+(define (~mr x)
+  (~r #:min-width 2 #:pad-string "0"
+      x))
+
+(define (format-duration d)
+  (define-values (ds ms) (quotient/remainder d 1000))
+  (define-values (dm s) (quotient/remainder ds 60))
+  (define-values (dh m) (quotient/remainder dm 60))
+  (define-values (dd h) (quotient/remainder dh 24))
+  (~a (~mr h) ":" (~mr m) ":" (~mr s) "." (~r ms)))
+
+(module+ main
+  (let loop ()
+    (define start (current-milliseconds))
+    (for ([e (in-vector (current-command-line-arguments))])
+      (printf "~a " e))
+    (flush-output)
+    (void (read-line))
+    (define end (current-milliseconds))
+    (define d (- end start))
+    (displayln (format-duration d))
+    (loop)))
