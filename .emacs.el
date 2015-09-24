@@ -1282,7 +1282,7 @@ given a prefix arg."
 (add-to-list 'auto-mode-alist '("\\.glsl$" . cg-mode))
 
 ;; proof general
-(setq proof-assistants 'coq)
+(setq proof-assistants '(coq))
 (load-file
  "/opt/local/share/ProofGeneral/generic/proof-site.el")
 ;; XXX make these local to the proof mode
