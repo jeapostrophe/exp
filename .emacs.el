@@ -445,8 +445,8 @@ given a prefix arg."
             ("glsl" . "cgc -noentry -oglsl")
             ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
             ("dc" . ,(if je/racket-test-p "rkt" "rk"))
+            ("scrbl" . ,(if je/racket-test-p "rkt" "rk"))
             ("txt" . "ctxt")
-            ("scrbl" . "scribble --pdf")
             ("dot" . "dot -Tpdf -O")
             ("tex" . "pdflatex")))
 
