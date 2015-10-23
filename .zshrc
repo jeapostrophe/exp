@@ -121,8 +121,8 @@ function oes() {
 
 function teamtmp() {
     NAME=$(date +%Y%m%d%H%M-)$(basename $1)
-    scp -r $1 weapons.cs.byu.edu:public_html/tmp/${NAME}
-    echo http://faculty.cs.byu.edu/~jay/tmp/${NAME}
+    scp -r $1 uml:public_html/tmp/${NAME}
+    echo http://www.cs.uml.edu/~jmccarth/tmp/${NAME}
 }
 
 function findss() {
