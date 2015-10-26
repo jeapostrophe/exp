@@ -5,6 +5,7 @@ Configuration files and experimental, one-off code
 .emacs.d - config directory for emacs
 .emacs.el - config file for emacs
 .profile - common shell config
+.vimrc - vim configuration
 .workout-plan - pictures for workout-plan
 .xmobarrc - config file for xmobbar (part of xmonad)
 .Xresources - X resources, mainly to get solarized urxvt
@@ -14,6 +15,7 @@ aggressive-timeout.rkt - aggressive timeout enforcer
 amazon-wishlist.rkt - dump wishlist from Amazon
 aml.ml - example of incremental ML
 anki-monster - plugin for Anki for kids
+aquarium.rkt - game of life with fish
 av.ss - solver for AV connection layout
 basic-lazy.rkt - basic laziness for student
 basic-monads.rkt - basic monads for student
@@ -24,6 +26,8 @@ bin - tiny scripts
 blog-macro.ss - macro example for blog
 boggle.rkt - boggle solver [Blogged: 2012-05-14]
 bom2se.rkt - Converts the Book of Mormon (JP) to Anki database
+brother-trees.rkt - brother tree implements
+bt-split-at.rkt - binary tree split at point
 cas-cad-e.rkt - case that is like C's switch [Blogged: 2013-06-24]
 cek.rkt - CEK machine
 coca.rkt - Word Frequency list parser
@@ -35,6 +39,7 @@ dark-souls.rkt - Dark Souls optimizer
 delim.ss - delim cont examples (Zipper)
 derivative.ss - symbolic deritive finder
 devmode - automatic restart of Racket Web server when implementation changes
+diet.rkt - something to help plan diets
 dir-serve.rkt - quick Web server for a directory
 dnd - iOS HTML D&D4e character sheet
 dpr.rkt - Go's defer-panic-recover in Racket
@@ -45,14 +50,19 @@ enum.rkt - implementation of enums
 espeaker.rkt - live espeak console
 ethread.rkt - threads that preserve a single exit value for later
 fake-serve.rkt - serve a single MP3
+faker.el - attempt to make something that fakes typing in a fine
 ff5-sram.rkt - SRAM hack for FF5
+fffhase-attack - demonstrates a "phase" attack on Racket
 fizzbuzz.rkt - fizzbuzz in racket
 flow.rkt - data-flow analysis definer
 foo - purely functional oo system with prototypes
 fp-rules.rkt - prototype of macros that run to fixed point
 grepw.rkt - basic version of grep but just for words
+grid.tex - basic grid for family
 gt5-events.rkt - manager for Gran Turismo 5 events
+house-sale.rkt - something to compute if selling your house is a good idea
 interface - prototype of interface-in/out
+isort-cost.rkt - computes the cost of insertion sort vs other sorts
 jdictate.rkt - screen scrap to create Japanese kanji Anki database
 k-from-end.rkt - implementation of stupid interview question
 kappend.rkt - version of list with O(1) append
@@ -117,6 +127,8 @@ rom-link2.rkt - set up links of roms for wahcade
 rom-sort.rkt - organize NES roms
 ror - demo of "Ruby on Rails" Racket macro
 rorth - Racket vesion of forth [Blogged: 2013-05-20]
+rsn.rkt - help prepare SNES sound tracks for playing
+ruby-yield.rkt - something to demonstrate what is wrong with ruby's yield
 russian.rkt - screen scrape to create Russian database for Anki 
 screenrc - config for screen (terminal window manager)
 scut.ss - awesome version of "cut"
@@ -154,6 +166,7 @@ ttt.rkt - a basic model of tic-tac-toe
 turing-machines.rkt - Turing Machine simulator
 tw.py - twitter to rss scraper
 undefined-dispatch-rules.rkt - a demonstration of #<undefined> interacting poorly with web-server/dispatch
+uniq.c - counts occureneces of words in file
 up.sh - script to push all git repos
 values.rkt - keyword and optional values
 values.ss - keyword and optional values (old)
@@ -165,3 +178,4 @@ workout-plan.tex - wrapper for workout plan PDF
 workout.rkt - graph workout data
 xmonad.hs - config file for xmonad
 y.css - style sheet for y
+zipper.py - zipper in python
