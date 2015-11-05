@@ -13,9 +13,6 @@
                     :font "Triplicate_T4c"
                     :height 120)
 
-;; XXX delete these files:
-;; (add-to-list 'load-path "~/Dev/dist/altercation/solarized/emacs-colors-solarized")
-
 ;; Theme
 
 ;; Don't change the font for some headings and titles
@@ -31,6 +28,10 @@
 (setq solarized-height-plus-4 1)
 
 (load-theme 'solarized-light t)
+
+;; ag
+(setq ag-highlight-search nil)
+(defalias 'agp 'ag-project)
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
@@ -1165,8 +1166,6 @@ given a prefix arg."
 (put 'autopair-newline 'delete-selection t)
 
 ;; Rainbow delimiters
-;;(add-to-list 'load-path "~/Dev/local/rainbow-delimiters")
-;;(require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; Twelf
@@ -1285,11 +1284,6 @@ given a prefix arg."
 ;; (setq flymake-gui-warnings-enabled nil)
 ;; (push '("\\.rkt\\'" flymake-racket-init)
 ;;       flymake-allowed-file-name-masks)
-
-;; cg mode
-(add-to-list 'load-path "~/Dev/local/cg-mode")
-(require 'cg-mode)
-(add-to-list 'auto-mode-alist '("\\.glsl$" . cg-mode))
 
 ;; proof general
 (setq proof-assistants '(coq))
