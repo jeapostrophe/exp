@@ -367,6 +367,8 @@ given a prefix arg."
 (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "s-f") 'isearch-forward)
 (global-set-key (kbd "s-g") 'isearch-repeat-forward)
+(global-set-key (kbd "s-;") 'next-buffer)
+(global-set-key (kbd "s-'") 'previous-buffer)
 
 (defun je/delete-window ()
   "Remove window or frame"
@@ -432,6 +434,25 @@ given a prefix arg."
               (je/name 65 65 :left :elide)
               " "
               (mode 16 16 :left :elide))))
+
+(defun ibuffer-previous-line ()
+  (interactive) (previous-line)
+  (if (<= (line-number-at-pos) 3)
+      (goto-line (count-lines (point-min) (point-max)))))
+(defun ibuffer-next-line ()
+  (interactive) (next-line)
+  (if (> (line-number-at-pos) (count-lines (point-min) (point-max)))
+      (goto-line 4)))
+(define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
+(define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
+
+;; Switching to ibuffer puts the cursor on the most recent buffer
+(defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+           "Open ibuffer with cursor pointed to most recent buffer name"
+           (let ((recent-buffer-name (buffer-name)))
+             ad-do-it
+             (ibuffer-jump-to-buffer recent-buffer-name)))
+(ad-activate 'ibuffer)
 
 ;; Setup some font size changers
 (define-key global-map (kbd "C-=") 'text-scale-increase)
