@@ -3,23 +3,34 @@
 ;;(add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
 
+(require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
 
 ;; font & color
 (set-face-attribute 'default nil 
                     :font "Triplicate_T4c"
                     :height 120)
 
-"-apple-Triplicate_T4c-medium-normal-normal-*-13-*-*-*-p-0-iso10646-1"
+;; XXX delete these files:
+;; (add-to-list 'load-path "~/Dev/dist/altercation/solarized/emacs-colors-solarized")
 
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-hober)
-(add-to-list 'load-path "~/Dev/dist/altercation/solarized/emacs-colors-solarized")
-(load "color-theme-solarized")
-(color-theme-solarized-light)
+;; Theme
+
+;; Don't change the font for some headings and titles
+(setq solarized-use-variable-pitch nil)
+;; Don't change size of org-mode headlines (but keep other size-changes)
+(setq solarized-scale-org-headlines nil)
+
+;; Avoid all font-size changes
+(setq solarized-height-minus-1 1)
+(setq solarized-height-plus-1 1)
+(setq solarized-height-plus-2 1)
+(setq solarized-height-plus-3 1)
+(setq solarized-height-plus-4 1)
+
+(load-theme 'solarized-light t)
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
@@ -441,8 +452,7 @@ given a prefix arg."
             ("sh" . "zsh")
             ("py" . "python")
             ("cc" . "ccci")
-            ("cg" . "cgc -noentry")
-            ("glsl" . "cgc -noentry -oglsl")
+            ("glsl" . "glslangValidator")
             ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
             ("dc" . ,(if je/racket-test-p "rkt" "rk"))
             ("scrbl" . ,(if je/racket-test-p "rkt" "rk"))
@@ -1332,6 +1342,9 @@ given a prefix arg."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(doc-view-continuous t)
  '(ibuffer-default-sorting-mode (quote filename/process))
  '(ibuffer-display-summary nil)
