@@ -1,0 +1,6 @@
+#!/bin/sh
+sysctl machdep.cpu.cache
+sysctl machdep.cpu.features
+sysctl machdep.cpu.leaf7_features
+sysctl machdep.cpu.extfeatures 
+sysctl machdep.cpu.brand_string
