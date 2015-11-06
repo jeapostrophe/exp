@@ -57,8 +57,6 @@
 (define (vlc-current-time)
   (read-num (open-input-string (vlc-rc! "get_time"))))
 
-(define MPLAYER-PATH
-  (find-executable-path "mplayer"))
 (define FFPROBE-PATH
   (find-executable-path "ffprobe"))
 (define HOME (find-system-path 'home-dir))
