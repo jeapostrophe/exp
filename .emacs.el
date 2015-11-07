@@ -180,14 +180,14 @@
 ;;;; Mode settings
 
 ;;;;; compiling
-(setq compilation-scroll-output 'yes)
+(setq compilation-scroll-output 'first-error)
 (setq comint-prompt-read-only t)
 
 ;; ANSI colors in command interaction and compile:
 (require 'ansi-color)
 (defun colorize-compilation-buffer ()
   (toggle-read-only)
-  (ansi-color-apply-on-region (point-min) (point-max))
+  (ansi-color-apply-on-region compilation-filter-start (point))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
@@ -491,19 +491,17 @@ given a prefix arg."
 
     (if (string-equal suffix "el") ; special case for emacs lisp
         (load-file fname)
-      (if progName
-          (progn
-            (message "Running...")
-
-            (if (and t (file-exists-p (concat default-directory "/Makefile")))
-                (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
+      (if (and t (file-exists-p (concat default-directory "/Makefile")))
+          (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
+        (if progName
+            (progn
               (if (not writep)
                   (compile (concat "zsh " cmdStr))
                 (let ((multi-term-program-switches
                        (list "-i" "-c" (concat progName " \"" fname "\""))))
-                  (multi-term-dedicated-open)))))
-        (progn
-          (message "No recognized program file suffix for this file."))))))
+                  (multi-term-dedicated-open))))
+          (progn
+            (message "No recognized program file suffix for this file.")))))))
 (defun run-current-file-ro ()
   "Execute or compile the current file."
   (interactive)
