@@ -3,6 +3,8 @@
 ;;(add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
 
+(setq exec-path (append '("/usr/local/bin") exec-path))
+
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
@@ -389,6 +391,7 @@ given a prefix arg."
 (define-key global-map (kbd "M-<tab>") 'other-window)
 
 ;; ibuffer
+(require 'ibuffer)
 (setq ibuffer-use-header-line nil)
 (setq directory-abbrev-alist
       '())
@@ -1306,8 +1309,7 @@ given a prefix arg."
 
 ;; proof general
 (setq proof-assistants '(coq))
-(load-file
- "/opt/local/share/ProofGeneral/generic/proof-site.el")
+(load-file "/usr/local/Cellar/proof-general/4.2/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
 ;; XXX make these local to the proof mode
 ;; proof-display-three-b
 ;; proof-shell-exit

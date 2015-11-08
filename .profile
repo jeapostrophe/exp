@@ -1,5 +1,5 @@
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-export PATH=/Applications/MacPorts/Emacs.app/Contents/MacOS/bin/:$PATH
+export PATH=/usr/local/Cellar/emacs/24.5/bin/:$PATH
 export PATH=/opt/local/libexec/perl5.16/:$PATH
 export PATH=/usr/local/bin/:$PATH
 
@@ -14,7 +14,7 @@ export COQ_ROOT=$DIST/coq/local
 export PATH=$COQ_ROOT/bin:$PATH
 export CVS_RSH=ssh
 export OCAMLRUNPARAM=b
-export EDITOR='emacsclient -c'
+export EDITOR=nvim
 export TEXINPUTS=$PROJS/papers/etc:$PLTHOME/pkgs/slatex:$TEXINPUTS
 export BIBINPUTS=$PROJS/papers/etc:$TEXINPUTS
 export BSTINPUTS=$PROJS/papers/etc:$TEXINPUTS
@@ -32,6 +32,8 @@ alias opene=oe
 alias o=open
 alias rd="raco docs"
 alias git=hub
+alias vim=nvim
+alias vi=nvim
 
 function rcd() { cd $(raco fc $*) }
 
