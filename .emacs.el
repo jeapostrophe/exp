@@ -33,7 +33,10 @@
 
 ;; ag
 (setq ag-highlight-search nil)
+
 (defalias 'agp 'ag-project)
+(defalias 'mg 'magit)
+(defalias 'isb 'ispell-buffer)
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
