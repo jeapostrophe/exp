@@ -37,6 +37,7 @@
 (defalias 'agp 'ag-project)
 (defalias 'mg 'magit-status)
 (defalias 'isb 'ispell-buffer)
+(defalias 'isw 'ispell-word)
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
