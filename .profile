@@ -1,3 +1,5 @@
+eval `/usr/libexec/path_helper -s`
+
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/usr/local/Cellar/emacs/24.5/bin/:$PATH
 export PATH=/opt/local/libexec/perl5.16/:$PATH

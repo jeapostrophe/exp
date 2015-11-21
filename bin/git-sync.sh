@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/bin/zsh
 . ~/.zshrc
 export DISPLAY=0.0
 export XAUTHORITY=~/.Xauthority

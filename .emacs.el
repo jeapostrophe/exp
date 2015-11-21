@@ -32,6 +32,7 @@
 (load-theme 'solarized-light t)
 
 ;; ag
+(setq ag-executable "/usr/local/bin/ag")
 (setq ag-highlight-search nil)
 
 (defalias 'agp 'ag-project)
