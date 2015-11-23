@@ -8,9 +8,10 @@ setopt printeightbit
 hash -d scm=$SVNROOT
 hash -d plt=$PLTHOME
 hash -d pkgs=~plt/pkgs
-hash -d ws=~pkgs/web-server-pkgs
-hash -d drdr=~pkgs/plt-services/meta/drdr
-hash -d pkgi=~pkgs/plt-services/meta/pkg-index
+hash -d epkgs=~plt/extra-pkgs
+hash -d ws=~epkgs/web-server
+hash -d drdr=~epkgs/drdr
+hash -d pkgi=~epkgs/pkg-index
 hash -d work=$PROJS
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
@@ -23,11 +24,9 @@ hash -d fin=~scm/github.jeapostrophe/home/finance
 hash -d j=~github/home/journal
 hash -d blogs=~scm/blogs
 
-hash -d fspec=~scm/svn.smc-lab/students/MS/morse-everett/fspec/trunk
-hash -d uber-lazy=~scm/svn.smc-lab/students/PhD/rungta-neha/papers/uber-lazy/trunk
-
 hash -d courses=~work/courses
 hash -d 305=~courses/2015/fall/305
+hash -d 305=~courses/2016/spring/308
 
 export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 
