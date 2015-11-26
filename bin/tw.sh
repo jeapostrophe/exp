@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/bin/zsh
 . ~/.zshrc
 
 precmd () {}
