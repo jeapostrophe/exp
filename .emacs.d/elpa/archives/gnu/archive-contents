@@ -147,7 +147,7 @@
 		((:url . "https://github.com/vspinu/company-math")
 		 (:keywords "unicode" "symbols" "completion"))])
  (company-statistics .
-		     [(0 2 1)
+		     [(0 2 2)
 		      ((emacs
 			(24 3))
 		       (company
@@ -194,7 +194,7 @@
 		((:url . "http://elpa.gnu.org/packages/dbus-codegen.html")
 		 (:keywords "comm" "dbus" "convenience"))])
  (debbugs .
-	  [(0 7)
+	  [(0 8)
 	   nil "SOAP library to access debbugs servers" tar
 	   ((:keywords "comm" "hypermedia")
 	    (:url . "http://elpa.gnu.org/packages/debbugs.html"))])
@@ -252,7 +252,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(0 1)
+	    [(0 1 1)
 	     ((emacs
 	       (25)))
 	     "Expression based incremental search for emacs-lisp-mode" single
@@ -525,7 +525,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(20151116)
+      [(20151123)
        nil "Outline-based notes management and organizer" tar nil])
  (osc .
       [(0 1)
