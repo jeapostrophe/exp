@@ -502,6 +502,11 @@
 	     [(1 30)
 	      nil "Indexing system for on-line note-taking" tar
 	      ((:url . "http://elpa.gnu.org/packages/notes-mode.html"))])
+ (ntlm .
+       [(2 0 0)
+	nil "NTLM (NT LanManager) authentication support" single
+	((:url . "http://elpa.gnu.org/packages/ntlm.html")
+	 (:keywords "ntlm" "sasl" "comm"))])
  (num3-mode .
 	    [(1 2)
 	     nil "highlight groups of digits in long numbers" single
@@ -611,6 +616,13 @@
 	    nil "Major mode for editing (Standard) ML" single
 	    ((:url . "http://elpa.gnu.org/packages/sml-mode.html")
 	     (:keywords "sml"))])
+ (soap-client .
+	      [(3 0 2)
+	       ((cl-lib
+		 (0 5)))
+	       "Access SOAP web services" tar
+	       ((:keywords "soap" "web-services" "comm" "hypermedia")
+		(:url . "http://elpa.gnu.org/packages/soap-client.html"))])
  (sokoban .
 	  [(1 4)
 	   nil "Implementation of Sokoban for Emacs." tar
@@ -689,6 +701,11 @@
 	nil "Quickly generate linear ranges in Emacs" tar
 	((:keywords "convenience")
 	 (:url . "https://github.com/abo-abo/tiny"))])
+ (transcribe .
+	     [(0 0 1)
+	      nil "package for audio transcriptions" single
+	      ((:url . "http://elpa.gnu.org/packages/transcribe.html")
+	       (:keywords))])
  (trie .
        [(0 2 6)
 	((tNFA
