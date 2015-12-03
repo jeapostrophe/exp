@@ -26,7 +26,7 @@ hash -d blogs=~scm/blogs
 
 hash -d courses=~work/courses
 hash -d 305=~courses/2015/fall/305
-hash -d 305=~courses/2016/spring/308
+hash -d 308=~courses/2016/spring/308
 
 export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 
