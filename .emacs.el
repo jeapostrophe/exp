@@ -965,7 +965,8 @@ given a prefix arg."
 (defun je/org-filter (n)
   "Change filter"
   (interactive "sFilter: ")
-  (je/org-agenda/filter-ctxt-toggle n))
+  (progn (je/org-agenda/filter-ctxt-toggle n)
+         (je/todo-list)))
 
 (defun je/filter-out (l o)
   (cond
