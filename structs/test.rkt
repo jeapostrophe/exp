@@ -10,7 +10,7 @@
          racket/contract/region
          (prefix-in c: racket/contract/base))
 
-(define N 10000 #;18000000)
+(define N 18000000)
 (define-syntax-rule (test id make get-x get-y)
   (module+ test
     (test-it id
@@ -113,6 +113,7 @@ typedef struct { double x; double y; } thestruct;
 double get_x ( thestruct *u ) { return u->x; }
 double get_y ( thestruct *u ) { return u->y; }
 })
+
 (define-runtime-path C-LIB-SOURCE-PATH "lib.c")
 (define-runtime-path C-LIB-SO-PATH "lib.so")
 (display-to-file C-LIB-SOURCE C-LIB-SOURCE-PATH #:exists 'replace)
@@ -124,7 +125,25 @@ double get_y ( thestruct *u ) { return u->y; }
 (test 'c make-cs c-x c-y)
 
 ;; Call out to C for whole test
-;; XXX
+(define C-TEST-SOURCE
+  @~a{
+@C-LIB-SOURCE
+double go () {
+ thestruct it = { .x = 1.0, .y = 2.0 };
+ double sum = 0.0;
+ for ( int i = 0; i < @N; i++ ) {
+   sum = sum + get_x(&it) + get_y(&it);
+ }
+ return sum;
+}
+})
+(define-runtime-path C-TEST-SOURCE-PATH "test.c")
+(define-runtime-path C-TEST-SO-PATH "test.so")
+(display-to-file C-TEST-SOURCE C-TEST-SOURCE-PATH #:exists 'replace)
+(system @~a{cc -O3 @C-TEST-SOURCE-PATH -shared -o @C-TEST-SO-PATH})
+(define the-test (ffi-lib C-TEST-SO-PATH))
+(define the-test-go (get-ffi-obj 'go the-test (_fun -> _double)))
+(test-it 'c-test (λ () (the-test-go)))
 
 ;;;;;;;;;;
 (module+ test
