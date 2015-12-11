@@ -1,4 +1,4 @@
-With N = 18000000,
+With N = 18000000 (and syntax for the test, so the calls get inlined)
 
 c-test              : 32
 unsafe-vector*      : 61
@@ -15,3 +15,19 @@ cstruct             : 1059
 c                   : 5259
 struct-w/-contract  : 9626
 
+With N = 18000000 (and not syntax for the test)
+
+c-test              : 32
+unsafe-vector*      : 269
+unsafe-struct*      : 280
+unsafe-vector       : 285
+unsafe-struct       : 293
+vector              : 298
+unsafe-flvector     : 346
+flvector            : 361
+ptr                 : 419
+prefab-struct       : 489
+struct              : 499
+cstruct             : 971
+c                   : 4931
+struct-w/-contract  : 9912

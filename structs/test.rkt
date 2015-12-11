@@ -11,16 +11,18 @@
          (prefix-in c: racket/contract/base))
 
 (define N 18000000)
+;; NOTE: Change this to `define` for the second kind of test
+(define-syntax-rule (test-fun make get-x get-y)
+  (λ ()
+    (define it (make 1.0 2.0))
+    (for/fold ([sum 0.0])
+              ([i (in-range N)])
+      (fl+ sum
+           (fl+ (get-x it)
+                (get-y it))))))
 (define-syntax-rule (test id make get-x get-y)
   (module+ test
-    (test-it id
-             (λ ()
-               (define it (make 1.0 2.0))
-               (for/fold ([sum 0.0])
-                         ([i (in-range N)])
-                 (fl+ sum
-                      (fl+ (get-x it)
-                           (get-y it))))))))
+    (test-it id (test-fun make get-x get-y))))
 (define R '())
 (define (test-it id fun)
   (define-values (res cpu real gc)
