@@ -1,4 +1,32 @@
-#lang racket/base
+#lang at-exp racket/base
+(require racket/performance-hint
+         racket/format
+         racket/unsafe/ops
+         racket/flonum
+         racket/runtime-path
+         racket/file
+         racket/system
+         ffi/unsafe
+         racket/contract/region
+         (prefix-in c: racket/contract/base))
+
+(define N 10000 #;18000000)
+(define-syntax-rule (test id make get-x get-y)
+  (module+ test
+    (test-it id
+             (λ ()
+               (define it (make 1.0 2.0))
+               (for/fold ([sum 0.0])
+                         ([i (in-range N)])
+                 (fl+ sum
+                      (fl+ (get-x it)
+                           (get-y it))))))))
+(define R '())
+(define (test-it id fun)
+  (define-values (res cpu real gc)
+    (time-apply fun '()))
+  (set! R (cons (cons id cpu) R))
+  (apply values res))
 
 ;; Prefab struct
 (struct ps (x y) #:prefab)
@@ -7,6 +35,14 @@
 ;; Struct
 (struct s (x y))
 (test 'struct s s-x s-y)
+
+;; Struct w/ contract
+(with-contract contract-boundary
+  ([sc-x (c:-> s? flonum?)]
+   [sc-y (c:-> s? flonum?)])
+  (define sc-x s-x)
+  (define sc-y s-y))
+(test 'struct-w/-contract s sc-x sc-y)
 
 ;; Unsafe struct
 (begin-encourage-inline
@@ -53,8 +89,45 @@
 (test 'unsafe-flvector fv ufv-x ufv-y)
 
 ;; Cstruct
+(define-cstruct _cs
+  ([x _double]
+   [y _double]))
+(test 'cstruct make-cs cs-x cs-y)
+
 ;; Unsafe cstruct
+;; XXX This doesn't exist
+
 ;; Ptr
+(begin-encourage-inline
+  (define (ptr-x p) (ptr-ref p _double 0))
+  (define (ptr-y p) (ptr-ref p _double 1)))
+(test 'ptr make-cs ptr-x ptr-y)
+
 ;; Unsafe ptr
+;; XXX This doesn't exist
+
 ;; Call out to C individually
+(define C-LIB-SOURCE
+  @~a{
+typedef struct { double x; double y; } thestruct;
+double get_x ( thestruct *u ) { return u->x; }
+double get_y ( thestruct *u ) { return u->y; }
+})
+(define-runtime-path C-LIB-SOURCE-PATH "lib.c")
+(define-runtime-path C-LIB-SO-PATH "lib.so")
+(display-to-file C-LIB-SOURCE C-LIB-SOURCE-PATH #:exists 'replace)
+(system @~a{cc @C-LIB-SOURCE-PATH -shared -o @C-LIB-SO-PATH})
+(define the-lib (ffi-lib C-LIB-SO-PATH))
+(begin-encourage-inline
+  (define c-x (get-ffi-obj 'get_x the-lib (_fun _cs-pointer -> _double)))
+  (define c-y (get-ffi-obj 'get_y the-lib (_fun _cs-pointer -> _double))))
+(test 'c make-cs c-x c-y)
+
 ;; Call out to C for whole test
+;; XXX
+
+;;;;;;;;;;
+(module+ test
+  (for ([id*cpu (in-list (sort R <= #:key cdr))])
+    (displayln (~a (~a #:min-width 20 (car id*cpu)) ": "
+                   (cdr id*cpu)))))
