@@ -673,7 +673,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/svg-clock.html")
 	      (:keywords "demo" "svg" "clock"))])
  (swiper .
-	 [(0 5 1)
+	 [(0 7 0)
 	  ((emacs
 	    (24 1)))
 	  "Isearch with an overview. Oh, man!" tar
@@ -711,8 +711,8 @@
 	((:keywords "convenience")
 	 (:url . "https://github.com/abo-abo/tiny"))])
  (transcribe .
-	     [(0 5 0)
-	      nil "package for audio transcriptions" single
+	     [(1 0 1)
+	      nil "Package for audio transcriptions" single
 	      ((:url . "http://elpa.gnu.org/packages/transcribe.html")
 	       (:keywords))])
  (trie .
