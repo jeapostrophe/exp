@@ -374,6 +374,8 @@ given a prefix arg."
 (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "s-f") 'isearch-forward)
 (global-set-key (kbd "s-g") 'isearch-repeat-forward)
+
+
 (global-set-key (kbd "s-'") 'next-buffer)
 (global-set-key (kbd "s-;") 'previous-buffer)
 

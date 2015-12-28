@@ -100,7 +100,7 @@ bindkey ^n screen
 
 screen -t irc forever irssi
 screen -t y forever y
-screen zsh_dir ~github/memorize/local
+screen -t memorize zsh_dir ~github/memorize/local
 screen zsh_dir ~courses
 screen zsh_dir ~305
 screen zsh_dir ~308
