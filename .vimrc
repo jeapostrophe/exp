@@ -1,3 +1,8 @@
+call plug#begin()
+Plug 'tpope/vim-sensible'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+call plug#end()
+
 set backupskip=/tmp/*,/private/tmp/*
 set backspace=indent,eol,start
 nnoremap <Esc>A <up>

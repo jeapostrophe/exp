@@ -159,3 +159,5 @@ alias e="mathomatic -e --"
 
 export REPORTTIME=10
 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
