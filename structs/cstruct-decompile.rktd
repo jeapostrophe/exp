@@ -100,18 +100,18 @@
      bindings
      #hasheq((0
               .
-              #hasheq((y-offset6.0
+              #hasheq((unsafe-set-cs-y!4.0
                        .
                        (#%decode-syntax
                         {wrap
-                         y-offset6
+                         unsafe-set-cs-y!4
                          #1#
                          #s((wrap zo 0)
                             ()
                             (#11=#s((scope #(2 3 4) zo 0)
-                                    13
+                                    11
                                     macro
-                                    ((y-offset6
+                                    ((unsafe-set-cs-y!4
                                       (#11#
                                        .
                                        #12=(#13=#s((scope #(2 3 4) zo 0)
@@ -1118,25 +1118,25 @@
                                                    #f)
                                             #4#))
                                       #s((module-binding binding 0 zo 0)
-                                         (insp0 #0# . y-offset6.0))))
+                                         (insp0 #0# . unsafe-set-cs-y!4.0))))
                                     ()
                                     #f)
                              .
                              #25=(#13#))
                             ((#3# 0)))}))
-                      (cs
+                      (unsafe-cs-y
                        .
                        (#%decode-syntax
                         {wrap
-                         cs
-                         #26=#(struct:srcloc
-                               #<path:/Users/jay/Dev/scm/github.jeapostrophe/exp/structs/cstruct.rkt>
-                               6
-                               17
-                               107
-                               3)
+                         unsafe-cs-y
+                         #(struct:srcloc
+                           #<path:/Users/jay/Dev/scm/github.jeapostrophe/exp/structs/cstruct.rkt>
+                           24
+                           10
+                           549
+                           11)
                          #1#
-                         #27=#s((wrap zo 0)
+                         #26=#s((wrap zo 0)
                                 (#s((module-shift zo 0)
                                     {#%modidx #f #f}
                                     #0#
@@ -1144,21 +1144,33 @@
                                     #f))
                                 #2#
                                 ((#3# 0)))}))
-                      (wrap-cs-type
+                      (cs
                        .
-                       (#%decode-syntax {wrap wrap-cs-type #26# #1# #27#}))
+                       (#%decode-syntax
+                        {wrap
+                         cs
+                         #27=#(struct:srcloc
+                               #<path:/Users/jay/Dev/scm/github.jeapostrophe/exp/structs/cstruct.rkt>
+                               6
+                               17
+                               107
+                               3)
+                         #1#
+                         #26#}))
                       (cs->list
                        .
-                       (#%decode-syntax {wrap cs->list #26# #1# #27#}))
+                       (#%decode-syntax {wrap cs->list #27# #1# #26#}))
                       (cs->list*
                        .
-                       (#%decode-syntax {wrap cs->list* #26# #1# #27#}))
-                      (cs-tag . (#%decode-syntax {wrap cs-tag #26# #1# #27#}))
-                      (cs-x . (#%decode-syntax {wrap cs-x #26# #1# #27#}))
+                       (#%decode-syntax {wrap cs->list* #27# #1# #26#}))
+                      (wrap-cs-type
+                       .
+                       (#%decode-syntax {wrap wrap-cs-type #27# #1# #26#}))
+                      (cs-tag . (#%decode-syntax {wrap cs-tag #27# #1# #26#}))
+                      (cs-x . (#%decode-syntax {wrap cs-x #27# #1# #26#}))
                       (cs-x-type
                        .
-                       (#%decode-syntax {wrap cs-x-type #26# #1# #27#}))
-                      (cs-y . (#%decode-syntax {wrap cs-y #26# #1# #27#}))
+                       (#%decode-syntax {wrap cs-x-type #27# #1# #26#}))
                       (^TYPE-tag.0
                        .
                        (#%decode-syntax
@@ -1166,9 +1178,9 @@
                          ^TYPE-tag
                          #28=#(struct:srcloc
                                ".../ffi/unsafe.rkt"
-                               1552
+                               1553
                                35
-                               69050
+                               69135
                                6)
                          #1#
                          #29=#s((wrap zo 0)
@@ -1180,80 +1192,121 @@
                                     #f))
                                 (#13# . #17#)
                                 ((#3# 0) (#21# 0)))}))
-                      (cs-y-type
-                       .
-                       (#%decode-syntax {wrap cs-y-type #26# #1# #27#}))
+                      (cs-y . (#%decode-syntax {wrap cs-y #27# #1# #26#}))
                       (^TYPE?.0
                        .
                        (#%decode-syntax {wrap ^TYPE? #28# #1# #29#}))
-                      (cs? . (#%decode-syntax {wrap cs? #26# #1# #27#}))
                       (_^TYPE.0
                        .
                        (#%decode-syntax {wrap _^TYPE #28# #1# #29#}))
-                      (list*->cs
+                      (cs-y-type
                        .
-                       (#%decode-syntax {wrap list*->cs #26# #1# #27#}))
+                       (#%decode-syntax {wrap cs-y-type #27# #1# #26#}))
                       (_^TYPE/null.0
                        .
                        (#%decode-syntax {wrap _^TYPE/null #28# #1# #29#}))
+                      (cs? . (#%decode-syntax {wrap cs? #27# #1# #26#}))
                       (alignment-v.0
                        .
                        (#%decode-syntax
                         {wrap
                          alignment-v
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1559 21 69437 11)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1560 21 69522 11)
                          #1#
                          #29#}))
-                      (list->cs
+                      (list*->cs
                        .
-                       (#%decode-syntax {wrap list->cs #26# #1# #27#}))
+                       (#%decode-syntax {wrap list*->cs #27# #1# #26#}))
                       (all-offsets.0
                        .
                        (#%decode-syntax
                         {wrap
                          all-offsets
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1574 39 70273 11)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1575 39 70358 11)
                          #1#
                          #29#}))
-                      (make-cs
-                       .
-                       (#%decode-syntax {wrap make-cs #26# #1# #27#}))
                       (all-tags.0
                        .
                        (#%decode-syntax
                         {wrap
                          all-tags
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1562 21 69632 8)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1563 21 69717 8)
                          #1#
                          #29#}))
+                      (list->cs
+                       .
+                       (#%decode-syntax {wrap list->cs #27# #1# #26#}))
                       (all-types.0
                        .
                        (#%decode-syntax
                         {wrap
                          all-types
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1574 29 70263 9)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1575 29 70348 9)
                          #1#
                          #29#}))
+                      (make-cs
+                       .
+                       (#%decode-syntax {wrap make-cs #27# #1# #26#}))
+                      (cs-x-offset5.0
+                       .
+                       (#%decode-syntax
+                        {wrap
+                         cs-x-offset5
+                         #1#
+                         #s((wrap zo 0)
+                            ()
+                            (#30=#s((scope #(2 3 4) zo 0)
+                                    12
+                                    macro
+                                    ((cs-x-offset5
+                                      (#30# . #12#)
+                                      #s((module-binding binding 0 zo 0)
+                                         (insp0 #0# . cs-x-offset5.0))))
+                                    ()
+                                    #f)
+                             .
+                             #25#)
+                            ((#3# 0)))}))
+                      (cs-y-offset6.0
+                       .
+                       (#%decode-syntax
+                        {wrap
+                         cs-y-offset6
+                         #1#
+                         #s((wrap zo 0)
+                            ()
+                            (#31=#s((scope #(2 3 4) zo 0)
+                                    13
+                                    macro
+                                    ((cs-y-offset6
+                                      (#31# . #12#)
+                                      #s((module-binding binding 0 zo 0)
+                                         (insp0 #0# . cs-y-offset6.0))))
+                                    ()
+                                    #f)
+                             .
+                             #25#)
+                            ((#3# 0)))}))
                       (set-cs-x!
                        .
-                       (#%decode-syntax {wrap set-cs-x! #26# #1# #27#}))
+                       (#%decode-syntax {wrap set-cs-x! #27# #1# #26#}))
                       (list*->super.0
                        .
                        (#%decode-syntax
                         {wrap
                          list*->super
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1548 56 68804 12)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1549 56 68889 12)
                          #1#
                          #29#}))
                       (set-cs-y!
                        .
-                       (#%decode-syntax {wrap set-cs-y! #26# #1# #27#}))
+                       (#%decode-syntax {wrap set-cs-y! #27# #1# #26#}))
                       (offsets.0
                        .
                        (#%decode-syntax
                         {wrap
                          offsets
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1560 21 69480 7)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1561 21 69565 7)
                          #1#
                          #29#}))
                       (struct:cpointer:super.0
@@ -1261,23 +1314,7 @@
                        (#%decode-syntax
                         {wrap
                          struct:cpointer:super
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1549 43 68859 21)
-                         #1#
-                         #29#}))
-                      (super->list*.0
-                       .
-                       (#%decode-syntax
-                        {wrap
-                         super->list*
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1548 43 68791 12)
-                         #1#
-                         #29#}))
-                      (super-offsets.0
-                       .
-                       (#%decode-syntax
-                        {wrap
-                         super-offsets
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1547 66 68735 13)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1550 43 68944 21)
                          #1#
                          #29#}))
                       (N
@@ -1292,13 +1329,29 @@
                            152
                            1)
                          #1#
-                         #27#}))
+                         #26#}))
+                      (super->list*.0
+                       .
+                       (#%decode-syntax
+                        {wrap
+                         super->list*
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1549 43 68876 12)
+                         #1#
+                         #29#}))
+                      (super-offsets.0
+                       .
+                       (#%decode-syntax
+                        {wrap
+                         super-offsets
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1548 66 68820 13)
+                         #1#
+                         #29#}))
                       (super-pointer.0
                        .
                        (#%decode-syntax
                         {wrap
                          super-pointer
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1547 29 68698 13)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1548 29 68783 13)
                          #1#
                          #29#}))
                       (super-tags.0
@@ -1306,7 +1359,7 @@
                        (#%decode-syntax
                         {wrap
                          super-tags
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1547 43 68712 10)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1548 43 68797 10)
                          #1#
                          #29#}))
                       (super-types.0
@@ -1314,7 +1367,7 @@
                        (#%decode-syntax
                         {wrap
                          super-types
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1547 54 68723 11)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1548 54 68808 11)
                          #1#
                          #29#}))
                       (super-wrap-type-type.0
@@ -1322,9 +1375,10 @@
                        (#%decode-syntax
                         {wrap
                          super-wrap-type-type
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1549 65 68881 20)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1550 65 68966 20)
                          #1#
                          #29#}))
+                      (_cs . (#%decode-syntax {wrap _cs #27# #1# #26#}))
                       (test-fun
                        .
                        (#%decode-syntax
@@ -1337,15 +1391,18 @@
                            171
                            8)
                          #1#
-                         #27#}))
+                         #26#}))
                       (types.0
                        .
                        (#%decode-syntax
                         {wrap
                          types
-                         #(struct:srcloc ".../ffi/unsafe.rkt" 1558 21 69393 5)
+                         #(struct:srcloc ".../ffi/unsafe.rkt" 1559 21 69478 5)
                          #1#
                          #29#}))
+                      (_cs-pointer
+                       .
+                       (#%decode-syntax {wrap _cs-pointer #27# #1# #26#}))
                       (test-unsafe-fun
                        .
                        (#%decode-syntax
@@ -1358,7 +1415,7 @@
                            605
                            15)
                          #1#
-                         #27#}))
+                         #26#}))
                       (unsafe-cs-x1.0
                        .
                        (#%decode-syntax
@@ -1367,11 +1424,11 @@
                          #1#
                          #s((wrap zo 0)
                             ()
-                            (#30=#s((scope #(2 3 4) zo 0)
+                            (#32=#s((scope #(2 3 4) zo 0)
                                     8
                                     macro
                                     ((unsafe-cs-x1
-                                      (#30# . #12#)
+                                      (#32# . #12#)
                                       #s((module-binding binding 0 zo 0)
                                          (insp0 #0# . unsafe-cs-x1.0))))
                                     ()
@@ -1379,7 +1436,9 @@
                              .
                              #25#)
                             ((#3# 0)))}))
-                      (_cs . (#%decode-syntax {wrap _cs #26# #1# #27#}))
+                      (_cs-pointer/null
+                       .
+                       (#%decode-syntax {wrap _cs-pointer/null #27# #1# #26#}))
                       (unsafe-cs-y2.0
                        .
                        (#%decode-syntax
@@ -1388,11 +1447,11 @@
                          #1#
                          #s((wrap zo 0)
                             ()
-                            (#31=#s((scope #(2 3 4) zo 0)
+                            (#33=#s((scope #(2 3 4) zo 0)
                                     9
                                     macro
                                     ((unsafe-cs-y2
-                                      (#31# . #12#)
+                                      (#33# . #12#)
                                       #s((module-binding binding 0 zo 0)
                                          (insp0 #0# . unsafe-cs-y2.0))))
                                     ()
@@ -1400,9 +1459,6 @@
                              .
                              #25#)
                             ((#3# 0)))}))
-                      (_cs-pointer
-                       .
-                       (#%decode-syntax {wrap _cs-pointer #26# #1# #27#}))
                       (unsafe-cs-x
                        .
                        (#%decode-syntax
@@ -1415,7 +1471,7 @@
                            493
                            11)
                          #1#
-                         #27#}))
+                         #26#}))
                       (unsafe-set-cs-x!3.0
                        .
                        (#%decode-syntax
@@ -1424,69 +1480,13 @@
                          #1#
                          #s((wrap zo 0)
                             ()
-                            (#32=#s((scope #(2 3 4) zo 0)
+                            (#34=#s((scope #(2 3 4) zo 0)
                                     10
                                     macro
                                     ((unsafe-set-cs-x!3
-                                      (#32# . #12#)
-                                      #s((module-binding binding 0 zo 0)
-                                         (insp0 #0# . unsafe-set-cs-x!3.0))))
-                                    ()
-                                    #f)
-                             .
-                             #25#)
-                            ((#3# 0)))}))
-                      (_cs-pointer/null
-                       .
-                       (#%decode-syntax {wrap _cs-pointer/null #26# #1# #27#}))
-                      (unsafe-set-cs-y!4.0
-                       .
-                       (#%decode-syntax
-                        {wrap
-                         unsafe-set-cs-y!4
-                         #1#
-                         #s((wrap zo 0)
-                            ()
-                            (#33=#s((scope #(2 3 4) zo 0)
-                                    11
-                                    macro
-                                    ((unsafe-set-cs-y!4
-                                      (#33# . #12#)
-                                      #s((module-binding binding 0 zo 0)
-                                         (insp0 #0# . unsafe-set-cs-y!4.0))))
-                                    ()
-                                    #f)
-                             .
-                             #25#)
-                            ((#3# 0)))}))
-                      (unsafe-cs-y
-                       .
-                       (#%decode-syntax
-                        {wrap
-                         unsafe-cs-y
-                         #(struct:srcloc
-                           #<path:/Users/jay/Dev/scm/github.jeapostrophe/exp/structs/cstruct.rkt>
-                           24
-                           10
-                           549
-                           11)
-                         #1#
-                         #27#}))
-                      (x-offset5.0
-                       .
-                       (#%decode-syntax
-                        {wrap
-                         x-offset5
-                         #1#
-                         #s((wrap zo 0)
-                            ()
-                            (#34=#s((scope #(2 3 4) zo 0)
-                                    12
-                                    macro
-                                    ((x-offset5
                                       (#34# . #12#)
                                       #s((module-binding binding 0 zo 0)
-                                         (insp0 #0# . x-offset5.0))))
+                                         (insp0 #0# . unsafe-set-cs-x!3.0))))
                                     ()
                                     #f)
                              .
@@ -1513,15 +1513,15 @@
        (cs)
        (let ()
          (quote inspector insp0)
-         (define stx31 (#%decode-syntax {wrap make-cs #26# #1# #27#}))
-         (define stx32 (#%decode-syntax {wrap cs? #26# #1# #27#}))
-         (define stx33 (#%decode-syntax {wrap cs-x #26# #1# #27#}))
-         (define stx34 (#%decode-syntax {wrap cs-y #26# #1# #27#}))
-         (define stx35 (#%decode-syntax {wrap set-cs-x! #26# #1# #27#}))
-         (define stx36 (#%decode-syntax {wrap set-cs-y! #26# #1# #27#}))
+         (define stx31 (#%decode-syntax {wrap make-cs #27# #1# #26#}))
+         (define stx32 (#%decode-syntax {wrap cs? #27# #1# #26#}))
+         (define stx33 (#%decode-syntax {wrap cs-x #27# #1# #26#}))
+         (define stx34 (#%decode-syntax {wrap cs-y #27# #1# #26#}))
+         (define stx35 (#%decode-syntax {wrap set-cs-x! #27# #1# #26#}))
+         (define stx36 (#%decode-syntax {wrap set-cs-y! #27# #1# #26#}))
          (|_make-struct-info@(lib "racket/private/struct-info.rkt")|
           (lambda ()
-            '...s/ffi/unsafe.rkt:1540:15
+            '...s/ffi/unsafe.rkt:1541:15
             '(flags: preserves-marks single-result)
             '(captures:
               (val/ref #%globals)
@@ -1547,9 +1547,9 @@
      (|_cstruct-info:f@(lib "ffi/unsafe.rkt")|
       _double
       (#%closed
-       ...s/ffi/unsafe.rkt:1494:2723
+       ...s/ffi/unsafe.rkt:1495:2723
        (lambda ()
-         '...s/ffi/unsafe.rkt:1494:27
+         '...s/ffi/unsafe.rkt:1495:27
          (values '#f '() '#f '#f '#f '#f '#f values)))))
     (define-values (_^TYPE-tag.0) (gensym '^TYPE))
     (define-values
@@ -1600,7 +1600,7 @@
     (define-values
      (_offsets.0)
      (|_compute-offsets:p@(lib "ffi/unsafe.rkt")| _types.0 '#f (list '#f '#f)))
-    (define-values (_x-offset5.0 _y-offset6.0) (apply values _offsets.0))
+    (define-values (_cs-x-offset5.0 _cs-y-offset6.0) (apply values _offsets.0))
     (define-values (_all-tags.0) (cons _^TYPE-tag.0 (#%checked _super-tags.0)))
     (define-values
      (__cs)
@@ -1614,7 +1614,7 @@
              (ctype-scheme->c (#%sfs-clear local102))
              (begin0
                (lambda (arg0-112)
-                 '...s/ffi/unsafe.rkt:1571:29
+                 '...s/ffi/unsafe.rkt:1572:29
                  '(flags: preserves-marks single-result)
                  '(captures:
                    (val/ref local105)
@@ -1636,17 +1636,17 @@
        (lambda (arg0-118)
          'unsafe-cs-x1
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_x-offset5.0))
-         (ptr-ref arg0-118 _double 'abs (#%checked _x-offset5.0)))
+         '(captures: (val/ref #%modvars) (_cs-x-offset5.0))
+         (ptr-ref arg0-118 _double 'abs (#%checked _cs-x-offset5.0)))
        (lambda (arg0-123)
          'unsafe-cs-x1
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_x-offset5.0))
+         '(captures: (val/ref #%modvars) (_cs-x-offset5.0))
          (ptr-ref
           (#%sfs-clear arg0-123)
           _double
           'abs
-          (#%checked _x-offset5.0)))))
+          (#%checked _cs-x-offset5.0)))))
     (define-values
      (_cs-x)
      (lambda (arg0-128)
@@ -1654,7 +1654,9 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_^TYPE-tag.0 |_memq@(lib "racket/private/member.rkt")| _x-offset5.0))
+         (_^TYPE-tag.0
+          |_memq@(lib "racket/private/member.rkt")|
+          _cs-x-offset5.0))
        (begin
          (if (if (cpointer? arg0-128)
                (let ((local130 (cpointer-tag arg0-128)))
@@ -1672,7 +1674,7 @@
           (#%sfs-clear arg0-128)
           _double
           'abs
-          (#%checked _x-offset5.0)))))
+          (#%checked _cs-x-offset5.0)))))
     (define-values
      (_unsafe-cs-y2.0)
      (begin
@@ -1680,13 +1682,13 @@
        (lambda (arg0-149)
          'unsafe-cs-y2
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_y-offset6.0))
-         (ptr-ref arg0-149 _double 'abs _y-offset6.0))
+         '(captures: (val/ref #%modvars) (_cs-y-offset6.0))
+         (ptr-ref arg0-149 _double 'abs _cs-y-offset6.0))
        (lambda (arg0-154)
          'unsafe-cs-y2
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_y-offset6.0))
-         (ptr-ref (#%sfs-clear arg0-154) _double 'abs _y-offset6.0))))
+         '(captures: (val/ref #%modvars) (_cs-y-offset6.0))
+         (ptr-ref (#%sfs-clear arg0-154) _double 'abs _cs-y-offset6.0))))
     (define-values
      (_cs-y)
      (lambda (arg0-159)
@@ -1694,7 +1696,9 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_^TYPE-tag.0 |_memq@(lib "racket/private/member.rkt")| _y-offset6.0))
+         (_^TYPE-tag.0
+          |_memq@(lib "racket/private/member.rkt")|
+          _cs-y-offset6.0))
        (begin
          (if (if (cpointer? arg0-159)
                (let ((local161 (cpointer-tag arg0-159)))
@@ -1708,7 +1712,7 @@
                '#f)
            '#<void>
            (raise-argument-error 'cs-y '"cs?" arg0-159))
-         (ptr-ref (#%sfs-clear arg0-159) _double 'abs _y-offset6.0))))
+         (ptr-ref (#%sfs-clear arg0-159) _double 'abs _cs-y-offset6.0))))
     (define-values
      (_unsafe-set-cs-x!3.0)
      (begin
@@ -1716,17 +1720,17 @@
        (lambda (arg0-180 arg1-181)
          'unsafe-set-cs-x!3
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_x-offset5.0))
-         (ptr-set! arg0-180 _double 'abs (#%checked _x-offset5.0) arg1-181))
+         '(captures: (val/ref #%modvars) (_cs-x-offset5.0))
+         (ptr-set! arg0-180 _double 'abs (#%checked _cs-x-offset5.0) arg1-181))
        (lambda (arg0-187 arg1-188)
          'unsafe-set-cs-x!3
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_x-offset5.0))
+         '(captures: (val/ref #%modvars) (_cs-x-offset5.0))
          (ptr-set!
           (#%sfs-clear arg0-187)
           _double
           'abs
-          (#%checked _x-offset5.0)
+          (#%checked _cs-x-offset5.0)
           (#%sfs-clear arg1-188)))))
     (define-values
      (_set-cs-x!)
@@ -1735,7 +1739,9 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_^TYPE-tag.0 |_memq@(lib "racket/private/member.rkt")| _x-offset5.0))
+         (_^TYPE-tag.0
+          |_memq@(lib "racket/private/member.rkt")|
+          _cs-x-offset5.0))
        (begin
          (if (if (cpointer? arg0-194)
                (let ((local197 (cpointer-tag arg0-194)))
@@ -1753,7 +1759,7 @@
           (#%sfs-clear arg0-194)
           _double
           'abs
-          (#%checked _x-offset5.0)
+          (#%checked _cs-x-offset5.0)
           (#%sfs-clear arg1-195)))))
     (define-values
      (_unsafe-set-cs-y!4.0)
@@ -1762,17 +1768,17 @@
        (lambda (arg0-219 arg1-220)
          'unsafe-set-cs-y!4
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_y-offset6.0))
-         (ptr-set! arg0-219 _double 'abs _y-offset6.0 arg1-220))
+         '(captures: (val/ref #%modvars) (_cs-y-offset6.0))
+         (ptr-set! arg0-219 _double 'abs _cs-y-offset6.0 arg1-220))
        (lambda (arg0-226 arg1-227)
          'unsafe-set-cs-y!4
          '(flags: preserves-marks single-result)
-         '(captures: (val/ref #%modvars) (_y-offset6.0))
+         '(captures: (val/ref #%modvars) (_cs-y-offset6.0))
          (ptr-set!
           (#%sfs-clear arg0-226)
           _double
           'abs
-          _y-offset6.0
+          _cs-y-offset6.0
           (#%sfs-clear arg1-227)))))
     (define-values
      (_set-cs-y!)
@@ -1781,7 +1787,9 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_^TYPE-tag.0 |_memq@(lib "racket/private/member.rkt")| _y-offset6.0))
+         (_^TYPE-tag.0
+          |_memq@(lib "racket/private/member.rkt")|
+          _cs-y-offset6.0))
        (begin
          (if (if (cpointer? arg0-233)
                (let ((local236 (cpointer-tag arg0-233)))
@@ -1799,7 +1807,7 @@
           (#%sfs-clear arg0-233)
           _double
           'abs
-          _y-offset6.0
+          _cs-y-offset6.0
           (#%sfs-clear arg1-234)))))
     (define-values
      (_make-cs)
@@ -1808,7 +1816,7 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_x-offset5.0 _y-offset6.0 _all-tags.0 __cs))
+         (_cs-x-offset5.0 _cs-y-offset6.0 _all-tags.0 __cs))
        (let ((local260 (malloc __cs 'atomic)))
          (begin
            (set-cpointer-tag! local260 _all-tags.0)
@@ -1816,9 +1824,14 @@
             local260
             _double
             'abs
-            (#%checked _x-offset5.0)
+            (#%checked _cs-x-offset5.0)
             (#%sfs-clear arg0-258))
-           (ptr-set! local260 _double 'abs _y-offset6.0 (#%sfs-clear arg1-259))
+           (ptr-set!
+            local260
+            _double
+            'abs
+            _cs-y-offset6.0
+            (#%sfs-clear arg1-259))
            local260))))
     (define-values
      (_list->cs)
@@ -1861,9 +1874,9 @@
            (let ((local299 (malloc __cs 'atomic)))
              (begin
                (set-cpointer-tag! local299 _all-tags.0)
-               (let ((...s/ffi/unsafe.rkt:1625:20304
+               (let ((...s/ffi/unsafe.rkt:1626:20304
                       (lambda (arg0-305 arg1-306 arg2-307)
-                        '...s/ffi/unsafe.rkt:1625:20
+                        '...s/ffi/unsafe.rkt:1626:20
                         '(flags: preserves-marks single-result)
                         '(captures:
                           (val/ref local299)
@@ -1889,9 +1902,9 @@
                               (|_cstruct-info:f@(lib "ffi/unsafe.rkt")|
                                arg0-305
                                (#%closed
-                                ...s/ffi/unsafe.rkt:1630:2917
+                                ...s/ffi/unsafe.rkt:1631:2917
                                 (lambda ()
-                                  '...s/ffi/unsafe.rkt:1630:29
+                                  '...s/ffi/unsafe.rkt:1631:29
                                   (values
                                    '#f
                                    '()
@@ -1921,7 +1934,7 @@
                                    (#%sfs-clear localv313)
                                    (#%sfs-clear arg2-307))))))))))
                  (for-each
-                  (#%sfs-clear ...s/ffi/unsafe.rkt:1625:20304)
+                  (#%sfs-clear ...s/ffi/unsafe.rkt:1626:20304)
                   (#%checked _all-types.0)
                   _all-offsets.0
                   (#%sfs-clear arg0-281)))
@@ -1956,9 +1969,9 @@
                '#f)
            '#<void>
            (raise-argument-error 'TYPE-list '"cs?" arg0-343))
-         (let ((...s/ffi/unsafe.rkt:1640:19360
+         (let ((...s/ffi/unsafe.rkt:1641:19360
                 (lambda (arg0-361 arg1-362)
-                  '...s/ffi/unsafe.rkt:1640:19
+                  '...s/ffi/unsafe.rkt:1641:19
                   '(flags: preserves-marks single-result)
                   '(captures: (val/ref arg0-343))
                   (ptr-ref
@@ -2014,7 +2027,7 @@
                (begin
                  (#%sfs-clear arg0-343)
                  (map
-                  (#%sfs-clear ...s/ffi/unsafe.rkt:1640:19360)
+                  (#%sfs-clear ...s/ffi/unsafe.rkt:1641:19360)
                   (#%sfs-clear local367)
                   _all-offsets.0))))))))
     (define-values
@@ -2053,9 +2066,9 @@
                     (|_cstruct-info:f@(lib "ffi/unsafe.rkt")|
                      (#%sfs-clear local430)
                      (#%closed
-                      ...s/ffi/unsafe.rkt:1651:2819
+                      ...s/ffi/unsafe.rkt:1652:2819
                       (lambda ()
-                        '...s/ffi/unsafe.rkt:1651:28
+                        '...s/ffi/unsafe.rkt:1652:28
                         (values '#f '() '#f '#f '#f '#f '#f values)))))
                   (begin
                     (#%sfs-clear localv440)
@@ -2098,9 +2111,9 @@
                            (|_cstruct-info:f@(lib "ffi/unsafe.rkt")|
                             (#%sfs-clear local464)
                             (#%closed
-                             ...s/ffi/unsafe.rkt:1651:2820
+                             ...s/ffi/unsafe.rkt:1652:2820
                              (lambda ()
-                               '...s/ffi/unsafe.rkt:1651:28
+                               '...s/ffi/unsafe.rkt:1652:28
                                (values '#f '() '#f '#f '#f '#f '#f values)))))
                          (begin
                            (#%sfs-clear localv474)
@@ -2150,9 +2163,9 @@
                '#f)
            '#<void>
            (raise-argument-error 'TYPE-list '"cs?" arg0-508))
-         (let ((...s/ffi/unsafe.rkt:1645:19525
+         (let ((...s/ffi/unsafe.rkt:1646:19525
                 (lambda (arg0-526 arg1-527)
-                  '...s/ffi/unsafe.rkt:1645:19
+                  '...s/ffi/unsafe.rkt:1646:19
                   '(captures:
                     (val/ref arg0-508)
                     (val/ref #%modvars)
@@ -2185,9 +2198,9 @@
                           (|_cstruct-info:f@(lib "ffi/unsafe.rkt")|
                            (#%sfs-clear arg0-526)
                            (#%closed
-                            ...s/ffi/unsafe.rkt:1651:2821
+                            ...s/ffi/unsafe.rkt:1652:2821
                             (lambda ()
-                              '...s/ffi/unsafe.rkt:1651:28
+                              '...s/ffi/unsafe.rkt:1652:28
                               (values '#f '() '#f '#f '#f '#f '#f values)))))
                         (begin
                           (#%sfs-clear localv536)
@@ -2207,14 +2220,14 @@
                      '#f)
                    '#f)
                (lift28
-                ...s/ffi/unsafe.rkt:1645:19525
+                ...s/ffi/unsafe.rkt:1646:19525
                 arg0-508
                 local552
                 _all-offsets.0)
                (begin
                  (#%sfs-clear arg0-508)
                  (map
-                  (#%sfs-clear ...s/ffi/unsafe.rkt:1645:19525)
+                  (#%sfs-clear ...s/ffi/unsafe.rkt:1646:19525)
                   (#%sfs-clear local552)
                   _all-offsets.0))))))))
     (#%apply-values
@@ -2248,8 +2261,8 @@
          (val/ref #%modvars)
          (_^TYPE-tag.0
           |_memq@(lib "racket/private/member.rkt")|
-          _x-offset5.0
-          _y-offset6.0
+          _cs-x-offset5.0
+          _cs-y-offset6.0
           _cs-x
           _cs-y
           lift29))
@@ -2271,7 +2284,11 @@
                           '#f)
                       '#<void>
                       (raise-argument-error 'cs-x '"cs?" arg0-576))
-                    (ptr-ref arg0-576 _double 'abs (#%checked _x-offset5.0)))
+                    (ptr-ref
+                     arg0-576
+                     _double
+                     'abs
+                     (#%checked _cs-x-offset5.0)))
                   (begin
                     (if (if (cpointer? arg0-576)
                           (let ((local607 (cpointer-tag arg0-576)))
@@ -2285,7 +2302,7 @@
                           '#f)
                       '#<void>
                       (raise-argument-error 'cs-y '"cs?" arg0-576))
-                    (ptr-ref arg0-576 _double 'abs _y-offset6.0))))))
+                    (ptr-ref arg0-576 _double 'abs _cs-y-offset6.0))))))
            (let ((local626 (+ (#%sfs-clear arg2-578) '1)))
              (if (< local626 '180000)
                (let ((flonum631
@@ -2323,7 +2340,7 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_x-offset5.0 _y-offset6.0 _all-tags.0 __cs lift29))
+         (_cs-x-offset5.0 _cs-y-offset6.0 _all-tags.0 __cs lift29))
        (let ((local666
               (let ((local667 (malloc __cs 'atomic)))
                 (begin
@@ -2332,9 +2349,9 @@
                    local667
                    _double
                    'abs
-                   (#%checked _x-offset5.0)
+                   (#%checked _cs-x-offset5.0)
                    '1.0)
-                  (ptr-set! local667 _double 'abs _y-offset6.0 '2.0)
+                  (ptr-set! local667 _double 'abs _cs-y-offset6.0 '2.0)
                   local667))))
          (lift29 local666 '0.0 '0))))
     (define-values
@@ -2406,7 +2423,7 @@
        '(flags: preserves-marks single-result)
        '(captures:
          (val/ref #%modvars)
-         (_x-offset5.0 _y-offset6.0 _all-tags.0 __cs))
+         (_cs-x-offset5.0 _cs-y-offset6.0 _all-tags.0 __cs))
        (let ((local705
               (let ((local706 (malloc __cs 'atomic)))
                 (begin
@@ -2415,9 +2432,9 @@
                    local706
                    _double
                    'abs
-                   (#%checked _x-offset5.0)
+                   (#%checked _cs-x-offset5.0)
                    '1.0)
-                  (ptr-set! local706 _double 'abs _y-offset6.0 '2.0)
+                  (ptr-set! local706 _double 'abs _cs-y-offset6.0 '2.0)
                   local706))))
          (let ((flonum721
                 (fl+

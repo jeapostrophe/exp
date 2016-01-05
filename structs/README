@@ -43,6 +43,42 @@ struct-w/-contract  : 9912
 After patching `ffi/unsafe`
 ======================================================================
 
+With N = 18000000 (and syntax for the test, so the calls get inlined)
+
+c-test              : 34
+unsafe-struct*      : 62
+unsafe-flvector     : 62
+unsafe-vector*      : 65
+flvector            : 74
+unsafe-vector       : 78
+unsafe-struct       : 83
+vector              : 88
+prefab-struct       : 102
+struct              : 104
+ptr                 : 181
+unsafe-cstruct      : 198
+cstruct             : 690
+c                   : 5426
+struct-w/-contract  : 9973
+
+With N = 18000000 (and not syntax for the test)
+
+c-test              : 35
+unsafe-vector*      : 264
+unsafe-vector       : 276
+unsafe-struct*      : 279
+unsafe-struct       : 287
+vector              : 288
+unsafe-flvector     : 324
+flvector            : 337
+ptr                 : 380
+unsafe-cstruct      : 390
+prefab-struct       : 479
+struct              : 481
+cstruct             : 736
+c                   : 4888
+struct-w/-contract  : 9285
+
 * Why the improvment?
 
 `define-cstruct` and `define-cpointer-type` (which it uses) expand to
@@ -77,7 +113,17 @@ because it definitely does. It would be good to improve the compiler
 to be able to track that.
 
 I do not know if the JIT is inlining `ptr-ref`/`ptr-set!`, but it
-appears not to (from the comparison of 'ptr and 'unsafe-flvector)
+appears to have difficulty (based on a comparison between the 'ptr
+version and the 'unsafe-flvector version)
 
 I don't believe there are any other obvious problems with
 `define-cstruct`'s expansion.
+
+I think the things to do are to invest in having the
+compiler/optimizer be able to improve pointer operations to not need
+the runtime information in the type so that it can produce "lowered"
+forms that can be jitted without boxing the structure member.
+
+Another idea is to make a new `define-cstruct`-like macro that uses a
+combination of homogenuous vector types and casting to get and set
+((i8/16/32/64)|(f32/64)) values.
