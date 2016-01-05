@@ -1,7 +1,10 @@
 call plug#begin()
 Plug 'tpope/vim-sensible'
+Plug 'chrisbra/unicode.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 call plug#end()
+
+
 
 set backupskip=/tmp/*,/private/tmp/*
 set backspace=indent,eol,start
