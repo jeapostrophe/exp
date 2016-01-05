@@ -39,6 +39,11 @@ cstruct             : 971
 c                   : 4931
 struct-w/-contract  : 9912
 
+* One strange thing to note... the `c` version has just as many checks
+  as the `struct-w/-contract` version, because all C FFI functions use
+  contracts to verify their inputs. It seems very strange that going
+  across the FFI border is better than not in this case.
+
 ======================================================================
 After patching `ffi/unsafe`
 ======================================================================
