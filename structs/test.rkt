@@ -10,7 +10,7 @@
          racket/contract/region
          (prefix-in c: racket/contract/base))
 
-(define N 180000 #;18000000)
+(define N 18000000)
 ;; NOTE: Change this to `define` for the second kind of test
 (define-syntax-rule (test-fun make get-x get-y)
   (λ ()
@@ -97,7 +97,12 @@
 (test 'cstruct make-cs cs-x cs-y)
 
 ;; Unsafe cstruct
-;; XXX This doesn't exist
+;; XXX simulating what could be exposed
+(define (unsafe-cs-x it)
+  (ptr-ref it _double 'abs 0))
+(define (unsafe-cs-y it)
+  (ptr-ref it _double 'abs 8))
+(test 'unsafe-cstruct make-cs unsafe-cs-x unsafe-cs-y)
 
 ;; Ptr
 (begin-encourage-inline

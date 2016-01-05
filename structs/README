@@ -1,3 +1,10 @@
+OpenGL code has to use cstructs heavily for preparing shader
+data. Unfortunately, cstructs in Racket are very very slow. This
+micro-benchmark computes how slow and is a record of some experiments
+to go faster.
+
+======================================================================
+
 With N = 18000000 (and syntax for the test, so the calls get inlined)
 
 c-test              : 32
@@ -31,3 +38,46 @@ struct              : 499
 cstruct             : 971
 c                   : 4931
 struct-w/-contract  : 9912
+
+======================================================================
+After patching `ffi/unsafe`
+======================================================================
+
+* Why the improvment?
+
+`define-cstruct` and `define-cpointer-type` (which it uses) expand to
+something like:
+
+```
+(define-values (a b c d)
+ (let ()
+  ....
+  (define a ....)
+  (define b ....)
+  (define c ....)
+  (define d ....)
+  ....
+  (values a b c d)))
+```
+
+This inhibits the inliner because the definitions of a-d are not
+visible. My patch undoes that
+
+* What is more to do?
+
+I got things ready to expose unsafe cstruct accessors that don't check
+the tag. These rely on knowing the offset. Exposing the offset would
+also be useful for code like OpenGL shaders where you must specify VAO
+layouts. I think we should do both.
+
+If you compare the expansion of 'cstruct and 'unsafe-cstruct (in the
+inlined case), you'll see that 'cstruct is bogged down by checking
+that the result of `make-cs` has the `cs-tag`, which is unfortunate
+because it definitely does. It would be good to improve the compiler
+to be able to track that.
+
+I do not know if the JIT is inlining `ptr-ref`/`ptr-set!`, but it
+appears not to (from the comparison of 'ptr and 'unsafe-flvector)
+
+I don't believe there are any other obvious problems with
+`define-cstruct`'s expansion.
