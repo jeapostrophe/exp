@@ -97,7 +97,8 @@
 (test 'cstruct make-cs cs-x cs-y)
 
 ;; Unsafe cstruct
-;; XXX simulating what could be exposed
+;; XXX simulating what could be exposed, although my guess is that it
+;; would use unsafe-ptr if that existed
 (define (unsafe-cs-x it)
   (ptr-ref it _double 'abs 0))
 (define (unsafe-cs-y it)
