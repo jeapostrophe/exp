@@ -10,7 +10,7 @@
          racket/contract/region
          (prefix-in c: racket/contract/base))
 
-(define N 18000000)
+(define N 180000 #;18000000)
 ;; NOTE: Change this to `define` for the second kind of test
 (define-syntax-rule (test-fun make get-x get-y)
   (λ ()
