@@ -1,14 +1,14 @@
 call plug#begin()
 Plug 'tpope/vim-sensible' " XXX Untested
-Plug 'chrisbra/unicode.vim'
+Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align' " XXX Untested
 Plug 'benekastah/neomake'  " XXX Untested
-Plug 'bling/vim-airline'
+Plug 'bling/vim-airline' " XXX Need to configure
 Plug 'tpope/vim-fugitive'  " XXX Doesn't seem to work with plug
 Plug 'tpope/vim-obsession' " XXX Untested
-Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-eunuch' " XXX Need to understand
 Plug 'tmux-plugins/vim-tmux' " XXX Untested
 Plug 'kassio/neoterm' " XXX Untested
 Plug 'Shougo/unite.vim' " XXX Untested
@@ -22,6 +22,11 @@ call plug#end()
 
 set esckeys
 set timeoutlen=0 ttimeoutlen=0
+
+" Simulate some Emacs keys
+inoremap <M-x> :
+nnoremap <M-x> :
+cnoremap <C-g> <Esc>
 
 " XXX need to have alt-arrows
 
@@ -38,7 +43,7 @@ inoremap <Esc>D <left>
 
 syntax on
 " XXX Doesn't seem to work in various ways... statusline is unreadable and
-" comments aren't enabled
+" comments aren't enable (really seems like a problem in iTerm)
 set background=light
 colorscheme solarized
 filetype plugin indent on
