@@ -19,6 +19,7 @@ struct              : 102
 prefab-struct       : 106
 ptr                 : 192
 cstruct             : 1059
+struct-w/-provide/contract-trusted: 1205
 struct-w/-provide/contract: 2336
 struct-w/-provide/contract-struct: 3234
 c                   : 5259
