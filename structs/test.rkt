@@ -58,6 +58,16 @@
 (require (prefix-in pc: (submod "." pc-struct)))
 (test 'struct-w/-provide/contract pc:s pc:s-x pc:s-y)
 
+;; Struct w/ provide/contract of struct
+(module pc-struct2 racket/base
+  (require racket/contract/base)
+  (struct s (x y))
+  (provide
+   (contract-out
+    [struct s ([x flonum?] [y flonum?])])))
+(require (prefix-in pc2: (submod "." pc-struct2)))
+(test 'struct-w/-provide/contract-struct pc2:s pc2:s-x pc2:s-y)
+
 ;; Unsafe struct
 (begin-encourage-inline
   (define (us-x u) (unsafe-struct-ref u 0))
