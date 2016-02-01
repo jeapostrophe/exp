@@ -68,7 +68,7 @@
 	 ((:keywords "async")
 	  (:url . "http://elpa.gnu.org/packages/async.html"))])
  (auctex .
-	 [(11 89)
+	 [(11 89 1)
 	  nil "Integrated environment for *TeX*" tar
 	  ((:url . "http://www.gnu.org/software/auctex/"))])
  (aumix-mode .
@@ -445,6 +445,13 @@
 	       nil "keep track of positions even after buffer changes" single
 	       ((:url . "http://github.com/rocky/emacs-loc-changes")
 		(:keywords))])
+ (loccur .
+	 [(1 2 2)
+	  ((cl-lib
+	    (0)))
+	  "Perform an occur-like folding in current buffer" single
+	  ((:url . "https://github.com/fourier/loccur")
+	   (:keywords "matching"))])
  (markchars .
 	    [(0 2 0)
 	     nil "Mark chars fitting certain characteristics" single
@@ -485,10 +492,10 @@
 	   ((:url . "http://elpa.gnu.org/packages/minimap.html")
 	    (:keywords))])
  (multishell .
-	     [(1 0 8)
-	      nil "facilitate multiple local and remote shell buffers" single
-	      ((:url . "https://github.com/kenmanheimer/EmacsMultishell")
-	       (:keywords "processes"))])
+	     [(1 1 2)
+	      nil "facilitate multiple local and remote shell buffers" tar
+	      ((:keywords "processes")
+	       (:url . "https://github.com/kenmanheimer/EmacsMultishell"))])
  (muse .
        [(3 20)
 	nil "Authoring and publishing tool for Emacs" tar
@@ -552,7 +559,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(20160125)
+      [(20160201)
        nil "Outline-based notes management and organizer" tar nil])
  (osc .
       [(0 1)
@@ -617,6 +624,11 @@
 		 "Clean-up and Beautify the list of minor-modes." single
 		 ((:url . "https://github.com/Malabarba/rich-minority")
 		  (:keywords "mode-line" "faces"))])
+ (rnc-mode .
+	   [(0 1)
+	    nil "Emacs mode to edit Relax-NG Compact files" single
+	    ((:url . "http://elpa.gnu.org/packages/rnc-mode.html")
+	     (:keywords "xml" "relaxng"))])
  (rudel .
 	[(0 3)
 	 nil "A collaborative editing framework for Emacs" tar
@@ -766,7 +778,7 @@
       ((:keywords "faces" "help" "comm" "news" "mail" "processes" "mouse" "hypermedia")
        (:url . "http://elpa.gnu.org/packages/w3.html"))])
  (wcheck-mode .
-	      [(2016 1 5)
+	      [(2016 1 30)
 	       nil "General interface for text checkers" single
 	       ((:url . "https://github.com/tlikonen/wcheck-mode")
 		(:keywords "text" "spell" "check" "languages" "ispell"))])
@@ -833,7 +845,7 @@
 	     ((:keywords "convenience" "emulation")
 	      (:url . "http://github.com/capitaomorte/yasnippet"))])
  (ztree .
-	[(1 0 2)
+	[(1 0 3)
 	 ((cl-lib
 	   (0)))
 	 "Text mode directory tree" tar
