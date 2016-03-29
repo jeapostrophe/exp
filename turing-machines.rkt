@@ -807,7 +807,7 @@
       (print-obj top)
 
       (printf "}")))
-  (system* "/opt/local/bin/dot"
+  (system* "/usr/local/bin/dot"
            "-Tpdf"
            f
            "-o"
