@@ -28,6 +28,8 @@ hash -d courses=~work/courses
 hash -d 305=~courses/2015/fall/305
 hash -d 308=~courses/2016/spring/308
 hash -d 304=~courses/2016/spring/304
+hash -d 304s=~courses/2016/summer/304
+hash -d 404=~courses/2016/summer/404
 
 hash -d utrs=~scm/bitbucket.jeapostrophe/consulting-utrs
 
