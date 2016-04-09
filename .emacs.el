@@ -1301,6 +1301,8 @@ given a prefix arg."
  ("\\unlhd"   #X22B4)
  ("\\defs"    "≙")
  ("\\skull"   "☠")
+ ("\\larr"   "←")
+ ("\\rarr"   "→")
  ("\\unrhd"   #X22B5))
 (mapc (lambda (x)
         (if (cddr x)
