@@ -1,21 +1,24 @@
-\documentclass{article}
+\documentclass[11pt,twocolumn]{article}
 \include{names}
 \begin{document}
+\pagenumbering{gobble}
 
 \section*{Logging In}
 \begin{tabular}{cl}
-Username & = \{ {\names} \} \\
-Password & = Username
+  Username & = \{ {\names} \} \\
+  Password & = Username
 \end{tabular}
 
 \section*{Window Manager --- \texttt{i3}}
 \newcommand{\mod}{Alt}
 
 \begin{tabular}{cl}
-{\mod}-d & --- Run a command \\
-{\mod}-f & --- Make a window fullscreen \\
-{\mod}-Enter & --- Open a terminal \\
-Shift-{\mod}-q & --- Close a window \\
+  {\mod}-\$NUMBER & --- Switch to other desktop \\
+  {\mod}-d & --- Run a command \\
+  {\mod}-f & --- Make a window fullscreen \\
+  {\mod}-Enter & --- Open a terminal \\
+  Shift-{\mod}-q & --- Close a window \\
+  Shift-{\mod}-e & --- Quit 
 \end{tabular}
 
 \section*{Terminal --- \texttt{st}}
@@ -23,27 +26,58 @@ Shift-{\mod}-q & --- Close a window \\
 \begin{tabular}{cl}
   \texttt{exit} & --- quit \\
   \texttt{ls} & --- display files in directory \\
-  \texttt{cd} & --- change directory \\
-\end{tabular} 
+  \texttt{cd ..} & --- change directory to parent \\
+  \texttt{cd \$DIR} & --- change directory \\
+  \texttt{less \$FILE} & --- view a file \\
+  \texttt{man \$CMD} & --- read manual for command
+\end{tabular}
+
+Press Tab when you have partially written a command and the rest will
+automatically be typed.
+
+Press Ctrl-C to quit any program.
 
 \section*{Web --- \texttt{links}}
 
-XXX
+\begin{tabular}{cl}
+  Esc & --- Open menu \\
+  g & --- Enter a URL \\
+  s & --- Open bookmarks \\
+  Right & --- Follow link \\
+  Left & --- Go back \\
+  q & --- Quit
+\end{tabular}
 
 \section*{Editor --- \texttt{vim}}
 
-XXX
+\begin{tabular}{cl}
+  \texttt{vimtutor} & --- View a tutorial \\
+  \texttt{vim \$FILE} & --- Edit a file \\
+  Esc & --- Enter a command \\
+  \texttt{:help} & --- View help
+\end{tabular}
 
-\section*{Calculator --- \texttt{am}}
+\section*{Calculator --- \texttt{mathomatic}}
 
-XXX
+\begin{tabular}{cl}
+  \texttt{help} & --- View help
+\end{tabular}
 
 \section*{Games}
 
-XXX
+\begin{tabular}{cl}
+  \texttt{escape} & --- Maze game \\
+  \texttt{nethack} & --- Adventure game \\
+  \texttt{fceux} & --- NES emulator \\
+  \texttt{snes9x} & --- SNES emulator
+\end{tabular}
 
 \section*{Programming}
 
-XXX
+\begin{tabular}{cl}
+  \texttt{gcc} & --- C compiler \\
+  \texttt{racket} & --- Racket REPL \\
+  \texttt{drracket} & --- Racket IDE
+\end{tabular}
 
 \end{document}
