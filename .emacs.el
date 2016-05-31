@@ -1381,6 +1381,11 @@ given a prefix arg."
   (interactive "*P\nr")
   (sort-regexp-fields reverse "[A-Za-z0-9\\.]+" "\\&" beg end))
 
+;; Some nice searching
+(require 'evil)
+(global-set-key (kbd "C-3") 'evil-search-symbol-forward)
+(global-set-key (kbd "C-2") 'evil-search-symbol-backward)
+
 ;; customs
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
