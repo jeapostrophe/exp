@@ -17,7 +17,9 @@
 (define PLAN
   (flatten
    (list
-    ;; XXX Dynamic stretches
+    (action 30 "Arm Swing")
+    (action 30 "Shoulder Swing Left")
+    (action 30 "Shoulder Swing Right")
     (repeat 4 (action+rest 30 "Hindu Squat"))
     
     (action+rest 60 "Bridge")
@@ -36,8 +38,17 @@
     (action+rest 60 "Bridge")
     (repeat 12 (action+rest 20 "Push Ups"))
 
-    ;; XXX Static stretches
-    )))
+    (action 30 "Runner's Lunge Left")
+    (action 30 "Runner's Lunge Right")
+    (action 30 "Head to Knee Stetch Left")
+    (action 30 "Head to Knee Stetch Right")
+    (action 30 "Neck Stretch Left")
+    (action 30 "Neck Stretch Right")
+    (action 30 "Shoulder Stretch Left")
+    (action 30 "Shoulder Stretch Right")
+    (action 30 "Bicep Stretch")
+
+    (action 180 "Seated Meditation"))))
 
 (define dry? #t)
 
