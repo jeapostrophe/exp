@@ -6,24 +6,54 @@
          racket/file
          racket/match)
 
+(define (action len s)
+  (vector len s))
+(define (action+rest len s)
+  (list (action len s)
+        (action (/ len 10) s)))
+(define (repeat x l)
+  (make-list x l))
+
 (define PLAN
-  `(#[20 "Crunch"]
-    #[ 5 "Rest"]
-    #[20 "Crunch"]
-    #[ 5 "Rest"]
-    #[210 "Watch TV"]
-    #[20 "Crunch"]
-    #[ 5 "Rest"]
-    #[20 "Crunch"]
-    #[ 5 "Rest"]
-    #[210 "Watch TV"]))
+  (flatten
+   (list
+    ;; XXX Dynamic stretches
+    (repeat 4 (action+rest 30 "Hindu Squat"))
+    
+    (action+rest 60 "Bridge")
+    (repeat 12 (action+rest 20 "Crunch"))
+
+    (action+rest 60 "Bridge")
+    (action+rest 60 "Full Plank")
+    (action+rest 30 "Elbow Plank")
+    (action+rest 30 "Raised Plank Left")
+    (action+rest 30 "Raised Plank Right")
+    (action+rest 30 "Side Plank Left")
+    (action+rest 30 "Side Plank Right")
+    (action+rest 30 "Full Plank")
+    (action+rest 60 "Elbow Plank")
+
+    (action+rest 60 "Bridge")
+    (repeat 12 (action+rest 20 "Push Ups"))
+
+    ;; XXX Static stretches
+    )))
+
+(define dry? #t)
+
+;;; Library
+
+(define (delete-file* p)
+  (when (file-exists? p)
+    (delete-file p)))
 
 (define (snoc l x)
   (append l (list x)))
 
 (define (system+ . s)
   (eprintf "~v\n" s)
-  (apply system* s))
+  (unless dry?
+    (apply system* s)))
 
 (define (audio-length p)
   (string->number
@@ -31,7 +61,7 @@
     #rx"\n"
     (with-output-to-string
       (λ ()
-        (system+ (find-executable-path "soxi") "-D" p)))
+        (system* (find-executable-path "soxi") "-D" p)))
     "")))
 
 (define (audio-announce! s dest)
@@ -43,7 +73,7 @@
   (system+ (find-executable-path "sox")
            dest-mono "-c" "2" "-r" "44100"
            dest)
-  (delete-file dest-mono)
+  (delete-file* dest-mono)
   dest)
 
 (define (audio-clip! src start end dest)
@@ -59,12 +89,12 @@
   (apply system+
          (find-executable-path "sox")
          (append wavs (list dest)))
-  (for-each delete-file wavs)
+  (for-each delete-file* wavs)
   dest)
 
 (define (wav->mp3! wav mp3)
   (system+ (find-executable-path "lame") "-S" wav mp3)
-  (delete-file wav)
+  (delete-file* wav)
   mp3)
 
 (define (output! PLAN dir)
@@ -79,11 +109,13 @@
           string-ci<=?
           #:key path->string))
   (struct music-info (path len))
-  (define music-infos
-    (for/list ([mf (in-list music-files)])
+  (define-values
+    (total-music-len music-infos)
+    (for/fold ([tot-len 0] [mis '()]) ([mf (in-list music-files)])
       (define p (build-path music-dir mf))
       (define len (audio-length p))
-      (music-info p len)))
+      (values (+ tot-len len)
+              (snoc mis (music-info p len)))))
   (define (music! dest start end)
     (define-values (now wavs)
       (for/fold ([then 0]
@@ -115,7 +147,7 @@
     (combine! wavs dest))
 
   (define-values
-    (music-len wavs)
+    (total-len wavs)
     (for/fold ([start-len 0]
                [wavs '()])
               ([p (in-list PLAN)]
@@ -131,11 +163,25 @@
       (values end-len (snoc wavs full-wav))))
 
   (define dest-wav
-    (combine! wavs (build-path dir "dest.wav")))
+    (combine! (snoc wavs (audio-announce! "You Did It" (tmp-p "done")))
+              (build-path dir "dest.wav")))
   (define dest-mp3
     (wav->mp3! dest-wav (build-path dir "dest.mp3")))
 
-  dest-mp3)
+  (let ()
+    (local-require
+     (prefix-in g:
+                (combine-in gregor
+                            gregor/period
+                            gregor/time)))
+    (define (display-len lab l)
+      (printf "Total ~alength is: ~a\n"
+              lab
+              (g:+time-period (g:time 0) (g:seconds (inexact->exact (floor l))))))
+    (printf "\n")
+    (display-len "music " total-music-len)
+    (display-len "" total-len)
+    (printf "\n")))
 
 (define (go! dir)
   (output! PLAN dir))
