@@ -6,48 +6,54 @@
          racket/file
          racket/match)
 
-(define (action len s)
-  (vector len s))
+(struct music (label))
+(struct action (len s))
+
+(define (+rest len)
+  (action len "Rest"))
 (define (action+rest len s)
   (list (action len s)
-        (action (/ len 10) s)))
+        (+rest (/ len 10))))
 (define (repeat x l)
   (make-list x l))
 
 (define PLAN
   (flatten
    (list
+    (music "action")
     (action 30 "Arm Swing")
     (action 30 "Shoulder Swing Left")
     (action 30 "Shoulder Swing Right")
     (repeat 4 (action+rest 30 "Hindu Squat"))
-    
+
     (action+rest 60 "Bridge")
     (repeat 12 (action+rest 20 "Crunch"))
 
-    (action+rest 60 "Bridge")
-    (action+rest 60 "Full Plank")
-    (action+rest 30 "Elbow Plank")
-    (action+rest 30 "Raised Plank Left")
-    (action+rest 30 "Raised Plank Right")
-    (action+rest 30 "Side Plank Left")
-    (action+rest 30 "Side Plank Right")
-    (action+rest 30 "Full Plank")
-    (action+rest 60 "Elbow Plank")
+    (action 120 "Bridge") (+rest 6)
+    (action 60 "Full Plank")
+    (action 30 "Elbow Plank")
+    (action 30 "Raised Plank Left")
+    (action 30 "Raised Plank Right")
+    (action 30 "Side Plank Left")
+    (action 30 "Side Plank Right")
+    (action 30 "Full Plank")
+    (action 60 "Elbow Plank")
 
     (action+rest 60 "Bridge")
     (repeat 12 (action+rest 20 "Push Ups"))
 
+    (music "soft")
     (action 30 "Runner's Lunge Left")
     (action 30 "Runner's Lunge Right")
+    (action 30 "Bicep Stretch")
     (action 30 "Head to Knee Stetch Left")
     (action 30 "Head to Knee Stetch Right")
     (action 30 "Neck Stretch Left")
     (action 30 "Neck Stretch Right")
     (action 30 "Shoulder Stretch Left")
     (action 30 "Shoulder Stretch Right")
-    (action 30 "Bicep Stretch")
 
+    (music "meditate")
     (action 180 "Seated Meditation"))))
 
 (define dry? #t)
@@ -108,70 +114,92 @@
   (delete-file* wav)
   mp3)
 
+(define (display-len lab l)
+  (local-require
+   (prefix-in g:
+              (combine-in gregor
+                          gregor/period
+                          gregor/time)))
+  (printf "Total ~alength is: ~a\n"
+          lab
+          (g:+time-period (g:time 0) (g:seconds (inexact->exact (floor l))))))
+
 (define (output! PLAN dir)
   (define tmp-dir (build-path dir "tmp"))
   (make-directory* tmp-dir)
   (define (tmp-p p)
     (build-path tmp-dir (format "~a.wav" p)))
 
-  (define music-dir (build-path dir "music"))
-  (define music-files
-    (sort (directory-list music-dir)
-          string-ci<=?
-          #:key path->string))
-  (struct music-info (path len))
-  (define-values
-    (total-music-len music-infos)
-    (for/fold ([tot-len 0] [mis '()]) ([mf (in-list music-files)])
-      (define p (build-path music-dir mf))
-      (define len (audio-length p))
-      (values (+ tot-len len)
-              (snoc mis (music-info p len)))))
-  (define (music! dest start end)
-    (define-values (now wavs)
-      (for/fold ([then 0]
-                 [wavs '()])
-                ([mi (in-cycle music-infos)]
-                 [i (in-naturals)]
-                 #:break (< end then))
-        (match-define (music-info p l) mi)
-        (define now (+ then l))
-        (define this-start (max start then))
-        (define this-end (min end now))
-        (define this-len (- this-end this-start))
-        (define c-start (- this-start then))
-        (define c-end (- this-end then))
-        (when #f
-          (eprintf "~v\n"
-                   (vector 'music!
-                           'start start 'end end
-                           'then then 'now now
-                           'tstart this-start 'tend this-end
-                           'cstart c-start 'cend c-end
-                           'len this-len)))
-        (values now
-                (if (< 0 this-len)
-                    (snoc wavs
-                          (audio-clip! p c-start c-end
-                                       (tmp-p (format "~a-m" i))))
-                    wavs))))
-    (combine! wavs dest))
+  (define top-music-dir (build-path dir "music"))
 
   (define-values
-    (total-len wavs)
+    (total-len last-len wavs music!)
     (for/fold ([start-len 0]
-               [wavs '()])
+               [last-len 0]
+               [wavs '()]
+               [music! void])
               ([p (in-list PLAN)]
                [i (in-naturals)])
-      (match-define (vector this-len s) p)
-      (define ann-wav
-        (audio-announce! s (tmp-p (format "~a-ann" i))))
-      (define end-len (+ start-len this-len))
-      (define music-wav
-        (music! (tmp-p (format "~a-mus" i)) start-len end-len))
-      (define full-wav
-        (combine! (list ann-wav music-wav) (tmp-p (format "~a-full" i))))
-      (values end-len (snoc wavs full-wav))))
+      (match p
+        [(music kind)
+         (define music-dir (build-path top-music-dir kind))
+         (define music-files
+           (sort (directory-list music-dir)
+                 string-ci<=?
+                 #:key path->string))
+         (struct music-info (path len))
+         (define-values
+           (total-music-len music-infos)
+           (for/fold ([tot-len 0] [mis '()]) ([mf (in-list music-files)])
+             (define p (build-path music-dir mf))
+             (define len (audio-length p))
+             (values (+ tot-len len)
+                     (snoc mis (music-info p len)))))
+
+         (display-len "(last music) " (- start-len last-len))
+         (display-len (format "music (~a) " kind) total-music-len)
+         
+         (define (music! dest start end)
+           (define-values (now wavs)
+             (for/fold ([then 0]
+                        [wavs '()])
+                       ([mi (in-cycle music-infos)]
+                        [i (in-naturals)]
+                        #:break (< end then))
+               (match-define (music-info p l) mi)
+               (define now (+ then l))
+               (define this-start (max start then))
+               (define this-end (min end now))
+               (define this-len (- this-end this-start))
+               (define c-start (- this-start then))
+               (define c-end (- this-end then))
+               (when #f
+                 (eprintf "~v\n"
+                          (vector 'music!
+                                  'start start 'end end
+                                  'then then 'now now
+                                  'tstart this-start 'tend this-end
+                                  'cstart c-start 'cend c-end
+                                  'len this-len)))
+               (values now
+                       (if (< 0 this-len)
+                           (snoc wavs
+                                 (audio-clip! p c-start c-end
+                                              (tmp-p (format "~a-m" i))))
+                           wavs))))
+           (combine! wavs dest))
+         (values start-len start-len wavs music!)]
+        [(action this-len s)
+         (define ann-wav
+           (audio-announce! s (tmp-p (format "~a-ann" i))))
+         (define end-len (+ start-len this-len))
+         (define music-wav
+           (music! (tmp-p (format "~a-mus" i)) start-len end-len))
+         (define full-wav
+           (combine! (list ann-wav music-wav) (tmp-p (format "~a-full" i))))
+         (values end-len last-len (snoc wavs full-wav) music!)])))
+
+  (display-len "(last music) " (- total-len last-len))
 
   (define dest-wav
     (combine! (snoc wavs (audio-announce! "You Did It" (tmp-p "done")))
@@ -179,20 +207,7 @@
   (define dest-mp3
     (wav->mp3! dest-wav (build-path dir "dest.mp3")))
 
-  (let ()
-    (local-require
-     (prefix-in g:
-                (combine-in gregor
-                            gregor/period
-                            gregor/time)))
-    (define (display-len lab l)
-      (printf "Total ~alength is: ~a\n"
-              lab
-              (g:+time-period (g:time 0) (g:seconds (inexact->exact (floor l))))))
-    (printf "\n")
-    (display-len "music " total-music-len)
-    (display-len "" total-len)
-    (printf "\n")))
+  (display-len "" total-len))
 
 (define (go! dir)
   (output! PLAN dir))
