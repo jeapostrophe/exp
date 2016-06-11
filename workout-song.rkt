@@ -13,7 +13,7 @@
   (action len "Take A Rest"))
 (define (action+rest len s)
   (list (action len s)
-        (+rest (/ len 10))))
+        (+rest (max 5 (* len 2/10)))))
 (define (repeat x l)
   (make-list x l))
 
@@ -22,15 +22,19 @@
    (list
     (music "action")
     (action 30 "Arm Swing")
-    (action 30 "Shoulder Rotate Left")
-    (action 30 "Shoulder Rotate Right")
-    
-    (+rest 1)
+    (action 15 "Shoulder Rotate Left Forward")
+    (action 15 "Shoulder Rotate Left Backward")
+    (action 15 "Shoulder Rotate Right Forward")
+    (action 15 "Shoulder Rotate Right Backward")
+
+    (action 0 "Get Ready")
     (repeat 4 (action+rest 30 "Hindu Squat"))
 
+    (action 0 "Switch Positions")
     (action+rest 60 "Bridge")
-    (repeat 12 (action+rest 20 "Crunch"))
+    (repeat 12 (action+rest 20 "Crunches"))
 
+    (action 0 "Get Ready")
     (action 120 "Bridge") (+rest 6)
     (action 60 "Full Plank")
     (action 30 "Elbow Plank")
@@ -41,9 +45,12 @@
     (action 30 "Full Plank")
     (action 60 "Elbow Plank")
 
+    (action 0 "Switch Positions")
     (action+rest 60 "Bridge")
     (repeat 12 (action+rest 20 "Push Ups"))
 
+    (action 0 "Time to Stretch")
+    
     (music "soft")
     (action 30 "Runner's Lunge Left")
     (action 30 "Runner's Lunge Right")
@@ -56,7 +63,9 @@
     (action 30 "Shoulder Stretch Right")
 
     (music "meditate")
-    (action 187 "Seated Meditation"))))
+    (action 201 "Seated Meditation")
+
+    (action 0 "You Did It"))))
 
 (define dry? #f)
 
@@ -192,6 +201,10 @@
                            wavs))))
            (combine! wavs dest))
          (values start-len start-len wavs music!)]
+        [(action 0 s)
+         (define ann-wav
+           (audio-announce! s (tmp-p (format "~a-ann" i))))         
+         (values start-len last-len (snoc wavs ann-wav) music!)]
         [(action this-len s)
          (define ann-wav
            (audio-announce! s (tmp-p (format "~a-ann" i))))
@@ -205,8 +218,7 @@
   (display-len "(last music) " (- total-len last-len))
 
   (define dest-wav
-    (combine! (snoc wavs (audio-announce! "You Did It" (tmp-p "done")))
-              (build-path dir "dest.wav")))
+    (combine! wavs (build-path dir "dest.wav")))
   (define dest-mp3
     (wav->mp3! dest-wav (build-path dir "dest.mp3")))
 
