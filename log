@@ -1,0 +1,1251 @@
+Total (last music) length is: #<time 00:00:00>
+Total music (action) length is: #<time 00:34:12>'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Arm Swing")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1313 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2337 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1281 samples; decrease volume?
+'#(music! start 0 end 30 then 0 now 278.047007 tstart 0 tend 30.0 cstart 0 cend 30.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "0" "=30.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 141 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/1-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/1-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/1-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Shoulder Rotate Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1215 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2132 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1211 samples; decrease volume?
+'#(music! start 30 end 60 then 0 now 278.047007 tstart 30 tend 60.0 cstart 30 cend 60.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "30" "=60.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 324 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/2-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/2-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/2-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Shoulder Rotate Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/3-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1378 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2416 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1346 samples; decrease volume?
+'#(music! start 60 end 90 then 0 now 278.047007 tstart 60 tend 90.0 cstart 60 cend 90.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "60" "=90.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 168 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/3-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/3-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/3-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/3-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/4-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1204 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 90 end 91 then 0 now 278.047007 tstart 90 tend 91.0 cstart 90 cend 91.0 len 1.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "90" "=91.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 20 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/4-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/4-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/4-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/4-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Hindu Squat")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/5-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1041 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1813 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1004 samples; decrease volume?
+'#(music! start 91 end 121 then 0 now 278.047007 tstart 91 tend 121.0 cstart 91 cend 121.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "91" "=121.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 437 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/5-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/5-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/5-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/5-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1180 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 121 end 124 then 0 now 278.047007 tstart 121 tend 124.0 cstart 121 cend 124.0 len 3.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "121" "=124.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 24 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/6-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/6-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/6-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Hindu Squat")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1041 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1845 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1004 samples; decrease volume?
+'#(music! start 124 end 154 then 0 now 278.047007 tstart 124 tend 154.0 cstart 124 cend 154.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "124" "=154.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 159 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/7-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/7-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/7-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1203 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 154 end 157 then 0 now 278.047007 tstart 154 tend 157.0 cstart 154 cend 157.0 len 3.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "154" "=157.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 25 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/8-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/8-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/8-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Hindu Squat")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/9-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1041 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1838 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1004 samples; decrease volume?
+'#(music! start 157 end 187 then 0 now 278.047007 tstart 157 tend 187.0 cstart 157 cend 187.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "157" "=187.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 329 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/9-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/9-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/9-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/9-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/10-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1179 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 187 end 190 then 0 now 278.047007 tstart 187 tend 190.0 cstart 187 cend 190.0 len 3.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "187" "=190.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 26 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/10-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/10-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/10-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/10-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Hindu Squat")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/11-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1041 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1814 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1004 samples; decrease volume?
+'#(music! start 190 end 220 then 0 now 278.047007 tstart 190 tend 220.0 cstart 190 cend 220.0 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "190" "=220.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 190 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/11-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/11-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/11-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/11-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/12-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1200 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 220 end 223 then 0 now 278.047007 tstart 220 tend 223.0 cstart 220 cend 223.0 len 3.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "220" "=223.0")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 58 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/12-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/12-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/12-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/12-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Bridge")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 488 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 857 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 477 samples; decrease volume?
+'#(music! start 223 end 283 then 0 now 278.047007 tstart 223 tend 278.047007 cstart 223 cend 278.047007 len 55.04700700000001)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/05 Sea of Frozen Crystals.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> "trim" "223" "=278.047007")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/0-m.wav' output clipped 454 samples; decrease volume?
+'#(music! start 223 end 283 then 278.047007 now 402.05 tstart 278.047007 tend 283.0 cstart 0.0 cend 4.952992999999992 len 4.952992999999992)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "0.0" "=4.952992999999992")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/0-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/13-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/13-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/13-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/14-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1189 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 283 end 289 then 0 now 278.047007 tstart 283 tend 278.047007 cstart 283 cend 278.047007 len -4.952992999999992)
+'#(music! start 283 end 289 then 278.047007 now 402.05 tstart 283.0 tend 289.0 cstart 4.952992999999992 cend 10.952992999999992 len 6.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "4.952992999999992" "=10.952992999999992")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/14-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/14-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/14-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/14-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/15-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 478 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 289 end 309 then 0 now 278.047007 tstart 289 tend 278.047007 cstart 289 cend 278.047007 len -10.952992999999992)
+'#(music! start 289 end 309 then 278.047007 now 402.05 tstart 289.0 tend 309.0 cstart 10.952992999999992 cend 30.952992999999992 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "10.952992999999992" "=30.952992999999992")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/15-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/15-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/15-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/15-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/16-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1191 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 309 end 311 then 0 now 278.047007 tstart 309 tend 278.047007 cstart 309 cend 278.047007 len -30.952992999999992)
+'#(music! start 309 end 311 then 278.047007 now 402.05 tstart 309.0 tend 311.0 cstart 30.952992999999992 cend 32.95299299999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "30.952992999999992" "=32.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/16-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/16-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/16-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/16-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/17-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 476 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 311 end 331 then 0 now 278.047007 tstart 311 tend 278.047007 cstart 311 cend 278.047007 len -32.95299299999999)
+'#(music! start 311 end 331 then 278.047007 now 402.05 tstart 311.0 tend 331.0 cstart 32.95299299999999 cend 52.95299299999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "32.95299299999999" "=52.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/17-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/17-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/17-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/17-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/18-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1187 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 331 end 333 then 0 now 278.047007 tstart 331 tend 278.047007 cstart 331 cend 278.047007 len -52.95299299999999)
+'#(music! start 331 end 333 then 278.047007 now 402.05 tstart 331.0 tend 333.0 cstart 52.95299299999999 cend 54.95299299999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "52.95299299999999" "=54.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/18-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/18-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/18-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/18-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/19-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 466 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 333 end 353 then 0 now 278.047007 tstart 333 tend 278.047007 cstart 333 cend 278.047007 len -54.95299299999999)
+'#(music! start 333 end 353 then 278.047007 now 402.05 tstart 333.0 tend 353.0 cstart 54.95299299999999 cend 74.95299299999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "54.95299299999999" "=74.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/19-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/19-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/19-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/19-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/20-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1205 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 353 end 355 then 0 now 278.047007 tstart 353 tend 278.047007 cstart 353 cend 278.047007 len -74.95299299999999)
+'#(music! start 353 end 355 then 278.047007 now 402.05 tstart 353.0 tend 355.0 cstart 74.95299299999999 cend 76.95299299999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "74.95299299999999" "=76.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/20-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/20-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/20-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/20-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/21-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 473 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 355 end 375 then 0 now 278.047007 tstart 355 tend 278.047007 cstart 355 cend 278.047007 len -76.95299299999999)
+'#(music! start 355 end 375 then 278.047007 now 402.05 tstart 355.0 tend 375.0 cstart 76.95299299999999 cend 96.95299299999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "76.95299299999999" "=96.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/21-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/21-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/21-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/21-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/22-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1194 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 375 end 377 then 0 now 278.047007 tstart 375 tend 278.047007 cstart 375 cend 278.047007 len -96.95299299999999)
+'#(music! start 375 end 377 then 278.047007 now 402.05 tstart 375.0 tend 377.0 cstart 96.95299299999999 cend 98.95299299999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "96.95299299999999" "=98.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/22-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/22-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/22-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/22-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/23-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 470 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 377 end 397 then 0 now 278.047007 tstart 377 tend 278.047007 cstart 377 cend 278.047007 len -98.95299299999999)
+'#(music! start 377 end 397 then 278.047007 now 402.05 tstart 377.0 tend 397.0 cstart 98.95299299999999 cend 118.95299299999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "98.95299299999999" "=118.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/23-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/23-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/23-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/23-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/24-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1199 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 397 end 399 then 0 now 278.047007 tstart 397 tend 278.047007 cstart 397 cend 278.047007 len -118.95299299999999)
+'#(music! start 397 end 399 then 278.047007 now 402.05 tstart 397.0 tend 399.0 cstart 118.95299299999999 cend 120.95299299999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "118.95299299999999" "=120.95299299999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/24-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/24-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/24-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/24-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/25-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 462 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 399 end 419 then 0 now 278.047007 tstart 399 tend 278.047007 cstart 399 cend 278.047007 len -120.95299299999999)
+'#(music! start 399 end 419 then 278.047007 now 402.05 tstart 399.0 tend 402.05 cstart 120.95299299999999 cend 124.002993 len 3.0500000000000114)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> "trim" "120.95299299999999" "=124.002993")
+'#(music! start 399 end 419 then 402.05 now 611.174 tstart 402.05 tend 419.0 cstart 0.0 cend 16.94999999999999 len 16.94999999999999)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "0.0" "=16.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/25-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/25-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/25-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/25-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/26-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1181 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 419 end 421 then 0 now 278.047007 tstart 419 tend 278.047007 cstart 419 cend 278.047007 len -140.952993)
+'#(music! start 419 end 421 then 278.047007 now 402.05 tstart 419.0 tend 402.05 cstart 140.952993 cend 124.002993 len -16.94999999999999)
+'#(music! start 419 end 421 then 402.05 now 611.174 tstart 419.0 tend 421.0 cstart 16.94999999999999 cend 18.94999999999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "16.94999999999999" "=18.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/26-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/26-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/26-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/26-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/27-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 460 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 421 end 441 then 0 now 278.047007 tstart 421 tend 278.047007 cstart 421 cend 278.047007 len -142.952993)
+'#(music! start 421 end 441 then 278.047007 now 402.05 tstart 421.0 tend 402.05 cstart 142.952993 cend 124.002993 len -18.94999999999999)
+'#(music! start 421 end 441 then 402.05 now 611.174 tstart 421.0 tend 441.0 cstart 18.94999999999999 cend 38.94999999999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "18.94999999999999" "=38.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/27-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/27-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/27-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/27-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/28-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1189 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 441 end 443 then 0 now 278.047007 tstart 441 tend 278.047007 cstart 441 cend 278.047007 len -162.952993)
+'#(music! start 441 end 443 then 278.047007 now 402.05 tstart 441.0 tend 402.05 cstart 162.952993 cend 124.002993 len -38.94999999999999)
+'#(music! start 441 end 443 then 402.05 now 611.174 tstart 441.0 tend 443.0 cstart 38.94999999999999 cend 40.94999999999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "38.94999999999999" "=40.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/28-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/28-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/28-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/28-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/29-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 482 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 443 end 463 then 0 now 278.047007 tstart 443 tend 278.047007 cstart 443 cend 278.047007 len -164.952993)
+'#(music! start 443 end 463 then 278.047007 now 402.05 tstart 443.0 tend 402.05 cstart 164.952993 cend 124.002993 len -40.94999999999999)
+'#(music! start 443 end 463 then 402.05 now 611.174 tstart 443.0 tend 463.0 cstart 40.94999999999999 cend 60.94999999999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "40.94999999999999" "=60.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/29-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/29-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/29-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/29-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/30-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1192 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 463 end 465 then 0 now 278.047007 tstart 463 tend 278.047007 cstart 463 cend 278.047007 len -184.952993)
+'#(music! start 463 end 465 then 278.047007 now 402.05 tstart 463.0 tend 402.05 cstart 184.952993 cend 124.002993 len -60.94999999999999)
+'#(music! start 463 end 465 then 402.05 now 611.174 tstart 463.0 tend 465.0 cstart 60.94999999999999 cend 62.94999999999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "60.94999999999999" "=62.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/30-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/30-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/30-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/30-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/31-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 481 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 465 end 485 then 0 now 278.047007 tstart 465 tend 278.047007 cstart 465 cend 278.047007 len -186.952993)
+'#(music! start 465 end 485 then 278.047007 now 402.05 tstart 465.0 tend 402.05 cstart 186.952993 cend 124.002993 len -62.94999999999999)
+'#(music! start 465 end 485 then 402.05 now 611.174 tstart 465.0 tend 485.0 cstart 62.94999999999999 cend 82.94999999999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "62.94999999999999" "=82.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/31-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/31-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/31-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/31-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/32-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1175 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 485 end 487 then 0 now 278.047007 tstart 485 tend 278.047007 cstart 485 cend 278.047007 len -206.952993)
+'#(music! start 485 end 487 then 278.047007 now 402.05 tstart 485.0 tend 402.05 cstart 206.952993 cend 124.002993 len -82.94999999999999)
+'#(music! start 485 end 487 then 402.05 now 611.174 tstart 485.0 tend 487.0 cstart 82.94999999999999 cend 84.94999999999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "82.94999999999999" "=84.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/32-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/32-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/32-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/32-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/33-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 477 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 487 end 507 then 0 now 278.047007 tstart 487 tend 278.047007 cstart 487 cend 278.047007 len -208.952993)
+'#(music! start 487 end 507 then 278.047007 now 402.05 tstart 487.0 tend 402.05 cstart 208.952993 cend 124.002993 len -84.94999999999999)
+'#(music! start 487 end 507 then 402.05 now 611.174 tstart 487.0 tend 507.0 cstart 84.94999999999999 cend 104.94999999999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "84.94999999999999" "=104.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/33-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/33-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/33-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/33-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/34-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1193 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 507 end 509 then 0 now 278.047007 tstart 507 tend 278.047007 cstart 507 cend 278.047007 len -228.952993)
+'#(music! start 507 end 509 then 278.047007 now 402.05 tstart 507.0 tend 402.05 cstart 228.952993 cend 124.002993 len -104.94999999999999)
+'#(music! start 507 end 509 then 402.05 now 611.174 tstart 507.0 tend 509.0 cstart 104.94999999999999 cend 106.94999999999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "104.94999999999999" "=106.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/34-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/34-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/34-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/34-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/35-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 472 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 509 end 529 then 0 now 278.047007 tstart 509 tend 278.047007 cstart 509 cend 278.047007 len -230.952993)
+'#(music! start 509 end 529 then 278.047007 now 402.05 tstart 509.0 tend 402.05 cstart 230.952993 cend 124.002993 len -106.94999999999999)
+'#(music! start 509 end 529 then 402.05 now 611.174 tstart 509.0 tend 529.0 cstart 106.94999999999999 cend 126.94999999999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "106.94999999999999" "=126.94999999999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/35-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/35-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/35-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/35-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/36-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1187 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 529 end 531 then 0 now 278.047007 tstart 529 tend 278.047007 cstart 529 cend 278.047007 len -250.952993)
+'#(music! start 529 end 531 then 278.047007 now 402.05 tstart 529.0 tend 402.05 cstart 250.952993 cend 124.002993 len -126.94999999999999)
+'#(music! start 529 end 531 then 402.05 now 611.174 tstart 529.0 tend 531.0 cstart 126.94999999999999 cend 128.95 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "126.94999999999999" "=128.95")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/36-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/36-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/36-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/36-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Crunch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/37-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 269 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 473 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 267 samples; decrease volume?
+'#(music! start 531 end 551 then 0 now 278.047007 tstart 531 tend 278.047007 cstart 531 cend 278.047007 len -252.952993)
+'#(music! start 531 end 551 then 278.047007 now 402.05 tstart 531.0 tend 402.05 cstart 252.952993 cend 124.002993 len -128.95)
+'#(music! start 531 end 551 then 402.05 now 611.174 tstart 531.0 tend 551.0 cstart 128.95 cend 148.95 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "128.95" "=148.95")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/37-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/37-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/37-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/37-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/38-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1196 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 551 end 553 then 0 now 278.047007 tstart 551 tend 278.047007 cstart 551 cend 278.047007 len -272.952993)
+'#(music! start 551 end 553 then 278.047007 now 402.05 tstart 551.0 tend 402.05 cstart 272.952993 cend 124.002993 len -148.95)
+'#(music! start 551 end 553 then 402.05 now 611.174 tstart 551.0 tend 553.0 cstart 148.95 cend 150.95 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "148.95" "=150.95")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/38-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/38-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/38-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/38-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Bridge")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/39-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 488 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 866 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 477 samples; decrease volume?
+'#(music! start 553 end 673 then 0 now 278.047007 tstart 553 tend 278.047007 cstart 553 cend 278.047007 len -274.952993)
+'#(music! start 553 end 673 then 278.047007 now 402.05 tstart 553.0 tend 402.05 cstart 274.952993 cend 124.002993 len -150.95)
+'#(music! start 553 end 673 then 402.05 now 611.174 tstart 553.0 tend 611.174 cstart 150.95 cend 209.12399999999997 len 58.17399999999998)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/06 Fukuoka (Stage 1).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> "trim" "150.95" "=209.12399999999997")
+'#(music! start 553 end 673 then 611.174 now 688.313002 tstart 611.174 tend 673.0 cstart 0.0 cend 61.82600000000002 len 61.82600000000002)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/02 Vampire Killer (Castlevania).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/3-m.wav> "trim" "0.0" "=61.82600000000002")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/2-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/3-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/39-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/39-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/39-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/39-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/40-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1179 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 673 end 679 then 0 now 278.047007 tstart 673 tend 278.047007 cstart 673 cend 278.047007 len -394.952993)
+'#(music! start 673 end 679 then 278.047007 now 402.05 tstart 673.0 tend 402.05 cstart 394.952993 cend 124.002993 len -270.95)
+'#(music! start 673 end 679 then 402.05 now 611.174 tstart 673.0 tend 611.174 cstart 270.95 cend 209.12399999999997 len -61.82600000000002)
+'#(music! start 673 end 679 then 611.174 now 688.313002 tstart 673.0 tend 679.0 cstart 61.82600000000002 cend 67.82600000000002 len 6.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/02 Vampire Killer (Castlevania).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/3-m.wav> "trim" "61.82600000000002" "=67.82600000000002")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/3-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/40-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/40-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/40-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/40-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Full Plank")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/41-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 695 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1232 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 676 samples; decrease volume?
+'#(music! start 679 end 739 then 0 now 278.047007 tstart 679 tend 278.047007 cstart 679 cend 278.047007 len -400.952993)
+'#(music! start 679 end 739 then 278.047007 now 402.05 tstart 679.0 tend 402.05 cstart 400.952993 cend 124.002993 len -276.95)
+'#(music! start 679 end 739 then 402.05 now 611.174 tstart 679.0 tend 611.174 cstart 276.95 cend 209.12399999999997 len -67.82600000000002)
+'#(music! start 679 end 739 then 611.174 now 688.313002 tstart 679.0 tend 688.313002 cstart 67.82600000000002 cend 77.139002 len 9.313001999999983)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/02 Vampire Killer (Castlevania).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/3-m.wav> "trim" "67.82600000000002" "=77.139002")
+'#(music! start 679 end 739 then 688.313002 now 849.451007 tstart 688.313002 tend 739.0 cstart 0.0 cend 50.68699800000002 len 50.68699800000002)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/12 Mega Man X.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> "trim" "0.0" "=50.68699800000002")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/3-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/41-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/41-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/41-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/41-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Elbow Plank")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/42-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 802 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1406 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 774 samples; decrease volume?
+'#(music! start 739 end 769 then 0 now 278.047007 tstart 739 tend 278.047007 cstart 739 cend 278.047007 len -460.952993)
+'#(music! start 739 end 769 then 278.047007 now 402.05 tstart 739.0 tend 402.05 cstart 460.952993 cend 124.002993 len -336.95)
+'#(music! start 739 end 769 then 402.05 now 611.174 tstart 739.0 tend 611.174 cstart 336.95 cend 209.12399999999997 len -127.82600000000002)
+'#(music! start 739 end 769 then 611.174 now 688.313002 tstart 739.0 tend 688.313002 cstart 127.82600000000002 cend 77.139002 len -50.68699800000002)
+'#(music! start 739 end 769 then 688.313002 now 849.451007 tstart 739.0 tend 769.0 cstart 50.68699800000002 cend 80.68699800000002 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/12 Mega Man X.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> "trim" "50.68699800000002" "=80.68699800000002")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/42-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/42-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/42-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/42-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Raised Plank Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/43-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 848 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1493 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 810 samples; decrease volume?
+'#(music! start 769 end 799 then 0 now 278.047007 tstart 769 tend 278.047007 cstart 769 cend 278.047007 len -490.952993)
+'#(music! start 769 end 799 then 278.047007 now 402.05 tstart 769.0 tend 402.05 cstart 490.952993 cend 124.002993 len -366.95)
+'#(music! start 769 end 799 then 402.05 now 611.174 tstart 769.0 tend 611.174 cstart 366.95 cend 209.12399999999997 len -157.82600000000002)
+'#(music! start 769 end 799 then 611.174 now 688.313002 tstart 769.0 tend 688.313002 cstart 157.82600000000002 cend 77.139002 len -80.68699800000002)
+'#(music! start 769 end 799 then 688.313002 now 849.451007 tstart 769.0 tend 799.0 cstart 80.68699800000002 cend 110.68699800000002 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/12 Mega Man X.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> "trim" "80.68699800000002" "=110.68699800000002")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/43-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/43-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/43-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/43-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Raised Plank Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/44-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 985 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1709 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 950 samples; decrease volume?
+'#(music! start 799 end 829 then 0 now 278.047007 tstart 799 tend 278.047007 cstart 799 cend 278.047007 len -520.952993)
+'#(music! start 799 end 829 then 278.047007 now 402.05 tstart 799.0 tend 402.05 cstart 520.952993 cend 124.002993 len -396.95)
+'#(music! start 799 end 829 then 402.05 now 611.174 tstart 799.0 tend 611.174 cstart 396.95 cend 209.12399999999997 len -187.82600000000002)
+'#(music! start 799 end 829 then 611.174 now 688.313002 tstart 799.0 tend 688.313002 cstart 187.82600000000002 cend 77.139002 len -110.68699800000002)
+'#(music! start 799 end 829 then 688.313002 now 849.451007 tstart 799.0 tend 829.0 cstart 110.68699800000002 cend 140.68699800000002 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/12 Mega Man X.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> "trim" "110.68699800000002" "=140.68699800000002")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN mp3: recoverable MAD error
+/usr/local/bin/sox WARN mp3: recoverable MAD error
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/44-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/44-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/44-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/44-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Side Plank Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/45-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1210 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2132 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1195 samples; decrease volume?
+'#(music! start 829 end 859 then 0 now 278.047007 tstart 829 tend 278.047007 cstart 829 cend 278.047007 len -550.952993)
+'#(music! start 829 end 859 then 278.047007 now 402.05 tstart 829.0 tend 402.05 cstart 550.952993 cend 124.002993 len -426.95)
+'#(music! start 829 end 859 then 402.05 now 611.174 tstart 829.0 tend 611.174 cstart 426.95 cend 209.12399999999997 len -217.82600000000002)
+'#(music! start 829 end 859 then 611.174 now 688.313002 tstart 829.0 tend 688.313002 cstart 217.82600000000002 cend 77.139002 len -140.68699800000002)
+'#(music! start 829 end 859 then 688.313002 now 849.451007 tstart 829.0 tend 849.451007 cstart 140.68699800000002 cend 161.13800500000002 len 20.451007000000004)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/12 Mega Man X.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> "trim" "140.68699800000002" "=161.13800500000002")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN trim: Last 1 position(s) not reached (audio shorter than expected).
+'#(music! start 829 end 859 then 849.451007 now 900.494 tstart 849.451007 tend 859.0 cstart 0.0 cend 9.548992999999996 len 9.548992999999996)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/04 Bloody Tears (Castlevania II_ Simon's Quest).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/5-m.wav> "trim" "0.0" "=9.548992999999996")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/4-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/5-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/45-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/45-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/45-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/45-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Side Plank Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/46-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1371 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2394 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1341 samples; decrease volume?
+'#(music! start 859 end 889 then 0 now 278.047007 tstart 859 tend 278.047007 cstart 859 cend 278.047007 len -580.952993)
+'#(music! start 859 end 889 then 278.047007 now 402.05 tstart 859.0 tend 402.05 cstart 580.952993 cend 124.002993 len -456.95)
+'#(music! start 859 end 889 then 402.05 now 611.174 tstart 859.0 tend 611.174 cstart 456.95 cend 209.12399999999997 len -247.82600000000002)
+'#(music! start 859 end 889 then 611.174 now 688.313002 tstart 859.0 tend 688.313002 cstart 247.82600000000002 cend 77.139002 len -170.68699800000002)
+'#(music! start 859 end 889 then 688.313002 now 849.451007 tstart 859.0 tend 849.451007 cstart 170.68699800000002 cend 161.13800500000002 len -9.548992999999996)
+'#(music! start 859 end 889 then 849.451007 now 900.494 tstart 859.0 tend 889.0 cstart 9.548992999999996 cend 39.548992999999996 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/04 Bloody Tears (Castlevania II_ Simon's Quest).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/5-m.wav> "trim" "9.548992999999996" "=39.548992999999996")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/5-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/46-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/46-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/46-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/46-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Full Plank")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/47-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 695 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1223 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 676 samples; decrease volume?
+'#(music! start 889 end 919 then 0 now 278.047007 tstart 889 tend 278.047007 cstart 889 cend 278.047007 len -610.952993)
+'#(music! start 889 end 919 then 278.047007 now 402.05 tstart 889.0 tend 402.05 cstart 610.952993 cend 124.002993 len -486.95)
+'#(music! start 889 end 919 then 402.05 now 611.174 tstart 889.0 tend 611.174 cstart 486.95 cend 209.12399999999997 len -277.826)
+'#(music! start 889 end 919 then 611.174 now 688.313002 tstart 889.0 tend 688.313002 cstart 277.826 cend 77.139002 len -200.68699800000002)
+'#(music! start 889 end 919 then 688.313002 now 849.451007 tstart 889.0 tend 849.451007 cstart 200.68699800000002 cend 161.13800500000002 len -39.548992999999996)
+'#(music! start 889 end 919 then 849.451007 now 900.494 tstart 889.0 tend 900.494 cstart 39.548992999999996 cend 51.042993000000024 len 11.494000000000028)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/04 Bloody Tears (Castlevania II_ Simon's Quest).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/5-m.wav> "trim" "39.548992999999996" "=51.042993000000024")
+'#(music! start 889 end 919 then 900.494 now 1081.087991 tstart 900.494 tend 919.0 cstart 0.0 cend 18.505999999999972 len 18.505999999999972)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "0.0" "=18.505999999999972")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/6-m.wav' output clipped 33 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/5-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/47-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/47-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/47-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/47-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Elbow Plank")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/48-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 802 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1391 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 774 samples; decrease volume?
+'#(music! start 919 end 979 then 0 now 278.047007 tstart 919 tend 278.047007 cstart 919 cend 278.047007 len -640.952993)
+'#(music! start 919 end 979 then 278.047007 now 402.05 tstart 919.0 tend 402.05 cstart 640.952993 cend 124.002993 len -516.95)
+'#(music! start 919 end 979 then 402.05 now 611.174 tstart 919.0 tend 611.174 cstart 516.95 cend 209.12399999999997 len -307.826)
+'#(music! start 919 end 979 then 611.174 now 688.313002 tstart 919.0 tend 688.313002 cstart 307.826 cend 77.139002 len -230.68699800000002)
+'#(music! start 919 end 979 then 688.313002 now 849.451007 tstart 919.0 tend 849.451007 cstart 230.68699800000002 cend 161.13800500000002 len -69.548993)
+'#(music! start 919 end 979 then 849.451007 now 900.494 tstart 919.0 tend 900.494 cstart 69.548993 cend 51.042993000000024 len -18.505999999999972)
+'#(music! start 919 end 979 then 900.494 now 1081.087991 tstart 919.0 tend 979.0 cstart 18.505999999999972 cend 78.50599999999997 len 60.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "18.505999999999972" "=78.50599999999997")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/6-m.wav' output clipped 40 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/48-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/48-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/48-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/48-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Bridge")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/49-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 488 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 849 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 477 samples; decrease volume?
+'#(music! start 979 end 1039 then 0 now 278.047007 tstart 979 tend 278.047007 cstart 979 cend 278.047007 len -700.952993)
+'#(music! start 979 end 1039 then 278.047007 now 402.05 tstart 979.0 tend 402.05 cstart 700.952993 cend 124.002993 len -576.95)
+'#(music! start 979 end 1039 then 402.05 now 611.174 tstart 979.0 tend 611.174 cstart 576.95 cend 209.12399999999997 len -367.826)
+'#(music! start 979 end 1039 then 611.174 now 688.313002 tstart 979.0 tend 688.313002 cstart 367.826 cend 77.139002 len -290.686998)
+'#(music! start 979 end 1039 then 688.313002 now 849.451007 tstart 979.0 tend 849.451007 cstart 290.686998 cend 161.13800500000002 len -129.548993)
+'#(music! start 979 end 1039 then 849.451007 now 900.494 tstart 979.0 tend 900.494 cstart 129.548993 cend 51.042993000000024 len -78.50599999999997)
+'#(music! start 979 end 1039 then 900.494 now 1081.087991 tstart 979.0 tend 1039.0 cstart 78.50599999999997 cend 138.50599999999997 len 60.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "78.50599999999997" "=138.50599999999997")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/6-m.wav' output clipped 43 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/49-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/49-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/49-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/49-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/50-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1192 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1039 end 1045 then 0 now 278.047007 tstart 1039 tend 278.047007 cstart 1039 cend 278.047007 len -760.952993)
+'#(music! start 1039 end 1045 then 278.047007 now 402.05 tstart 1039.0 tend 402.05 cstart 760.952993 cend 124.002993 len -636.95)
+'#(music! start 1039 end 1045 then 402.05 now 611.174 tstart 1039.0 tend 611.174 cstart 636.95 cend 209.12399999999997 len -427.826)
+'#(music! start 1039 end 1045 then 611.174 now 688.313002 tstart 1039.0 tend 688.313002 cstart 427.826 cend 77.139002 len -350.686998)
+'#(music! start 1039 end 1045 then 688.313002 now 849.451007 tstart 1039.0 tend 849.451007 cstart 350.686998 cend 161.13800500000002 len -189.548993)
+'#(music! start 1039 end 1045 then 849.451007 now 900.494 tstart 1039.0 tend 900.494 cstart 189.548993 cend 51.042993000000024 len -138.50599999999997)
+'#(music! start 1039 end 1045 then 900.494 now 1081.087991 tstart 1039.0 tend 1045.0 cstart 138.50599999999997 cend 144.50599999999997 len 6.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "138.50599999999997" "=144.50599999999997")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/6-m.wav' output clipped 2 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/50-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/50-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/50-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/50-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/51-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 956 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1045 end 1065 then 0 now 278.047007 tstart 1045 tend 278.047007 cstart 1045 cend 278.047007 len -766.952993)
+'#(music! start 1045 end 1065 then 278.047007 now 402.05 tstart 1045.0 tend 402.05 cstart 766.952993 cend 124.002993 len -642.95)
+'#(music! start 1045 end 1065 then 402.05 now 611.174 tstart 1045.0 tend 611.174 cstart 642.95 cend 209.12399999999997 len -433.826)
+'#(music! start 1045 end 1065 then 611.174 now 688.313002 tstart 1045.0 tend 688.313002 cstart 433.826 cend 77.139002 len -356.686998)
+'#(music! start 1045 end 1065 then 688.313002 now 849.451007 tstart 1045.0 tend 849.451007 cstart 356.686998 cend 161.13800500000002 len -195.548993)
+'#(music! start 1045 end 1065 then 849.451007 now 900.494 tstart 1045.0 tend 900.494 cstart 195.548993 cend 51.042993000000024 len -144.50599999999997)
+'#(music! start 1045 end 1065 then 900.494 now 1081.087991 tstart 1045.0 tend 1065.0 cstart 144.50599999999997 cend 164.50599999999997 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "144.50599999999997" "=164.50599999999997")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/6-m.wav' output clipped 16 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/51-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/51-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/51-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/51-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/52-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1187 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1065 end 1067 then 0 now 278.047007 tstart 1065 tend 278.047007 cstart 1065 cend 278.047007 len -786.952993)
+'#(music! start 1065 end 1067 then 278.047007 now 402.05 tstart 1065.0 tend 402.05 cstart 786.952993 cend 124.002993 len -662.95)
+'#(music! start 1065 end 1067 then 402.05 now 611.174 tstart 1065.0 tend 611.174 cstart 662.95 cend 209.12399999999997 len -453.826)
+'#(music! start 1065 end 1067 then 611.174 now 688.313002 tstart 1065.0 tend 688.313002 cstart 453.826 cend 77.139002 len -376.686998)
+'#(music! start 1065 end 1067 then 688.313002 now 849.451007 tstart 1065.0 tend 849.451007 cstart 376.686998 cend 161.13800500000002 len -215.548993)
+'#(music! start 1065 end 1067 then 849.451007 now 900.494 tstart 1065.0 tend 900.494 cstart 215.548993 cend 51.042993000000024 len -164.50599999999997)
+'#(music! start 1065 end 1067 then 900.494 now 1081.087991 tstart 1065.0 tend 1067.0 cstart 164.50599999999997 cend 166.50599999999997 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "164.50599999999997" "=166.50599999999997")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/52-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/52-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/52-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/52-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/53-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 957 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1067 end 1087 then 0 now 278.047007 tstart 1067 tend 278.047007 cstart 1067 cend 278.047007 len -788.952993)
+'#(music! start 1067 end 1087 then 278.047007 now 402.05 tstart 1067.0 tend 402.05 cstart 788.952993 cend 124.002993 len -664.95)
+'#(music! start 1067 end 1087 then 402.05 now 611.174 tstart 1067.0 tend 611.174 cstart 664.95 cend 209.12399999999997 len -455.826)
+'#(music! start 1067 end 1087 then 611.174 now 688.313002 tstart 1067.0 tend 688.313002 cstart 455.826 cend 77.139002 len -378.686998)
+'#(music! start 1067 end 1087 then 688.313002 now 849.451007 tstart 1067.0 tend 849.451007 cstart 378.686998 cend 161.13800500000002 len -217.548993)
+'#(music! start 1067 end 1087 then 849.451007 now 900.494 tstart 1067.0 tend 900.494 cstart 217.548993 cend 51.042993000000024 len -166.50599999999997)
+'#(music! start 1067 end 1087 then 900.494 now 1081.087991 tstart 1067.0 tend 1081.087991 cstart 166.50599999999997 cend 180.59399100000007 len 14.087991000000102)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/03 Forest Funk (Ch 1 Light World).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "166.50599999999997" "=180.59399100000007")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN trim: Last 1 position(s) not reached (audio shorter than expected).
+'#(music! start 1067 end 1087 then 1081.087991 now 1221.6259960000002 tstart 1081.087991 tend 1087.0 cstart 0.0 cend 5.912008999999898 len 5.912008999999898)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "0.0" "=5.912008999999898")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/53-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/53-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/53-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/53-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/54-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1178 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1087 end 1089 then 0 now 278.047007 tstart 1087 tend 278.047007 cstart 1087 cend 278.047007 len -808.952993)
+'#(music! start 1087 end 1089 then 278.047007 now 402.05 tstart 1087.0 tend 402.05 cstart 808.952993 cend 124.002993 len -684.95)
+'#(music! start 1087 end 1089 then 402.05 now 611.174 tstart 1087.0 tend 611.174 cstart 684.95 cend 209.12399999999997 len -475.826)
+'#(music! start 1087 end 1089 then 611.174 now 688.313002 tstart 1087.0 tend 688.313002 cstart 475.826 cend 77.139002 len -398.686998)
+'#(music! start 1087 end 1089 then 688.313002 now 849.451007 tstart 1087.0 tend 849.451007 cstart 398.686998 cend 161.13800500000002 len -237.548993)
+'#(music! start 1087 end 1089 then 849.451007 now 900.494 tstart 1087.0 tend 900.494 cstart 237.548993 cend 51.042993000000024 len -186.50599999999997)
+'#(music! start 1087 end 1089 then 900.494 now 1081.087991 tstart 1087.0 tend 1081.087991 cstart 186.50599999999997 cend 180.59399100000007 len -5.912008999999898)
+'#(music! start 1087 end 1089 then 1081.087991 now 1221.6259960000002 tstart 1087.0 tend 1089.0 cstart 5.912008999999898 cend 7.912008999999898 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "5.912008999999898" "=7.912008999999898")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/54-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/54-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/54-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/54-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/55-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 958 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1089 end 1109 then 0 now 278.047007 tstart 1089 tend 278.047007 cstart 1089 cend 278.047007 len -810.952993)
+'#(music! start 1089 end 1109 then 278.047007 now 402.05 tstart 1089.0 tend 402.05 cstart 810.952993 cend 124.002993 len -686.95)
+'#(music! start 1089 end 1109 then 402.05 now 611.174 tstart 1089.0 tend 611.174 cstart 686.95 cend 209.12399999999997 len -477.826)
+'#(music! start 1089 end 1109 then 611.174 now 688.313002 tstart 1089.0 tend 688.313002 cstart 477.826 cend 77.139002 len -400.686998)
+'#(music! start 1089 end 1109 then 688.313002 now 849.451007 tstart 1089.0 tend 849.451007 cstart 400.686998 cend 161.13800500000002 len -239.548993)
+'#(music! start 1089 end 1109 then 849.451007 now 900.494 tstart 1089.0 tend 900.494 cstart 239.548993 cend 51.042993000000024 len -188.50599999999997)
+'#(music! start 1089 end 1109 then 900.494 now 1081.087991 tstart 1089.0 tend 1081.087991 cstart 188.50599999999997 cend 180.59399100000007 len -7.912008999999898)
+'#(music! start 1089 end 1109 then 1081.087991 now 1221.6259960000002 tstart 1089.0 tend 1109.0 cstart 7.912008999999898 cend 27.912008999999898 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "7.912008999999898" "=27.912008999999898")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/55-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/55-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/55-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/55-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/56-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1186 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1109 end 1111 then 0 now 278.047007 tstart 1109 tend 278.047007 cstart 1109 cend 278.047007 len -830.952993)
+'#(music! start 1109 end 1111 then 278.047007 now 402.05 tstart 1109.0 tend 402.05 cstart 830.952993 cend 124.002993 len -706.95)
+'#(music! start 1109 end 1111 then 402.05 now 611.174 tstart 1109.0 tend 611.174 cstart 706.95 cend 209.12399999999997 len -497.826)
+'#(music! start 1109 end 1111 then 611.174 now 688.313002 tstart 1109.0 tend 688.313002 cstart 497.826 cend 77.139002 len -420.686998)
+'#(music! start 1109 end 1111 then 688.313002 now 849.451007 tstart 1109.0 tend 849.451007 cstart 420.686998 cend 161.13800500000002 len -259.548993)
+'#(music! start 1109 end 1111 then 849.451007 now 900.494 tstart 1109.0 tend 900.494 cstart 259.548993 cend 51.042993000000024 len -208.50599999999997)
+'#(music! start 1109 end 1111 then 900.494 now 1081.087991 tstart 1109.0 tend 1081.087991 cstart 208.50599999999997 cend 180.59399100000007 len -27.912008999999898)
+'#(music! start 1109 end 1111 then 1081.087991 now 1221.6259960000002 tstart 1109.0 tend 1111.0 cstart 27.912008999999898 cend 29.912008999999898 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "27.912008999999898" "=29.912008999999898")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/56-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/56-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/56-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/56-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/57-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 978 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1111 end 1131 then 0 now 278.047007 tstart 1111 tend 278.047007 cstart 1111 cend 278.047007 len -832.952993)
+'#(music! start 1111 end 1131 then 278.047007 now 402.05 tstart 1111.0 tend 402.05 cstart 832.952993 cend 124.002993 len -708.95)
+'#(music! start 1111 end 1131 then 402.05 now 611.174 tstart 1111.0 tend 611.174 cstart 708.95 cend 209.12399999999997 len -499.826)
+'#(music! start 1111 end 1131 then 611.174 now 688.313002 tstart 1111.0 tend 688.313002 cstart 499.826 cend 77.139002 len -422.686998)
+'#(music! start 1111 end 1131 then 688.313002 now 849.451007 tstart 1111.0 tend 849.451007 cstart 422.686998 cend 161.13800500000002 len -261.548993)
+'#(music! start 1111 end 1131 then 849.451007 now 900.494 tstart 1111.0 tend 900.494 cstart 261.548993 cend 51.042993000000024 len -210.50599999999997)
+'#(music! start 1111 end 1131 then 900.494 now 1081.087991 tstart 1111.0 tend 1081.087991 cstart 210.50599999999997 cend 180.59399100000007 len -29.912008999999898)
+'#(music! start 1111 end 1131 then 1081.087991 now 1221.6259960000002 tstart 1111.0 tend 1131.0 cstart 29.912008999999898 cend 49.9120089999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "29.912008999999898" "=49.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/57-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/57-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/57-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/57-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/58-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1187 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1131 end 1133 then 0 now 278.047007 tstart 1131 tend 278.047007 cstart 1131 cend 278.047007 len -852.952993)
+'#(music! start 1131 end 1133 then 278.047007 now 402.05 tstart 1131.0 tend 402.05 cstart 852.952993 cend 124.002993 len -728.95)
+'#(music! start 1131 end 1133 then 402.05 now 611.174 tstart 1131.0 tend 611.174 cstart 728.95 cend 209.12399999999997 len -519.826)
+'#(music! start 1131 end 1133 then 611.174 now 688.313002 tstart 1131.0 tend 688.313002 cstart 519.826 cend 77.139002 len -442.686998)
+'#(music! start 1131 end 1133 then 688.313002 now 849.451007 tstart 1131.0 tend 849.451007 cstart 442.686998 cend 161.13800500000002 len -281.548993)
+'#(music! start 1131 end 1133 then 849.451007 now 900.494 tstart 1131.0 tend 900.494 cstart 281.548993 cend 51.042993000000024 len -230.50599999999997)
+'#(music! start 1131 end 1133 then 900.494 now 1081.087991 tstart 1131.0 tend 1081.087991 cstart 230.50599999999997 cend 180.59399100000007 len -49.9120089999999)
+'#(music! start 1131 end 1133 then 1081.087991 now 1221.6259960000002 tstart 1131.0 tend 1133.0 cstart 49.9120089999999 cend 51.9120089999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "49.9120089999999" "=51.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/58-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/58-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/58-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/58-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/59-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 985 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1133 end 1153 then 0 now 278.047007 tstart 1133 tend 278.047007 cstart 1133 cend 278.047007 len -854.952993)
+'#(music! start 1133 end 1153 then 278.047007 now 402.05 tstart 1133.0 tend 402.05 cstart 854.952993 cend 124.002993 len -730.95)
+'#(music! start 1133 end 1153 then 402.05 now 611.174 tstart 1133.0 tend 611.174 cstart 730.95 cend 209.12399999999997 len -521.826)
+'#(music! start 1133 end 1153 then 611.174 now 688.313002 tstart 1133.0 tend 688.313002 cstart 521.826 cend 77.139002 len -444.686998)
+'#(music! start 1133 end 1153 then 688.313002 now 849.451007 tstart 1133.0 tend 849.451007 cstart 444.686998 cend 161.13800500000002 len -283.548993)
+'#(music! start 1133 end 1153 then 849.451007 now 900.494 tstart 1133.0 tend 900.494 cstart 283.548993 cend 51.042993000000024 len -232.50599999999997)
+'#(music! start 1133 end 1153 then 900.494 now 1081.087991 tstart 1133.0 tend 1081.087991 cstart 232.50599999999997 cend 180.59399100000007 len -51.9120089999999)
+'#(music! start 1133 end 1153 then 1081.087991 now 1221.6259960000002 tstart 1133.0 tend 1153.0 cstart 51.9120089999999 cend 71.9120089999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "51.9120089999999" "=71.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/59-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/59-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/59-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/59-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/60-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1198 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1153 end 1155 then 0 now 278.047007 tstart 1153 tend 278.047007 cstart 1153 cend 278.047007 len -874.952993)
+'#(music! start 1153 end 1155 then 278.047007 now 402.05 tstart 1153.0 tend 402.05 cstart 874.952993 cend 124.002993 len -750.95)
+'#(music! start 1153 end 1155 then 402.05 now 611.174 tstart 1153.0 tend 611.174 cstart 750.95 cend 209.12399999999997 len -541.826)
+'#(music! start 1153 end 1155 then 611.174 now 688.313002 tstart 1153.0 tend 688.313002 cstart 541.826 cend 77.139002 len -464.686998)
+'#(music! start 1153 end 1155 then 688.313002 now 849.451007 tstart 1153.0 tend 849.451007 cstart 464.686998 cend 161.13800500000002 len -303.548993)
+'#(music! start 1153 end 1155 then 849.451007 now 900.494 tstart 1153.0 tend 900.494 cstart 303.548993 cend 51.042993000000024 len -252.50599999999997)
+'#(music! start 1153 end 1155 then 900.494 now 1081.087991 tstart 1153.0 tend 1081.087991 cstart 252.50599999999997 cend 180.59399100000007 len -71.9120089999999)
+'#(music! start 1153 end 1155 then 1081.087991 now 1221.6259960000002 tstart 1153.0 tend 1155.0 cstart 71.9120089999999 cend 73.9120089999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "71.9120089999999" "=73.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/60-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/60-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/60-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/60-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/61-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 966 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1155 end 1175 then 0 now 278.047007 tstart 1155 tend 278.047007 cstart 1155 cend 278.047007 len -876.952993)
+'#(music! start 1155 end 1175 then 278.047007 now 402.05 tstart 1155.0 tend 402.05 cstart 876.952993 cend 124.002993 len -752.95)
+'#(music! start 1155 end 1175 then 402.05 now 611.174 tstart 1155.0 tend 611.174 cstart 752.95 cend 209.12399999999997 len -543.826)
+'#(music! start 1155 end 1175 then 611.174 now 688.313002 tstart 1155.0 tend 688.313002 cstart 543.826 cend 77.139002 len -466.686998)
+'#(music! start 1155 end 1175 then 688.313002 now 849.451007 tstart 1155.0 tend 849.451007 cstart 466.686998 cend 161.13800500000002 len -305.548993)
+'#(music! start 1155 end 1175 then 849.451007 now 900.494 tstart 1155.0 tend 900.494 cstart 305.548993 cend 51.042993000000024 len -254.50599999999997)
+'#(music! start 1155 end 1175 then 900.494 now 1081.087991 tstart 1155.0 tend 1081.087991 cstart 254.50599999999997 cend 180.59399100000007 len -73.9120089999999)
+'#(music! start 1155 end 1175 then 1081.087991 now 1221.6259960000002 tstart 1155.0 tend 1175.0 cstart 73.9120089999999 cend 93.9120089999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "73.9120089999999" "=93.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/61-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/61-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/61-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/61-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/62-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1194 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1175 end 1177 then 0 now 278.047007 tstart 1175 tend 278.047007 cstart 1175 cend 278.047007 len -896.952993)
+'#(music! start 1175 end 1177 then 278.047007 now 402.05 tstart 1175.0 tend 402.05 cstart 896.952993 cend 124.002993 len -772.95)
+'#(music! start 1175 end 1177 then 402.05 now 611.174 tstart 1175.0 tend 611.174 cstart 772.95 cend 209.12399999999997 len -563.826)
+'#(music! start 1175 end 1177 then 611.174 now 688.313002 tstart 1175.0 tend 688.313002 cstart 563.826 cend 77.139002 len -486.686998)
+'#(music! start 1175 end 1177 then 688.313002 now 849.451007 tstart 1175.0 tend 849.451007 cstart 486.686998 cend 161.13800500000002 len -325.548993)
+'#(music! start 1175 end 1177 then 849.451007 now 900.494 tstart 1175.0 tend 900.494 cstart 325.548993 cend 51.042993000000024 len -274.506)
+'#(music! start 1175 end 1177 then 900.494 now 1081.087991 tstart 1175.0 tend 1081.087991 cstart 274.506 cend 180.59399100000007 len -93.9120089999999)
+'#(music! start 1175 end 1177 then 1081.087991 now 1221.6259960000002 tstart 1175.0 tend 1177.0 cstart 93.9120089999999 cend 95.9120089999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "93.9120089999999" "=95.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/62-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/62-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/62-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/62-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/63-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 969 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1177 end 1197 then 0 now 278.047007 tstart 1177 tend 278.047007 cstart 1177 cend 278.047007 len -898.952993)
+'#(music! start 1177 end 1197 then 278.047007 now 402.05 tstart 1177.0 tend 402.05 cstart 898.952993 cend 124.002993 len -774.95)
+'#(music! start 1177 end 1197 then 402.05 now 611.174 tstart 1177.0 tend 611.174 cstart 774.95 cend 209.12399999999997 len -565.826)
+'#(music! start 1177 end 1197 then 611.174 now 688.313002 tstart 1177.0 tend 688.313002 cstart 565.826 cend 77.139002 len -488.686998)
+'#(music! start 1177 end 1197 then 688.313002 now 849.451007 tstart 1177.0 tend 849.451007 cstart 488.686998 cend 161.13800500000002 len -327.548993)
+'#(music! start 1177 end 1197 then 849.451007 now 900.494 tstart 1177.0 tend 900.494 cstart 327.548993 cend 51.042993000000024 len -276.506)
+'#(music! start 1177 end 1197 then 900.494 now 1081.087991 tstart 1177.0 tend 1081.087991 cstart 276.506 cend 180.59399100000007 len -95.9120089999999)
+'#(music! start 1177 end 1197 then 1081.087991 now 1221.6259960000002 tstart 1177.0 tend 1197.0 cstart 95.9120089999999 cend 115.9120089999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "95.9120089999999" "=115.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/63-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/63-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/63-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/63-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/64-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1195 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1197 end 1199 then 0 now 278.047007 tstart 1197 tend 278.047007 cstart 1197 cend 278.047007 len -918.952993)
+'#(music! start 1197 end 1199 then 278.047007 now 402.05 tstart 1197.0 tend 402.05 cstart 918.952993 cend 124.002993 len -794.95)
+'#(music! start 1197 end 1199 then 402.05 now 611.174 tstart 1197.0 tend 611.174 cstart 794.95 cend 209.12399999999997 len -585.826)
+'#(music! start 1197 end 1199 then 611.174 now 688.313002 tstart 1197.0 tend 688.313002 cstart 585.826 cend 77.139002 len -508.686998)
+'#(music! start 1197 end 1199 then 688.313002 now 849.451007 tstart 1197.0 tend 849.451007 cstart 508.686998 cend 161.13800500000002 len -347.548993)
+'#(music! start 1197 end 1199 then 849.451007 now 900.494 tstart 1197.0 tend 900.494 cstart 347.548993 cend 51.042993000000024 len -296.506)
+'#(music! start 1197 end 1199 then 900.494 now 1081.087991 tstart 1197.0 tend 1081.087991 cstart 296.506 cend 180.59399100000007 len -115.9120089999999)
+'#(music! start 1197 end 1199 then 1081.087991 now 1221.6259960000002 tstart 1197.0 tend 1199.0 cstart 115.9120089999999 cend 117.9120089999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "115.9120089999999" "=117.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/64-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/64-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/64-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/64-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/65-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 964 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1199 end 1219 then 0 now 278.047007 tstart 1199 tend 278.047007 cstart 1199 cend 278.047007 len -920.952993)
+'#(music! start 1199 end 1219 then 278.047007 now 402.05 tstart 1199.0 tend 402.05 cstart 920.952993 cend 124.002993 len -796.95)
+'#(music! start 1199 end 1219 then 402.05 now 611.174 tstart 1199.0 tend 611.174 cstart 796.95 cend 209.12399999999997 len -587.826)
+'#(music! start 1199 end 1219 then 611.174 now 688.313002 tstart 1199.0 tend 688.313002 cstart 587.826 cend 77.139002 len -510.686998)
+'#(music! start 1199 end 1219 then 688.313002 now 849.451007 tstart 1199.0 tend 849.451007 cstart 510.686998 cend 161.13800500000002 len -349.548993)
+'#(music! start 1199 end 1219 then 849.451007 now 900.494 tstart 1199.0 tend 900.494 cstart 349.548993 cend 51.042993000000024 len -298.506)
+'#(music! start 1199 end 1219 then 900.494 now 1081.087991 tstart 1199.0 tend 1081.087991 cstart 298.506 cend 180.59399100000007 len -117.9120089999999)
+'#(music! start 1199 end 1219 then 1081.087991 now 1221.6259960000002 tstart 1199.0 tend 1219.0 cstart 117.9120089999999 cend 137.9120089999999 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "117.9120089999999" "=137.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/65-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/65-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/65-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/65-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/66-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1206 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1219 end 1221 then 0 now 278.047007 tstart 1219 tend 278.047007 cstart 1219 cend 278.047007 len -940.952993)
+'#(music! start 1219 end 1221 then 278.047007 now 402.05 tstart 1219.0 tend 402.05 cstart 940.952993 cend 124.002993 len -816.95)
+'#(music! start 1219 end 1221 then 402.05 now 611.174 tstart 1219.0 tend 611.174 cstart 816.95 cend 209.12399999999997 len -607.826)
+'#(music! start 1219 end 1221 then 611.174 now 688.313002 tstart 1219.0 tend 688.313002 cstart 607.826 cend 77.139002 len -530.686998)
+'#(music! start 1219 end 1221 then 688.313002 now 849.451007 tstart 1219.0 tend 849.451007 cstart 530.686998 cend 161.13800500000002 len -369.548993)
+'#(music! start 1219 end 1221 then 849.451007 now 900.494 tstart 1219.0 tend 900.494 cstart 369.548993 cend 51.042993000000024 len -318.506)
+'#(music! start 1219 end 1221 then 900.494 now 1081.087991 tstart 1219.0 tend 1081.087991 cstart 318.506 cend 180.59399100000007 len -137.9120089999999)
+'#(music! start 1219 end 1221 then 1081.087991 now 1221.6259960000002 tstart 1219.0 tend 1221.0 cstart 137.9120089999999 cend 139.9120089999999 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "137.9120089999999" "=139.9120089999999")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/66-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/66-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/66-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/66-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/67-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 967 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1221 end 1241 then 0 now 278.047007 tstart 1221 tend 278.047007 cstart 1221 cend 278.047007 len -942.952993)
+'#(music! start 1221 end 1241 then 278.047007 now 402.05 tstart 1221.0 tend 402.05 cstart 942.952993 cend 124.002993 len -818.95)
+'#(music! start 1221 end 1241 then 402.05 now 611.174 tstart 1221.0 tend 611.174 cstart 818.95 cend 209.12399999999997 len -609.826)
+'#(music! start 1221 end 1241 then 611.174 now 688.313002 tstart 1221.0 tend 688.313002 cstart 609.826 cend 77.139002 len -532.686998)
+'#(music! start 1221 end 1241 then 688.313002 now 849.451007 tstart 1221.0 tend 849.451007 cstart 532.686998 cend 161.13800500000002 len -371.548993)
+'#(music! start 1221 end 1241 then 849.451007 now 900.494 tstart 1221.0 tend 900.494 cstart 371.548993 cend 51.042993000000024 len -320.506)
+'#(music! start 1221 end 1241 then 900.494 now 1081.087991 tstart 1221.0 tend 1081.087991 cstart 320.506 cend 180.59399100000007 len -139.9120089999999)
+'#(music! start 1221 end 1241 then 1081.087991 now 1221.6259960000002 tstart 1221.0 tend 1221.6259960000002 cstart 139.9120089999999 cend 140.5380050000001 len 0.6259960000002138)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "139.9120089999999" "=140.5380050000001")
+/usr/local/bin/sox WARN trim: Last 1 position(s) not reached (audio shorter than expected).
+'#(music! start 1221 end 1241 then 1221.6259960000002 now 1345.5869940000002 tstart 1221.6259960000002 tend 1241.0 cstart 0.0 cend 19.374003999999786 len 19.374003999999786)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "0.0" "=19.374003999999786")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 941 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/67-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/67-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/67-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/67-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/68-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1190 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1241 end 1243 then 0 now 278.047007 tstart 1241 tend 278.047007 cstart 1241 cend 278.047007 len -962.952993)
+'#(music! start 1241 end 1243 then 278.047007 now 402.05 tstart 1241.0 tend 402.05 cstart 962.952993 cend 124.002993 len -838.95)
+'#(music! start 1241 end 1243 then 402.05 now 611.174 tstart 1241.0 tend 611.174 cstart 838.95 cend 209.12399999999997 len -629.826)
+'#(music! start 1241 end 1243 then 611.174 now 688.313002 tstart 1241.0 tend 688.313002 cstart 629.826 cend 77.139002 len -552.686998)
+'#(music! start 1241 end 1243 then 688.313002 now 849.451007 tstart 1241.0 tend 849.451007 cstart 552.686998 cend 161.13800500000002 len -391.548993)
+'#(music! start 1241 end 1243 then 849.451007 now 900.494 tstart 1241.0 tend 900.494 cstart 391.548993 cend 51.042993000000024 len -340.506)
+'#(music! start 1241 end 1243 then 900.494 now 1081.087991 tstart 1241.0 tend 1081.087991 cstart 340.506 cend 180.59399100000007 len -159.9120089999999)
+'#(music! start 1241 end 1243 then 1081.087991 now 1221.6259960000002 tstart 1241.0 tend 1221.6259960000002 cstart 159.9120089999999 cend 140.5380050000001 len -19.374003999999786)
+'#(music! start 1241 end 1243 then 1221.6259960000002 now 1345.5869940000002 tstart 1241.0 tend 1243.0 cstart 19.374003999999786 cend 21.374003999999786 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "19.374003999999786" "=21.374003999999786")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 322 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/68-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/68-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/68-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/68-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/69-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 968 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1243 end 1263 then 0 now 278.047007 tstart 1243 tend 278.047007 cstart 1243 cend 278.047007 len -964.952993)
+'#(music! start 1243 end 1263 then 278.047007 now 402.05 tstart 1243.0 tend 402.05 cstart 964.952993 cend 124.002993 len -840.95)
+'#(music! start 1243 end 1263 then 402.05 now 611.174 tstart 1243.0 tend 611.174 cstart 840.95 cend 209.12399999999997 len -631.826)
+'#(music! start 1243 end 1263 then 611.174 now 688.313002 tstart 1243.0 tend 688.313002 cstart 631.826 cend 77.139002 len -554.686998)
+'#(music! start 1243 end 1263 then 688.313002 now 849.451007 tstart 1243.0 tend 849.451007 cstart 554.686998 cend 161.13800500000002 len -393.548993)
+'#(music! start 1243 end 1263 then 849.451007 now 900.494 tstart 1243.0 tend 900.494 cstart 393.548993 cend 51.042993000000024 len -342.506)
+'#(music! start 1243 end 1263 then 900.494 now 1081.087991 tstart 1243.0 tend 1081.087991 cstart 342.506 cend 180.59399100000007 len -161.9120089999999)
+'#(music! start 1243 end 1263 then 1081.087991 now 1221.6259960000002 tstart 1243.0 tend 1221.6259960000002 cstart 161.9120089999999 cend 140.5380050000001 len -21.374003999999786)
+'#(music! start 1243 end 1263 then 1221.6259960000002 now 1345.5869940000002 tstart 1243.0 tend 1263.0 cstart 21.374003999999786 cend 41.374003999999786 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "21.374003999999786" "=41.374003999999786")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 3181 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/69-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/69-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/69-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/69-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/70-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1212 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1263 end 1265 then 0 now 278.047007 tstart 1263 tend 278.047007 cstart 1263 cend 278.047007 len -984.952993)
+'#(music! start 1263 end 1265 then 278.047007 now 402.05 tstart 1263.0 tend 402.05 cstart 984.952993 cend 124.002993 len -860.95)
+'#(music! start 1263 end 1265 then 402.05 now 611.174 tstart 1263.0 tend 611.174 cstart 860.95 cend 209.12399999999997 len -651.826)
+'#(music! start 1263 end 1265 then 611.174 now 688.313002 tstart 1263.0 tend 688.313002 cstart 651.826 cend 77.139002 len -574.686998)
+'#(music! start 1263 end 1265 then 688.313002 now 849.451007 tstart 1263.0 tend 849.451007 cstart 574.686998 cend 161.13800500000002 len -413.548993)
+'#(music! start 1263 end 1265 then 849.451007 now 900.494 tstart 1263.0 tend 900.494 cstart 413.548993 cend 51.042993000000024 len -362.506)
+'#(music! start 1263 end 1265 then 900.494 now 1081.087991 tstart 1263.0 tend 1081.087991 cstart 362.506 cend 180.59399100000007 len -181.9120089999999)
+'#(music! start 1263 end 1265 then 1081.087991 now 1221.6259960000002 tstart 1263.0 tend 1221.6259960000002 cstart 181.9120089999999 cend 140.5380050000001 len -41.374003999999786)
+'#(music! start 1263 end 1265 then 1221.6259960000002 now 1345.5869940000002 tstart 1263.0 tend 1265.0 cstart 41.374003999999786 cend 43.374003999999786 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "41.374003999999786" "=43.374003999999786")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 365 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/70-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/70-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/70-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/70-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/71-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 984 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1265 end 1285 then 0 now 278.047007 tstart 1265 tend 278.047007 cstart 1265 cend 278.047007 len -986.952993)
+'#(music! start 1265 end 1285 then 278.047007 now 402.05 tstart 1265.0 tend 402.05 cstart 986.952993 cend 124.002993 len -862.95)
+'#(music! start 1265 end 1285 then 402.05 now 611.174 tstart 1265.0 tend 611.174 cstart 862.95 cend 209.12399999999997 len -653.826)
+'#(music! start 1265 end 1285 then 611.174 now 688.313002 tstart 1265.0 tend 688.313002 cstart 653.826 cend 77.139002 len -576.686998)
+'#(music! start 1265 end 1285 then 688.313002 now 849.451007 tstart 1265.0 tend 849.451007 cstart 576.686998 cend 161.13800500000002 len -415.548993)
+'#(music! start 1265 end 1285 then 849.451007 now 900.494 tstart 1265.0 tend 900.494 cstart 415.548993 cend 51.042993000000024 len -364.506)
+'#(music! start 1265 end 1285 then 900.494 now 1081.087991 tstart 1265.0 tend 1081.087991 cstart 364.506 cend 180.59399100000007 len -183.9120089999999)
+'#(music! start 1265 end 1285 then 1081.087991 now 1221.6259960000002 tstart 1265.0 tend 1221.6259960000002 cstart 183.9120089999999 cend 140.5380050000001 len -43.374003999999786)
+'#(music! start 1265 end 1285 then 1221.6259960000002 now 1345.5869940000002 tstart 1265.0 tend 1285.0 cstart 43.374003999999786 cend 63.374003999999786 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "43.374003999999786" "=63.374003999999786")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 3713 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/71-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/71-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/71-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/71-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/72-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1192 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1285 end 1287 then 0 now 278.047007 tstart 1285 tend 278.047007 cstart 1285 cend 278.047007 len -1006.952993)
+'#(music! start 1285 end 1287 then 278.047007 now 402.05 tstart 1285.0 tend 402.05 cstart 1006.952993 cend 124.002993 len -882.95)
+'#(music! start 1285 end 1287 then 402.05 now 611.174 tstart 1285.0 tend 611.174 cstart 882.95 cend 209.12399999999997 len -673.826)
+'#(music! start 1285 end 1287 then 611.174 now 688.313002 tstart 1285.0 tend 688.313002 cstart 673.826 cend 77.139002 len -596.686998)
+'#(music! start 1285 end 1287 then 688.313002 now 849.451007 tstart 1285.0 tend 849.451007 cstart 596.686998 cend 161.13800500000002 len -435.548993)
+'#(music! start 1285 end 1287 then 849.451007 now 900.494 tstart 1285.0 tend 900.494 cstart 435.548993 cend 51.042993000000024 len -384.506)
+'#(music! start 1285 end 1287 then 900.494 now 1081.087991 tstart 1285.0 tend 1081.087991 cstart 384.506 cend 180.59399100000007 len -203.9120089999999)
+'#(music! start 1285 end 1287 then 1081.087991 now 1221.6259960000002 tstart 1285.0 tend 1221.6259960000002 cstart 203.9120089999999 cend 140.5380050000001 len -63.374003999999786)
+'#(music! start 1285 end 1287 then 1221.6259960000002 now 1345.5869940000002 tstart 1285.0 tend 1287.0 cstart 63.374003999999786 cend 65.37400399999979 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "63.374003999999786" "=65.37400399999979")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 382 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/72-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/72-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/72-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/72-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Push Ups")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/73-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 553 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 960 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 546 samples; decrease volume?
+'#(music! start 1287 end 1307 then 0 now 278.047007 tstart 1287 tend 278.047007 cstart 1287 cend 278.047007 len -1008.952993)
+'#(music! start 1287 end 1307 then 278.047007 now 402.05 tstart 1287.0 tend 402.05 cstart 1008.952993 cend 124.002993 len -884.95)
+'#(music! start 1287 end 1307 then 402.05 now 611.174 tstart 1287.0 tend 611.174 cstart 884.95 cend 209.12399999999997 len -675.826)
+'#(music! start 1287 end 1307 then 611.174 now 688.313002 tstart 1287.0 tend 688.313002 cstart 675.826 cend 77.139002 len -598.686998)
+'#(music! start 1287 end 1307 then 688.313002 now 849.451007 tstart 1287.0 tend 849.451007 cstart 598.686998 cend 161.13800500000002 len -437.548993)
+'#(music! start 1287 end 1307 then 849.451007 now 900.494 tstart 1287.0 tend 900.494 cstart 437.548993 cend 51.042993000000024 len -386.506)
+'#(music! start 1287 end 1307 then 900.494 now 1081.087991 tstart 1287.0 tend 1081.087991 cstart 386.506 cend 180.59399100000007 len -205.9120089999999)
+'#(music! start 1287 end 1307 then 1081.087991 now 1221.6259960000002 tstart 1287.0 tend 1221.6259960000002 cstart 205.9120089999999 cend 140.5380050000001 len -65.37400399999979)
+'#(music! start 1287 end 1307 then 1221.6259960000002 now 1345.5869940000002 tstart 1287.0 tend 1307.0 cstart 65.37400399999979 cend 85.37400399999979 len 20.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "65.37400399999979" "=85.37400399999979")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 4925 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/73-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/73-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/73-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/73-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Take A Rest")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/74-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 677 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1186 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 659 samples; decrease volume?
+'#(music! start 1307 end 1309 then 0 now 278.047007 tstart 1307 tend 278.047007 cstart 1307 cend 278.047007 len -1028.9529929999999)
+'#(music! start 1307 end 1309 then 278.047007 now 402.05 tstart 1307.0 tend 402.05 cstart 1028.9529929999999 cend 124.002993 len -904.95)
+'#(music! start 1307 end 1309 then 402.05 now 611.174 tstart 1307.0 tend 611.174 cstart 904.95 cend 209.12399999999997 len -695.826)
+'#(music! start 1307 end 1309 then 611.174 now 688.313002 tstart 1307.0 tend 688.313002 cstart 695.826 cend 77.139002 len -618.686998)
+'#(music! start 1307 end 1309 then 688.313002 now 849.451007 tstart 1307.0 tend 849.451007 cstart 618.686998 cend 161.13800500000002 len -457.548993)
+'#(music! start 1307 end 1309 then 849.451007 now 900.494 tstart 1307.0 tend 900.494 cstart 457.548993 cend 51.042993000000024 len -406.506)
+'#(music! start 1307 end 1309 then 900.494 now 1081.087991 tstart 1307.0 tend 1081.087991 cstart 406.506 cend 180.59399100000007 len -225.9120089999999)
+'#(music! start 1307 end 1309 then 1081.087991 now 1221.6259960000002 tstart 1307.0 tend 1221.6259960000002 cstart 225.9120089999999 cend 140.5380050000001 len -85.37400399999979)
+'#(music! start 1307 end 1309 then 1221.6259960000002 now 1345.5869940000002 tstart 1307.0 tend 1309.0 cstart 85.37400399999979 cend 87.37400399999979 len 2.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/action/09 Flullu Blobbo Lolz (Pulsen Edit).mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> "trim" "85.37400399999979" "=87.37400399999979")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/8-m.wav' output clipped 552 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/8-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/74-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/74-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/74-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/74-full.wav>)
+
+Total (last music) length is: #<time 00:21:49>
+Total music (soft) length is: #<time 00:07:01>'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Runner's Lunge Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/76-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 858 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1490 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 847 samples; decrease volume?
+'#(music! start 1309 end 1339 then 0 now 75.389002 tstart 1309 tend 75.389002 cstart 1309 cend 75.389002 len -1233.610998)
+'#(music! start 1309 end 1339 then 75.389002 now 268.904002 tstart 1309.0 tend 268.904002 cstart 1233.610998 cend 193.515 len -1040.095998)
+'#(music! start 1309 end 1339 then 268.904002 now 362.656995 tstart 1309.0 tend 362.656995 cstart 1040.095998 cend 93.752993 len -946.343005)
+'#(music! start 1309 end 1339 then 362.656995 now 421.745 tstart 1309.0 tend 421.745 cstart 946.343005 cend 59.08800500000001 len -887.255)
+'#(music! start 1309 end 1339 then 421.745 now 497.134002 tstart 1309.0 tend 497.134002 cstart 887.255 cend 75.389002 len -811.865998)
+'#(music! start 1309 end 1339 then 497.134002 now 690.649002 tstart 1309.0 tend 690.649002 cstart 811.865998 cend 193.515 len -618.350998)
+'#(music! start 1309 end 1339 then 690.649002 now 784.4019949999999 tstart 1309.0 tend 784.4019949999999 cstart 618.350998 cend 93.75299299999995 len -524.5980050000001)
+'#(music! start 1309 end 1339 then 784.4019949999999 now 843.4899999999999 tstart 1309.0 tend 843.4899999999999 cstart 524.5980050000001 cend 59.08800499999995 len -465.5100000000001)
+'#(music! start 1309 end 1339 then 843.4899999999999 now 918.8790019999999 tstart 1309.0 tend 918.8790019999999 cstart 465.5100000000001 cend 75.389002 len -390.1209980000001)
+'#(music! start 1309 end 1339 then 918.8790019999999 now 1112.394002 tstart 1309.0 tend 1112.394002 cstart 390.1209980000001 cend 193.5150000000001 len -196.605998)
+'#(music! start 1309 end 1339 then 1112.394002 now 1206.146995 tstart 1309.0 tend 1206.146995 cstart 196.605998 cend 93.75299300000006 len -102.85300499999994)
+'#(music! start 1309 end 1339 then 1206.146995 now 1265.2350000000001 tstart 1309.0 tend 1265.2350000000001 cstart 102.85300499999994 cend 59.08800500000007 len -43.76499999999987)
+'#(music! start 1309 end 1339 then 1265.2350000000001 now 1340.624002 tstart 1309.0 tend 1339.0 cstart 43.76499999999987 cend 73.76499999999987 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/2-02 Character Select.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/12-m.wav> "trim" "43.76499999999987" "=73.76499999999987")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/12-m.wav' output clipped 25 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/12-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/76-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/76-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/76-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/76-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Runner's Lunge Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/77-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1010 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1776 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 984 samples; decrease volume?
+'#(music! start 1339 end 1369 then 0 now 75.389002 tstart 1339 tend 75.389002 cstart 1339 cend 75.389002 len -1263.610998)
+'#(music! start 1339 end 1369 then 75.389002 now 268.904002 tstart 1339.0 tend 268.904002 cstart 1263.610998 cend 193.515 len -1070.095998)
+'#(music! start 1339 end 1369 then 268.904002 now 362.656995 tstart 1339.0 tend 362.656995 cstart 1070.095998 cend 93.752993 len -976.343005)
+'#(music! start 1339 end 1369 then 362.656995 now 421.745 tstart 1339.0 tend 421.745 cstart 976.343005 cend 59.08800500000001 len -917.255)
+'#(music! start 1339 end 1369 then 421.745 now 497.134002 tstart 1339.0 tend 497.134002 cstart 917.255 cend 75.389002 len -841.865998)
+'#(music! start 1339 end 1369 then 497.134002 now 690.649002 tstart 1339.0 tend 690.649002 cstart 841.865998 cend 193.515 len -648.350998)
+'#(music! start 1339 end 1369 then 690.649002 now 784.4019949999999 tstart 1339.0 tend 784.4019949999999 cstart 648.350998 cend 93.75299299999995 len -554.5980050000001)
+'#(music! start 1339 end 1369 then 784.4019949999999 now 843.4899999999999 tstart 1339.0 tend 843.4899999999999 cstart 554.5980050000001 cend 59.08800499999995 len -495.5100000000001)
+'#(music! start 1339 end 1369 then 843.4899999999999 now 918.8790019999999 tstart 1339.0 tend 918.8790019999999 cstart 495.5100000000001 cend 75.389002 len -420.1209980000001)
+'#(music! start 1339 end 1369 then 918.8790019999999 now 1112.394002 tstart 1339.0 tend 1112.394002 cstart 420.1209980000001 cend 193.5150000000001 len -226.605998)
+'#(music! start 1339 end 1369 then 1112.394002 now 1206.146995 tstart 1339.0 tend 1206.146995 cstart 226.605998 cend 93.75299300000006 len -132.85300499999994)
+'#(music! start 1339 end 1369 then 1206.146995 now 1265.2350000000001 tstart 1339.0 tend 1265.2350000000001 cstart 132.85300499999994 cend 59.08800500000007 len -73.76499999999987)
+'#(music! start 1339 end 1369 then 1265.2350000000001 now 1340.624002 tstart 1339.0 tend 1340.624002 cstart 73.76499999999987 cend 75.38900199999989 len 1.6240020000000186)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/2-02 Character Select.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/12-m.wav> "trim" "73.76499999999987" "=75.38900199999989")
+'#(music! start 1339 end 1369 then 1340.624002 now 1534.139002 tstart 1340.624002 tend 1369.0 cstart 0.0 cend 28.37599799999998 len 28.37599799999998)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "0.0" "=28.37599799999998")
+/usr/local/bin/sox WARN rate: rate clipped 69 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 60 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/12-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/77-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/77-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/77-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/77-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Bicep Stretch")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/78-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 925 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1610 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 914 samples; decrease volume?
+'#(music! start 1369 end 1399 then 0 now 75.389002 tstart 1369 tend 75.389002 cstart 1369 cend 75.389002 len -1293.610998)
+'#(music! start 1369 end 1399 then 75.389002 now 268.904002 tstart 1369.0 tend 268.904002 cstart 1293.610998 cend 193.515 len -1100.095998)
+'#(music! start 1369 end 1399 then 268.904002 now 362.656995 tstart 1369.0 tend 362.656995 cstart 1100.095998 cend 93.752993 len -1006.343005)
+'#(music! start 1369 end 1399 then 362.656995 now 421.745 tstart 1369.0 tend 421.745 cstart 1006.343005 cend 59.08800500000001 len -947.255)
+'#(music! start 1369 end 1399 then 421.745 now 497.134002 tstart 1369.0 tend 497.134002 cstart 947.255 cend 75.389002 len -871.865998)
+'#(music! start 1369 end 1399 then 497.134002 now 690.649002 tstart 1369.0 tend 690.649002 cstart 871.865998 cend 193.515 len -678.350998)
+'#(music! start 1369 end 1399 then 690.649002 now 784.4019949999999 tstart 1369.0 tend 784.4019949999999 cstart 678.350998 cend 93.75299299999995 len -584.5980050000001)
+'#(music! start 1369 end 1399 then 784.4019949999999 now 843.4899999999999 tstart 1369.0 tend 843.4899999999999 cstart 584.5980050000001 cend 59.08800499999995 len -525.5100000000001)
+'#(music! start 1369 end 1399 then 843.4899999999999 now 918.8790019999999 tstart 1369.0 tend 918.8790019999999 cstart 525.5100000000001 cend 75.389002 len -450.1209980000001)
+'#(music! start 1369 end 1399 then 918.8790019999999 now 1112.394002 tstart 1369.0 tend 1112.394002 cstart 450.1209980000001 cend 193.5150000000001 len -256.605998)
+'#(music! start 1369 end 1399 then 1112.394002 now 1206.146995 tstart 1369.0 tend 1206.146995 cstart 256.605998 cend 93.75299300000006 len -162.85300499999994)
+'#(music! start 1369 end 1399 then 1206.146995 now 1265.2350000000001 tstart 1369.0 tend 1265.2350000000001 cstart 162.85300499999994 cend 59.08800500000007 len -103.76499999999987)
+'#(music! start 1369 end 1399 then 1265.2350000000001 now 1340.624002 tstart 1369.0 tend 1340.624002 cstart 103.76499999999987 cend 75.38900199999989 len -28.37599799999998)
+'#(music! start 1369 end 1399 then 1340.624002 now 1534.139002 tstart 1369.0 tend 1399.0 cstart 28.37599799999998 cend 58.37599799999998 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "28.37599799999998" "=58.37599799999998")
+/usr/local/bin/sox WARN rate: rate clipped 2021 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1756 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/78-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/78-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/78-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/78-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Head to Knee Stretch Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/79-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1110 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1958 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1088 samples; decrease volume?
+'#(music! start 1399 end 1429 then 0 now 75.389002 tstart 1399 tend 75.389002 cstart 1399 cend 75.389002 len -1323.610998)
+'#(music! start 1399 end 1429 then 75.389002 now 268.904002 tstart 1399.0 tend 268.904002 cstart 1323.610998 cend 193.515 len -1130.095998)
+'#(music! start 1399 end 1429 then 268.904002 now 362.656995 tstart 1399.0 tend 362.656995 cstart 1130.095998 cend 93.752993 len -1036.343005)
+'#(music! start 1399 end 1429 then 362.656995 now 421.745 tstart 1399.0 tend 421.745 cstart 1036.343005 cend 59.08800500000001 len -977.255)
+'#(music! start 1399 end 1429 then 421.745 now 497.134002 tstart 1399.0 tend 497.134002 cstart 977.255 cend 75.389002 len -901.865998)
+'#(music! start 1399 end 1429 then 497.134002 now 690.649002 tstart 1399.0 tend 690.649002 cstart 901.865998 cend 193.515 len -708.350998)
+'#(music! start 1399 end 1429 then 690.649002 now 784.4019949999999 tstart 1399.0 tend 784.4019949999999 cstart 708.350998 cend 93.75299299999995 len -614.5980050000001)
+'#(music! start 1399 end 1429 then 784.4019949999999 now 843.4899999999999 tstart 1399.0 tend 843.4899999999999 cstart 614.5980050000001 cend 59.08800499999995 len -555.5100000000001)
+'#(music! start 1399 end 1429 then 843.4899999999999 now 918.8790019999999 tstart 1399.0 tend 918.8790019999999 cstart 555.5100000000001 cend 75.389002 len -480.1209980000001)
+'#(music! start 1399 end 1429 then 918.8790019999999 now 1112.394002 tstart 1399.0 tend 1112.394002 cstart 480.1209980000001 cend 193.5150000000001 len -286.605998)
+'#(music! start 1399 end 1429 then 1112.394002 now 1206.146995 tstart 1399.0 tend 1206.146995 cstart 286.605998 cend 93.75299300000006 len -192.85300499999994)
+'#(music! start 1399 end 1429 then 1206.146995 now 1265.2350000000001 tstart 1399.0 tend 1265.2350000000001 cstart 192.85300499999994 cend 59.08800500000007 len -133.76499999999987)
+'#(music! start 1399 end 1429 then 1265.2350000000001 now 1340.624002 tstart 1399.0 tend 1340.624002 cstart 133.76499999999987 cend 75.38900199999989 len -58.37599799999998)
+'#(music! start 1399 end 1429 then 1340.624002 now 1534.139002 tstart 1399.0 tend 1429.0 cstart 58.37599799999998 cend 88.37599799999998 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "58.37599799999998" "=88.37599799999998")
+/usr/local/bin/sox WARN rate: rate clipped 530 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 455 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/79-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/79-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/79-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/79-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Head to Knee Stretch Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/80-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1262 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2203 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1238 samples; decrease volume?
+'#(music! start 1429 end 1459 then 0 now 75.389002 tstart 1429 tend 75.389002 cstart 1429 cend 75.389002 len -1353.610998)
+'#(music! start 1429 end 1459 then 75.389002 now 268.904002 tstart 1429.0 tend 268.904002 cstart 1353.610998 cend 193.515 len -1160.095998)
+'#(music! start 1429 end 1459 then 268.904002 now 362.656995 tstart 1429.0 tend 362.656995 cstart 1160.095998 cend 93.752993 len -1066.343005)
+'#(music! start 1429 end 1459 then 362.656995 now 421.745 tstart 1429.0 tend 421.745 cstart 1066.343005 cend 59.08800500000001 len -1007.255)
+'#(music! start 1429 end 1459 then 421.745 now 497.134002 tstart 1429.0 tend 497.134002 cstart 1007.255 cend 75.389002 len -931.865998)
+'#(music! start 1429 end 1459 then 497.134002 now 690.649002 tstart 1429.0 tend 690.649002 cstart 931.865998 cend 193.515 len -738.350998)
+'#(music! start 1429 end 1459 then 690.649002 now 784.4019949999999 tstart 1429.0 tend 784.4019949999999 cstart 738.350998 cend 93.75299299999995 len -644.5980050000001)
+'#(music! start 1429 end 1459 then 784.4019949999999 now 843.4899999999999 tstart 1429.0 tend 843.4899999999999 cstart 644.5980050000001 cend 59.08800499999995 len -585.5100000000001)
+'#(music! start 1429 end 1459 then 843.4899999999999 now 918.8790019999999 tstart 1429.0 tend 918.8790019999999 cstart 585.5100000000001 cend 75.389002 len -510.1209980000001)
+'#(music! start 1429 end 1459 then 918.8790019999999 now 1112.394002 tstart 1429.0 tend 1112.394002 cstart 510.1209980000001 cend 193.5150000000001 len -316.605998)
+'#(music! start 1429 end 1459 then 1112.394002 now 1206.146995 tstart 1429.0 tend 1206.146995 cstart 316.605998 cend 93.75299300000006 len -222.85300499999994)
+'#(music! start 1429 end 1459 then 1206.146995 now 1265.2350000000001 tstart 1429.0 tend 1265.2350000000001 cstart 222.85300499999994 cend 59.08800500000007 len -163.76499999999987)
+'#(music! start 1429 end 1459 then 1265.2350000000001 now 1340.624002 tstart 1429.0 tend 1340.624002 cstart 163.76499999999987 cend 75.38900199999989 len -88.37599799999998)
+'#(music! start 1429 end 1459 then 1340.624002 now 1534.139002 tstart 1429.0 tend 1459.0 cstart 88.37599799999998 cend 118.37599799999998 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "88.37599799999998" "=118.37599799999998")
+/usr/local/bin/sox WARN rate: rate clipped 2002 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1762 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/80-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/80-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/80-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/80-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Neck Stretch Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/81-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 691 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1248 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 676 samples; decrease volume?
+'#(music! start 1459 end 1489 then 0 now 75.389002 tstart 1459 tend 75.389002 cstart 1459 cend 75.389002 len -1383.610998)
+'#(music! start 1459 end 1489 then 75.389002 now 268.904002 tstart 1459.0 tend 268.904002 cstart 1383.610998 cend 193.515 len -1190.095998)
+'#(music! start 1459 end 1489 then 268.904002 now 362.656995 tstart 1459.0 tend 362.656995 cstart 1190.095998 cend 93.752993 len -1096.343005)
+'#(music! start 1459 end 1489 then 362.656995 now 421.745 tstart 1459.0 tend 421.745 cstart 1096.343005 cend 59.08800500000001 len -1037.255)
+'#(music! start 1459 end 1489 then 421.745 now 497.134002 tstart 1459.0 tend 497.134002 cstart 1037.255 cend 75.389002 len -961.865998)
+'#(music! start 1459 end 1489 then 497.134002 now 690.649002 tstart 1459.0 tend 690.649002 cstart 961.865998 cend 193.515 len -768.350998)
+'#(music! start 1459 end 1489 then 690.649002 now 784.4019949999999 tstart 1459.0 tend 784.4019949999999 cstart 768.350998 cend 93.75299299999995 len -674.5980050000001)
+'#(music! start 1459 end 1489 then 784.4019949999999 now 843.4899999999999 tstart 1459.0 tend 843.4899999999999 cstart 674.5980050000001 cend 59.08800499999995 len -615.5100000000001)
+'#(music! start 1459 end 1489 then 843.4899999999999 now 918.8790019999999 tstart 1459.0 tend 918.8790019999999 cstart 615.5100000000001 cend 75.389002 len -540.1209980000001)
+'#(music! start 1459 end 1489 then 918.8790019999999 now 1112.394002 tstart 1459.0 tend 1112.394002 cstart 540.1209980000001 cend 193.5150000000001 len -346.605998)
+'#(music! start 1459 end 1489 then 1112.394002 now 1206.146995 tstart 1459.0 tend 1206.146995 cstart 346.605998 cend 93.75299300000006 len -252.85300499999994)
+'#(music! start 1459 end 1489 then 1206.146995 now 1265.2350000000001 tstart 1459.0 tend 1265.2350000000001 cstart 252.85300499999994 cend 59.08800500000007 len -193.76499999999987)
+'#(music! start 1459 end 1489 then 1265.2350000000001 now 1340.624002 tstart 1459.0 tend 1340.624002 cstart 193.76499999999987 cend 75.38900199999989 len -118.37599799999998)
+'#(music! start 1459 end 1489 then 1340.624002 now 1534.139002 tstart 1459.0 tend 1489.0 cstart 118.37599799999998 cend 148.37599799999998 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "118.37599799999998" "=148.37599799999998")
+/usr/local/bin/sox WARN rate: rate clipped 1745 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1529 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/81-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/81-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/81-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/81-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Neck Stretch Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/82-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 835 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1467 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 829 samples; decrease volume?
+'#(music! start 1489 end 1519 then 0 now 75.389002 tstart 1489 tend 75.389002 cstart 1489 cend 75.389002 len -1413.610998)
+'#(music! start 1489 end 1519 then 75.389002 now 268.904002 tstart 1489.0 tend 268.904002 cstart 1413.610998 cend 193.515 len -1220.095998)
+'#(music! start 1489 end 1519 then 268.904002 now 362.656995 tstart 1489.0 tend 362.656995 cstart 1220.095998 cend 93.752993 len -1126.343005)
+'#(music! start 1489 end 1519 then 362.656995 now 421.745 tstart 1489.0 tend 421.745 cstart 1126.343005 cend 59.08800500000001 len -1067.255)
+'#(music! start 1489 end 1519 then 421.745 now 497.134002 tstart 1489.0 tend 497.134002 cstart 1067.255 cend 75.389002 len -991.865998)
+'#(music! start 1489 end 1519 then 497.134002 now 690.649002 tstart 1489.0 tend 690.649002 cstart 991.865998 cend 193.515 len -798.350998)
+'#(music! start 1489 end 1519 then 690.649002 now 784.4019949999999 tstart 1489.0 tend 784.4019949999999 cstart 798.350998 cend 93.75299299999995 len -704.5980050000001)
+'#(music! start 1489 end 1519 then 784.4019949999999 now 843.4899999999999 tstart 1489.0 tend 843.4899999999999 cstart 704.5980050000001 cend 59.08800499999995 len -645.5100000000001)
+'#(music! start 1489 end 1519 then 843.4899999999999 now 918.8790019999999 tstart 1489.0 tend 918.8790019999999 cstart 645.5100000000001 cend 75.389002 len -570.1209980000001)
+'#(music! start 1489 end 1519 then 918.8790019999999 now 1112.394002 tstart 1489.0 tend 1112.394002 cstart 570.1209980000001 cend 193.5150000000001 len -376.605998)
+'#(music! start 1489 end 1519 then 1112.394002 now 1206.146995 tstart 1489.0 tend 1206.146995 cstart 376.605998 cend 93.75299300000006 len -282.85300499999994)
+'#(music! start 1489 end 1519 then 1206.146995 now 1265.2350000000001 tstart 1489.0 tend 1265.2350000000001 cstart 282.85300499999994 cend 59.08800500000007 len -223.76499999999987)
+'#(music! start 1489 end 1519 then 1265.2350000000001 now 1340.624002 tstart 1489.0 tend 1340.624002 cstart 223.76499999999987 cend 75.38900199999989 len -148.37599799999998)
+'#(music! start 1489 end 1519 then 1340.624002 now 1534.139002 tstart 1489.0 tend 1519.0 cstart 148.37599799999998 cend 178.37599799999998 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "148.37599799999998" "=178.37599799999998")
+/usr/local/bin/sox WARN rate: rate clipped 2057 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1798 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/82-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/82-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/82-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/82-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Shoulder Stretch Left")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/83-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1106 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1968 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1094 samples; decrease volume?
+'#(music! start 1519 end 1549 then 0 now 75.389002 tstart 1519 tend 75.389002 cstart 1519 cend 75.389002 len -1443.610998)
+'#(music! start 1519 end 1549 then 75.389002 now 268.904002 tstart 1519.0 tend 268.904002 cstart 1443.610998 cend 193.515 len -1250.095998)
+'#(music! start 1519 end 1549 then 268.904002 now 362.656995 tstart 1519.0 tend 362.656995 cstart 1250.095998 cend 93.752993 len -1156.343005)
+'#(music! start 1519 end 1549 then 362.656995 now 421.745 tstart 1519.0 tend 421.745 cstart 1156.343005 cend 59.08800500000001 len -1097.255)
+'#(music! start 1519 end 1549 then 421.745 now 497.134002 tstart 1519.0 tend 497.134002 cstart 1097.255 cend 75.389002 len -1021.865998)
+'#(music! start 1519 end 1549 then 497.134002 now 690.649002 tstart 1519.0 tend 690.649002 cstart 1021.865998 cend 193.515 len -828.350998)
+'#(music! start 1519 end 1549 then 690.649002 now 784.4019949999999 tstart 1519.0 tend 784.4019949999999 cstart 828.350998 cend 93.75299299999995 len -734.5980050000001)
+'#(music! start 1519 end 1549 then 784.4019949999999 now 843.4899999999999 tstart 1519.0 tend 843.4899999999999 cstart 734.5980050000001 cend 59.08800499999995 len -675.5100000000001)
+'#(music! start 1519 end 1549 then 843.4899999999999 now 918.8790019999999 tstart 1519.0 tend 918.8790019999999 cstart 675.5100000000001 cend 75.389002 len -600.1209980000001)
+'#(music! start 1519 end 1549 then 918.8790019999999 now 1112.394002 tstart 1519.0 tend 1112.394002 cstart 600.1209980000001 cend 193.5150000000001 len -406.605998)
+'#(music! start 1519 end 1549 then 1112.394002 now 1206.146995 tstart 1519.0 tend 1206.146995 cstart 406.605998 cend 93.75299300000006 len -312.85300499999994)
+'#(music! start 1519 end 1549 then 1206.146995 now 1265.2350000000001 tstart 1519.0 tend 1265.2350000000001 cstart 312.85300499999994 cend 59.08800500000007 len -253.76499999999987)
+'#(music! start 1519 end 1549 then 1265.2350000000001 now 1340.624002 tstart 1519.0 tend 1340.624002 cstart 253.76499999999987 cend 75.38900199999989 len -178.37599799999998)
+'#(music! start 1519 end 1549 then 1340.624002 now 1534.139002 tstart 1519.0 tend 1534.139002 cstart 178.37599799999998 cend 193.51499999999987 len 15.139001999999891)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/03 Call Me Maybe.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> "trim" "178.37599799999998" "=193.51499999999987")
+/usr/local/bin/sox WARN trim: Last 1 position(s) not reached (audio shorter than expected).
+/usr/local/bin/sox WARN rate: rate clipped 510 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 451 samples; decrease volume?
+'#(music! start 1519 end 1549 then 1534.139002 now 1627.891995 tstart 1534.139002 tend 1549.0 cstart 0.0 cend 14.860998000000109 len 14.860998000000109)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/2-09 Robo's Theme.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/14-m.wav> "trim" "0.0" "=14.860998000000109")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/13-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/14-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/83-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/83-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/83-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/83-full.wav>)
+'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Shoulder Stretch Right")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/84-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 1251 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 2195 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 1234 samples; decrease volume?
+'#(music! start 1549 end 1579 then 0 now 75.389002 tstart 1549 tend 75.389002 cstart 1549 cend 75.389002 len -1473.610998)
+'#(music! start 1549 end 1579 then 75.389002 now 268.904002 tstart 1549.0 tend 268.904002 cstart 1473.610998 cend 193.515 len -1280.095998)
+'#(music! start 1549 end 1579 then 268.904002 now 362.656995 tstart 1549.0 tend 362.656995 cstart 1280.095998 cend 93.752993 len -1186.343005)
+'#(music! start 1549 end 1579 then 362.656995 now 421.745 tstart 1549.0 tend 421.745 cstart 1186.343005 cend 59.08800500000001 len -1127.255)
+'#(music! start 1549 end 1579 then 421.745 now 497.134002 tstart 1549.0 tend 497.134002 cstart 1127.255 cend 75.389002 len -1051.865998)
+'#(music! start 1549 end 1579 then 497.134002 now 690.649002 tstart 1549.0 tend 690.649002 cstart 1051.865998 cend 193.515 len -858.350998)
+'#(music! start 1549 end 1579 then 690.649002 now 784.4019949999999 tstart 1549.0 tend 784.4019949999999 cstart 858.350998 cend 93.75299299999995 len -764.5980050000001)
+'#(music! start 1549 end 1579 then 784.4019949999999 now 843.4899999999999 tstart 1549.0 tend 843.4899999999999 cstart 764.5980050000001 cend 59.08800499999995 len -705.5100000000001)
+'#(music! start 1549 end 1579 then 843.4899999999999 now 918.8790019999999 tstart 1549.0 tend 918.8790019999999 cstart 705.5100000000001 cend 75.389002 len -630.1209980000001)
+'#(music! start 1549 end 1579 then 918.8790019999999 now 1112.394002 tstart 1549.0 tend 1112.394002 cstart 630.1209980000001 cend 193.5150000000001 len -436.605998)
+'#(music! start 1549 end 1579 then 1112.394002 now 1206.146995 tstart 1549.0 tend 1206.146995 cstart 436.605998 cend 93.75299300000006 len -342.85300499999994)
+'#(music! start 1549 end 1579 then 1206.146995 now 1265.2350000000001 tstart 1549.0 tend 1265.2350000000001 cstart 342.85300499999994 cend 59.08800500000007 len -283.7649999999999)
+'#(music! start 1549 end 1579 then 1265.2350000000001 now 1340.624002 tstart 1549.0 tend 1340.624002 cstart 283.7649999999999 cend 75.38900199999989 len -208.37599799999998)
+'#(music! start 1549 end 1579 then 1340.624002 now 1534.139002 tstart 1549.0 tend 1534.139002 cstart 208.37599799999998 cend 193.51499999999987 len -14.860998000000109)
+'#(music! start 1549 end 1579 then 1534.139002 now 1627.891995 tstart 1549.0 tend 1579.0 cstart 14.860998000000109 cend 44.86099800000011 len 30.0)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/soft/2-09 Robo's Theme.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/14-m.wav> "trim" "14.860998000000109" "=44.86099800000011")
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/14-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/84-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/84-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/84-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/84-full.wav>)
+
+Total (last music) length is: #<time 00:04:30>
+Total music (meditate) length is: #<time 00:03:59>'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "Seated Meditation")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/86-ann.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 963 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1691 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 929 samples; decrease volume?
+'#(music! start 1579 end 1766 then 0 now 239.886009 tstart 1579 tend 239.886009 cstart 1579 cend 239.886009 len -1339.113991)
+'#(music! start 1579 end 1766 then 239.886009 now 479.772018 tstart 1579.0 tend 479.772018 cstart 1339.113991 cend 239.886009 len -1099.2279819999999)
+'#(music! start 1579 end 1766 then 479.772018 now 719.658027 tstart 1579.0 tend 719.658027 cstart 1099.2279819999999 cend 239.88600899999994 len -859.341973)
+'#(music! start 1579 end 1766 then 719.658027 now 959.544036 tstart 1579.0 tend 959.544036 cstart 859.341973 cend 239.88600900000006 len -619.455964)
+'#(music! start 1579 end 1766 then 959.544036 now 1199.430045 tstart 1579.0 tend 1199.430045 cstart 619.455964 cend 239.88600900000006 len -379.56995499999994)
+'#(music! start 1579 end 1766 then 1199.430045 now 1439.3160540000001 tstart 1579.0 tend 1439.3160540000001 cstart 379.56995499999994 cend 239.88600900000006 len -139.68394599999988)
+'#(music! start 1579 end 1766 then 1439.3160540000001 now 1679.2020630000002 tstart 1579.0 tend 1679.2020630000002 cstart 139.68394599999988 cend 239.88600900000006 len 100.20206300000018)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/meditate/99-waves.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> "trim" "139.68394599999988" "=239.88600900000006")
+/usr/local/bin/sox WARN mp3: MAD lost sync
+/usr/local/bin/sox WARN mp3: recoverable MAD error
+/usr/local/bin/sox WARN trim: Last 1 position(s) not reached (audio shorter than expected).
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/6-m.wav' output clipped 1253 samples; decrease volume?
+'#(music! start 1579 end 1766 then 1679.2020630000002 now 1919.0880720000002 tstart 1679.2020630000002 tend 1766.0 cstart 0.0 cend 86.79793699999982 len 86.79793699999982)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/music/meditate/99-waves.mp3> "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> "trim" "0.0" "=86.79793699999982")
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/7-m.wav' output clipped 5656 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/6-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/7-m.wav> #<path:/Users/jay/Downloads/workout-song/tmp/86-mus.wav>)
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/86-ann.wav> #<path:/Users/jay/Downloads/workout-song/tmp/86-mus.wav> #<path:/Users/jay/Downloads/workout-song/tmp/86-full.wav>)
+
+Total (last music) length is: #<time 00:03:07>'(#<path:/usr/local/bin/espeak> "-k20" "-w" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "You Did It")
+'(#<path:/usr/local/bin/sox> "--volume" "4" #<path:/Users/jay/Downloads/workout-song/tmp/dest-mono.wav> "-c" "2" "-r" "44100" #<path:/Users/jay/Downloads/workout-song/tmp/done.wav>)
+/usr/local/bin/sox WARN rate: rate clipped 640 samples; decrease volume?
+/usr/local/bin/sox WARN dither: dither clipped 1115 samples; decrease volume?
+/usr/local/bin/sox WARN sox: `/Users/jay/Downloads/workout-song/tmp/dest-mono.wav' balancing clipped 640 samples; decrease volume?
+'(#<path:/usr/local/bin/sox> #<path:/Users/jay/Downloads/workout-song/tmp/1-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/2-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/3-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/4-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/5-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/6-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/7-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/8-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/9-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/10-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/11-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/12-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/13-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/14-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/15-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/16-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/17-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/18-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/19-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/20-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/21-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/22-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/23-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/24-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/25-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/26-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/27-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/28-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/29-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/30-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/31-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/32-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/33-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/34-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/35-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/36-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/37-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/38-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/39-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/40-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/41-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/42-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/43-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/44-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/45-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/46-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/47-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/48-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/49-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/50-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/51-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/52-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/53-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/54-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/55-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/56-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/57-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/58-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/59-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/60-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/61-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/62-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/63-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/64-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/65-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/66-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/67-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/68-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/69-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/70-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/71-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/72-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/73-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/74-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/76-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/77-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/78-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/79-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/80-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/81-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/82-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/83-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/84-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/86-full.wav> #<path:/Users/jay/Downloads/workout-song/tmp/done.wav> #<path:/Users/jay/Downloads/workout-song/dest.wav>)
+'(#<path:/usr/local/bin/lame> "--preset" "medium" "-S" #<path:/Users/jay/Downloads/workout-song/dest.wav> #<path:/Users/jay/Downloads/workout-song/dest.mp3>)
+LAME 3.99.5 64bits (http://lame.sf.net)
+Using polyphase lowpass filter, transition band: 17249 Hz - 17782 Hz
+Encoding /Users/jay/Downloads/workout-song/dest.wav
+      to /Users/jay/Downloads/workout-song/dest.mp3
+Encoding as 44.1 kHz j-stereo MPEG-1 Layer III VBR(q=4)
+
+Total length is: #<time 00:29:26>

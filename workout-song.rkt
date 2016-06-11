@@ -10,7 +10,7 @@
 (struct action (len s))
 
 (define (+rest len)
-  (action len "Rest"))
+  (action len "Take A Rest"))
 (define (action+rest len s)
   (list (action len s)
         (+rest (/ len 10))))
@@ -22,8 +22,10 @@
    (list
     (music "action")
     (action 30 "Arm Swing")
-    (action 30 "Shoulder Swing Left")
-    (action 30 "Shoulder Swing Right")
+    (action 30 "Shoulder Rotate Left")
+    (action 30 "Shoulder Rotate Right")
+    
+    (+rest 1)
     (repeat 4 (action+rest 30 "Hindu Squat"))
 
     (action+rest 60 "Bridge")
@@ -46,22 +48,22 @@
     (action 30 "Runner's Lunge Left")
     (action 30 "Runner's Lunge Right")
     (action 30 "Bicep Stretch")
-    (action 30 "Head to Knee Stetch Left")
-    (action 30 "Head to Knee Stetch Right")
+    (action 30 "Head to Knee Stretch Left")
+    (action 30 "Head to Knee Stretch Right")
     (action 30 "Neck Stretch Left")
     (action 30 "Neck Stretch Right")
     (action 30 "Shoulder Stretch Left")
     (action 30 "Shoulder Stretch Right")
 
     (music "meditate")
-    (action 180 "Seated Meditation"))))
+    (action 187 "Seated Meditation"))))
 
-(define dry? #t)
+(define dry? #f)
 
 ;;; Library
 
 (define (delete-file* p)
-  (when (file-exists? p)
+  (unless dry?
     (delete-file p)))
 
 (define (snoc l x)
@@ -88,16 +90,16 @@
            "-k20" "-w" dest-mono
            s)
   (system+ (find-executable-path "sox")
-           dest-mono "-c" "2" "-r" "44100"
+           "--volume" "4" dest-mono  "-c" "2" "-r" "44100"
            dest)
   (delete-file* dest-mono)
   dest)
 
 (define (audio-clip! src start end dest)
   (system+ (find-executable-path "sox")
-           src dest
+           src "-r" "44100" dest
            "trim" (number->string start)
-           (number->string end))
+           (format "=~a" (number->string end)))
   dest)
 
 (define (combine! wavs dest)
@@ -110,7 +112,7 @@
   dest)
 
 (define (wav->mp3! wav mp3)
-  (system+ (find-executable-path "lame") "-S" wav mp3)
+  (system+ (find-executable-path "lame") "--preset" "medium" "-S" wav mp3)
   (delete-file* wav)
   mp3)
 
@@ -142,11 +144,12 @@
                [i (in-naturals)])
       (match p
         [(music kind)
-         (define music-dir (build-path top-music-dir kind))
+         (define music-dir
+           (build-path top-music-dir kind))
          (define music-files
-           (sort (directory-list music-dir)
-                 string-ci<=?
-                 #:key path->string))
+           (shuffle
+            (filter (λ (x) (not (regexp-match #rx"DS_Store" x)))
+                    (directory-list music-dir))))
          (struct music-info (path len))
          (define-values
            (total-music-len music-infos)
@@ -173,7 +176,7 @@
                (define this-len (- this-end this-start))
                (define c-start (- this-start then))
                (define c-end (- this-end then))
-               (when #f
+               (when #t
                  (eprintf "~v\n"
                           (vector 'music!
                                   'start start 'end end
