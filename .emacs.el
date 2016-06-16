@@ -1357,7 +1357,7 @@ given a prefix arg."
 
 (setq proof-shell-process-connection-type nil)
 
-(setq proof-three-window-mode-policy 'hybrid)
+(setq proof-three-window-mode-policy 'horizontal)
 (if nil
     (proof-display-three-b 'hybrid))
 
