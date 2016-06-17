@@ -67,6 +67,20 @@
 
     (action 0 "You Did It"))))
 
+(define LIFT-PLAN
+  ;; 1:00 quad extension
+  ;; 1:15 leg curl
+  ;; 1:10 lat pull
+  ;; 3:00 chest press
+  ;; 1:00 shoulder press
+  ;; 2:00 squat + calf raise
+  ;; 1:00 shrugg
+  ;; 0:30 arm curl (x25) and row (x25) (x4)
+  ;; 1:00 tricep press
+  ;;
+  ;; 0:05 to 0:10 for moving things and resting
+  #f)
+
 (define dry? #f)
 
 ;;; Library
