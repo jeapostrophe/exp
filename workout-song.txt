@@ -1,0 +1,34 @@
+dest.mp3
+music
+tmp
+
+/Users/jay/Downloads/workout-song/music:
+action
+meditate
+soft
+
+/Users/jay/Downloads/workout-song/music/action:
+02 System (Menu).mp3
+02 Vampire Killer (Castlevania).mp3
+03 Forest Funk (Ch 1 Light World).mp3
+03 I Really Like You.mp3
+04 Bloody Tears (Castlevania II_ Simon's Quest).mp3
+05 Sea of Frozen Crystals.mp3
+06 Fukuoka (Stage 1).mp3
+08 Positive force.mp3
+09 Flullu Blobbo Lolz (Pulsen Edit).mp3
+1-02 Another Winter.mp3
+12 Mega Man X.mp3
+30 Dracula's Tears (Castlevania_ Dawn of Sorrow).mp3
+31 Demon Castle Pinnacle (Castlevania_ Dawn of Sorrow).mp3
+
+/Users/jay/Downloads/workout-song/music/meditate:
+99-waves.mp3
+
+/Users/jay/Downloads/workout-song/music/soft:
+03 Call Me Maybe.mp3
+2-02 Character Select.mp3
+2-09 Robo's Theme.mp3
+Besties Theme.mp3
+
+/Users/jay/Downloads/workout-song/tmp:
