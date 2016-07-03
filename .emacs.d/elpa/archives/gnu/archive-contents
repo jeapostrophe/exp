@@ -145,8 +145,13 @@
 	       nil "Major mode for CoffeeScript files" single
 	       ((:url . "http://github.com/defunkt/coffee-mode")
 		(:keywords "coffeescript" "major" "mode"))])
+ (compact-docstrings .
+		     [(0 1)
+		      nil "Shrink blank lines in docstrings and doc comments" single
+		      ((:url . "https://github.com/cpitclaudel/compact-docstrings")
+		       (:keywords "convenience" "faces" "lisp" "maint" "c"))])
  (company .
-	  [(0 8 12)
+	  [(0 9 0)
 	   ((emacs
 	     (24 1))
 	    (cl-lib
@@ -189,6 +194,11 @@
 	    nil "Major mode for editing comma/char separated values" single
 	    ((:url . "http://elpa.gnu.org/packages/csv-mode.html")
 	     (:keywords "convenience"))])
+ (cycle-quotes .
+	       [(0 1)
+		nil "Cycle between quote styles" tar
+		((:keywords "convenience")
+		 (:url . "http://elpa.gnu.org/packages/cycle-quotes.html"))])
  (darkroom .
 	   [(0 1)
 	    ((cl-lib
@@ -209,7 +219,7 @@
 		((:url . "http://elpa.gnu.org/packages/dbus-codegen.html")
 		 (:keywords "comm" "dbus" "convenience"))])
  (debbugs .
-	  [(0 9 5)
+	  [(0 9 7)
 	   ((soap-client
 	     (3 1 1))
 	    (cl-lib
@@ -229,7 +239,7 @@
 	     ((:url . "http://www.dr-qubit.org/emacs.php")
 	      (:keywords "extensions" "matching" "data structures trie" "tree" "dictionary" "completion" "regexp"))])
  (diff-hl .
-	  [(1 8 3)
+	  [(1 8 4)
 	   ((cl-lib
 	     (0 2)))
 	   "Highlight uncommitted changes using VC" tar
@@ -307,7 +317,7 @@
 		  ((:keywords "convenience")
 		   (:url . "https://github.com/ergoemacs/ergoemacs-mode"))])
  (excorporate .
-	      [(0 7 3)
+	      [(0 7 5)
 	       ((emacs
 		 (24 1))
 		(fsm
@@ -430,7 +440,7 @@
 	       ((:url . "http://elpa.gnu.org/packages/jgraph-mode.html")
 		(:keywords "tex" "wp"))])
  (js2-mode .
-	   [(20150909)
+	   [(20160623)
 	    ((emacs
 	      (24 1))
 	     (cl-lib
@@ -535,6 +545,13 @@
 	nil "Authoring and publishing tool for Emacs" tar
 	((:keywords "hypermedia")
 	 (:url . "http://mwolson.org/projects/EmacsMuse.html"))])
+ (myers .
+	[(0 1)
+	 ((emacs
+	   (25)))
+	 "Random-access singly-linked lists" single
+	 ((:url . "http://elpa.gnu.org/packages/myers.html")
+	  (:keywords "list" "containers"))])
  (nameless .
 	   [(1 0 1)
 	    ((emacs
@@ -593,7 +610,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(20160530)
+      [(20160627)
        nil "Outline-based notes management and organizer" tar nil])
  (osc .
       [(0 1)
@@ -623,7 +640,7 @@
 	 ((:url . "http://elpa.gnu.org/packages/poker.html")
 	  (:keywords "games"))])
  (python .
-	 [(0 25 1)
+	 [(0 25 2)
 	  ((emacs
 	    (24 1))
 	   (cl-lib
@@ -679,7 +696,7 @@
 	    ((:url . "http://elpa.gnu.org/packages/sed-mode.html")
 	     (:keywords))])
  (seq .
-      [(2 15)
+      [(2 16)
        nil "Sequence manipulation functions" tar
        ((:keywords "sequences")
 	(:url . "http://elpa.gnu.org/packages/seq.html"))])
@@ -904,7 +921,7 @@
        ((:keywords "multimedia" "xpm")
 	(:url . "http://www.gnuvola.org/software/xpm/"))])
  (yasnippet .
-	    [(0 9 1)
+	    [(0 10 0)
 	     ((cl-lib
 	       (0 5)))
 	     "Yet another snippet extension for Emacs." tar
