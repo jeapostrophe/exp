@@ -441,9 +441,9 @@ given a prefix arg."
     (buffer-name buffer))))
 (setq ibuffer-formats
       '((mark modified " "
-              (je/name 65 65 :left :elide)
+              (mode 12 12 :left :elide)
               " "
-              (mode 16 16 :left :elide))))
+              je/name)))
 
 (defun ibuffer-previous-line ()
   (interactive) (previous-line)
