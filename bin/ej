@@ -1,12 +1,1 @@
-#!/bin/zsh
-source ~/.zshrc
-
-FILE=$(date "+%Y%m%d.txt")
-cd ~j/d
-if [ -f ${FILE} ] ; then
-    oe ${FILE}
-    git commit -m "Editted journal entry" ${FILE}
-else
-    echo "Journal entry does not exist"
-    exit 1
-fi
+nj
