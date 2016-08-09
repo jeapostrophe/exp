@@ -14,6 +14,7 @@
 (define (action+rest len s)
   (list (action len s)
         (+rest (max 5 (* len 2/10)))))
+;; XXX Add count to know when last one is
 (define (repeat x l)
   (make-list x l))
 
@@ -30,27 +31,28 @@
     (action 0 "Get Ready")
     (repeat 4 (action+rest 30 "Hindu Squat"))
 
-    (action 0 "Switch Positions")
+    (action 3 "Switch Positions")
     (action+rest 60 "Bridge")
     (repeat 12 (action+rest 20 "Crunches"))
 
-    (action 0 "Get Ready")
+    (action 3 "Get Ready")
     (action 120 "Bridge") (+rest 6)
-    (action 60 "Full Plank")
-    (action 30 "Elbow Plank")
-    (action 30 "Raised Plank Left")
-    (action 30 "Raised Plank Right")
-    (action 30 "Side Plank Left")
-    (action 30 "Side Plank Right")
-    (action 30 "Full Plank")
-    (action 60 "Elbow Plank")
+    (action 60 "Full Plank") (+rest 6)
+    (action 30 "Elbow Plank") (+rest 3)
+    (action 30 "Side Plank Left") (+rest 3)
+    (action 30 "Side Plank Right") (+rest 3)
+    (action 30 "Raised Plank Left") (+rest 3)
+    (action 30 "Raised Plank Right") (+rest 3)
+    (action 30 "Full Plank") (+rest 3)
+    (action 60 "Elbow Plank") (+rest 6)
 
     (action 0 "Switch Positions")
     (action+rest 60 "Bridge")
     (repeat 12 (action+rest 20 "Push Ups"))
 
-    (action 0 "Time to Stretch")
-    
+    (action 3 "Time to Stretch")
+
+    ;; XXX Doesn't start again at time 0
     (music "soft")
     (action 30 "Runner's Lunge Left")
     (action 30 "Runner's Lunge Right")
@@ -63,7 +65,7 @@
     (action 30 "Shoulder Stretch Right")
 
     (music "meditate")
-    (action 201 "Seated Meditation")
+    (action (* 60 5) "Seated Meditation")
 
     (action 0 "You Did It"))))
 
@@ -184,7 +186,7 @@
 
          (display-len "(last music) " (- start-len last-len))
          (display-len (format "music (~a) " kind) total-music-len)
-         
+
          (define (music! dest start end)
            (define-values (now wavs)
              (for/fold ([then 0]
@@ -217,7 +219,7 @@
          (values start-len start-len wavs music!)]
         [(action 0 s)
          (define ann-wav
-           (audio-announce! s (tmp-p (format "~a-ann" i))))         
+           (audio-announce! s (tmp-p (format "~a-ann" i))))
          (values start-len last-len (snoc wavs ann-wav) music!)]
         [(action this-len s)
          (define ann-wav
