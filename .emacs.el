@@ -881,10 +881,16 @@ given a prefix arg."
      a)
 
     ;; Lame to implement filtering here
-    (if (or 
+    (if (or
+         ;; If we want quiet and no due date or distant due date, then
+         ;; filter
+         (and (or (not da)
+                  (> ta (+ tn (* 60 60 24 7 8))))
+              (member/eq "Quiet" je/org-agenda/filter-ctxt-not))
          ;; If we care about the schedule, and this is after now, then
          ;; drop it.
          (and je-schedule-flag? (< tn sta))
+         ;; Look at tags
          (let* ((tag-str (or (org-entry-get ma "TAGS") ""))
                 (tags (org-split-string tag-str ":")))
            ;; If there are tags, implement filtering
@@ -940,6 +946,8 @@ given a prefix arg."
     value)))
 (setq org-columns-modify-value-for-display-function 'je/column-display)
 
+(defvar je/org-agenda/filter-mode 0)
+(defvar je/org-agenda/filter-modes 4)
 (defvar je/org-agenda/filter-ctxt nil)
 (defvar je/org-agenda/filter-ctxt-not nil)
 
@@ -947,7 +955,8 @@ given a prefix arg."
   "Open up the org-mode todo list (all)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-ctxt nil
+    (setq je/org-agenda/filter-mode 0
+          je/org-agenda/filter-ctxt nil
           je/org-agenda/filter-ctxt-not nil)
     (je/todo-list)))
 (global-set-key (kbd "s-o") 'je/todo-list/all)
@@ -980,29 +989,28 @@ given a prefix arg."
       (cons (car l) (je/filter-out (cdr l) o)))))
    (t l)))
 
-(defun je/todo-list/work ()
-  "Open up the org-mode todo list (work)"
-  (interactive)
-  (progn
-    (je/org-agenda/filter-ctxt-toggle "Work")
-    (je/todo-list)))
-(global-set-key (kbd "s-O") 'je/todo-list/work)
-
 (defun je/todo-list/home ()
   "Open up the org-mode todo list (home)"
   (interactive)
   (progn
-    (je/org-agenda/filter-ctxt-toggle "Home")
+    (setq je/org-agenda/filter-mode
+          (% (+ 1 je/org-agenda/filter-mode)
+             je/org-agenda/filter-modes))
+    (cond
+     ((eq je/org-agenda/filter-mode 0)
+      (setq je/org-agenda/filter-ctxt nil
+            je/org-agenda/filter-ctxt-not nil))
+     ((eq je/org-agenda/filter-mode 1)
+      (setq je/org-agenda/filter-ctxt nil
+            je/org-agenda/filter-ctxt-not (list "Home" "Quiet")))
+     ((eq je/org-agenda/filter-mode 2)
+      (setq je/org-agenda/filter-ctxt (list "Home")
+            je/org-agenda/filter-ctxt-not nil))
+     ((eq je/org-agenda/filter-mode 3)
+      (setq je/org-agenda/filter-ctxt nil
+            je/org-agenda/filter-ctxt-not (list "Home"))))
     (je/todo-list)))
 (global-set-key (kbd "s-h") 'je/todo-list/home)
-
-(defun je/org/toggle-internet ()
-  "toggle internet status in org"
-  (interactive)
-  (progn
-    (je/org-agenda/filter-ctxt-toggle "Internet")
-    (je/todo-list)))
-(global-set-key (kbd "M-s-^") 'je/org/toggle-internet)
 
 (global-set-key (kbd "s-j") 'je/todo-list)
 
