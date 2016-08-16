@@ -1,6 +1,8 @@
 #!/bin/zsh
 source ~/.zshrc
 
+PROMPT_FILE=~j/prompts.txt
+
 FILE=$(date "+%Y%m%d.txt")
 cd ~j/d
 if [ -f ${FILE} ] ; then
@@ -9,7 +11,13 @@ if [ -f ${FILE} ] ; then
 else
     LANG=en date "+%A, %B %e %Y%n%n" > ${FILE}
     echo >> ${FILE}
-    gshuf -n 1 ~j/prompts.txt >> ${FILE}
+    DAY_SINCE_EPOCH=$(($(date -u +%s)/86400))
+    echo $DAY_SINCE_EPOCH
+    PROMPTS=$(cat ${PROMPT_FILE} | wc -l)
+    echo $PROMPTS
+    TARGET=$((${DAY_SINCE_EPOCH} % ${PROMPTS}))
+    echo $TARGET
+    sed "${TARGET}q;d" ${PROMPT_FILE} >> ${FILE}
     echo >> ${FILE}
     git add ${FILE}
     oe ${FILE}
