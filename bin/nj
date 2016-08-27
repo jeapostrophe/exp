@@ -15,7 +15,7 @@ else
     echo $DAY_SINCE_EPOCH
     PROMPTS=$(cat ${PROMPT_FILE} | wc -l)
     echo $PROMPTS
-    TARGET=$((${DAY_SINCE_EPOCH} % ${PROMPTS}))
+    TARGET=$((((${DAY_SINCE_EPOCH} - 1) % ${PROMPTS}) + 1))
     echo $TARGET
     sed "${TARGET}q;d" ${PROMPT_FILE} >> ${FILE}
     echo >> ${FILE}
