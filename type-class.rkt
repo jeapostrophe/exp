@@ -1,6 +1,7 @@
 #lang racket/base
 (require racket/match)
 
+;; XXX Add the default: x >> y = x >>= \_ . y
 (define-class (Monad m)
   return
   >>=)
@@ -15,11 +16,13 @@
       [(some a) (f a)]
       [(none) oa])))
 
+;; A sub-class
 (define-class (MonadPlus m)
   #:constraint (Monad m)
   mzero
   mplus)
 
+;; You don't have to explicitly satisfy the constraints?
 (define-instance () (MonadPlus option)
   (define mzero (none))
   (define (mplus x y)
@@ -29,6 +32,7 @@
       [((none)   (some _)) y]
       [(_        _)        x])))
 
+;; Function defined over any class instance
 (define-generic (a) #:constraint (MonadPlus a)
   (msum l)
   (foldr mplus mzero l))
@@ -36,10 +40,13 @@
 (define-class (Functor a)
   fmap)
 
+;; Derived instance
 (define-instance (a) (Functor a)
   #:constraint (Monad a)
   (define (fmap ab ma)
     (>>= ma (λ (x) (return (ab x))))))
 
+;; XXX There needs to be another form for when one context needs two
+;; different instances.
 (with-instances [(Monad option) (MonadPlus option) (Functor option)]
   (fmap add1 (msum (list (none) (return 5) (none)))))
