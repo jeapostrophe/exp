@@ -38,7 +38,8 @@
 
 (define-instance (a) (Functor a)
   #:constraint (Monad a)
-  (define (fmap ab ma) (>>= ma (λ (x) (return (ab x))))))
+  (define (fmap ab ma)
+    (>>= ma (λ (x) (return (ab x))))))
 
 (with-instances [(Monad option) (MonadPlus option) (Functor option)]
   (fmap add1 (msum (list (none) (return 5) (none)))))
