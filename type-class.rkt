@@ -50,3 +50,7 @@
 ;; different instances.
 (with-instances [(Monad option) (MonadPlus option) (Functor option)]
   (fmap add1 (msum (list (none) (return 5) (none)))))
+
+;; XXX https://wiki.haskell.org/Functional_dependencies
+;; XXX https://wiki.haskell.org/Type_families
+;; XXX https://wiki.haskell.org/Multi-parameter_type_class
