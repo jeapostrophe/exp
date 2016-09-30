@@ -376,7 +376,8 @@ given a prefix arg."
 (global-set-key (kbd "s-g") 'isearch-repeat-forward)
 
 ;; The default is 'other-frame, but that doesn't behave as expected on OS X
-(global-set-key (kbd "s-`") 'other-frame)
+(global-unset-key (kbd "s-`"))
+(global-unset-key (kbd "M-`"))
 
 (global-set-key (kbd "s-'") 'next-buffer)
 (global-set-key (kbd "s-;") 'previous-buffer)
