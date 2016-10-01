@@ -1,5 +1,7 @@
 ;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
 
+(setq ns-use-titled-windows nil)
+
 ;;(add-to-list 'load-path "~/.emacs.d/")
 (byte-recompile-directory "~/.emacs.d/")
 
@@ -1396,6 +1398,9 @@ given a prefix arg."
 (require 'evil)
 (global-set-key (kbd "C-3") 'evil-search-symbol-forward)
 (global-set-key (kbd "C-2") 'evil-search-symbol-backward)
+
+(add-to-list 'default-frame-alist '(height . 27))
+(add-to-list 'default-frame-alist '(width . 90))
 
 ;; customs
 (custom-set-variables
