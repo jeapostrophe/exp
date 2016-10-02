@@ -1,6 +1,3 @@
 #!/bin/bash
 
-# XXX Remove after reboot
-export FZF_DEFAULT_OPTS="--cycle --algo=v1 --color=light"
-
-tmux select-window -t $(tmux list-windows -F "#I: #T" | sed \$d | fzf --reverse | cut -f 1 -d :)
+tmux select-window -t $(tmux list-windows -F "#I: #T" | sed \$d | gtac | fzf --reverse | cut -f 1 -d :)
