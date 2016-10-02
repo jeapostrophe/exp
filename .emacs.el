@@ -1395,9 +1395,9 @@ given a prefix arg."
   (sort-regexp-fields reverse "[A-Za-z0-9\\.]+" "\\&" beg end))
 
 ;; Some nice searching
-(require 'evil)
-(global-set-key (kbd "C-3") 'evil-search-symbol-forward)
-(global-set-key (kbd "C-2") 'evil-search-symbol-backward)
+;;(require 'evil)
+;;(global-set-key (kbd "C-3") 'evil-search-symbol-forward)
+;;(global-set-key (kbd "C-2") 'evil-search-symbol-backward)
 
 (add-to-list 'default-frame-alist '(height . 27))
 (add-to-list 'default-frame-alist '(width . 90))
@@ -1444,7 +1444,7 @@ given a prefix arg."
  '(racket-paren-face ((t (:foreground "#93a1a1"))))
  '(racket-selfeval-face ((t (:foreground "#859900")))))
 
-(add-to-list 'load-path "~/Dev//scm/github.jeapostrophe/prover-mode")
-(load "prover")
+;;(add-to-list 'load-path "~/Dev//scm/github.jeapostrophe/prover-mode")
+;;(load "prover")
 
 (fringe-mode 0)
