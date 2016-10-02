@@ -31,7 +31,9 @@ hash -d 305=~courses/2015/fall/305
 hash -d 308=~courses/2016/spring/308
 hash -d 404=~courses/2016/summer/404
 
-hash -d utrs=~scm/bitbucket.jeapostrophe/consulting-utrs
+hash -d bitb=~scm/bitbucket.jeapostrophe
+hash -d utrs=~bitb/consulting-utrs
+hash -d byron=~bitb/consulting-byron-davies
 
 export PATH=~exp/bin:~work/papers/etc/bin:$PATH
 
@@ -41,8 +43,8 @@ autoload -U zmv
 bindkey -e
 
 PROMPT_SYMB=❯
-export PS1="%S%~%s
-%(?.%F{blue}.%F{red})${PROMPT_SYMB}%f "
+TPUT_END=$(tput cup 9999 0)
+export PS1="${TPUT_END}%(?.%F{blue}.%F{red})${PROMPT_SYMB}%f "
 TPS1="%~ ${PROMPT_SYMB} "
 RECENTFILES=8
 
