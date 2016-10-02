@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# XXX Remove after reboot
+export FZF_DEFAULT_OPTS="--cycle --algo=v1 --color=light"
+
+CURRENT=$(tmux display-message -p '#W')
+
+tmux select-window -t $(tmux list-windows -F "#I: #T" | sed \$d | fzf --query="$CURRENT" --reverse | cut -f 1 -d :)
