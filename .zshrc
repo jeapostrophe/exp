@@ -40,9 +40,10 @@ setopt autopushd pushdminus pushdsilent pushdtohome
 autoload -U zmv
 bindkey -e
 
+PROMPT_SYMB=❯
 export PS1="%S%~%s
-%# "
-TPS1="%~ %# "
+%(?.%F{blue}.%F{red})${PROMPT_SYMB}%f "
+TPS1="%~ ${PROMPT_SYMB} "
 RECENTFILES=8
 
 JE_CUSTOM_NAME=0
