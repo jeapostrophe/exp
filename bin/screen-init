@@ -5,3 +5,5 @@ if (screen -list | grep lightning) ; then
 else
 	screen -UdmS lightning
 fi
+
+# Client: /usr/bin/screen -UxS lightning

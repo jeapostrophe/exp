@@ -45,25 +45,27 @@ export PS1="%S%~%s
 TPS1="%~ %# "
 RECENTFILES=8
 
-# Interaction with Emacs:
-function set-eterm-dir {
-    echo -e "\033AnSiTu" "$LOGNAME" # $LOGNAME is more portable than using whoami.
-    echo -e "\033AnSiTc" "$(pwd)"
-    if [ $(uname) = "SunOS" ]; then
-	    # The -f option does something else on SunOS and is not needed anyway.
-       	hostname_options="";
-    else
-        hostname_options="-f";
-    fi
-    echo -e "\033AnSiTh" "$(hostname $hostname_options)" # Using the -f option can cause problems on some OSes.
+JE_CUSTOM_NAME=0
+function rename-pane {
+    print -Pn "\e]0;$1\a\033k$1\033\\"
+    JE_CUSTOM_NAME=1
+}
+function cancel-rename-pane {
+    JE_CUSTOM_NAME=0
 }
 
 # Track directory, username, and cwd for remote logons.
-if [ "$TERM" = "eterm-color" ]; then
-    precmd () { set-eterm-dir }
-elif [[ "$TERM" =~ "screen" ]] ; then
-    precmd () {print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\"}
-    preexec () {print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\"}
+if [[ "$TERM" =~ "screen" ]] ; then
+    precmd () {
+        if [ ${JE_CUSTOM_NAME} = '0' ] ; then
+            print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\"
+        fi
+    }
+    preexec () {
+        if [ ${JE_CUSTOM_NAME} = '0' ] ; then
+            print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\"
+        fi
+    }
 fi
 
 ZDIR=~/.zdir
@@ -162,6 +164,5 @@ alias e="mathomatic -e --"
 #racketdoclink
 
 export REPORTTIME=10
-
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

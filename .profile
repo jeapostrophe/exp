@@ -30,6 +30,7 @@ alias ls='ls -G'
 alias r='racket -il xrepl'
 alias oew=emacsclient
 alias oe='emacsclient -nc'
+alias foe='fzf | emacsclient -nc'
 alias opene=oe
 alias o=open
 alias rd="raco docs"
