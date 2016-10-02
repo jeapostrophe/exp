@@ -42,10 +42,23 @@ setopt autopushd pushdminus pushdsilent pushdtohome
 autoload -U zmv
 bindkey -e
 
-PROMPT_SYMB=❯
 TPUT_END=$(tput cup 9999 0)
-export PS1="${TPUT_END}%(?.%F{blue}.%F{red})${PROMPT_SYMB}%f "
-TPS1="%~ ${PROMPT_SYMB} "
+PROMPT_SYMB=❯
+PROMPT_SYMB=⌁
+PROMPT_SYMB=►
+PROMPT_SYMB=⫸
+# Hamburger
+PROMPT_SYMB="🍔 "
+# Pizza
+PROMPT_SYMB="🍕 "
+# Space Invader
+PROMPT_SYMB="👾 "
+# Poop
+PROMPT_SYMB="💩 "
+
+PROMPT_SYMB=⫸
+export PS1="${TPUT_END}%(?.%F{green}.%F{red})${PROMPT_SYMB}%f "
+TPS1="%~ ${PROMPT_SYMB}"
 RECENTFILES=8
 
 JE_CUSTOM_NAME=0
