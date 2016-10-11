@@ -57,7 +57,12 @@ PROMPT_SYMB="👾 "
 PROMPT_SYMB="💩 "
 
 PROMPT_SYMB=⫸
-export PS1="${TPUT_END}%(?.%F{green}.%F{red})${PROMPT_SYMB}%f "
+PS1="${TPUT_END}%(?.%F{green}.%F{red})${PROMPT_SYMB}%f "
+if [[ "$TERM" =~ "xterm" ]] ; then
+    PS1="%S%~%s
+$PS1"
+fi
+export PS1
 TPS1="%~ ${PROMPT_SYMB}"
 RECENTFILES=8
 
