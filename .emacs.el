@@ -1447,4 +1447,14 @@ given a prefix arg."
 ;;(add-to-list 'load-path "~/Dev//scm/github.jeapostrophe/prover-mode")
 ;;(load "prover")
 
+(defun unfill-paragraph ()
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
+(defun unfill-region (start end)
+  (interactive "r")
+  (let ((fill-column (point-max)))
+    (fill-region start end nil)))
+
 (fringe-mode 0)
