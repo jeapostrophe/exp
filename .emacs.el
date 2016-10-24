@@ -1350,30 +1350,6 @@ given a prefix arg."
 ;; (push '("\\.rkt\\'" flymake-racket-init)
 ;;       flymake-allowed-file-name-masks)
 
-;; proof general
-(setq proof-assistants '(coq))
-(load-file "/usr/local/Cellar/proof-general/4.2/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
-;; XXX make these local to the proof mode
-;; proof-display-three-b
-;; proof-shell-exit
-;; proof-process-buffer
-;; proof-activate-scripting
-(global-set-key (kbd "<M-s-right>") 'proof-goto-point)
-(global-set-key (kbd "<M-s-return>") 'proof-goto-point)
-(global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
-(global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
-
-(global-set-key (kbd "M-s-÷") 'proof-goto-point)
-(global-set-key (kbd "M-s-π") 'proof-goto-point)
-(global-set-key (kbd "M-s-≤") 'proof-undo-last-successful-command)
-(global-set-key (kbd "M-s-≥") 'proof-assert-next-command-interactive)
-
-(setq proof-shell-process-connection-type nil)
-
-(setq proof-three-window-mode-policy 'vertical)
-(if nil
-    (proof-display-three-b 'hybrid))
-
 ;; haskell
 ;; (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode-autoloads.el")
 
@@ -1458,3 +1434,27 @@ given a prefix arg."
     (fill-region start end nil)))
 
 (fringe-mode 0)
+
+;; proof general
+(setq proof-assistants '(coq))
+(load-file "/usr/local/Cellar/proof-general/4.2/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
+;; XXX make these local to the proof mode
+;; proof-display-three-b
+;; proof-shell-exit
+;; proof-process-buffer
+;; proof-activate-scripting
+(global-set-key (kbd "<M-s-right>") 'proof-goto-point)
+(global-set-key (kbd "<M-s-return>") 'proof-goto-point)
+(global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
+(global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
+
+(global-set-key (kbd "M-s-÷") 'proof-goto-point)
+(global-set-key (kbd "M-s-π") 'proof-goto-point)
+(global-set-key (kbd "M-s-≤") 'proof-undo-last-successful-command)
+(global-set-key (kbd "M-s-≥") 'proof-assert-next-command-interactive)
+
+(setq proof-shell-process-connection-type nil)
+
+(setq proof-three-window-mode-policy 'vertical)
+(if nil
+    (proof-display-three-b 'hybrid))
