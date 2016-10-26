@@ -38,13 +38,14 @@
                 (expect-identifier-for stx #'the-module-lang "the module language" #t)
                 (quasisyntax/loc stx
                   (define-syntaxes (the-module+)
-                    (lambda (stx)
+                    (lambda (module+-stx)
                       (do-module+-for #'#,which-module
                                       #'the-submodule #'the-module-lang
-                                      stx)))))])])))
+                                      #'the-module-lang
+                                      module+-stx)))))])])))
 
     (define-values (do-module+-for)
-      (lambda (which-module-stx the-submodule-stx the-module-lang-stx stx)
+      (lambda (which-module-stx the-submodule-stx the-module-lang-stx context-stx stx)
         (case (syntax-local-context)
           [(module-begin)
            (quasisyntax/loc stx (begin #,stx))]
@@ -54,8 +55,8 @@
               (begin
                 ;; This looks it up the first time and is allowed to create a
                 ;; list and lift a module-end declaration if necessary:
-                (let ([stxs-box (get-stxs-box stx
-                                              which-module-stx
+                (let ([stxs-box (get-stxs-box which-module-stx
+                                              context-stx
                                               the-submodule-stx
                                               the-module-lang-stx
                                               #t)])
@@ -83,7 +84,8 @@
         [(_ the-submodule e ...)
          (begin
            (expect-identifier-for stx #'the-submodule "a submodule" #f)
-           (do-module+-for #'module* #'the-submodule #'the-module-lang
+           (do-module+-for #'module* #'the-submodule #'#f
+                           stx
                            #'(fake-the-submodule+ e ...)))])))
 
   (begin-for-syntax
@@ -114,8 +116,11 @@
     (lambda (stx)
       (syntax-case stx ()
         [(_ which-module the-submodule the-module-language)
-         (let ([stxs-box (get-stxs-box #f #'the-submodule #f)])
-           (printf "Defining ~v\n" (vector #'which-module #'the-submodule #'the-module-language))
+         (let ([stxs-box (get-stxs-box #f #f #'the-submodule #f #f)])
+           (printf "Defining ~v\n"
+                   (vector (syntax-e #'which-module)
+                           (syntax-e #'the-submodule)
+                           (syntax-e #'the-module-language)))
            ;; Propagate the lexical context of the first `module+'
            ;; for the implicit `#%module-begin':
            (datum->syntax

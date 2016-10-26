@@ -1,6 +1,16 @@
 #lang racket/base
 (require "module.rkt")
 
+(module og-duck racket/base
+  (provide num-eggs quack)
+  (define num-eggs 2)
+  (define (quack n)
+    (unless (zero? n)
+      (printf "quack\n")
+      (quack (sub1 n)))))
+(require (prefix-in og: 'og-duck))
+(og:quack og:num-eggs)
+
 (define-module+ duck+
   duck racket/base)
 (duck+ (provide num-eggs quack)
