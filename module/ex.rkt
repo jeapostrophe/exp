@@ -19,9 +19,13 @@
          (unless (zero? n)
            (printf "quack\n")
            (quack (sub1 n)))))
+(duck+ #:declared)
 
 (require 'duck)
 (quack num-eggs)
+
+;; This is a syntax error
+#;(duck+ (printf "Yo!\n"))
 
 (define nine 9)
 (provide nine)
