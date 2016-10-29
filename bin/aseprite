@@ -1,1 +1,3 @@
-/Users/jay/Dev/dist/aseprite/aseprite/build/bin/aseprite
+#!/bin/sh
+cd ~/Dev/dist/aseprite/aseprite/build/
+exec ./bin/aseprite
