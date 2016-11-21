@@ -2,8 +2,10 @@
 
 if [ -f Makefile ] ; then
     make $*
+elif [ -f make.rkt ] ; then
+    rkt make.rkt -- $*
 else
     for i in *.tex ; do
-        pdflatex $(basename $i .tex)
+        echo pdflatex $(basename $i .tex)
     done
 fi
