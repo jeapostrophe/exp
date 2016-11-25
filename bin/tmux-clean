@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for i in $(tmux list-sessions | grep -v -e attached -e lightning | awk -F':' '{print $1}') ; do
+    tmux kill-session -t $i
+done
