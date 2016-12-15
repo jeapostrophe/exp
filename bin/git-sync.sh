@@ -1,5 +1,5 @@
 #!/bin/zsh
-. ~/.zshrc
+. ~/.zshrc-dirs
 export DISPLAY=0.0
 export XAUTHORITY=~/.Xauthority
 
