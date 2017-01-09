@@ -52,13 +52,14 @@
   (define VertexShaderId (glCreateShader GL_VERTEX_SHADER))
   (glShaderSource VertexShaderId 1
                   (vector
-                   (string-append
-                    (format "#version ~a\n"
-                            ;; XXX This is likely to be a problem in Wayland
-                            (match '3.3
-                              ['3.3 "330 core"]
-                              ['es3.1 "310 es"]))
-                    VertexShader))
+                   (format "#version ~a\n~a"
+                           ;; XXX This is likely to be a problem in
+                           ;; Wayland (which I think mandates ES? But
+                           ;; I don't know what version.)
+                           (match '3.3
+                             ['3.3 "330 core"]
+                             ['es3.1 "310 es"])
+                           VertexShader))
                   (s32vector))
   (glCompileShader VertexShaderId)
   (unless (= GL_TRUE (glGetShaderiv VertexShaderId GL_COMPILE_STATUS))
@@ -97,7 +98,6 @@
                   GL_RGBA GL_UNSIGNED_BYTE
                   bm-bs))
 
-  (define bm-vao (glGen glGenVertexArrays))
   (define bm-program (glCreateProgram))
 
   (define bm-vert
@@ -132,6 +132,7 @@ void main() {
   (compile-shader GL_VERTEX_SHADER bm-program bm-vert)
   (compile-shader GL_FRAGMENT_SHADER bm-program bm-fragment)
 
+  (define bm-vao (glGen glGenVertexArrays))
   (glBindVertexArray bm-vao)
   (glLinkProgram&check bm-program 'bm)
   (glUseProgram bm-program)
