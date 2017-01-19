@@ -1,5 +1,10 @@
 #!/bin/bash
 
+cd ~/.tmux/resurrect
+ls -tp tmux_resurrect*.txt | grep -v '/$' | tail -n +6 | xargs -I {} rm -- {}
+
+tmux clear-history
+
 for i in $(tmux list-sessions | grep -v -e attached -e lightning | awk -F':' '{print $1}') ; do
     tmux kill-session -t $i
 done
