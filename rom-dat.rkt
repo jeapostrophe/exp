@@ -5,51 +5,91 @@
          racket/dict
          racket/set
          racket/system
-         graph
          xml)
 
-(define (go! p)
+(struct rom (name desc manu year clone? want? children) #:mutable)
+
+(define (dict-ref* d k)
+  (match (dict-ref d k #f)
+    [(list v) v]
+    [#f #f]))
+
+(define (go! p d)
   (define xe
     (parameterize ([collapse-whitespace #t]
                    [xexpr-drop-empty-attributes #t])
       (string->xexpr (file->string p))))
-  
-  (define g (directed-graph empty))
-  (define n->y (make-hash))
-  (define n->d (make-hash))
-  (define clones (mutable-set))
-  
-  (for ([x (in-list xe)])
-    (match x
-      [(or 'datafile " " `(header . ,_)) (void)]
-      [`(game ,attrs . ,body)
-       (define n (first (dict-ref attrs 'name)))
-       (add-vertex! g n)
-       (when (dict-ref attrs 'cloneof #f)
-         (set-add! clones n))
-       ;; xxx sampleof
-       (define r (dict-ref attrs 'romof #f))
-       (when r
-         (add-edge! g n (first r)))
-       (for ([x (in-list body)])
-         (match x
-           [`(description ,d) (hash-set! n->d n d)]
-           [`(year ,y) (hash-set! n->y n y)]
-           [x (void)]))]
-      [x
-       (printf "~e\n" x)]))
+  (define want? (list->set (map symbol->string (file->value d))))
 
-  (define dot-p (path-add-suffix p #".dot"))
-  (define pdf-p (path-add-suffix p #".pdf"))
-  (display-to-file (graphviz g) dot-p)
-  (system* (find-executable-path "dot")
-           "-Tpdf" dot-p "-o" pdf-p)
+  (define roms empty)
+  (let ()
+    (define n->r (make-hash))
+    (define n->cs (make-hash))
+    (for ([x (in-list xe)])
+      (match x
+        [(or 'datafile " " `(header . ,_)) (void)]
+        [`(game ,attrs . ,body)
+         (define name (dict-ref* attrs 'name))
+         (define desc "Unknown")
+         (define year "????")
+         (define manu "Unknown")
+         (for ([x (in-list body)])
+           (match x
+             [`(description . ,d) (set! desc d)]
+             [`(year ,y) (set! year y)]
+             [`(manufacturer ,m) (set! manu m)]
+             [x (void)]))
+         (define clone? (and (dict-ref* attrs 'cloneof) #t))
+         (define parent (dict-ref* attrs 'romof))
+         (define w? (set-member? want? name))
 
-  (for ([n (in-vertices g)])
-    (printf "~a (~a)\n" (hash-ref n->d n) n))
+         (define r (rom name desc manu year clone? w? empty))
+         (hash-set! n->r name r)
+         (when parent
+           (hash-update! n->cs parent (λ (old) (cons r old)) empty))]
+        [x
+         (printf "~e\n" x)]))
+    
+    (for ([(n r) (in-hash n->r)])
+      (define cs (hash-ref n->cs n empty))
+      (set-rom-children! r cs)
+      (unless (empty? cs)
+        (set! roms (cons r roms)))))
+
+  (let loop ([r roms])
+    (cond
+      [(rom? r)
+       (define w? (or (rom-want? r) (loop (rom-children r))))
+       (set-rom-want?! r w?)
+       w?]
+      [(cons? r)
+       (or (loop (car r)) (loop (cdr r)))]
+      [else
+       #f]))
+
+  (define (display-tree i)
+    (cond
+      [(zero? i)
+       (display "│-- ")]
+      [else
+       (display "│   ")
+       (display-tree (sub1 i))]))
+  (define bold-on "#\x033[1m")
+  (define bold-off "#\x033[0m")
+  (define (print-rom i r)
+    (match-define (rom n d m y c? w? cs) r)
+    (when w? (display bold-on))
+    (display-tree i)
+    (printf "~a. ~a\t< ~a >\t~a" y n m d)
+    (when w? (display bold-off))
+    (newline)
+    (print-roms (add1 i) cs))
+  (define (print-roms i rs)
+    (for ([r (in-list (sort rs string<=? #:key rom-year))])
+      (print-rom i r)))
   
-  )
+  (print-roms 0 roms))
 
 (module+ main
   (require racket/cmdline)
-  (command-line #:args (p) (go! p)))
+  (command-line #:args (p d) (go! p d)))
