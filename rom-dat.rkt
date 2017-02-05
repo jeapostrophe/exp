@@ -7,7 +7,7 @@
          racket/system
          xml)
 
-(struct rom (name desc manu year clone? want? children) #:mutable)
+(struct rom (name desc manu year clone? want? parent children) #:mutable)
 
 (define (dict-ref* d k)
   (match (dict-ref d k #f)
@@ -43,7 +43,7 @@
          (define parent (dict-ref* attrs 'romof))
          (define w? (set-member? want? name))
 
-         (define r (rom name desc manu year clone? w? empty))
+         (define r (rom name desc manu year clone? w? parent empty))
          (hash-set! n->r name r)
          (when parent
            (hash-update! n->cs parent (λ (old) (cons r old)) empty))]
@@ -53,17 +53,20 @@
     (for ([(n r) (in-hash n->r)])
       (define cs (hash-ref n->cs n empty))
       (set-rom-children! r cs)
-      (unless (empty? cs)
+      (unless (or (rom-parent r) (empty? cs))
         (set! roms (cons r roms)))))
 
   (let loop ([r roms])
     (cond
       [(rom? r)
-       (define w? (or (rom-want? r) (loop (rom-children r))))
+       (define c (loop (rom-children r)))
+       (define w? (or (rom-want? r) c))
        (set-rom-want?! r w?)
        w?]
       [(cons? r)
-       (or (loop (car r)) (loop (cdr r)))]
+       (define x (loop (car r)))
+       (define y (loop (cdr r)))
+       (or x y)]
       [else
        #f]))
 
@@ -74,10 +77,10 @@
       [else
        (display "│   ")
        (display-tree (sub1 i))]))
-  (define bold-on "#\x033[1m")
-  (define bold-off "#\x033[0m")
+  (define bold-on "\033[1m")
+  (define bold-off "\033[0m")
   (define (print-rom i r)
-    (match-define (rom n d m y c? w? cs) r)
+    (match-define (rom n d m y c? w? p cs) r)
     (when w? (display bold-on))
     (display-tree i)
     (printf "~a. ~a\t< ~a >\t~a" y n m d)
@@ -87,7 +90,8 @@
   (define (print-roms i rs)
     (for ([r (in-list (sort rs string<=? #:key rom-year))])
       (print-rom i r)))
-  
+
+  ;; xxx copy want
   (print-roms 0 roms))
 
 (module+ main
