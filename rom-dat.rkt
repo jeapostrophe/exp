@@ -14,7 +14,7 @@
     [(list v) v]
     [#f #f]))
 
-(define (go! p d)
+(define (go! fba-p mame-p d)
   (define xe
     (parameterize ([collapse-whitespace #t]
                    [xexpr-drop-empty-attributes #t])
@@ -96,4 +96,4 @@
 
 (module+ main
   (require racket/cmdline)
-  (command-line #:args (p d) (go! p d)))
+  (command-line #:args (fba-p mame-p d) (go! fba-p mame-p d)))
