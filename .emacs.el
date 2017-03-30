@@ -1437,7 +1437,7 @@ given a prefix arg."
 
 ;; proof general
 (setq proof-assistants '(coq))
-(load-file "/usr/local/Cellar/proof-general/4.2/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
+(load-file "/usr/local/Cellar/proof-general/4.4/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
 ;; XXX make these local to the proof mode
 ;; proof-display-three-b
 ;; proof-shell-exit
