@@ -1377,6 +1377,7 @@ given a prefix arg."
 
 (add-to-list 'default-frame-alist '(height . 27))
 (add-to-list 'default-frame-alist '(width . 90))
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 ;; customs
 (custom-set-variables
