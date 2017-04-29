@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec youtube-dl --continue --ignore-errors --output "U%(title)s.%(ext)s" "$1" 
