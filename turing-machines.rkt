@@ -404,7 +404,14 @@
    (run* implicit-binary-add
          '(0 1 1 + 0 1 1)
          #:inform (make-display-state implicit-binary-add))
-   '(1 1 0)))
+   '(1 1 0))
+
+  (check-equal?
+   (run* implicit-binary-add
+         ;; xxx remove the 0 to right of +
+         '(0 0 1 0 + 0 1 1 1 1)
+         #:inform (make-display-state implicit-binary-add))
+   '(1 0 0 0 1)))
 
 ;; Rendering
 (require 2htdp/universe
