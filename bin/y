@@ -373,6 +373,8 @@
        (system* (find-executable-path "youtube-dl")
                 "--continue"
                 "--ignore-errors"
+                "--embed-subs"
+                "--all-subs"
                 "--output"
                 "U%(uploader)s - %(title)s.%(ext)s"
                 x))]))
