@@ -14,7 +14,8 @@
     (hash-set! t->p ft (reverse fp)))
   t->p)
 
-(module+ main
+;; Fighting Boys
+#;(module+ main
   (pretty-print
    (search (list 'W)
            (list (cons 1 (λ (s) (reverse s)))
@@ -22,3 +23,14 @@
                  (cons 3 (λ (s) (list* 'G '_ s)))
                  (cons 4 (λ (s) (cons 'E (snoc s 'U))))
                  (cons 5 (λ (s) (cons 'N s)))))))
+
+;; The Enchament
+(module+ main
+  (pretty-print
+   (search '(T N)
+           (list (cons 1 (λ (s) (append s '(E E))))
+                 (cons 2 (λ (s) (append s '(T E E))))
+                 (cons 3 (λ (s) (append '(S I) s '(N))))
+                 (cons 4 (λ (s) (append '(X) s)))
+                 (cons 5 (λ (s) (append '(X T) s)))
+                 (cons 6 reverse))))) 
