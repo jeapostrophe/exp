@@ -98,6 +98,7 @@
   (define new-children
     (for/list ([c (in-list (node-children games))])
       (define p (node-props c))
+      (define lab (node-fulllabel c))
       (define cp
         (if (and (hash-has-key? p "Status")
                  (hash-has-key? p "Completed")
@@ -109,7 +110,7 @@
               (match
                   (message-box/custom
                    "Ranking"
-                   (format "Did you complete ~a?" (node-label c))
+                   (format "Did you complete ~a?" lab)
                    "Yes" "No" "Yes w/ cheats")
                 [1 "Y"]
                 [2 "N"]
@@ -118,7 +119,7 @@
               (match
                   (message-box/custom
                    "Ranking"
-                   (format "Would you play ~a again?" (node-label c))
+                   (format "Would you play ~a again?" lab)
                    "Yes" "No" #f)
                 [1 "Y"]
                 [2 "N"]))
@@ -126,7 +127,7 @@
               (match
                   (message-box/custom
                    "Ranking"
-                   (format "Would you recommend ~a?" (node-label c))
+                   (format "Would you recommend ~a?" lab)
                    "Yes" "No" #f)
                 [1 "Y"]
                 [2 "N"]))
@@ -278,6 +279,12 @@
     [else
      "????/??/??"]))
 
+(define (node-fulllabel n)
+  (format "~a (~a, ~a)"
+          (node-label n)
+          ((node-prop "System") n)
+          (node-props-year n)))
+
 (define (perform-ranking kind games)
   (define key (format "Sort~a" kind))
   (define (game-completed? n)
@@ -288,10 +295,7 @@
                           "Queue"))))
   (define (sortable l)
     (for/list ([n (in-list l)])
-      (node (format "~a (~a, ~a)"
-                    (node-label n)
-                    ((node-prop "System") n)
-                    (node-props-year n))
+      (node (node-fulllabel n)
             (hasheq "ID" ((node-prop "ID") n)
                     key ((node-prop key #f) n))
             empty
