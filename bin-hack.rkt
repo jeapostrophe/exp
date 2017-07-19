@@ -22,7 +22,7 @@
   (for ([(vi vf-ht) (in-hash vf-hts)])
     (for ([(where who) (in-hash vf-ht)])
       (unless (= 1 (length who))
-        (printf "~a = ~a\n" vi where)))))
+        (printf "~a = ~a\n" vi (number->string where 16))))))
 
 (module+ main
   (go! (list (vector "continue.sav-LastLevel-26-9" (list 26 9))
