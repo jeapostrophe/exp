@@ -29,12 +29,17 @@
         (unbox v))))
   (map (λ (x) (x)) T))
 
-(define (display-stats V)
+(define (display-stats aV)
+  (define-values (nV V) (partition not aV))
   (printf "\n")
-  (printf "Min: ~a\n" (fmt-time (apply min V)))
-  (printf "Max: ~a\n" (fmt-time (apply max V)))
-  (printf "Avg: ~a\n" (fmt-time (/ (sum V) (length V)))))
+  (printf "Fails: ~a\n" (length nV))
+  (printf "  Min: ~a\n" (fmt-time (apply min V)))
+  (printf "  Max: ~a\n" (fmt-time (apply max V)))
+  (printf "  Avg: ~a\n" (fmt-time (/ (sum V) (length V)))))
 
 (module+ main
+  (define N 20)
   (define H '("google.com" "fitbit.com" "yahoo.com" "amazon.com" "ebay.com" "facebook.com" "airbnb.com" "uber.com" "lds.org" "twitter.com" "instagram.com" "microsoft.com"))
-  (display-stats (http-pings (shuffle H))))
+  (define H*N
+    (append* (make-list N H)))
+  (display-stats (http-pings (shuffle H*N))))
