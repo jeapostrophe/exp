@@ -10,7 +10,8 @@ setopt autopushd pushdminus pushdsilent pushdtohome
 autoload -U zmv
 bindkey -e
 
-TPUT_END=$(tput cup 9999 0)
+#(tput cup 9999 0)
+TPUT_END="" 
 PROMPT_SYMB=❯
 PROMPT_SYMB=⌁
 PROMPT_SYMB=►
