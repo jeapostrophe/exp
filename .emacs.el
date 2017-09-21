@@ -491,6 +491,7 @@ given a prefix arg."
             ("cc" . "ccci")
             ("glsl" . "glslangValidator")
             ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
+            ("ss" . ,(if je/racket-test-p "rkt" "rk"))
             ("dc" . ,(if je/racket-test-p "rkt" "rk"))
             ("scrbl" . ,(if je/racket-test-p "rkt" "rk"))
             ("txt" . "ctxt")
@@ -506,7 +507,7 @@ given a prefix arg."
 
     (if (string-equal suffix "el") ; special case for emacs lisp
         (load-file fname)
-      (if (and t (file-exists-p (concat default-directory "/Makefile")))
+      (if (and nil (file-exists-p (concat default-directory "/Makefile")))
           (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
         (if progName
             (progn
