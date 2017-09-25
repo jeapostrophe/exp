@@ -1,0 +1,4 @@
+#!/bin/sh
+F=/Users/jay/Dev/scm/github.jeapostrophe/exp/dir-serve.rkt
+raco make $F
+exec racket -t $F -- $*
