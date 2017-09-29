@@ -8,7 +8,7 @@ echo Clearing History
 tmux clear-history
 
 echo Clearing old sessions
-for i in $(tmux list-sessions | grep -e lightning | grep -v -e attached | awk -F':' '{print $1}') ; do
+for i in $(tmux list-sessions | grep -e lightning | grep -v -e attached | awk -F':' '{print $1}' | grep -e '-') ; do
     echo \t Clearing session $i 
     tmux kill-session -t $i
 done
