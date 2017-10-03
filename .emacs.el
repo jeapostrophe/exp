@@ -507,7 +507,8 @@ given a prefix arg."
 
     (if (string-equal suffix "el") ; special case for emacs lisp
         (load-file fname)
-      (if (and nil (file-exists-p (concat default-directory "/Makefile")))
+      (if (and (not (string-equal suffix "ss"))
+               (file-exists-p (concat default-directory "/Makefile")))
           (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
         (if progName
             (progn
