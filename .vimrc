@@ -20,7 +20,7 @@ Plug 'Shougo/context_filetype.vim' " XXX Untested
 Plug 'altercation/vim-colors-solarized'
 call plug#end()
 
-set esckeys
+" set esckeys
 set timeoutlen=0 ttimeoutlen=0
 
 " Simulate some Emacs keys
