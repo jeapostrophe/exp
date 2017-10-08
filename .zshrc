@@ -27,6 +27,7 @@ PROMPT_SYMB="💩 "
 
 PROMPT_SYMB=⫸
 PS1="${TPUT_END}%(?.%F{green}.%F{red})${PROMPT_SYMB}%f "
+
 if [[ "$TERM" =~ "xterm" ]] ; then
     PS1="%S%~%s
 $PS1"
