@@ -1,0 +1,3 @@
+#!/bin/bash
+
+vagrant global-status | awk '/running/{print $1}' | gxargs -r -d '\n' -n 1 -- vagrant suspend
