@@ -1395,9 +1395,10 @@ given a prefix arg."
  '(ibuffer-display-summary nil)
  '(package-selected-packages
    (quote
-    (yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
+    (scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
+ '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
  '(racket-racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
  '(racket-raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco")
  '(racket-use-company-mode nil)
