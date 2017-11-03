@@ -104,3 +104,4 @@
 (put 'nest 'scheme-indent-function 1)
 
 (put 'with-states 'scheme-indent-function 2)
+(put 'generator 'scheme-indent-function 1)
