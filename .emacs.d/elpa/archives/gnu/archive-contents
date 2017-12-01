@@ -335,7 +335,7 @@
 	     ((:keywords "killing" "convenience")
 	      (:url . "https://github.com/leoliu/easy-kill"))])
  (ebdb .
-       [(0 4 1)
+       [(0 4 2)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -369,7 +369,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(1 3 2)
+	    [(1 4 0 5)
 	     ((emacs
 	       (25))
 	      (stream
@@ -422,7 +422,7 @@
 	       ((:keywords "calendar")
 		(:url . "http://elpa.gnu.org/packages/excorporate.html"))])
  (exwm .
-       [(0 15)
+       [(0 16)
 	((xelb
 	  (0 12)))
 	"Emacs X Window Manager" tar
@@ -469,13 +469,20 @@
 	 "Operate on Git branches like dired" tar
 	 ((:keywords "git" "vc" "convenience")
 	  (:url . "http://elpa.gnu.org/packages/gited.html"))])
+ (gle-mode .
+	   [(1 1)
+	    ((cl-lib
+	      (0 5)))
+	    "Major mode to edit Graphics Layout Engine files" single
+	    ((:url . "http://elpa.gnu.org/packages/gle-mode.html")
+	     (:keywords))])
  (gnome-c-style .
 		[(0 1)
 		 nil "minor mode for editing GNOME-style C source code" tar
 		 ((:keywords "gnome" "c" "coding style")
 		  (:url . "http://elpa.gnu.org/packages/gnome-c-style.html"))])
  (gnorb .
-	[(1 3 1)
+	[(1 3 2)
 	 ((cl-lib
 	   (0 5)))
 	 "Glue code between Gnus, Org, and BBDB" tar
@@ -531,7 +538,7 @@
 	 ((:keywords "bindings")
 	  (:url . "https://github.com/abo-abo/hydra"))])
  (hyperbole .
-	    [(6 0 2)
+	    [(7 0 2)
 	     ((emacs
 	       (24 4)))
 	     "GNU Hyperbole: The Everyday Hypertextual Information Manager" tar
@@ -550,7 +557,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/iterators.html")
 	      (:keywords "extensions" "elisp"))])
  (ivy .
-      [(0 9 1)
+      [(0 10 0)
        ((emacs
 	 (24 1)))
        "Incremental Vertical completYon" tar
@@ -674,6 +681,15 @@
 	    "Create keyboard events from Midi input" single
 	    ((:url . "http://elpa.gnu.org/packages/midi-kbd.html")
 	     (:keywords "convenience" "hardware" "multimedia"))])
+ (mines .
+	[(1 2)
+	 ((emacs
+	   (24 4))
+	  (cl-lib
+	   (0 5)))
+	 "Minesweeper game" tar
+	 ((:keywords "games")
+	  (:url . "https://github.com/calancha/Minesweeper"))])
  (minibuffer-line .
 		  [(0 1)
 		   nil "Display status info in the minibuffer window" single
@@ -727,7 +743,7 @@
 	      ((:url . "http://elpa.gnu.org/packages/nhexl-mode.html")
 	       (:keywords "data"))])
  (nlinum .
-	 [(1 8)
+	 [(1 8 1)
 	  nil "Show line numbers in the margin" single
 	  ((:url . "http://elpa.gnu.org/packages/nlinum.html")
 	   (:keywords "convenience"))])
@@ -763,7 +779,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(20171030)
+      [(20171127)
        nil "Outline-based notes management and organizer" tar nil])
  (org-edna .
 	   [(1 0 -3 1)
@@ -961,6 +977,11 @@
 	   nil "Add spinners and progress-bars to the mode-line for ongoing operations" single
 	   ((:url . "https://github.com/Malabarba/spinner.el")
 	    (:keywords "processes" "mode-line"))])
+ (sql-indent .
+	     [(1 0)
+	      nil "Support for indenting code in SQL files." tar
+	      ((:keywords "languages" "sql")
+	       (:url . "http://elpa.gnu.org/packages/sql-indent.html"))])
  (stream .
 	 [(2 2 4)
 	  ((emacs
@@ -1145,7 +1166,7 @@
 	   ((:url . "http://elpa.gnu.org/packages/wpuzzle.html")
 	    (:keywords))])
  (xclip .
-	[(1 3)
+	[(1 4)
 	 nil "use xclip to copy&paste" single
 	 ((:url . "http://elpa.gnu.org/packages/xclip.html")
 	  (:keywords "convenience" "tools"))])
