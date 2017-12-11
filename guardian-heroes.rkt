@@ -64,8 +64,8 @@
     [else
      (define-values (dist-ht prev-ht)
        (dag-shortest-paths g 'start))
-     (define pth (reverse (chase prev-ht 'end)))
-     (cons (rest pth)
+     (define pth (chase prev-ht 'end))
+     (cons (rest (reverse (rest pth)))
            (go! (set-union seen? (list->seteq pth))))]))
 
 (define (render-graphviz/dot dot png)
@@ -88,11 +88,20 @@
       (for/or ([n (in-list (rest n))]
                [i (in-naturals 1)]
                #:when (eq? v n))
-        i))))
+        (~a " "i)))))
+
+(define (same-rank ns)
+  (list "{ rank=same; "
+        (for/list ([n (in-list ns)])
+          (~a " node" n ";"))
+        " }\n"))
 
 (module+ main
   (require racket/pretty)
-  (render-graph (unweighted-graph/adj STAGES) "STAGES.png")
+  (define all (unweighted-graph/adj STAGES))
+  (remove-vertex! all 'end)
+  (remove-vertex! all 'start)
+  (render-graph all "STAGES.png")
 
   (define paths (go! (seteq)))
   (render-graphviz
@@ -100,6 +109,7 @@
     (flatten
      (list
       "digraph {\n"
+      #;"\tordering=out;"
       (for/list ([n (in-set (apply set-union (map list->seteq paths)))])
         (~a "\tnode"n" [label=\""n"\"];\n"))
       (for/list ([pth (in-list paths)]
@@ -108,7 +118,15 @@
               (for/list ([u (in-list pth)]
                          [v (in-list (rest pth))])
                 (define w (which u v))
-                (~a "node"u" -> node"v" [colorscheme=\"dark28\", color="i", label=\""w"\"];\n"))
+                (~a "\tnode"u" -> node"v" [colorscheme=\"dark28\", color="i", label=\""w"\"];\n"))
               "}\n"))
+      ;; XXX Hack
+      (same-rank '(29 30))
+      (same-rank '(24 25 26 27 28))
+      (same-rank '(18 19 20 21 22 23))
+      (same-rank '(13 14 15 16 17))
+      (same-rank '( 8  9 10 11 12))
+      (same-rank '( 5  6  7))
+      (same-rank '( 3  4))      
       "}\n")))
    "PATHS.png"))
