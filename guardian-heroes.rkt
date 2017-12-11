@@ -65,7 +65,7 @@
      (define-values (dist-ht prev-ht)
        (dag-shortest-paths g 'start))
      (define pth (reverse (chase prev-ht 'end)))
-     (cons pth
+     (cons (rest pth)
            (go! (set-union seen? (list->seteq pth))))]))
 
 (define (render-graphviz/dot dot png)
@@ -80,6 +80,16 @@
 (define (render-graph g png)
   (render-graphviz (graphviz g) png))
 
+(define (which u v)
+  (for/or ([n (in-list STAGES)]
+           #:when (eq? u (first n)))
+    (if (= 1 (length (rest n)))
+      ""
+      (for/or ([n (in-list (rest n))]
+               [i (in-naturals 1)]
+               #:when (eq? v n))
+        i))))
+
 (module+ main
   (require racket/pretty)
   (render-graph (unweighted-graph/adj STAGES) "STAGES.png")
@@ -87,7 +97,18 @@
   (define paths (go! (seteq)))
   (render-graphviz
    (string-join
-    (list
-     "graph {"
-     "}"))
+    (flatten
+     (list
+      "digraph {\n"
+      (for/list ([n (in-set (apply set-union (map list->seteq paths)))])
+        (~a "\tnode"n" [label=\""n"\"];\n"))
+      (for/list ([pth (in-list paths)]
+                 [i (in-naturals 1)])
+        (list "subgraph {\n"
+              (for/list ([u (in-list pth)]
+                         [v (in-list (rest pth))])
+                (define w (which u v))
+                (~a "node"u" -> node"v" [colorscheme=\"dark28\", color="i", label=\""w"\"];\n"))
+              "}\n"))
+      "}\n")))
    "PATHS.png"))
