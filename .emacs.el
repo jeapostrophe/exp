@@ -1439,6 +1439,14 @@ given a prefix arg."
 
 (fringe-mode 0)
 
+(setq table-cell-horizontal-chars "═")
+(setq table-cell-vertical-char ?║)
+(setq table-cell-intersection-char ?╬)
+
+(setq table-cell-horizontal-chars "-")
+(setq table-cell-vertical-char ?|)
+(setq table-cell-intersection-char ?+)
+
 ;; proof general
 (setq proof-assistants '(coq))
 (load-file "/usr/local/Cellar/proof-general/4.4_1/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
