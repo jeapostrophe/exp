@@ -12,6 +12,10 @@
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
+(require 'cl)
+(cond
+ ((eq window-system 'ns) (setq shell-command-switch "-lc")))
+
 ;; font & color
 (set-face-attribute 'default nil 
                     :font "Triplicate T4c"
@@ -1395,7 +1399,7 @@ given a prefix arg."
  '(ibuffer-display-summary nil)
  '(package-selected-packages
    (quote
-    (scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
+    (ac-math auto-complete auto-complete-auctex auto-complete-c-headers tuareg scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
  '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
@@ -1439,6 +1443,7 @@ given a prefix arg."
 
 (fringe-mode 0)
 
+;; table stuff
 (setq table-cell-horizontal-chars "═")
 (setq table-cell-vertical-char ?║)
 (setq table-cell-intersection-char ?╬)
@@ -1446,6 +1451,40 @@ given a prefix arg."
 (setq table-cell-horizontal-chars "-")
 (setq table-cell-vertical-char ?|)
 (setq table-cell-intersection-char ?+)
+
+;; ocaml
+(require 'tuareg)
+(setq auto-mode-alist 
+      (append '(("\\.ml[ily]?$" . tuareg-mode))
+	      auto-mode-alist))
+
+(dolist
+   (var (car (read-from-string
+              (shell-command-to-string "opam config env --sexp"))))
+ (setenv (car var) (cadr var)))
+(setq exec-path (split-string (getenv "PATH") path-separator))
+(push (concat (getenv "OCAML_TOPLEVEL_PATH")
+	      "/../../share/emacs/site-lisp") load-path)
+(autoload 'utop "utop" "Toplevel for OCaml" t)
+(autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+(add-hook 'tuareg-mode-hook 'utop-minor-mode)
+
+(setq opam-share (substring (shell-command-to-string "opam config var share") 0 -1))
+(add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))
+(require 'merlin)
+
+(add-hook 'tuareg-mode-hook 'merlin-mode)
+
+(define-key merlin-mode-map
+  (kbd "C-c <up>") 'merlin-type-enclosing-go-up)
+(define-key merlin-mode-map
+  (kbd "C-c <down>") 'merlin-type-enclosing-go-down)
+(set-face-background 'merlin-type-face "#88FF44")
+
+(require 'auto-complete)
+(add-hook 'tuareg-mode-hook 'auto-complete-mode)
+
+(require 'ocp-indent)
 
 ;; proof general
 (setq proof-assistants '(coq))
