@@ -50,3 +50,5 @@ export EMACS_SERVER_FILE=~/.emacs.d/server/lightning
 export FZF_DEFAULT_OPTS="--cycle --algo=v1 --color=light"
 
 export GPG_TTY=$(tty)
+
+export PATH="$HOME/.cargo/bin:$PATH"
