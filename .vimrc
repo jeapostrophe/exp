@@ -1,3 +1,6 @@
+let g:python_host_prog  = '/usr/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
+    
 call plug#begin()
 Plug 'tpope/vim-sensible' " XXX Untested
 Plug 'chrisbra/unicode.vim' " XXX Need to understand better
@@ -18,7 +21,11 @@ Plug 'Shougo/echodoc.vim' " XXX Untested
 Plug 'Shougo/context_filetype.vim' " XXX Untested
 " Plug 'Shougo/vimshell.vim' " not ported to neovim yet?
 Plug 'altercation/vim-colors-solarized'
+" Plug 'let-def/vimbufsync'         " pathogen
+" Plug 'the-lambda-church/coquille' " pathogen
 call plug#end()
+
+call pathogen#infect()
 
 " set esckeys
 set timeoutlen=0 ttimeoutlen=0
