@@ -1408,15 +1408,12 @@ given a prefix arg."
  '(racket-use-company-mode nil)
  '(safe-local-variable-values
    (quote
-    ((prover-cmd . ". ~/.profile; racket mctop.rkt")
+    ((coq-prog-name . "/usr/local/Cellar/coq/8.7.1/bin/coqtop")
+     (prover-cmd . ". ~/.profile; racket mctop.rkt")
      (prover-cmd . "/bin/cat")
      (prover-cmd . ". ~/.profile; racket prover.rkt")
      (prover-cmd . "pwd")
-     (prover-cmd . "racket prover.rkt")
-     (coq-prog-args "-emacs" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
-     (coq-prog-args "-emacs-U" "-R" "/Users/jay/Dev/dist/rfindler/395-2013" "Braun")
-     (coq-prog-args "-emacs-U" "-R" ".." "Braun")
-     (coq-prog-args "-emacs-U" "-R" "." "Braun")))))
+     (prover-cmd . "racket prover.rkt")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
