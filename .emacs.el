@@ -1491,18 +1491,37 @@ given a prefix arg."
 ;; proof-shell-exit
 ;; proof-process-buffer
 ;; proof-activate-scripting
-(global-set-key (kbd "<M-s-right>") 'proof-goto-point)
-(global-set-key (kbd "<M-s-return>") 'proof-goto-point)
-(global-set-key (kbd "<M-s-up>") 'proof-undo-last-successful-command)
-(global-set-key (kbd "<M-s-down>") 'proof-assert-next-command-interactive)
 
-(global-set-key (kbd "M-s-÷") 'proof-goto-point)
-(global-set-key (kbd "M-s-π") 'proof-goto-point)
-(global-set-key (kbd "M-s-≤") 'proof-undo-last-successful-command)
-(global-set-key (kbd "M-s-≥") 'proof-assert-next-command-interactive)
+(defun je/proof-back ()
+  (interactive)
+  (proof-undo-last-successful-command)
+  (proof-shell-wait)
+  (proof-prf))
+(defun je/proof-forward ()
+  (interactive)
+  (proof-assert-next-command-interactive)
+  ;(proof-shell-wait)
+  ;(proof-prf)
+  )
+(defun je/proof-here ()
+  (interactive)
+  (proof-goto-point)
+  (proof-shell-wait)
+  (proof-prf))
+
+(global-set-key (kbd "<M-s-right>") 'je/proof-here)
+(global-set-key (kbd "<M-s-return>") 'je/proof-here)
+(global-set-key (kbd "<M-s-up>") 'je/proof-back)
+(global-set-key (kbd "<M-s-down>") 'je/proof-forward)
+
+(global-set-key (kbd "M-s-÷") 'je/proof-here)
+(global-set-key (kbd "M-s-π") 'je/proof-here)
+(global-set-key (kbd "M-s-≤") 'je/proof-back)
+(global-set-key (kbd "M-s-≥") 'je/proof-forward)
+(global-set-key (kbd "M-s-…") 'proof-prf)
 
 (setq proof-shell-process-connection-type nil)
 
-(setq proof-three-window-mode-policy 'vertical)
+(setq proof-three-window-mode-policy 'hybrid)
 (if nil
     (proof-display-three-b 'hybrid))
