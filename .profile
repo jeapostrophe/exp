@@ -5,6 +5,7 @@ export PATH=/usr/local/Cellar/emacs/24.5/bin:$PATH
 export PATH=/opt/local/libexec/perl5.16:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=/Users/jay/Library/Python/2.7/bin:$PATH
+export PATH=/Users/jay/Library/Python/3.6/bin:$PATH
 export PATH=/Users/jay/.gem/ruby/2.0.0/bin:$PATH
 
 export PYTHON_PATH=/Users/jay/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages
