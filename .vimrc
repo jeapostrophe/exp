@@ -20,7 +20,8 @@ call plug#begin()
 "Plug 'Shougo/echodoc.vim' " XXX Untested
 "Plug 'Shougo/context_filetype.vim' " XXX Untested
 " Plug 'Shougo/vimshell.vim' " not ported to neovim yet?
-" Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
+"https://github.com/iCyMind/NeoSolarized
 " Plug 'let-def/vimbufsync'         " pathogen
 " Plug 'the-lambda-church/coquille' " pathogen
 call plug#end()

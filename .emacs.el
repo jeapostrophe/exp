@@ -1399,7 +1399,7 @@ given a prefix arg."
  '(ibuffer-display-summary nil)
  '(package-selected-packages
    (quote
-    (ac-math auto-complete auto-complete-auctex auto-complete-c-headers tuareg scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
+    (yaml-mode ac-math auto-complete auto-complete-auctex auto-complete-c-headers tuareg scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
  '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
