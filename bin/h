@@ -1,5 +1,6 @@
 #!/bin/sh
 cd ~/Dev/scm/github.jeapostrophe/home/etc && \
-    git ci -m "Pre" habit.log && \
-    ~/Dev/scm/github.jeapostrophe/lifelog/habit.rkt habit.log wra scratch tumblr keto dessert && \
-    git ci -m "Post" habit.log
+#    git ci -m "Pre" habit.log && \
+    ~/Dev/scm/github.jeapostrophe/lifelog/habit.rkt habit.log wra !scratch !tumblr keto !dessert && \
+#    git ci -m "Post" habit.log && \
+    echo 
