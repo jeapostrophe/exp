@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /Users/jay/Dev/scm/github.jeapostrophe/lifelog/habit.rkt /Users/jay/Dev/scm/github.jeapostrophe/home/etc/habit.log
