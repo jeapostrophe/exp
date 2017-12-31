@@ -1,2 +1,5 @@
 #!/bin/sh
-exec /Users/jay/Dev/scm/github.jeapostrophe/lifelog/habit.rkt /Users/jay/Dev/scm/github.jeapostrophe/home/etc/habit.log
+cd ~/Dev/scm/github.jeapostrophe/home/etc && \
+    git ci -m "Pre" habit.log && \
+    ~/Dev/scm/github.jeapostrophe/lifelog/habit.rkt habit.log wra scratch tumblr keto dessert && \
+    git ci -m "Post" habit.log
