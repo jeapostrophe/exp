@@ -63,7 +63,7 @@
 	((:url . "http://elpa.gnu.org/packages/ampc.html")
 	 (:keywords "ampc" "mpc" "mpd"))])
  (arbitools .
-	    [(0 91)
+	    [(0 93)
 	     ((cl-lib
 	       (0 5)))
 	     "Package for chess tournaments administration" single
@@ -375,7 +375,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(1 4 0 11)
+	    [(1 4 0 12)
 	     ((emacs
 	       (25))
 	      (stream
@@ -1120,7 +1120,7 @@
 	    ((:url . "https://elpa.gnu.org/packages/vigenere.html")
 	     (:keywords "data" "vigenere" "cipher"))])
  (vlf .
-      [(1 7)
+      [(1 7 1)
        nil "View Large Files" tar
        ((:keywords "large files" "utilities")
 	(:url . "https://github.com/m00natic/vlfi"))])
