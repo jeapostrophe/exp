@@ -4,16 +4,24 @@
 # <sequence> ST, and for all ESCs in <sequence> to be replaced with ESC ESC. It
 # only accepts ESC backslash for ST.
 function print_osc() {
-    if [[ $TERM == screen* ]] ; then
+    if true ; then #[[ $TERM == screen* ]] ; then
         printf "\033Ptmux;\033\033]"
     else
         printf "\033]"
     fi
 }
 
+function print_csi() {
+    if true ; then #[[ $TERM == screen* ]] ; then
+        printf "\033Ptmux;\033\033["
+    else
+        printf "\033["
+    fi
+}
+
 # More of the tmux workaround described above.
 function print_st() {
-    if [[ $TERM == screen* ]] ; then
+    if true ; then #[[ $TERM == screen* ]] ; then
         printf "\a\033\\"
     else
         printf "\a"
@@ -27,30 +35,36 @@ function print_st() {
 #   print_filename: If non-empty, print the filename 
 #                   before outputting the image
 function print_image() {
+    printf "\n\n\n\n\n\n\n\n\n\n"
+    print_csi
+    printf "?25l"
+    print_csi
+    printf "10F"
     print_osc
     printf '1337;File='
     if [[ -n "$1" ]]; then
-      printf 'name='`printf "%s" "$1" | base64`";"
+      printf 'name='`echo -n "$1" | base64`";"
     fi
-
-    VERSION=$(base64 --version 2>&1)
-    if [[ "$VERSION" =~ fourmilab ]]; then
+    if $(base64 --version 2>&1 | egrep 'fourmilab|GNU' > /dev/null)
+    then
       BASE64ARG=-d
-    elif [[ "$VERSION" =~ GNU ]]; then
-      BASE64ARG=-di
     else
       BASE64ARG=-D
     fi
-
-    printf "%s" "$3" | base64 $BASE64ARG | wc -c | awk '{printf "size=%d",$1}'
+    echo -n "$3" | base64 $BASE64ARG | wc -c | awk '{printf "size=%d",$1}'
     printf ";inline=$2"
+    printf ";height=10"
     printf ":"
-    printf "%s" "$3"
+    echo -n "$3"
     print_st
     printf '\n'
     if [[ -n "$4" ]]; then
       echo $1
     fi
+    print_csi
+    printf "10E"
+    print_csi
+    printf "?25h"
 }
 
 function error() {
