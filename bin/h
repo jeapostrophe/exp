@@ -1,6 +1,1 @@
-#!/bin/sh
-cd ~/Dev/scm/github.jeapostrophe/home/etc && \
-    (git ci -m "Pre" habit.log || true) &> /dev/null && \
-    ~/Dev/scm/github.jeapostrophe/lifelog/habit.rkt $* habit.log wra !scratch !tumblr keto !dessert && \
-    git ci -m "Post" habit.log &> /dev/null && \
-    echo 
+/Users/jay/Dev/scm/github.jeapostrophe/lifelog/habit.rkt
