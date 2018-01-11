@@ -46,6 +46,29 @@
 (defalias 'isb 'ispell-buffer)
 (defalias 'isw 'ispell-word)
 
+;; Helm
+(require 'helm-config)
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 50)
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+(setq helm-buffer-max-length nil)
+(helm-autoresize-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(helm-mode 1)
+
+
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
 (defvar emacs-has-x
@@ -399,10 +422,9 @@ given a prefix arg."
 (global-set-key (kbd "M-w") 'delete-other-windows)
 
 ;; Replace the standard way of looking through buffers
-(progn
-  (global-set-key (kbd "C-x C-b") 'ibuffer))
-(define-key global-map (kbd "C-`") 'ibuffer)
-(define-key global-map (kbd "C-b") 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'helm-mini)
+(define-key global-map (kbd "C-`") 'helm-mini)
+(define-key global-map (kbd "C-b") 'helm-mini)
 (define-key global-map (kbd "M-`") 'iswitchb-buffer)
 (define-key global-map (kbd "M-<tab>") 'other-window)
 
@@ -1399,7 +1421,7 @@ given a prefix arg."
  '(ibuffer-display-summary nil)
  '(package-selected-packages
    (quote
-    (yaml-mode ac-math auto-complete auto-complete-auctex auto-complete-c-headers tuareg scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
+    (f3 flyspell-correct-helm helm helm-ag helm-ag-r helm-bibtex helm-flyspell helm-fuzzier helm-github-stars helm-google helm-unicode yaml-mode ac-math auto-complete auto-complete-auctex auto-complete-c-headers tuareg scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
  '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")

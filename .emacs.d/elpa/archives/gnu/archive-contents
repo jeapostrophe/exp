@@ -63,7 +63,7 @@
 	((:url . "http://elpa.gnu.org/packages/ampc.html")
 	 (:keywords "ampc" "mpc" "mpd"))])
  (arbitools .
-	    [(0 93)
+	    [(0 94)
 	     ((cl-lib
 	       (0 5)))
 	     "Package for chess tournaments administration" single
@@ -375,7 +375,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(1 4 0 12)
+	    [(1 4 0 17)
 	     ((emacs
 	       (25))
 	      (stream
@@ -784,9 +784,6 @@
 	     "guide your eyes while scrolling" single
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
- (org .
-      [(20171225)
-       nil "Outline-based notes management and organizer" tar nil])
  (org-edna .
 	   [(1 0 -2 4)
 	    ((emacs
@@ -1156,7 +1153,7 @@
 	     ((:keywords "communication" "websocket" "server")
 	      (:url . "http://elpa.gnu.org/packages/websocket.html"))])
  (which-key .
-	    [(3 0 2)
+	    [(3 1 0)
 	     ((emacs
 	       (24 4)))
 	     "Display available keybindings in popup" tar
