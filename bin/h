@@ -1,2 +1,2 @@
 #!/bin/sh
-exec racket -l lifelog/habit -- $*
+exec racket -l lifelog -- $*
