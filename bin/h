@@ -1,1 +1,2 @@
-/Users/jay/Dev/scm/github.jeapostrophe/lifelog/habit.rkt
+#!/bin/sh
+exec racket -l lifelog/habit -- $*
