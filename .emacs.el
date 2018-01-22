@@ -1471,6 +1471,13 @@ given a prefix arg."
 (setq table-cell-vertical-char ?|)
 (setq table-cell-intersection-char ?+)
 
+;; outlook
+(defun je/exchange-outlook-format ()
+  "Swap Exchange/Outlook formatting with Internet-style formatting"
+  (interactive)
+  (mark-whole-buffer)
+  (shell-command-on-region (point) (mark) "~/bin/outlook-quote.rb" (current-buffer) t))
+
 ;; ocaml
 (require 'tuareg)
 (setq auto-mode-alist 

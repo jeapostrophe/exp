@@ -265,7 +265,7 @@
 		((:url . "http://elpa.gnu.org/packages/dbus-codegen.html")
 		 (:keywords "comm" "dbus" "convenience"))])
  (debbugs .
-	  [(0 14)
+	  [(0 15)
 	   ((soap-client
 	     (3 1 1))
 	    (cl-lib
@@ -375,7 +375,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(1 4 0 17)
+	    [(1 5 1)
 	     ((emacs
 	       (25))
 	      (stream
@@ -467,7 +467,7 @@
 	  ((:url . "https://github.com/leoliu/ggtags")
 	   (:keywords "tools" "convenience"))])
  (gited .
-	[(0 3 3)
+	[(0 3 4)
 	 ((emacs
 	   (24 4))
 	  (cl-lib
@@ -688,7 +688,7 @@
 	    ((:url . "http://elpa.gnu.org/packages/midi-kbd.html")
 	     (:keywords "convenience" "hardware" "multimedia"))])
  (mines .
-	[(1 2)
+	[(1 5)
 	 ((emacs
 	   (24 4))
 	  (cl-lib
