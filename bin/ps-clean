@@ -1,0 +1,5 @@
+#!/bin/sh
+
+~/bin/tmux-clean
+ps awx | grep -e git-index -e gcalcli | cut -d ' ' -f 1 | xargs kill -9
+
