@@ -63,7 +63,7 @@
 (setq helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match    t)
 (setq helm-buffer-max-length nil)
-(helm-autoresize-mode 1)
+;; (helm-autoresize-mode 1)
 
 (global-set-key (kbd "M-x") 'helm-M-x)
 (helm-mode 1)
