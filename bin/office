@@ -1,0 +1,15 @@
+#!/bin/bash
+
+MODE=${1:-ls}
+echo "MODE = '${MODE}'"
+case ${MODE} in
+    ls)
+        echo Office
+        ssh remote-office 'ls ~/Downloads'
+        echo WWW
+        ssh uml 'ls ~/public_html/dl'
+        ;;
+    sync)
+        ssh remote-office 'rsync -a --progress --exclude-from=/home/jay/.office-sync ~/Downloads/ uml:~/public_html/dl/'
+        ;;
+esac
