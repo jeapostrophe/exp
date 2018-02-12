@@ -4,21 +4,12 @@ MODE=${1:-ls}
 echo "MODE = '${MODE}'"
 case ${MODE} in
     ls)
-        echo Office
-        ssh remote-office 'ls ~/Downloads'
-        echo WWW
-        ssh uml 'ls ~/public_html/dl'
+        ssh remote-office 'cd ~/Downloads; ls'
         ;;
-    sync)
-        ssh remote-office 'rsync -a --progress --exclude-from=/home/jay/.office-sync ~/Downloads/ uml:~/public_html/dl/'
+    to)
+        ssh remote-office 'cd ~/Downloads ; find . -type f \! -path "*MAME*" -exec echo /home/jay/local/dbxcli/dbxcli-linux-amd64 put {} dl/{} \;'
         ;;
-    cp)
-        ssh uml 'chmod -R a+r ~/public_html/dl; cd ~/public_html; find dl -type f' > /tmp/cur
-        while IFS='' read -r line ; do
-            wget -r -P ~/Downloads -nH --cut-dirs=2 -c "http://www.cs.uml.edu/~jmccarth/${line}"
-        done < /tmp/cur
-        ;;
-    del)
-        ssh uml 'rm -fr ~/public_html/dl/*'
+    from)
+        /Users/jay/Dev/dist/dbxcli/dbxcli-darwin-amd64 ls dl
         ;;
 esac
