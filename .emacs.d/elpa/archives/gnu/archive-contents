@@ -28,7 +28,7 @@
 	       ((:keywords "languages" "ada")
 		(:url . "http://stephe-leake.org/ada/arm.html"))])
  (adaptive-wrap .
-		[(0 5 1)
+		[(0 5 2)
 		 nil "Smart line-wrapping with wrap-prefix" single
 		 ((:url . "http://elpa.gnu.org/packages/adaptive-wrap.html")
 		  (:keywords))])
@@ -80,7 +80,7 @@
 	 ((:keywords "async")
 	  (:url . "http://elpa.gnu.org/packages/async.html"))])
  (auctex .
-	 [(12 1 0)
+	 [(12 1 1)
 	  nil "Integrated environment for *TeX*" tar
 	  ((:url . "http://www.gnu.org/software/auctex/"))])
  (aumix-mode .
@@ -375,7 +375,7 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (el-search .
-	    [(1 6)
+	    [(1 6 3)
 	     ((emacs
 	       (25))
 	      (stream
@@ -430,9 +430,9 @@
 	       ((:keywords "calendar")
 		(:url . "http://elpa.gnu.org/packages/excorporate.html"))])
  (exwm .
-       [(0 17)
+       [(0 18)
 	((xelb
-	  (0 13)))
+	  (0 14)))
 	"Emacs X Window Manager" tar
 	((:keywords "unix")
 	 (:url . "https://github.com/ch11ng/exwm"))])
@@ -469,7 +469,7 @@
 	  ((:url . "https://github.com/leoliu/ggtags")
 	   (:keywords "tools" "convenience"))])
  (gited .
-	[(0 3 4)
+	[(0 4 1)
 	 ((emacs
 	   (24 4))
 	  (cl-lib
@@ -558,7 +558,7 @@
 	  ((:url . "http://elpa.gnu.org/packages/ioccur.html")
 	   (:keywords))])
  (iterators .
-	    [(0 1)
+	    [(0 1 1)
 	     ((emacs
 	       (25)))
 	     "Functions for working with iterators" single
@@ -708,6 +708,13 @@
 	   nil "Sidebar showing a \"mini-map\" of a buffer" single
 	   ((:url . "http://elpa.gnu.org/packages/minimap.html")
 	    (:keywords))])
+ (mmm-mode .
+	   [(0 5 6)
+	    ((cl-lib
+	      (0 2)))
+	    "Allow Multiple Major Modes in a buffer" tar
+	    ((:keywords "convenience" "faces" "languages" "tools")
+	     (:url . "https://github.com/purcell/mmm-mode"))])
  (multishell .
 	     [(1 1 5)
 	      ((cl-lib
@@ -716,7 +723,7 @@
 	      ((:keywords "processes")
 	       (:url . "https://github.com/kenmanheimer/EmacsMultishell"))])
  (muse .
-       [(3 20)
+       [(3 20 2)
 	nil "Authoring and publishing tool for Emacs" tar
 	((:keywords "hypermedia")
 	 (:url . "http://mwolson.org/projects/EmacsMuse.html"))])
@@ -767,7 +774,7 @@
 	((:url . "http://elpa.gnu.org/packages/ntlm.html")
 	 (:keywords "ntlm" "sasl" "comm"))])
  (num3-mode .
-	    [(1 2)
+	    [(1 3)
 	     nil "highlight groups of digits in long numbers" single
 	     ((:url . "http://elpa.gnu.org/packages/num3-mode.html")
 	      (:keywords "faces" "minor-mode"))])
@@ -788,6 +795,11 @@
 	     "guide your eyes while scrolling" single
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
+ (org .
+      [(9 1 9)
+       nil "Outline-based notes management and organizer" tar
+       ((:keywords "outlines" "hypermedia" "calendar" "wp")
+	(:url . "http://elpa.gnu.org/packages/org.html"))])
  (org-edna .
 	   [(1 0 -2 6)
 	    ((emacs
@@ -845,7 +857,7 @@
 	 ((:url . "http://elpa.gnu.org/packages/poker.html")
 	  (:keywords "games"))])
  (posframe .
-	   [(0 1 0)
+	   [(0 3 0)
 	    ((emacs
 	      (26)))
 	    "Pop a posframe (just a frame) at point" single
@@ -876,7 +888,7 @@
 	 ((:url . "http://www.dr-qubit.org/emacs.php")
 	  (:keywords "extensions" "data structures" "queue"))])
  (rainbow-mode .
-	       [(0 13)
+	       [(1 0)
 		nil "Colorize color names in buffers" single
 		((:url . "http://elpa.gnu.org/packages/rainbow-mode.html")
 		 (:keywords "faces"))])
@@ -896,7 +908,7 @@
 	      ((:url . "http://elpa.gnu.org/packages/rcirc-menu.html")
 	       (:keywords "comm"))])
  (realgud .
-	  [(1 4 4)
+	  [(1 4 5)
 	   ((load-relative
 	     (1 2))
 	    (loc-changes
@@ -908,7 +920,7 @@
 	    (emacs
 	     (24)))
 	   "A modular front-end for interacting with external debuggers" tar
-	   ((:keywords "gdb" "python" "perl" "go" "bash" "nodejs" "zsh" "bashdb" "zshdb" "remake" "make" "trepan" "perldb")
+	   ((:keywords "gdb" "python" "perl" "go" "bash" "nodejs" "zsh" "bashdb" "zshdb" "remake" "make" "trepan" "perldb" "pdb")
 	    (:url . "http://github.com/realgud/realgud/"))])
  (register-list .
 		[(0 1)
@@ -1199,7 +1211,7 @@
 	 ((:url . "http://elpa.gnu.org/packages/xclip.html")
 	  (:keywords "convenience" "tools"))])
  (xelb .
-       [(0 13)
+       [(0 14)
 	((emacs
 	  (24 4))
 	 (cl-generic
