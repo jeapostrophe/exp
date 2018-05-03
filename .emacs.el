@@ -369,7 +369,7 @@ given a prefix arg."
 ;;    (linum-mode 1)))
 
 ;;;;; auto-fill
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;;;; multi-term ()
 ;; (require 'multi-term)
