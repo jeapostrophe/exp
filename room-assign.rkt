@@ -46,9 +46,7 @@
   (define best #f)
   (define best-sc -inf.0)
   (define past '())
-  (define K 0)
   (define (try! #:keep? [keep? #f] name order)
-    (set! K (add1 K)) (printf "~a\n" K)
     (define st
       (for/fold ([inv inventory]
                  [score 0] [assignment (hash)]
@@ -86,12 +84,17 @@
   ;; Render Solution
   (define max-score (* MAX-POSSIBLE (hash-count who->prefs)))
   (draw-here
-   (table #:inset-dw 1
-          (text-rows
-           (list* (list "Name" "Score" "%")
-                  (for/list ([s (in-list (reverse (cons best past)))])
-                    (match-define (state name score seen assignment) s)
-                    (list name score (real->decimal-string (/ score max-score)))))))))
+   (vappend
+    #:halign 'center
+    (table #:inset-dw 1
+           (text-rows
+            (list* (list "Strategy" "Score" "%")
+                   (for/list ([s (in-list (reverse (cons best past)))])
+                     (match-define (state name score seen assignment) s)
+                     (list name score (real->decimal-string (/ score max-score)))))))
+    (table #:inset-dw 1
+           (text-rows
+            (for/list ([(k v) (in-hash (state-assignment best))]) (list k v)))))))
 
 (module+ main
   (go! (parse (build-path (find-system-path 'home-dir) "Downloads"
