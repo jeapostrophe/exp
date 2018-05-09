@@ -5,7 +5,20 @@
          csv-reading
          raart)
 
-(define MAX-POSSIBLE 11)
+(define inventory
+  (hash "110-C-C" 1
+        "120-L-T" 2
+        "120-L-C" 4
+        "120-C-C" 1
+        "120-R-T" 5
+        "140-C-C" 3
+        "140-C-T" 1
+        "140-R-C" 4
+        "150-C-T" 6
+        ;;"160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
+        ;;"170-R-C" 2
+        ))
+(define MAX-POSSIBLE (hash-count inventory))
 
 (define (parse p)
   (match-define (list* head fac)
@@ -20,19 +33,6 @@
              (for/list ([p (in-list prefs)] [o (in-list opts)])
                (cons (min MAX-POSSIBLE (string->number p)) o))
              >= #:key car))))
-
-(define inventory
-  (hash "110-C-C" 1
-        "120-L-T" 2
-        "120-L-C" 4
-        "120-C-C" 1
-        "120-R-T" 5
-        "140-C-C" 3
-        "140-C-T" 1
-        "140-R-C" 4
-        "150-C-T" 6
-        "160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
-        "170-R-C" 2))
 
 (define assistant '("Anna Rumshisky" "Wenjin Zhou" "Matteo Cimini" "Michelle Ichinco" "Farhad Pourkamali Anaraki" "Ben Kim" "Reza Ahmadzadeh"))
 (define associate '("William Moloney" "Byung Kim" "Cindy Chen" "Tingjian Ge" "Guanling Chen" "Yu Cao" "Jay McCarthy"))
@@ -57,11 +57,11 @@
         (define prefs (hash-ref who->prefs who))
         (match-define (cons this-score room-type)
           (for/or ([p (in-list prefs)])
-            (and (< 0 (hash-ref inv (cdr p)))
+            (and (< 0 (hash-ref inv (cdr p) 0))
                  p)))
         (values (hash-update inv room-type sub1)
                 (+ score this-score)
-                (hash-set assignment who room-type))))
+                (hash-set assignment who (list room-type this-score)))))
     (define st-sc (state-score st))
     (cond
       [(< best-sc st-sc)
@@ -78,7 +78,7 @@
         [i (in-naturals)])
     (try! (map car o) (append-map cdr o)))
   (define all (hash-keys who->prefs))
-  (for ([i (in-range (expt 2 20))])
+  (for ([i (in-range (expt 2 21))])
     (try! (cons 'random i) (shuffle all)))
 
   ;; Render Solution
@@ -94,7 +94,9 @@
                      (list name score (real->decimal-string (/ score max-score)))))))
     (table #:inset-dw 1
            (text-rows
-            (for/list ([(k v) (in-hash (state-assignment best))]) (list k v)))))))
+            (list* (list "Who" "Room" "Score")
+                   (for/list ([(k v) (in-hash (state-assignment best))])
+                     (cons k v))))))))
 
 (module+ main
   (go! (parse (build-path (find-system-path 'home-dir) "Downloads"
