@@ -74,8 +74,7 @@
   ;; Run problem
   (try! #:keep? #t "FAAL" (append full associate assistant lecturer))
   (define-syntax-rule (qlist e ...) (list (cons 'e e) ...))
-  (for ([o (in-permutations (qlist assistant lecturer full associate))]
-        [i (in-naturals)])
+  (for ([o (in-permutations (qlist assistant lecturer full associate))])
     (try! (map car o) (append-map cdr o)))
   (define all (hash-keys who->prefs))
   (for ([i (in-range (expt 2 21))])
