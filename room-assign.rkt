@@ -2,6 +2,7 @@
 (require racket/pretty
          racket/list
          racket/match
+         non-det/opt
          csv-reading)
 
 (define (parse p)
@@ -31,27 +32,78 @@
         "160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
         "170-R-C" 2))
 
-(define (go! who->prefs)
-  (define order (hash-keys who->prefs))
+(define assistant '("Anna Rumshisky" "Wenjin Zhou" "Matteo Cimini" "Michelle Ichinco" "Farhad Pourkamali Anaraki" "Ben Kim" "Reza Ahmadzadeh"))
+(define associate '("William Moloney" "Byung Kim" "Cindy Chen" "Tingjian Ge" "Guanling Chen" "Yu Cao" "Jay McCarthy"))
+(define full '("Jie Wang" "Benyuan Liu" "Xinwen Fu" "Hong Yu"))
+(define lecturer '("David Adams" "Sirong Lin" "Yelena Rykalova" "C. Tom Wilkes" "Jonathan Mwaura"))
 
-  (for/fold ([inv inventory]
-             [score 0] [max-score 0] [assignment '()]
-             #:result
-             (let ()
-               (pretty-print assignment)
-               (printf "Score is ~a (~a)\n" score
-                       (real->decimal-string (/ score max-score)))))
-            ([who (in-list order)]
-             #:when (hash-has-key? who->prefs who))
-    (define prefs (hash-ref who->prefs who))
-    (match-define (cons this-score room-type)
-      (for/or ([p (in-list prefs)])
-        (and (< 0 (hash-ref inv (cdr p)))
-             p)))
-    (values (hash-update inv room-type sub1)
-            (+ score this-score)
-            (+ max-score 11)
-            (list* (cons who room-type) assignment))))
+(define (go! who->prefs)
+  ;; Problem Instance
+  (struct state (unseen inv score-bound score seen assignment))
+
+  (define (branch st)
+    (match-define (state unseen inv score-bound score seen assignment) st)
+    (match-define (cons who next-unseen) unseen)
+    (for/list ([p (in-list (take (filter (λ (p) (< 0 (hash-ref inv (cdr p))))
+                                         (hash-ref who->prefs who))
+                                 ;; XXX Consider on the top 3 options
+                                 3))])
+      (match-define (cons this-score room-type) p)
+      (define next-inv (hash-update inv room-type sub1))
+      (define next-bound
+        (+ score (for/sum ([u (in-list unseen)])
+                   (for/or ([p (in-list (hash-ref who->prefs u))]
+                            #:when (< 0 (hash-ref inv (cdr p))))
+                     (car p)))))
+      (candidate*
+       (state next-unseen next-inv next-bound (+ score this-score)
+              (cons who seen) (hash-set assignment who room-type)))))
+  (define (candidate* st)
+    (if (empty? (state-unseen st))
+      (solution state-score st)
+      (candidate state-score-bound branch st)))
+
+  ;; Problem Setup
+  (define heuristics
+    (for/list ([heur
+                (list (vector "ALFA" (append assistant lecturer full associate))
+                      (vector "FAAL" (append full associate assistant lecturer)))])
+      (match-define (vector name order) heur)
+      (candidate*
+       (for/fold ([inv inventory]
+                  [score 0] [assignment (hash)]
+                  #:result
+                  (state '() inv score score order assignment))
+                 ([who (in-list order)]
+                  #:when (hash-has-key? who->prefs who))
+         (define prefs (hash-ref who->prefs who))
+         (match-define (cons this-score room-type)
+           (for/or ([p (in-list prefs)])
+             (and (< 0 (hash-ref inv (cdr p)))
+                  p)))
+         (values (hash-update inv room-type sub1)
+                 (+ score this-score)
+                 (hash-set assignment who room-type))))))
+  (define initial-st
+    (state
+     ;; Start with people who prefer rooms with many in the inventory
+     (sort (hash-keys who->prefs) >
+           #:cache-keys? #t
+           #:key (λ (w)
+                   (hash-ref inventory (cdr (first (hash-ref who->prefs w))))))
+     inventory (* 11 (hash-count who->prefs)) 0 '() (hash)))
+  (define sol
+    (optimize #:mode 'max (candidate* initial-st)
+              heuristics))
+
+  ;; Render Solution
+  (let ()
+    (define max-score (* 11 (hash-count who->prefs)))
+    (match-define (state unseen inv score-bound score seen assignment) sol)
+    (printf "Order: ~a\n" seen)
+    (pretty-print assignment)
+    (printf "Score is ~a (~a)\n" score
+            (real->decimal-string (/ score max-score)))))
 
 (module+ main
   (go! (parse (build-path (find-system-path 'home-dir) "Downloads"
