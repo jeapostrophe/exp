@@ -41,7 +41,9 @@
   ;; Problem Instance
   (struct state (unseen inv score-bound score seen assignment))
 
+  (define K 0)
   (define (branch st)
+    (set! K (add1 K)) (printf "K=~a\n" K)
     (match-define (state unseen inv score-bound score seen assignment) st)
     (match-define (cons who next-unseen) unseen)
     (for/list ([p (in-list (take (filter (λ (p) (< 0 (hash-ref inv (cdr p))))
