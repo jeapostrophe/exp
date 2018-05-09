@@ -15,8 +15,8 @@
         "140-C-T" 1
         "140-R-C" 4
         "150-C-T" 6
-        ;;"160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
-        ;;"170-R-C" 2
+        "160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
+        "170-R-C" 2
         ))
 (define MAX-POSSIBLE (hash-count inventory))
 
