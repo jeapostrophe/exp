@@ -82,9 +82,14 @@
   (define random-t
     (thread
      (λ ()
-       (for ([i (in-naturals)])
+       (for/or ([i (in-naturals)])
          (try! (cons 'random i) (shuffle all))
-         (set! random-k (add1 random-k))))))
+         (set! random-k (add1 random-k))
+         (thread-try-receive)))))
+  (sleep (* 5 60))
+  (thread-send random-t #t)
+  (thread-wait random-t)
+  (eprintf "Tried ~a random permutations\n" random-k)
 
   ;; Render Solution
   (define max-score (* MAX-POSSIBLE (length all)))
