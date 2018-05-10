@@ -15,8 +15,8 @@
         "140-C-T" 1
         "140-R-C" 4
         "150-C-T" 6
-        "160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
-        "170-R-C" 2
+        ;; "160-L-C" 1 ;; 2 on site, but 315 allocated to Holly
+        ;; "170-R-C" 2
         ))
 (define MAX-POSSIBLE (hash-count inventory))
 
@@ -35,8 +35,8 @@
              >= #:key car))))
 
 (define assistant '("Anna Rumshisky" "Wenjin Zhou" "Matteo Cimini" "Michelle Ichinco" "Farhad Pourkamali Anaraki" "Ben Kim" "Reza Ahmadzadeh"))
-(define associate '("William Moloney" "Byung Kim" "Cindy Chen" "Tingjian Ge" "Guanling Chen" "Yu Cao" "Jay McCarthy"))
-(define full '("Jie Wang" "Benyuan Liu" "Xinwen Fu" "Hong Yu"))
+(define associate '(#;"Bill Moloney" #;"Byung Kim" "Cindy Chen" "Tingjian Ge" "Guanling Chen" "Yu Cao" "Jay McCarthy"))
+(define full '(#;"Jie Wang" "Benyuan Liu" #;"Xinwen Fu" "Hong Yu"))
 (define lecturer '("David Adams" "Sirong Lin" "Yelena Rykalova" "C. Tom Wilkes" "Jonathan Mwaura"))
 
 (define (go! who->prefs)
@@ -67,7 +67,8 @@
       [(< best-sc st-sc)
        (when best (set! past (cons best past)))
        (set! best st)
-       (set! best-sc st-sc)]
+       (set! best-sc st-sc)
+       (eprintf "New best! ~a ~v\n" name st-sc)]
       [keep?
        (set! past (cons st past))]))
 
@@ -76,12 +77,17 @@
   (define-syntax-rule (qlist e ...) (list (cons 'e e) ...))
   (for ([o (in-permutations (qlist assistant lecturer full associate))])
     (try! (map car o) (append-map cdr o)))
-  (define all (hash-keys who->prefs))
-  (for ([i (in-range (expt 2 21))])
-    (try! (cons 'random i) (shuffle all)))
+  (define all (append full associate assistant lecturer))
+  (define random-k 0)
+  (define random-t
+    (thread
+     (λ ()
+       (for ([i (in-naturals)])
+         (try! (cons 'random i) (shuffle all))
+         (set! random-k (add1 random-k))))))
 
   ;; Render Solution
-  (define max-score (* MAX-POSSIBLE (hash-count who->prefs)))
+  (define max-score (* MAX-POSSIBLE (length all)))
   (draw-here
    (vappend
     #:halign 'center
