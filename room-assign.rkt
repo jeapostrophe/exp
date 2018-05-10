@@ -35,7 +35,7 @@
              >= #:key car))))
 
 (define assistant '("Anna Rumshisky" "Wenjin Zhou" "Matteo Cimini" "Michelle Ichinco" "Farhad Pourkamali Anaraki" "Ben Kim" "Reza Ahmadzadeh"))
-(define associate '(#;"Bill Moloney" #;"Byung Kim" "Cindy Chen" "Tingjian Ge" "Guanling Chen" "Yu Cao" "Jay McCarthy"))
+(define associate '(#;"Bill Moloney" #;"Haim Levkowitz" #;"Byung Kim" "Cindy Chen" "Tingjian Ge" "Guanling Chen" "Yu Cao" "Jay McCarthy"))
 (define full '(#;"Jie Wang" "Benyuan Liu" "Xinwen Fu" "Hong Yu"))
 (define lecturer '("David Adams" "Sirong Lin" "Yelena Rykalova" "C. Tom Wilkes" "Jonathan Mwaura"))
 
