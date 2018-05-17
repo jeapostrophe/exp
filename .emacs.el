@@ -865,8 +865,9 @@ given a prefix arg."
   (let ((pad (make-string (- 90 (length a) (length d)) ? )))
     (concat a pad d)))
 
-(defvar je-schedule-flag? t)
-(setq je-schedule-flag? t)
+(defcustom je-schedule-flag? t
+  "whether the agenda cares about start time"
+  :type 'boolean)
 (defun je/todo-color (a)
   "Color things in the column view differently based on deadline"
   (let* ((ma (or (get-text-property 1 'org-marker a)
