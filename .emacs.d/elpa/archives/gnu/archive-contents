@@ -374,8 +374,15 @@
 	     nil "Emacs Does Interactive Prolog" single
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
+ (eglot .
+	[(0 7)
+	 ((emacs
+	   (26 1)))
+	 "Client for Language Server Protocol (LSP) servers" tar
+	 ((:keywords "convenience" "languages")
+	  (:url . "https://github.com/joaotavora/eglot"))])
  (el-search .
-	    [(1 6 5)
+	    [(1 6 10)
 	     ((emacs
 	       (25))
 	      (stream
@@ -469,7 +476,7 @@
 	  ((:url . "https://github.com/leoliu/ggtags")
 	   (:keywords "tools" "convenience"))])
  (gited .
-	[(0 4 3)
+	[(0 5 3)
 	 ((emacs
 	   (24 4))
 	  (cl-lib
@@ -490,7 +497,7 @@
 		 ((:keywords "gnome" "c" "coding style")
 		  (:url . "http://elpa.gnu.org/packages/gnome-c-style.html"))])
  (gnorb .
-	[(1 4 2)
+	[(1 5 4)
 	 ((cl-lib
 	   (0 5)))
 	 "Glue code between Gnus, Org, and BBDB" tar
@@ -796,7 +803,7 @@
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(9 1 12)
+      [(9 1 13)
        nil "Outline-based notes management and organizer" tar
        ((:keywords "outlines" "hypermedia" "calendar" "wp")
 	(:url . "http://elpa.gnu.org/packages/org.html"))])
@@ -812,7 +819,7 @@
 	    ((:keywords "convenience" "text" "org")
 	     (:url . "https://savannah.nongnu.org/projects/org-edna-el/"))])
  (orgalist .
-	   [(1 1)
+	   [(1 7)
 	    ((emacs
 	      (24 4)))
 	    "Manage Org-like lists in non-Org buffers" single
@@ -895,7 +902,7 @@
 	 ((:url . "http://www.dr-qubit.org/emacs.php")
 	  (:keywords "extensions" "data structures" "queue"))])
  (rainbow-mode .
-	       [(1 0)
+	       [(1 0 1)
 		nil "Colorize color names in buffers" single
 		((:url . "http://elpa.gnu.org/packages/rainbow-mode.html")
 		 (:keywords "faces"))])
@@ -1025,8 +1032,10 @@
 	   ((:url . "https://github.com/Malabarba/spinner.el")
 	    (:keywords "processes" "mode-line"))])
  (sql-indent .
-	     [(1 1)
-	      nil "Support for indenting code in SQL files." tar
+	     [(1 2)
+	      ((cl-lib
+		(0 5)))
+	      "Support for indenting code in SQL files." tar
 	      ((:keywords "languages" "sql")
 	       (:url . "http://elpa.gnu.org/packages/sql-indent.html"))])
  (stream .
@@ -1232,12 +1241,19 @@
        ((:keywords "multimedia" "xpm")
 	(:url . "http://www.gnuvola.org/software/xpm/"))])
  (yasnippet .
-	    [(0 12 2)
+	    [(0 13 0)
 	     ((cl-lib
 	       (0 5)))
 	     "Yet another snippet extension for Emacs." tar
 	     ((:keywords "convenience" "emulation")
 	      (:url . "http://github.com/joaotavora/yasnippet"))])
+ (yasnippet-classic-snippets .
+			     [(1 0 2)
+			      ((yasnippet
+				(0 9 1)))
+			      "\"Classic\" yasnippet snippets" tar
+			      ((:keywords "snippets")
+			       (:url . "http://elpa.gnu.org/packages/yasnippet-classic-snippets.html"))])
  (ztree .
 	[(1 0 5)
 	 ((cl-lib
