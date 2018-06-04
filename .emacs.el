@@ -1479,6 +1479,8 @@ given a prefix arg."
   (mark-whole-buffer)
   (shell-command-on-region (point) (mark) "~/bin/outlook-quote.rb" (current-buffer) t))
 
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
 ;; ocaml
 (require 'tuareg)
 (setq auto-mode-alist 
