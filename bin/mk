@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f Makefile ] ; then
+if [ -f Makefile -o -f GNUmakefile ] ; then
     make $*
 elif [ -f make.rkt ] ; then
     rkt make.rkt -- $*
