@@ -434,40 +434,15 @@ given a prefix arg."
 (setq directory-abbrev-alist
       '())
 
-(defun je/abbreviate-file-name (name)
-  (let ((directory-abbrev-alist
-         '(("^/home/jay" . "~")
-           ("^/Users/jay" . "~")
-           ("^~/Dev/scm" . "~scm")
-           ("^~/Dev/dist" . "~dist")
-           ("^~dist/sf" . "~sf")
-           ("^~sf/full" . "~sff")
-           ("^~scm/plt" . "~plt")
-           ("^~plt/collects" . "~collects")
-           ("^~collects/web-server" . "~ws")
-           ("^~scm/github.jeapostrophe" . "~github")
-           ("^~github/exp" . "~exp")
-           ("^~github/work" . "~work")
-           ("^~work/papers" . "~papers")
-           ("^~work/courses" . "~courses")
-           ("^~github/home" . "~home")
-           ("^~home/etc" . "~etc")
-           ("^~home/finance" . "~fin")
-           ("^~home/journal" . "~j")
-           ("^~github/get-bonus" . "~gb")
-           ("^~scm/blogs" . "~blogs")
-           ("^~blogs/jeapostrophe.github.com/source/downloads/code" . "~je-blog"))))
-    (abbreviate-file-name name)))
-
 (setq frame-title-format
       '(:eval (if (buffer-file-name)
-                  (je/abbreviate-file-name (buffer-file-name))
+                  (buffer-file-name)
                 "%b")))
 
 (define-ibuffer-column je/name ()
   (cond
    ((buffer-file-name buffer)
-    (je/abbreviate-file-name (buffer-file-name buffer)))
+    (buffer-file-name buffer))
    (t
     (buffer-name buffer))))
 (setq ibuffer-formats
