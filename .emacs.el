@@ -1488,7 +1488,7 @@ given a prefix arg."
 (require 'auto-complete)
 (add-hook 'tuareg-mode-hook 'auto-complete-mode)
 
-(require 'ocp-indent)
+;; (require 'ocp-indent)
 
 ;; proof general
 (setq proof-assistants '(coq))
