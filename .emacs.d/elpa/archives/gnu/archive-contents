@@ -341,7 +341,7 @@
 	     ((:keywords "killing" "convenience")
 	      (:url . "https://github.com/leoliu/easy-kill"))])
  (ebdb .
-       [(0 5 3)
+       [(0 6)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -375,14 +375,16 @@
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
  (eglot .
-	[(1 0)
+	[(1 1)
 	 ((emacs
-	   (26 1)))
+	   (26 1))
+	  (jsonrpc
+	   (1 0 0)))
 	 "Client for Language Server Protocol (LSP) servers" tar
 	 ((:keywords "convenience" "languages")
 	  (:url . "https://github.com/joaotavora/eglot"))])
  (el-search .
-	    [(1 7 1)
+	    [(1 7 4)
 	     ((emacs
 	       (25))
 	      (stream
@@ -437,9 +439,9 @@
 	       ((:keywords "calendar")
 		(:url . "http://elpa.gnu.org/packages/excorporate.html"))])
  (exwm .
-       [(0 18)
+       [(0 19)
 	((xelb
-	  (0 14)))
+	  (0 15)))
 	"Emacs X Window Manager" tar
 	((:keywords "unix")
 	 (:url . "https://github.com/ch11ng/exwm"))])
@@ -448,6 +450,13 @@
 			 nil "Parse and browse f90 interfaces" single
 			 ((:url . "http://github.com/wence-/f90-iface/")
 			  (:keywords))])
+ (filladapt .
+	    [(2 12 2)
+	     ((emacs
+	       (24 4)))
+	     "Adaptive fill" single
+	     ((:url . "http://elpa.gnu.org/packages/filladapt.html")
+	      (:keywords))])
  (flylisp .
 	  [(0 2)
 	   ((emacs
@@ -472,7 +481,7 @@
        ((:url . "http://elpa.gnu.org/packages/fsm.html")
 	(:keywords "extensions"))])
  (ggtags .
-	 [(0 8 12)
+	 [(0 8 13)
 	  ((emacs
 	    (24))
 	   (cl-lib
@@ -614,7 +623,7 @@
  (jsonrpc .
 	  [(1 0 0)
 	   ((emacs
-	     (26 1)))
+	     (25 2)))
 	   "JSON-RPC library" single
 	   ((:url . "http://elpa.gnu.org/packages/jsonrpc.html")
 	    (:keywords "processes" "languages" "extensions"))])
@@ -843,7 +852,7 @@
        ((:url . "http://elpa.gnu.org/packages/osc.html")
 	(:keywords "comm" "processes" "multimedia"))])
  (other-frame-window .
-		     [(1 0 4)
+		     [(1 0 5)
 		      ((emacs
 			(24 4)))
 		      "Minor mode to enable global prefix keys for other frame/window buffer placement" single
@@ -924,7 +933,7 @@
 	((:url . "http://elpa.gnu.org/packages/rbit.html")
 	 (:keywords "data structures" "binary tree" "intervals"))])
  (rcirc-color .
-	      [(0 3)
+	      [(0 4)
 	       nil "color nicks" single
 	       ((:url . "http://elpa.gnu.org/packages/rcirc-color.html")
 		(:keywords "comm"))])
@@ -1239,7 +1248,7 @@
 	 ((:url . "http://elpa.gnu.org/packages/xclip.html")
 	  (:keywords "convenience" "tools"))])
  (xelb .
-       [(0 14)
+       [(0 15)
 	((emacs
 	  (24 4))
 	 (cl-generic
