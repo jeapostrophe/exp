@@ -5,7 +5,7 @@
          racket/system
          racket/list)
 
-(define mame-dir "/Users/jay/Downloads/Roms/Arcade/mame0159-64bit")
+(define mame-dir "/Users/jay/Downloads/Video Games/Arcade/mame0159-64bit")
 (define roms-dir (build-path mame-dir "roms"))
 (define last-path (build-path mame-dir "last.rktd"))
 
@@ -15,7 +15,7 @@
     "deathsml"
     ["bublbobl_orig.zip" "bublbobl.zip" "bublbobl"]
     ;; "espgal2"
-    
+
     "miexchng"
     "futariblj"
     "dsmbl"
@@ -25,15 +25,20 @@
     ))
 
 (module+ main
-  (define last-one
-    (if (file-exists? last-path)
-        (file->value last-path)
-        -1))
-  (define next-one
-    (modulo (add1 last-one) (length games)))
-  (define next (list-ref games next-one))
-  (write-to-file next-one last-path
-                 #:exists 'replace)
+  (define next
+    (match (current-command-line-arguments)
+      [(vector given)
+       given]
+      [(vector)
+       (define last-one
+         (if (file-exists? last-path)
+           (file->value last-path)
+           -1))
+       (define next-one
+         (modulo (add1 last-one) (length games)))
+       (write-to-file next-one last-path
+                      #:exists 'replace)
+       (list-ref games next-one)]))
   (define-values (rom-name extra-args)
     (match next
       [(? string? rom)
@@ -51,5 +56,5 @@
      rom-name
      "-skip_gameinfo"
      (if (empty? extra-args)
-         (list "-autosave")
-         extra-args))))
+       (list "-autosave")
+       extra-args))))
