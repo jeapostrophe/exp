@@ -1063,7 +1063,7 @@ given a prefix arg."
    ;; directory and buffer/file name
    ;;(:propertize (:eval (shorten-directory default-directory 5))
    ;;             face mode-line-folder-face)
-   (:propertize (:eval (je/abbreviate-file-name (buffer-name)))
+   (:propertize (:eval (buffer-name))
                 face mode-line-filename-face)
    ;; narrow [default -- keep?]
    ;;" %n "
