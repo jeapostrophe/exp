@@ -5,7 +5,7 @@
          racket/system
          racket/list)
 
-(define mame-dir "/Users/jay/Downloads/Video Games/Arcade/mame0159-64bit")
+(define mame-dir "/Users/jay/Downloads/Video Games/Arcade/mame0201-64bit")
 (define roms-dir (build-path mame-dir "roms"))
 (define last-path (build-path mame-dir "last.rktd"))
 
@@ -13,13 +13,13 @@
   `("tgm2p"
     "futari15"
     "deathsml"
-    ["bublbobl_orig.zip" "bublbobl.zip" "bublbobl"]
+    "bublbobl"
     ;; "espgal2"
 
     "miexchng"
     "futariblj"
     "dsmbl"
-    ["bublcave.zip" "bublbobl.zip" "bublbobl"]
+    "bublcave"
     ;;"ddpdfk"
     ;;"rsgun"
     ))
