@@ -5,27 +5,57 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <style>
+    div#workarea {
+     display: box;
+     box-pack: center;
+     box-align: center; }
+
+    ul#header {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: white; }
+
+    ul#header li {
+      float: left; }
+
+    ul#header li a {
+      display: block;
+      color: black;
+      text-decoration: none;
+      text-align: center;
+      padding-left: 1em; }
+
+    div#problems {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      padding-top: 1em;
+      border-top: 1px solid black; }
+
     div.problem {
+      font-size: 130%;
+      width: 2em;
       text-align: right;
-      margin-right: 1em;
-      margin-bottom: 1em; }
-    div.problem span.top {
-      color: blue; }
+      margin-right: 15px;
+      margin-bottom: 10px; }
+    div.problem span.top { }
     div.problem span.top:after {
       content: '\A';
       white-space: pre; }
     div.problem span.op {
       float: left;
-      color: red; }
-    div.problem span.bot {
-      color: green; }
+      font-weight: bold; }
+    div.problem span.bot { }
     div.problem hr.line {
       border: none;
       background-color: black;
       margin: 0px;
       padding: 0px;
       height: 2px;
-      width: 1em; }
+      -webkit-print-color-adjust:exact;
+      width: 100%; }
     </style>
     <script type="text/javascript">
 function rand(lo, hi) {
@@ -36,28 +66,30 @@ function fill(n) {
     theop = n;
     var t = document.getElementById("problems");
     t.innerHTML = "";
-    for ( var i = 0; i < 9; i++ ) {
-        var r = t.insertRow(0);
-        for ( var j = 0; j < 9; j++ ) {
-            var c = r.insertCell(0);
-            var top = rand(2,19);
-            var bot = rand(2,top);
-            c.innerHTML = "<div class='problem'><span class='top'>" + top + "</span><span class='op'>" + theop + "</span><span class='bot'>" + bot + "</span><hr class='line'>&nbsp;</hr></div>"; } } }
+    for ( var i = 0; i < 120; i++ ) {
+      var c = document.createElement('div');
+      c.className = 'problem';
+      var top = rand(2,19);
+      var bot;
+      if ( theop == '-' ) {
+        bot = rand(2, top); }
+      else {
+        bot = rand(2,19); }
+      c.innerHTML = "<span class='top'>" + top + "</span><span class='op'>" + theop + "</span><span class='bot'>" + bot + "</span><hr class='line'>&nbsp;</hr>";
+      t.appendChild(c); } }
 </script>
   </head>
   <body onload="fill('-');">
-    <div id="toolbar">
-      <ul>
+    <div id="workarea">
+      <ul id="header">
         <li><a href="javascript:fill('+');">+</a></li>
-        <li><a href="javascript:fill('-');">+</a></li>
+        <li><a href="javascript:fill('-');">-</a></li>
         <li><a href="javascript:fill('×');">×</a></li>
         <li><a href="javascript:fill('÷');">÷</a></li>
         <li><a href="javascript:fill(theop);">↻</a></li>
       </ul>
-    </div>
-    <div id="workarea">
-      <table id="problems">
-      </table>
+      <div id="problems">
+      </div>
     </div>
   </body>
 </html>
