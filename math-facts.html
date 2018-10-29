@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Math Facts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <style>
+    div.problem {
+      text-align: right;
+      margin-right: 1em;
+      margin-bottom: 1em; }
+    div.problem span.top {
+      color: blue; }
+    div.problem span.top:after {
+      content: '\A';
+      white-space: pre; }
+    div.problem span.op {
+      float: left;
+      color: red; }
+    div.problem span.bot {
+      color: green; }
+    div.problem hr.line {
+      border: none;
+      background-color: black;
+      margin: 0px;
+      padding: 0px;
+      height: 2px;
+      width: 1em; }
+    </style>
+    <script type="text/javascript">
+function rand(lo, hi) {
+  return Math.floor(Math.random() * (hi-lo)) + lo; }
+
+var theop = '-';
+function fill(n) {
+    theop = n;
+    var t = document.getElementById("problems");
+    t.innerHTML = "";
+    for ( var i = 0; i < 9; i++ ) {
+        var r = t.insertRow(0);
+        for ( var j = 0; j < 9; j++ ) {
+            var c = r.insertCell(0);
+            var top = rand(2,19);
+            var bot = rand(2,top);
+            c.innerHTML = "<div class='problem'><span class='top'>" + top + "</span><span class='op'>" + theop + "</span><span class='bot'>" + bot + "</span><hr class='line'>&nbsp;</hr></div>"; } } }
+</script>
+  </head>
+  <body onload="fill('-');">
+    <div id="toolbar">
+      <ul>
+        <li><a href="javascript:fill('+');">+</a></li>
+        <li><a href="javascript:fill('-');">+</a></li>
+        <li><a href="javascript:fill('×');">×</a></li>
+        <li><a href="javascript:fill('÷');">÷</a></li>
+        <li><a href="javascript:fill(theop);">↻</a></li>
+      </ul>
+    </div>
+    <div id="workarea">
+      <table id="problems">
+      </table>
+    </div>
+  </body>
+</html>
