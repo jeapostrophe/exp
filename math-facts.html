@@ -39,11 +39,11 @@ function rand(lo, hi) {
   return Math.floor(Math.random() * (hi-lo)) + lo; }
 
 function fill() {
-    var ops = "+-×÷";
+    var ops = "+-";
     var t = document.getElementById("problems");
     t.innerHTML = "";
     for ( var i = 0; i < 120; i++ ) {
-      var theop = ops[rand(0,4)];
+      var theop = ops[rand(0,2)];
       var c = document.createElement('div');
       c.className = 'problem';
       var top = rand(2,19);
