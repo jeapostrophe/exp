@@ -5,34 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <style>
-    div#workarea {
-     display: box;
-     box-pack: center;
-     box-align: center; }
-
-    ul#header {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: white; }
-
-    ul#header li {
-      float: left; }
-
-    ul#header li a {
-      display: block;
-      color: black;
-      text-decoration: none;
-      text-align: center;
-      padding-left: 1em; }
 
     div#problems {
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-start;
-      padding-top: 1em;
-      border-top: 1px solid black; }
+      justify-content: flex-start;  }
 
     div.problem {
       font-size: 130%;
@@ -61,17 +38,19 @@
 function rand(lo, hi) {
   return Math.floor(Math.random() * (hi-lo)) + lo; }
 
-var theop = '-';
-function fill(n) {
-    theop = n;
+function fill() {
+    var ops = "+-×÷";
     var t = document.getElementById("problems");
     t.innerHTML = "";
     for ( var i = 0; i < 120; i++ ) {
+      var theop = ops[rand(0,4)];
       var c = document.createElement('div');
       c.className = 'problem';
       var top = rand(2,19);
       var bot;
       if ( theop == '-' ) {
+        bot = rand(2, top); }
+      else if ( theop == '÷' ) {
         bot = rand(2, top); }
       else {
         bot = rand(2,19); }
@@ -79,17 +58,8 @@ function fill(n) {
       t.appendChild(c); } }
 </script>
   </head>
-  <body onload="fill('-');">
-    <div id="workarea">
-      <ul id="header">
-        <li><a href="javascript:fill('+');">+</a></li>
-        <li><a href="javascript:fill('-');">-</a></li>
-        <li><a href="javascript:fill('×');">×</a></li>
-        <li><a href="javascript:fill('÷');">÷</a></li>
-        <li><a href="javascript:fill(theop);">↻</a></li>
-      </ul>
-      <div id="problems">
-      </div>
+  <body onload="fill();">
+    <div id="problems">
     </div>
   </body>
 </html>
