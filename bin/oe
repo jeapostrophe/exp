@@ -1,0 +1,3 @@
+#!/bin/sh
+recent file "$1"
+exec emacsclient -nc "$1"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.skype.skype.shareagent</string>
+	<key>MachServices</key>
+	<dict>
+		<key>AL798K98FX.com.skype.skype.shareagent</key>
+		<true/>
+	</dict>
+	<key>Program</key>
+	<string>/Applications/Local/Skype.app/Contents/Library/LaunchServices/com.skype.skype.shareagent.bundle/Contents/MacOS/com.skype.skype.shareagent</string>
+</dict>
+</plist>

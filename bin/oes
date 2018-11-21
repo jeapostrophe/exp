@@ -1,5 +1,4 @@
 #!/bin/sh
-        for i in $*
-        do
-                emacsclient -nc $i
-        done
+for i in $* ; do
+    oe $i
+done

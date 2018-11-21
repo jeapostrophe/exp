@@ -1,16 +1,16 @@
 source ~/.profile
 
-hash -d scm=$SVNROOT
-hash -d plt=$PLTHOME
+hash -d scm=$HOME/Dev/scm/
+hash -d plt=~scm/plt
 hash -d pkgs=~plt/pkgs
 hash -d epkgs=~plt/extra-pkgs
 hash -d ws=~epkgs/web-server
 hash -d drdr=~epkgs/drdr
 hash -d pkgi=~epkgs/pkg-index
-hash -d work=$PROJS
+hash -d github=~scm/github.jeapostrophe
+hash -d work=~github/work
 hash -d papers=~work/papers
 hash -d planet=~scm/github.jeapostrophe.planet
-hash -d github=~scm/github.jeapostrophe
 hash -d home=~github/home
 hash -d gb=~github/get-bonus
 hash -d lll=~github/lll
@@ -30,5 +30,3 @@ hash -d 406=~courses/2018/spring/406
 hash -d bitb=~scm/bitbucket.jeapostrophe
 hash -d utrs=~bitb/consulting-utrs
 hash -d byron=~bitb/consulting-byron-davies
-
-export PATH=~exp/bin:~work/papers/etc/bin:$PATH

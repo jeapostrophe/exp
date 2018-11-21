@@ -1,2 +1,0 @@
-#!/bin/sh
-cloc --read-lang-def=/home/jay/bin/cloc.defs --by-file-by-lang $*

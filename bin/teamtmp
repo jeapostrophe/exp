@@ -1,0 +1,4 @@
+#!/bin/sh
+NAME=$(date +%Y%m%d%H%M-)$(basename $1)
+scp -r $1 uml:public_html/tmp/${NAME}
+echo http://www.cs.uml.edu/~jmccarth/tmp/${NAME} 
