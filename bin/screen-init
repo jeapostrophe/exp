@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if (screen -list | grep lightning) ; then
-	echo Screen exists
-else
-	screen -UdmS lightning
-fi
-
-# Client: /usr/bin/screen -UxS lightning

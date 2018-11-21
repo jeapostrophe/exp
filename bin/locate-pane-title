@@ -1,3 +1,0 @@
-#!/bin/sh
-
-find $(echo $1 | awk -F % '{print $1}')

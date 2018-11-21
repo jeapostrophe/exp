@@ -1,3 +1,0 @@
-#!/bin/sh
-
-synclient PalmDetect=1 TapButton1=0 TapButton2=0 TapButton3=0 MaxTapMove=0 MaxTapTime=0

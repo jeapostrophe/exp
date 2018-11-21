@@ -1,2 +1,0 @@
-#!/bin/sh
-exec urxvt -e ssh y

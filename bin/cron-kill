@@ -1,2 +1,0 @@
-#!/bin/sh
-kill $(pclo /var/run/crond.pid)

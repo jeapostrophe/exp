@@ -1,2 +1,0 @@
-#!/bin/sh
-exec racket -t $(dirname $0)/space.rkt -- $*
