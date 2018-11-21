@@ -152,11 +152,7 @@ function rfc() {
 alias am=mathomatic
 alias e="mathomatic -e --"
 
-#racketdoclink
-
 export REPORTTIME=10
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # OPAM configuration
 . ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
