@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+ <dict>
+  <key>Label</key>
+  <string>com.adobe.GC.Scheduler-1.0</string>
+  <key>Program</key>
+  <string>/Library/Application Support/Adobe/AdobeGCClient/agcinvokerutility</string>
+  <key>ProgramArguments</key>
+  <array>
+     <string>/Library/Application Support/Adobe/AdobeGCClient/agcinvokerutility</string>
+     <string>-mode=scheduled</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Minute</key>
+    <integer>27</integer>
+    <key>Hour</key>
+    <integer>0</integer>
+  </dict>
+ </dict>
+</plist>
