@@ -23,7 +23,9 @@ alias vim=$EDITOR
 alias vi=$EDITOR
 alias ed=$EDITOR
 
-function rcd() { cd $(racket -l find-collection/run -- $@) }
+function rcd() {
+    cd $(racket -l find-collection/run -- $@)
+}
 
 export EMACS_SERVER_PORT=50000
 export EMACS_SERVER_FILE=$HOME/.emacs.d/server/lightning

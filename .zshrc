@@ -34,5 +34,7 @@ if [[ "$TERM" =~ "screen" ]] ; then
         print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\" }
 fi
 
-chpwd () { recent dir "$PWD" }
+chpwd() {
+    recent dir "$PWD"
+}
 
