@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# XXX Change the name in the buffer list to something cool
-tmux select-window -t $(tmux list-windows -F "#I: #T" | sed \$d | gtac | fzf --reverse | cut -f 1 -d :)
