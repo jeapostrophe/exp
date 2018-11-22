@@ -1,4 +1,5 @@
-eval `/usr/libexec/path_helper -s`
+#!/bin/sh
+eval $(/usr/libexec/path_helper -s)
 
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/Library/Python/2.7/bin:$PATH
