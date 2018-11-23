@@ -1279,6 +1279,13 @@ given a prefix arg."
 (setq auto-mode-alist
       (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
+;; clean buffer list
+(require 'midnight)
+(add-to-list 'clean-buffer-list-kill-never-buffer-names
+             "/usr/share/dict/words")
+(add-to-list 'clean-buffer-list-kill-never-regexps
+             "gpg$" "org$")
+
 ;; spelling
 (require 'ispell)
 (setq ispell-process-directory (expand-file-name "~/"))
