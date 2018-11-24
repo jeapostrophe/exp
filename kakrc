@@ -1,3 +1,11 @@
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+
+plug "alexherbo2/auto-pairs.kak"
+hook global WinCreate .* %{
+    auto-pairs-enable
+}
+# XXX Customize racket to not insert two 's
+
 # XXX These colors are slightly wrong --- main text is too light
 colorscheme solarized-light-termcolors
 
@@ -8,7 +16,7 @@ add-highlighter global/ show-matching
 set global autowrap_column 80
 # XXX Make this only turn on when line is actually too long
 # add-highlighter global/ column '%opt{autowrap_column}' default,red
-# XXX Select paragraph first
+# XXX Select entire paragraph first
 map global normal = ' |par -w $kak_opt_autowrap_column<ret>'
 
 # Highlight note words
@@ -24,6 +32,7 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # | to send to command
 # Use a hook for BufCreate fn to put fn in recent
 # Turn on linting
+# Make Racket mode
 
 # Questions
 # - How do I cancel a selection?
