@@ -1,3 +1,4 @@
+# XXX These colors are slightly wrong --- main text is too light
 colorscheme solarized-light-termcolors
 
 # Highlight matching parens/etc
@@ -9,7 +10,6 @@ set global autowrap_column 80
 # add-highlighter global/ column '%opt{autowrap_column}' default,red
 # XXX Select paragraph first
 map global normal = ' |par -w $kak_opt_autowrap_column<ret>'
-
 
 # Highlight note words
 add-highlighter global/ regex \b(TODO|FIXME|XXX|NOTE)\b 0:default+rb
