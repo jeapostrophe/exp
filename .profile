@@ -22,6 +22,8 @@ alias git=hub
 alias vim=$EDITOR
 alias vi=$EDITOR
 alias ed=$EDITOR
+alias cat=bat
+alias find=fd
 
 function rcd() {
     cd $(racket -l find-collection/run -- $@)
@@ -30,6 +32,8 @@ function rcd() {
 export EMACS_SERVER_PORT=50000
 export EMACS_SERVER_FILE=$HOME/.emacs.d/server/lightning
 
-export FZF_DEFAULT_OPTS="--cycle --algo=v1 --color=light --layout=reverse-list --prompt='⫸ '"
+export FZF_DEFAULT_COMMAND='fd --type file --color=always'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="--ansi --cycle --algo=v1 --color=light --layout=reverse-list --prompt='⫸ '"
 
 export GPG_TTY=$(tty)

@@ -1,12 +1,22 @@
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 
-plug "alexherbo2/auto-pairs.kak"
+plug alexherbo2/auto-pairs.kak
 hook global WinCreate .* %{
     auto-pairs-enable
 }
 # XXX Customize racket to not insert two 's
 
-# XXX These colors are slightly wrong --- main text is too light
+plug andreyorst/fzf.kak
+map global normal <c-p> ': fzf-mode<ret>'
+set-option global fzf_file_command 'fd'
+# XXX Add Racket support to bat
+set-option global fzf_highlighter 'bat'
+# XXX Add Racket support to universal-ctags
+
+plug occivink/kakoune-sudo-write
+
+# XXX Use personal wiki instead of org?
+
 colorscheme solarized-light-termcolors
 
 # Highlight matching parens/etc
