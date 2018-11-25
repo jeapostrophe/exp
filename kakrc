@@ -17,6 +17,8 @@ plug occivink/kakoune-sudo-write
 
 # XXX Use personal wiki instead of org?
 
+# XXX Uses taskwarrior or todotxt
+
 colorscheme solarized-light-termcolors
 
 # Highlight matching parens/etc
