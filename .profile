@@ -8,6 +8,7 @@ export PATH=$HOME/.gem/ruby/2.0.0/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 . ~/.opam/opam-init/variables.sh > /dev/null 2> /dev/null || true
 export PATH=$HOME/Dev/scm/plt/racket/bin:$PATH
+export PATH=$HOME/.jwm/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/sbin:$PATH
 
@@ -35,5 +36,7 @@ export EMACS_SERVER_FILE=$HOME/.emacs.d/server/lightning
 export FZF_DEFAULT_COMMAND='fd --type file --color=always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--ansi --cycle --algo=v1 --color=light --layout=reverse-list --prompt='⫸ '"
+
+export TMPDIR=/tmp/
 
 export GPG_TTY=$(tty)

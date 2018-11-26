@@ -4,7 +4,7 @@ plug alexherbo2/auto-pairs.kak
 hook global WinCreate .* %{
     auto-pairs-enable
 }
-# XXX Customize racket to not insert two 's
+# XXX Customize racket to not insert two 's but add |
 
 plug andreyorst/fzf.kak
 map global normal <c-p> ': fzf-mode<ret>'
@@ -22,14 +22,19 @@ plug occivink/kakoune-sudo-write
 colorscheme solarized-light-termcolors
 
 # Highlight matching parens/etc
+# XXX highlight entire region
 add-highlighter global/ show-matching
 
+set global grepcmd 'ag'
+
 # Wrapping stuff
-set global autowrap_column 80
+set global autowrap_column 72
+set global autowrap_fmtcmd 'par w%c'
 # XXX Make this only turn on when line is actually too long
 # add-highlighter global/ column '%opt{autowrap_column}' default,red
 # XXX Select entire paragraph first
-map global normal = ' |par -w $kak_opt_autowrap_column<ret>'
+# XXX defer to autowrap_fmtcmd (see how it does it)
+map global normal = ' |par w$kak_opt_autowrap_column<ret>'
 
 # Highlight note words
 add-highlighter global/ regex \b(TODO|FIXME|XXX|NOTE)\b 0:default+rb
@@ -45,6 +50,8 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # Use a hook for BufCreate fn to put fn in recent
 # Turn on linting
 # Make Racket mode
+
+# XXX spelling not working
 
 # Questions
 # - How do I cancel a selection?
