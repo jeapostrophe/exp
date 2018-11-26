@@ -15,11 +15,6 @@ set-option global fzf_highlighter 'bat'
 
 plug occivink/kakoune-sudo-write
 
-plug alexherbo2/search-highlighter.kak
-hook global WinCreate .* %{
-    search-highlighter-enable
-}
-
 # XXX Use personal wiki instead of org?
 
 # XXX change tab width to 4
@@ -33,7 +28,10 @@ colorscheme solarized-light-termcolors
 # Highlight matching parens/etc
 # XXX highlight entire region
 add-highlighter global/ show-matching
+# XXX / register isn't empty when you delete everything in it
+add-highlighter global/ dynregex '%reg{/}' 0:+u
 
+set global makecmd 'mk'
 set global grepcmd 'ag --column'
 # XXX set search relative to current buffer path
 
@@ -73,3 +71,21 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # - How do I move between matching things
 
 # This is a long test string is it too long that I will try to use with par to see if it works.
+
+# Filetypes
+hook global WinSetOption filetype=(c|cpp) %{
+  clang-enable-autocomplete
+  clang-enable-diagnostics
+  alias window lint clang-parse
+  alias window lint-next-error clang-diagnostics-next                 
+}
+
+# System Clipboard
+map global user -docstring 'paste (after) from clipboard' p '!pbpaste<ret>'
+map global user -docstring 'paste (before) from clipboard' P '<a-!>pbpaste<ret>'
+map global user -docstring 'yank to clipboard' y '<a-|>pbcopy<ret>'
+map global user -docstring 'replace from clipboard' R '|pbcopy<ret>'
+
+# Simple Mappings
+# XXX Shift down next line?
+map global normal '#' :comment-line<ret>
