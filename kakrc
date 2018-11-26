@@ -15,7 +15,16 @@ set-option global fzf_highlighter 'bat'
 
 plug occivink/kakoune-sudo-write
 
+plug alexherbo2/search-highlighter.kak
+hook global WinCreate .* %{
+    search-highlighter-enable
+}
+
 # XXX Use personal wiki instead of org?
+
+# XXX change tab width to 4
+
+# XXX insert lambda (and other unicode)
 
 # XXX Uses taskwarrior or todotxt
 
