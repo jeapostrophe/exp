@@ -26,6 +26,9 @@ colorscheme solarized-light-termcolors
 add-highlighter global/ show-matching
 
 set global grepcmd 'ag'
+# XXX set search relative to current buffer path
+
+# XXX support bat in ranger - https://github.com/ranger/ranger/issues/1288
 
 # Wrapping stuff
 set global autowrap_column 72
@@ -45,11 +48,11 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 
 # Notes:
 # <c-n> <c-p> to select completions
-# FIFO buffer for REPL
+# FIFO buffer for REPL (or tmux-repl)
 # | to send to command
 # Use a hook for BufCreate fn to put fn in recent
 # Turn on linting
-# Make Racket mode
+# Make Racket mode (look at scheme.kak)
 
 # XXX spelling not working
 
