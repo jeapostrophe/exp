@@ -18,7 +18,8 @@ plug occivink/kakoune-sudo-write
 
 # XXX Use personal wiki instead of org?
 
-# XXX change tab width to 4
+set global tabstop 2
+set global indentwidth 2
 
 # XXX insert lambda (and other unicode)
 # Use jwm/uni and send text back to \ to it as $1
