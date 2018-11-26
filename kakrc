@@ -25,9 +25,10 @@ colorscheme solarized-light-termcolors
 # XXX highlight entire region
 add-highlighter global/ show-matching
 
-set global grepcmd 'ag'
+set global grepcmd 'ag --column'
 # XXX set search relative to current buffer path
 
+# XXX Use ranger.kak
 # XXX support bat in ranger - https://github.com/ranger/ranger/issues/1288
 
 # Wrapping stuff
