@@ -4,6 +4,7 @@ plug alexherbo2/auto-pairs.kak
 hook global WinCreate .* %{
     auto-pairs-enable
 }
+# XXX debug this
 # XXX Customize racket to not insert two 's but add |
 
 plug andreyorst/fzf.kak
@@ -20,8 +21,7 @@ plug occivink/kakoune-sudo-write
 # XXX change tab width to 4
 
 # XXX insert lambda (and other unicode)
-# https://github.com/chrisbra/unicode.vim/blob/master/autoload/unicode.vim
-# http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
+# Use jwm/uni and send text back to \ to it as $1
 
 # XXX Uses taskwarrior or todotxt
 
