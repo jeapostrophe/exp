@@ -20,6 +20,8 @@ plug occivink/kakoune-sudo-write
 # XXX change tab width to 4
 
 # XXX insert lambda (and other unicode)
+# https://github.com/chrisbra/unicode.vim/blob/master/autoload/unicode.vim
+# http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
 
 # XXX Uses taskwarrior or todotxt
 
