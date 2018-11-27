@@ -21,10 +21,9 @@ plug occivink/kakoune-sudo-write
 set global tabstop 2
 set global indentwidth 2
 
-# XXX insert lambda (and other unicode)
-# Use jwm/uni and send text back to \ to it as $1
+# unicode insertion
 map global insert  'λ'
-map global insert <a-\> '<esc><a-f>\|xargs uni<ret>'
+map global normal  '<a-f>\|xargs uni<ret>'
 
 # XXX Uses taskwarrior or todotxt
 
@@ -79,6 +78,12 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 
 # This is a long test string is it too long that I will try to use with par to see if it works.
 
+# Keys how I like
+map global normal <s-left> H
+map global normal <s-right> L
+map global normal <s-up> K
+map global normal <s-down> J
+
 # Filetypes
 hook global WinSetOption filetype=(c|cpp) %{
   clang-enable-autocomplete
@@ -88,11 +93,21 @@ hook global WinSetOption filetype=(c|cpp) %{
 }
 
 # System Clipboard
-map global user -docstring 'paste (after) from clipboard' p '!pbpaste<ret>'
-map global user -docstring 'paste (before) from clipboard' P '<a-!>pbpaste<ret>'
-map global user -docstring 'yank to clipboard' y '<a-|>pbcopy<ret>'
-map global user -docstring 'replace from clipboard' R '|pbcopy<ret>'
+hook global NormalKey y|d|c %{ nop %sh{
+  printf %s "$kak_main_reg_dquote" | pbcopy
+}}
+map global normal p '!pbpaste<ret>'
+map global normal P '<a-!>pbpaste<ret>'
+# XXX <a-p> <a-P> R <a-R>
 
 # Simple Mappings
 # XXX Shift down next line?
 map global normal '#' :comment-line<ret>
+
+# Modeline and focus info
+# XXX Change the cursor shape instead
+decl str focused
+hook global FocusIn .* %{ set window focused ""  }
+hook global FocusOut .* %{ set window focused " [UNFOCUSED]" }
+set global modelinefmt '%val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} %opt{filetype}%opt{focused}'
+
