@@ -82,6 +82,8 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # XXX S-pgup
 # XXX S-pgdn
 # XXX S-arrows in insert mode
+map global normal ~ gl
+map global normal ~ gh
 
 # Filetypes
 hook global WinSetOption filetype=(c|cpp) %{
