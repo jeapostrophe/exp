@@ -23,6 +23,8 @@ set global indentwidth 2
 
 # XXX insert lambda (and other unicode)
 # Use jwm/uni and send text back to \ to it as $1
+map global insert  'λ'
+map global insert <a-\> '<esc><a-f>\|xargs uni<ret>'
 
 # XXX Uses taskwarrior or todotxt
 
@@ -64,6 +66,8 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # Use a hook for BufCreate fn to put fn in recent
 # Turn on linting
 # Make Racket mode (look at scheme.kak)
+
+# Disable indenting while pasting with \i
 
 # XXX spelling not working
 
