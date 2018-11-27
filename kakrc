@@ -35,7 +35,7 @@ add-highlighter global/ show-matching
 # XXX / register isn't empty when you delete everything in it
 add-highlighter global/ dynregex '%reg{/}' 0:+u
 
-set global makecmd 'mk'
+set global makecmd 'mk' # XXX make mk better
 set global grepcmd 'ag --column'
 # XXX set search relative to current buffer path
 
