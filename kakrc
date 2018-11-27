@@ -79,10 +79,9 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # This is a long test string is it too long that I will try to use with par to see if it works.
 
 # Keys how I like
-map global normal <s-left> H
-map global normal <s-right> L
-map global normal <s-up> K
-map global normal <s-down> J
+# XXX S-pgup
+# XXX S-pgdn
+# XXX S-arrows in insert mode
 
 # Filetypes
 hook global WinSetOption filetype=(c|cpp) %{

@@ -20,14 +20,14 @@ PROMPT_SYMB="💩 " # Poop
 PROMPT_SYMB=⫸
 PS1="%(?.%F{green}.%F{red})${PROMPT_SYMB}%f "
 
-if [[ "$TERM" =~ "xterm" ]] ; then
+if [[ "$TMUX" == "" ]] ; then
     PS1="%S%~%s
 $PS1"
 fi
 export PS1
 
 TPS1="%~ ${PROMPT_SYMB}"
-if [[ "$TERM" =~ "screen" ]] ; then
+if [[ "$TMUX" != "" ]] ; then
     precmd () {
         print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\" }
     preexec () {

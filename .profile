@@ -40,3 +40,4 @@ export FZF_DEFAULT_OPTS="--ansi --cycle --algo=v1 --color=light --layout=reverse
 export TMPDIR=/tmp/
 
 export GPG_TTY=$(tty)
+
