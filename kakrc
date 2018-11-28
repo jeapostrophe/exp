@@ -76,12 +76,20 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 #   map global normal <s-left> or <a-right>
 # - How do I move between matching things
 
+# XXX https://github.com/eraserhd/parinfer-rust/blob/master/rc/parinfer.kak
+
 # This is a long test string is it too long that I will try to use with par to see if it works.
 
 # Keys how I like
 # XXX alt arrows and S-alt arrows (normal & insert)
+map global normal <backspace> <a-d>
+map global normal <del> d
 map global normal <end> gl
 map global normal <home> gh
+map global normal <a-up> ''
+map global normal <a-down> ''
+map global normal <a-left> '<a-b>_'
+map global normal <a-right> '<a-e>_'
 map global insert <s-home> '<esc><s-home>'
 map global insert <s-end> '<esc><s-end>'
 map global insert <s-left> '<esc>H'
