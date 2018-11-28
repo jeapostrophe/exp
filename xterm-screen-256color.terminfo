@@ -11,6 +11,10 @@ xterm-screen-256color|GNU Screen with 256 colors bce and tmux xterm-keys,
     kIC=\E[2;2~, kLFT=\E[1;2D, kNXT=\E[6;2~, kPRV=\E[5;2~,
     kRIT=\E[1;2C, kind=\E[1;2B, kri=\E[1;2A, 
 
+# Got the above names from: https://github.com/mirror/ncurses/blob/master/man/user_caps.5
+# And from: https://github.com/mawww/kakoune/blob/master/src/ncurses_ui.cc
+# Got their values from: https://github.com/tmux/tmux/blob/master/xterm-keys.c
+
 # Change this to screen-256color if the terminal you run tmux in
 # doesn't support bce:
     use=screen-256color-bce,
