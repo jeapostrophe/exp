@@ -124,3 +124,4 @@ hook global FocusIn .* %{ set window focused ""  }
 hook global FocusOut .* %{ set window focused " [UNFOCUSED]" }
 set global modelinefmt '%val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} %opt{filetype}%opt{focused}'
 
+# XXX Use kitty
