@@ -1,0 +1,16 @@
+# A screen- based TERMINFO that declares the escape sequences
+# enabled by the tmux config "set-window-option -g xterm-keys".
+#
+# Prefix the name with xterm- since some applications inspect
+# the TERM *name* in addition to the terminal capabilities advertised.
+xterm-screen-256color|GNU Screen with 256 colors bce and tmux xterm-keys,
+
+# As of Nov'11, the below keys are picked up by
+# .../tmux/blob/master/trunk/xterm-keys.c:
+    kDC=\E[3;2~, kEND=\E[1;2F, kHOM=\E[1;2H,
+    kIC=\E[2;2~, kLFT=\E[1;2D, kNXT=\E[6;2~, kPRV=\E[5;2~,
+    kRIT=\E[1;2C, kind=\E[1;2B, kri=\E[1;2A, 
+
+# Change this to screen-256color if the terminal you run tmux in
+# doesn't support bce:
+    use=screen-256color-bce,
