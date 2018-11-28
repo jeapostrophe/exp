@@ -79,9 +79,11 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 # This is a long test string is it too long that I will try to use with par to see if it works.
 
 # Keys how I like
-# XXX S-home/end in insert mode
+# XXX alt arrows and S-alt arrows (normal & insert)
 map global normal <end> gl
 map global normal <home> gh
+map global insert <s-home> '<esc><s-home>'
+map global insert <s-end> '<esc><s-end>'
 map global insert <s-left> '<esc>H'
 map global insert <s-right> '<esc>L'
 map global insert <s-up> '<esc>K'
