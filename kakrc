@@ -78,24 +78,51 @@ add-highlighter global/search dynregex '%reg{/}' 0:search
 
 # XXX https://github.com/eraserhd/parinfer-rust/blob/master/rc/parinfer.kak
 
+# XXX https://github.com/alexherbo2/distraction-free.kak
+# 
 # This is a long test string is it too long that I will try to use with par to see if it works.
 
 # Keys how I like
-# XXX alt arrows and S-alt arrows (normal & insert)
 map global normal <backspace> <a-d>
 map global normal <del> d
-map global normal <end> gl
-map global normal <home> gh
-map global normal <a-up> ''
-map global normal <a-down> ''
-map global normal <a-left> '<a-b>_'
-map global normal <a-right> '<a-e>_'
-map global insert <s-home> '<esc><s-home>'
-map global insert <s-end> '<esc><s-end>'
 map global insert <s-left> '<esc>H'
 map global insert <s-right> '<esc>L'
 map global insert <s-up> '<esc>K'
+map global normal <a-up> ''
 map global insert <s-down> '<esc>J'
+map global normal <a-down> ''
+map global normal <end> gl
+map global insert <s-end> '<esc><s-end>'
+map global normal <home> gh
+map global insert <s-home> '<esc><s-home>'
+
+# XXX alt arrows and S-alt arrows (normal & insert)
+define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move %{
+  echo mpm %sh{
+    SHIFT=$1
+    DIRECTION=$2
+    CURSOR=$(printf "\x$(printf %x ${kak_cursor_char_value})")
+    PAIRS="$kak_opt_matching_pairs"
+
+		ISPAIR=0
+		PARITY=1
+		for i in $PAIRS ; do
+			if [ $PARITY == $DIRECTION ] ; then
+			  P=$(echo $i | sed "s/'//g")
+				if [ $P == $CURSOR ] ; then
+					ISPAIR=1
+				fi
+			fi
+			PARITY=$(expr \( $PARITY + 1 \) % 2)
+		done
+
+    echo $CURSOR $ISPAIR
+  }
+}
+map global normal <a-left> ':match_pair_move 0 0<ret>'
+map global normal <a-right> ':match_pair_move 0 1<ret>'
+map global normal <s-a-left> ':match_pair_move 1 0<ret>'
+map global normal <s-a-right> ':match_pair_move 1 1<ret>'
 
 # Filetypes
 hook global WinSetOption filetype=(c|cpp) %{
