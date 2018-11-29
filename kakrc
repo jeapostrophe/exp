@@ -106,17 +106,26 @@ define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move 
 
 		ISPAIR=0
 		PARITY=1
+		LAST=
+		OTHER=
 		for i in $PAIRS ; do
+			P=$(echo $i | sed "s/'//g")
+			if [ -z "$OTHER" -a $ISPAIR == "1" ] ; then
+				OTHER=$P
+			fi
 			if [ $PARITY == $DIRECTION ] ; then
-			  P=$(echo $i | sed "s/'//g")
 				if [ $P == $CURSOR ] ; then
 					ISPAIR=1
+					if [ $DIRECTION == 0 ] ; then
+						OTHER=$LAST
+					fi
 				fi
 			fi
+			LAST=$P
 			PARITY=$(expr \( $PARITY + 1 \) % 2)
 		done
 
-    echo $CURSOR $ISPAIR
+    echo $CURSOR $ISPAIR/$OTHER
   }
 }
 map global normal <a-left> ':match_pair_move 0 0<ret>'
