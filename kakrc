@@ -98,7 +98,7 @@ map global insert <s-home> '<esc><s-home>'
 
 # XXX alt arrows and S-alt arrows (normal & insert)
 define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move %{
-  echo mpm %sh{
+  execute-keys %sh{
     SHIFT=$1
     DIRECTION=$2
     CURSOR=$(printf "\x$(printf %x ${kak_cursor_char_value})")
@@ -116,7 +116,7 @@ define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move 
 			if [ $PARITY == $DIRECTION ] ; then
 				if [ $P == $CURSOR ] ; then
 					ISPAIR=1
-					if [ $DIRECTION == 0 ] ; then
+					if [ $DIRECTION -eq 0 ] ; then
 						OTHER=$LAST
 					fi
 				fi
@@ -125,7 +125,19 @@ define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move 
 			PARITY=$(expr \( $PARITY + 1 \) % 2)
 		done
 
-    echo $CURSOR $ISPAIR/$OTHER
+		if [ $ISPAIR -eq 1 ] ; then
+			if [ $DIRECTION -eq 0 ] ; then
+				echo '<a-f>'${OTHER}
+			else
+				echo f${OTHER}
+			fi
+		else
+			if [ $DIRECTION -eq 0 ] ; then
+				echo '<a-b>'
+			else
+				echo '<a-e>'
+			fi
+	  fi
   }
 }
 map global normal <a-left> ':match_pair_move 0 0<ret>'
