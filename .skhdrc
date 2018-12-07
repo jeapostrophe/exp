@@ -1,0 +1,30 @@
+# XXX Read https://github.com/koekeishiya/skhd/blob/master/examples/skhdrc
+
+alt - space : /Users/jay/.jwm/bin/new-termw
+cmd - return : /Users/jay/.jwm/bin/new-termw
+
+#cmd - w : chunkc tiling::window --close
+
+cmd - h : chunkc tiling::window --focus west 
+cmd - l : chunkc tiling::window --focus east
+cmd - j : chunkc tiling::window --focus south
+cmd - k : chunkc tiling::window --focus north
+
+cmd - i : chunkc tiling::window --focus prev
+cmd - o : chunkc tiling::window --focus next
+
+cmd + shift - h : chunkc tiling::window --swap west
+cmd + shift - l : chunkc tiling::window --swap east
+cmd + shift - j : chunkc tiling::window --swap south
+cmd + shift - k : chunkc tiling::window --swap north
+
+cmd + shift - 0 : chunkc tiling::window --send-to-desktop 0
+cmd + shift - 1 : chunkc tiling::window --send-to-desktop 1
+cmd + shift - 2 : chunkc tiling::window --send-to-desktop 2 
+cmd + shift - 3 : chunkc tiling::window --send-to-desktop 3
+cmd + shift - 4 : chunkc tiling::window --send-to-desktop 4
+cmd + shift - 5 : chunkc tiling::window --send-to-desktop 5
+cmd + shift - 6 : chunkc tiling::window --send-to-desktop 6
+cmd + shift - 7 : chunkc tiling::window --send-to-desktop 7
+cmd + shift - 8 : chunkc tiling::window --send-to-desktop 8
+cmd + shift - 9 : chunkc tiling::window --send-to-desktop 9
