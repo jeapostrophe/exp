@@ -6,6 +6,9 @@ cmd - return : /Users/jay/.jwm/bin/new-termw
 # XXX Messes with Safari and closing tabs
 #cmd - w : chunkc tiling::window --close
 
+cmd + ctrl - t : chunkc tiling::window --toggle float;\
+                 chunkc tiling::window --grid-layout 4:4:1:1:2:2
+
 cmd + ctrl - h : chunkc tiling::window --focus west 
 cmd + ctrl - l : chunkc tiling::window --focus east
 cmd + ctrl - j : chunkc tiling::window --focus south
