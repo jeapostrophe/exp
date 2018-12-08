@@ -16,12 +16,12 @@ cmd + ctrl - k : chunkc tiling::window --focus north
 cmd + ctrl - i : chunkc tiling::window --focus prev
 cmd + ctrl - o : chunkc tiling::window --focus next
 
-cmd + shift - h : chunkc tiling::window --swap west
-cmd + shift - l : chunkc tiling::window --swap east
-cmd + shift - j : chunkc tiling::window --swap south
-cmd + shift - k : chunkc tiling::window --swap north
-cmd + shift - i : chunkc tiling::window --swap prev
-cmd + shift - o : chunkc tiling::window --swap next
+cmd + alt - h : chunkc tiling::window --swap west
+cmd + alt - l : chunkc tiling::window --swap east
+cmd + alt - j : chunkc tiling::window --swap south
+cmd + alt - k : chunkc tiling::window --swap north
+cmd + alt - i : chunkc tiling::window --swap prev
+cmd + alt - o : chunkc tiling::window --swap next
 
 cmd + shift - 0 : chunkc tiling::window --send-to-desktop 0
 cmd + shift - 1 : chunkc tiling::window --send-to-desktop 1
