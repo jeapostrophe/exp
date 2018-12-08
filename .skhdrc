@@ -6,26 +6,34 @@ cmd - return : /Users/jay/.jwm/bin/new-termw
 # XXX Messes with Safari and closing tabs
 #cmd - w : chunkc tiling::window --close
 
-cmd + ctrl - t : chunkc tiling::window --toggle float;\
-                 chunkc tiling::window --grid-layout 4:4:1:1:2:2
+cmd - e : chunkc tiling::window --toggle float;\
+          chunkc tiling::window --grid-layout 4:4:1:1:2:2
 
-cmd + ctrl - h : chunkc tiling::window --focus west 
-cmd + ctrl - l : chunkc tiling::window --focus east
-cmd + ctrl - j : chunkc tiling::window --focus south
-cmd + ctrl - k : chunkc tiling::window --focus north
-cmd + ctrl - i : chunkc tiling::window --focus prev
-cmd + ctrl - o : chunkc tiling::window --focus next
+cmd - h : chunkc tiling::window --focus west
+cmd - l : chunkc tiling::window --focus east
+cmd - j : chunkc tiling::window --focus south
+cmd - k : chunkc tiling::window --focus north
+cmd - i : chunkc tiling::window --focus prev
+cmd - o : chunkc tiling::window --focus next
+cmd - left : chunkc tiling::window --focus west
+cmd - right : chunkc tiling::window --focus east
+cmd - down : chunkc tiling::window --focus south
+cmd - up : chunkc tiling::window --focus north
 
-cmd + alt - h : chunkc tiling::window --warp west
-cmd + alt - l : chunkc tiling::window --warp east
-cmd + alt - j : chunkc tiling::window --warp south
-cmd + alt - k : chunkc tiling::window --warp north
-cmd + alt - i : chunkc tiling::window --warp prev
-cmd + alt - o : chunkc tiling::window --warp next
+cmd + shift - h : chunkc tiling::window --warp west
+cmd + shift - l : chunkc tiling::window --warp east
+cmd + shift - j : chunkc tiling::window --warp south
+cmd + shift - k : chunkc tiling::window --warp north
+cmd + shift - i : chunkc tiling::window --warp prev
+cmd + shift - o : chunkc tiling::window --warp next
+cmd + shift - left : chunkc tiling::window --warp west
+cmd + shift - right : chunkc tiling::window --warp east
+cmd + shift - down : chunkc tiling::window --warp south
+cmd + shift - up : chunkc tiling::window --warp north
 
 cmd + shift - 0 : chunkc tiling::window --send-to-desktop 0
 cmd + shift - 1 : chunkc tiling::window --send-to-desktop 1
-cmd + shift - 2 : chunkc tiling::window --send-to-desktop 2 
+cmd + shift - 2 : chunkc tiling::window --send-to-desktop 2
 cmd + shift - 3 : chunkc tiling::window --send-to-desktop 3
 cmd + shift - 4 : chunkc tiling::window --send-to-desktop 4
 cmd + shift - 5 : chunkc tiling::window --send-to-desktop 5
@@ -34,9 +42,9 @@ cmd + shift - 7 : chunkc tiling::window --send-to-desktop 7
 cmd + shift - 8 : chunkc tiling::window --send-to-desktop 8
 cmd + shift - 9 : chunkc tiling::window --send-to-desktop 9
 
-cmd + alt - a : chunkc tiling::desktop --layout bsp
-cmd + alt - s : chunkc tiling::desktop --layout monocle
-cmd + alt - d : chunkc tiling::desktop --layout float
+cmd + alt - j : chunkc tiling::desktop --layout bsp
+cmd + alt - k : chunkc tiling::desktop --layout monocle
+cmd + alt - l : chunkc tiling::desktop --layout float
 
 # Move around floats
 cmd + alt - left   : chunkc tiling::window --grid-layout 1:2:0:0:1:1

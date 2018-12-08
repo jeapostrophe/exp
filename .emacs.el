@@ -393,23 +393,20 @@ given a prefix arg."
 
 ;;;; global-set-key
 
-(global-set-key (kbd "s-S-t") 'eval-region)
-(global-set-key (kbd "s-a") 'mark-whole-buffer)
-;;(global-set-key (kbd "s-q") 'kill-emacs)
+(global-set-key (kbd "C-S-t") 'eval-region)
+(global-set-key (kbd "C-a") 'mark-whole-buffer)
+;;(global-set-key (kbd "C-q") 'kill-emacs)
 (global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
 (global-set-key (kbd "s-x") 'clipboard-kill-region)
 (global-set-key (kbd "s-v") 'clipboard-yank)
 (global-set-key (kbd "s-n") 'new-frame)
-(global-set-key (kbd "s-s") 'save-buffer)
-(global-set-key (kbd "s-f") 'isearch-forward)
-(global-set-key (kbd "s-g") 'isearch-repeat-forward)
+(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "S-s") 'save-buffer)
+(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "C-g") 'isearch-repeat-forward)
 
-;; The default is 'other-frame, but that doesn't behave as expected on OS X
-(global-unset-key (kbd "s-`"))
-(global-unset-key (kbd "M-`"))
-
-(global-set-key (kbd "s-'") 'next-buffer)
-(global-set-key (kbd "s-;") 'previous-buffer)
+(global-set-key (kbd "C-'") 'next-buffer)
+(global-set-key (kbd "C-;") 'previous-buffer)
 
 (defun je/delete-window ()
   "Remove window or frame"
@@ -529,8 +526,9 @@ given a prefix arg."
   (interactive)
   (run-current-file t))
 
-(global-set-key (kbd "C-t") 'run-current-file-ro)
-(global-set-key (kbd "C-M-t") 'run-current-file-wr)
+(global-set-key (kbd "<C-return>") 'run-current-file-ro)
+(global-set-key (kbd "<C-M-return>") 'run-current-file-wr)
+(global-set-key (kbd "<C-SPC>") 'calculator)
 
 ;; A few editing things
 (progn
@@ -553,7 +551,7 @@ given a prefix arg."
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
 
-(global-set-key (kbd "s-i") 'my-indent-buffer)
+(global-set-key (kbd "C-i") 'my-indent-buffer)
 
 (progn
   (global-set-key (kbd "C-h F") 'find-function-at-point))
@@ -573,7 +571,7 @@ given a prefix arg."
 
 (global-set-key (kbd "C-x C-c") 'custom-cxcc)
 
-(global-set-key (kbd "s-r") 'revert-buffer)
+(global-set-key (kbd "C-r") 'revert-buffer)
 (global-set-key (kbd "M-r") 'replace-string)
 
 (global-set-key (kbd "<C-up>") 'beginning-of-buffer)
@@ -583,17 +581,6 @@ given a prefix arg."
 
 (global-set-key (kbd "<M-left>") 'backward-sexp)
 (global-set-key (kbd "<M-right>") 'forward-sexp)
-
-;; For grading
-(defun custom-sl ()
-  "Submit grade"
-  (interactive)
-
-  (progn
-    (save-buffer)
-    (server-edit)))
-
-(global-set-key (kbd "s-l") 'custom-sl)
 
 (normal-erase-is-backspace-mode 1)
 
@@ -605,7 +592,7 @@ given a prefix arg."
   (save-some-buffers t))
 
 (defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
-(global-set-key (kbd "s-S") 'je/save-all)
+(global-set-key (kbd "C-S") 'je/save-all)
 
 ;; Org Mode
 (setq load-path (cons "~/Dev/local/org-mode/lisp" load-path))
@@ -646,7 +633,7 @@ given a prefix arg."
       ;; Delete lines or make the "Buffer is read-only" error.
       (flush-lines regexp))))
 
-(global-set-key (kbd "s-t")
+(global-set-key (kbd "C-t")
                 (lambda ()
                   (interactive)
                   (if (eq major-mode 'org-mode)
@@ -660,10 +647,10 @@ given a prefix arg."
 
 (org-defkey org-mode-map [(meta tab)]  nil)
 
-(org-defkey org-mode-map (kbd "s-[") 'org-metaleft)
-(org-defkey org-mode-map (kbd "s-]") 'org-metaright)
-(org-defkey org-mode-map (kbd "s-{") 'org-shiftleft)
-(org-defkey org-mode-map (kbd "s-}") 'org-shiftright)
+(org-defkey org-mode-map (kbd "C-[") 'org-metaleft)
+(org-defkey org-mode-map (kbd "C-]") 'org-metaright)
+(org-defkey org-mode-map (kbd "C-{") 'org-shiftleft)
+(org-defkey org-mode-map (kbd "C-}") 'org-shiftright)
 
 (defun je/org-meta-return ()
   (interactive)
@@ -753,10 +740,10 @@ given a prefix arg."
          :immediate-finish t)))
 
 (global-set-key
- (kbd "<s-f1>")
+ (kbd "<C-f1>")
  (lambda () (interactive) (org-capture nil "t")))
 (global-set-key
- (kbd "<s-XF86MonBrightnessDown>")
+ (kbd "<C-XF86MonBrightnessDown>")
  (lambda () (interactive) (org-capture nil "t")))
 (global-set-key
  (kbd "<f1>")
@@ -968,7 +955,7 @@ given a prefix arg."
           je/org-agenda/filter-ctxt nil
           je/org-agenda/filter-ctxt-not nil)
     (je/todo-list)))
-(global-set-key (kbd "s-o") 'je/todo-list/all)
+(global-set-key (kbd "C-o") 'je/todo-list/all)
 
 (defun je/org-agenda/filter-ctxt-toggle (n)
   (cond
@@ -1019,9 +1006,8 @@ given a prefix arg."
       (setq je/org-agenda/filter-ctxt nil
             je/org-agenda/filter-ctxt-not (list "Home"))))
     (je/todo-list)))
-(global-set-key (kbd "s-h") 'je/todo-list/home)
-
-(global-set-key (kbd "s-j") 'je/todo-list)
+(global-set-key (kbd "C-S-o") 'je/todo-list/home)
+(global-set-key (kbd "C-M-o") 'je/todo-list)
 
 (defun je/agenda-sort (a b)
   "Sorting strategy for agenda items."
@@ -1237,7 +1223,7 @@ given a prefix arg."
 ;;(add-hook 'racket-mode-hook           (lambda () (paredit-mode +1)))
 
 ;; Insert lambda
-(global-set-key (kbd "s-\\")
+(global-set-key (kbd "C-\\")
                 (lambda () (interactive nil) (insert "λ")))
 
 ;; iBus
@@ -1499,7 +1485,7 @@ given a prefix arg."
 
 ;; proof general
 (setq proof-assistants '(coq))
-(load-file "/usr/local/Cellar/proof-general/4.4_1/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
+(load-file "/usr/local/Cellar/proof-general/4.4_2/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
 ;; XXX make these local to the proof mode
 ;; proof-display-three-b
 ;; proof-shell-exit
