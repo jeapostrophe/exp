@@ -66,6 +66,7 @@
 ;; (helm-autoresize-mode 1)
 
 (global-set-key (kbd "M-x") 'helm-M-x)
+
 (helm-mode 1)
 
 ;;;; Do we have X? This is false under Debian's emacs-nox package
@@ -319,6 +320,7 @@
 ;; This could be made portable but I'm not interested in that at the
 ;; moment so it's git-only.
 
+(require 'vc)
 (defun vc-push-or-pull ()
   "`vc-push' if given an argument, otherwise `vc-pull'"
   (interactive)
@@ -336,6 +338,8 @@ given a prefix arg."
   "Run git-pull on the current repository."
   (interactive)
   (shell-command "git up"))
+
+(setq vc-follow-symlinks t)
 
 ;;;;; woman
 
@@ -398,7 +402,7 @@ given a prefix arg."
 (global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
 (global-set-key (kbd "s-x") 'clipboard-kill-region)
 (global-set-key (kbd "s-v") 'clipboard-yank)
-(global-set-key (kbd "s-n") 'new-frame)
+(global-set-key (kbd "s-n") 'make-frame)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "S-s") 'save-buffer)
 (global-set-key (kbd "C-f") 'isearch-forward)
@@ -597,10 +601,10 @@ given a prefix arg."
 (global-set-key (kbd "C-S") 'je/save-all)
 
 ;; Org Mode
-(setq load-path (cons "~/Dev/local/org-mode/lisp" load-path))
-(setq load-path (cons "~/Dev/local/org-mode/contrib/lisp" load-path))
-(add-to-list 'Info-default-directory-list
-             (expand-file-name "~/Dev/local/org-mode/doc"))
+; (setq load-path (cons "~/Dev/local/org-mode/lisp" load-path))
+; (setq load-path (cons "~/Dev/local/org-mode/contrib/lisp" load-path))
+; (add-to-list 'Info-default-directory-list (expand-file-name "~/Dev/local/org-mode/doc"))
+
 (require 'org)
 (require 'org-faces)
 (require 'org-protocol)
@@ -674,6 +678,8 @@ given a prefix arg."
 (org-defkey org-mode-map [(control shift down)]        nil)
 (org-defkey org-mode-map [(control shift left)]        nil)
 (org-defkey org-mode-map [(control shift right)]       nil)
+
+(org-defkey org-mode-map (kbd "M-x") 'helm-M-x)
 
 (setq org-hide-leading-stars t)
 (setq org-return-follows-link t)
@@ -1169,33 +1175,18 @@ given a prefix arg."
 
 (desktop-save-mode 1)
 
-;; Broken in switch to Emacs 24
-;;(add-to-list 'load-path "~/Dev/dist/nxhtml/util")
-;;(require 'winsav)
-;;(setq winsav-save t)
-;;(setq winsav-dirname "~/.emacs.d/")
-;;(winsav-save-mode 1)
-
 ;;;;; shift select
 (setq shift-select-mode 1)
 (delete-selection-mode 1)
 
-;; Auto pair
-;;(add-to-list 'load-path "~/Dev/dist/capitaomorte/autopair")
-;;(require 'autopair)
-
-(add-hook 'racket-mode-hook
-          #'(lambda ()
-              ;; (flymake-mode t)
-              (autopair-mode t)))
-(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
-
 ;; CUA
-(setq cua-enable-cua-keys nil)           ;; don't add C-x,C-c,C-v
+(setq cua-enable-cua-keys nil)
 ;; (cua-mode t)                             ;; for rectangles, CUA is nice
 
-(add-hook 'term-mode-hook
-          #'(lambda () (setq autopair-dont-activate t)))
+;; Auto pair
+(add-hook 'racket-mode-hook #'(lambda () (autopair-mode t)))
+(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
+(add-hook 'term-mode-hook #'(lambda () (setq autopair-dont-activate t)))
 
 (put 'autopair-insert-opening 'delete-selection t)
 (put 'autopair-skip-close-maybe 'delete-selection t)
@@ -1208,21 +1199,9 @@ given a prefix arg."
 ;; Rainbow delimiters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
-;; Twelf
-;;(setq twelf-root "/Users/jay/Dev/dist/Twelf/")
-;;(load (concat twelf-root "emacs/twelf-init.el"))
-
 ;; dynamic abbreviations
 (setq dabbrev-case-fold-search nil)
 ;; XXX make this play nicer with C++
-
-;; Auto saving
-;;(autoload 'paredit-mode "paredit"
-;;  "Minor mode for pseudo-structurally editing Lisp code." t)
-;;(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
-;;(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
-;;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
-;;(add-hook 'racket-mode-hook           (lambda () (paredit-mode +1)))
 
 ;; Insert lambda
 (global-set-key (kbd "C-\\")
@@ -1237,8 +1216,8 @@ given a prefix arg."
   (setq ibus-cursor-color
         '("red" "blue" "limegreen"))
   (add-hook 'after-make-frame-functions
-            (lambda (new-frame)
-              (select-frame new-frame)
+            (lambda (nf)
+              (select-frame nf)
               (or ibus-mode (ibus-mode-on))))
   (ibus-define-common-key ?\S-\s nil)
   (global-set-key (kbd "M-s-;") 'ibus-toggle))
@@ -1247,19 +1226,6 @@ given a prefix arg."
 (autoload 'calculator "calculator"
   "Run the Emacs calculator." t)
 (global-set-key (kbd "<C-SPC>") 'calculator)
-
-;; W3M
-;;(require 'w3m-load)
-;;(require 'mime-w3m)
-
-;; v-center
-;; (require 'centered-cursor-mode)
-;; (global-centered-cursor-mode +1)
-
-;; highlight current line (needs to be after v-center)
-;; (global-hl-line-mode 1)
-;; Doesn't look good with solarized, because there aren't more background colors
-;; (set-face-background 'hl-line "#f5f5f5")
 
 ;; mark down
 (autoload 'markdown-mode "markdown-mode.el"
@@ -1323,11 +1289,6 @@ given a prefix arg."
 
 (set-input-method "je/math")
 
-;; forth
-;;(autoload 'forth-mode "gforth.el")
-;;(autoload 'forth-block-mode "gforth.el")
-;;(add-to-list 'auto-mode-alist '("\\.fs$" . forth-mode))
-
 ;; search is case insensitive
 (setq case-fold-search t)
 ;; XXX I don't know why this works
@@ -1336,43 +1297,10 @@ given a prefix arg."
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
 
-;; (require 'flymake)
-;; (require 'flymake-cursor)
-;; (defun flymake-racket-init ()
-;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
-;;                      'flymake-create-temp-inplace))
-;;          (local-file (file-relative-name
-;;                       temp-file
-;;                       (file-name-directory buffer-file-name))))
-;;     (list "racket" (list "-qf" local-file))))
-;; (setq flymake-gui-warnings-enabled nil)
-;; (push '("\\.rkt\\'" flymake-racket-init)
-;;       flymake-allowed-file-name-masks)
-
-;; haskell
-;; (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode-autoloads.el")
-
-;;
 (defun je/insert-$ (cmd)
   (interactive (list (read-shell-command "$ ")))
   (progn
     (shell-command cmd t)))
-
-(defun sort-words (reverse beg end)
-  "Sort words in region alphabetically, in REVERSE if negative.
-    Prefixed with negative \\[universal-argument], sorts in reverse.
-
-    The variable `sort-fold-case' determines whether alphabetic case
-    affects the sort order.
-
-    See `sort-regexp-fields'."
-  (interactive "*P\nr")
-  (sort-regexp-fields reverse "[A-Za-z0-9\\.]+" "\\&" beg end))
-
-;; Some nice searching
-;;(require 'evil)
-;;(global-set-key (kbd "C-3") 'evil-search-symbol-forward)
-;;(global-set-key (kbd "C-2") 'evil-search-symbol-backward)
 
 (add-to-list 'default-frame-alist '(height . 27))
 (add-to-list 'default-frame-alist '(width . 90))
@@ -1390,9 +1318,6 @@ given a prefix arg."
  '(doc-view-continuous t)
  '(ibuffer-default-sorting-mode (quote filename/process))
  '(ibuffer-display-summary nil)
- '(package-selected-packages
-   (quote
-    (f3 flyspell-correct-helm helm helm-ag helm-ag-r helm-bibtex helm-flyspell helm-fuzzier helm-github-stars helm-google helm-unicode yaml-mode ac-math auto-complete auto-complete-auctex auto-complete-c-headers tuareg scribble-mode yasnippet unfill syslog-mode ssh-config-mode solarized-theme rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair ag)))
  '(racket-mode-pretty-lambda t)
  '(racket-mode-rackjure-indent nil)
  '(racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket")
@@ -1482,8 +1407,6 @@ given a prefix arg."
 
 (require 'auto-complete)
 (add-hook 'tuareg-mode-hook 'auto-complete-mode)
-
-;; (require 'ocp-indent)
 
 ;; proof general
 (setq proof-assistants '(coq))

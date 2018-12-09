@@ -12,13 +12,13 @@
        ((:keywords "tools" "processes" "convenience")
 	(:url . "https://github.com/leoliu/ack-el"))])
  (ada-mode .
-	   [(5 3 2)
+	   [(6 0 1)
 	    ((wisi
-	      (1 1 6))
+	      (2 0 1))
 	     (cl-lib
-	      (0 4))
+	      (1 0))
 	     (emacs
-	      (24 3)))
+	      (25 0)))
 	    "major-mode for editing Ada sources" tar
 	    ((:keywords "languages" "ada")
 	     (:url . "http://www.nongnu.org/ada-mode/"))])
@@ -186,7 +186,7 @@
 		      ((:url . "https://github.com/cpitclaudel/compact-docstrings")
 		       (:keywords "convenience" "faces" "lisp" "maint" "c"))])
  (company .
-	  [(0 9 7)
+	  [(0 9 8)
 	   ((emacs
 	     (24 3)))
 	   "Modular text completion framework" tar
@@ -295,9 +295,11 @@
 	     ((:url . "http://www.dr-qubit.org/emacs.php")
 	      (:keywords "extensions" "matching" "data structures trie" "tree" "dictionary" "completion" "regexp"))])
  (diff-hl .
-	  [(1 8 4)
+	  [(1 8 5)
 	   ((cl-lib
-	     (0 2)))
+	     (0 2))
+	    (emacs
+	     (24 3)))
 	   "Highlight uncommitted changes using VC" tar
 	   ((:keywords "vc" "diff")
 	    (:url . "https://github.com/dgutov/diff-hl"))])
@@ -475,6 +477,13 @@
 	   "Color unbalanced parentheses and parentheses inconsistent with indentation" single
 	   ((:url . "http://elpa.gnu.org/packages/flylisp.html")
 	    (:keywords))])
+ (flymake .
+	  [(1 0 2)
+	   ((emacs
+	     (26 1)))
+	   "A universal on-the-fly syntax checker" single
+	   ((:url . "http://elpa.gnu.org/packages/flymake.html")
+	    (:keywords "c" "languages" "tools"))])
  (fountain-mode .
 		[(2 6 1)
 		 ((emacs
@@ -545,7 +554,7 @@
 	 ((:keywords "games" "processes")
 	  (:url . "http://www.gnuvola.org/software/gnugo/"))])
  (gnus-mock .
-	    [(0 3 0)
+	    [(0 4 0)
 	     nil "Mock Gnus installation for testing" tar
 	     ((:url . "http://elpa.gnu.org/packages/gnus-mock.html"))])
  (heap .
@@ -1105,7 +1114,7 @@
 	  ((:keywords "stream" "laziness" "sequences")
 	   (:url . "http://elpa.gnu.org/packages/stream.html"))])
  (svg .
-      [(0 1)
+      [(0 2)
        ((emacs
 	 (25)))
        "svg image creation functions" single
@@ -1277,11 +1286,13 @@
 	      ((:url . "http://elpa.gnu.org/packages/windresize.html")
 	       (:keywords "window"))])
  (wisi .
-       [(1 1 6)
+       [(2 0 1)
 	((cl-lib
-	  (0 4))
+	  (1 0))
 	 (emacs
-	  (24 3)))
+	  (25 0))
+	 (seq
+	  (2 20)))
 	"Utilities for implementing an indentation/navigation engine using a generalized LALR parser" tar
 	((:keywords "parser" "indentation" "navigation")
 	 (:url . "http://www.nongnu.org/ada-mode/wisi/wisi.html"))])
@@ -1324,7 +1335,7 @@
 			      ((:keywords "snippets")
 			       (:url . "http://elpa.gnu.org/packages/yasnippet-classic-snippets.html"))])
  (zones .
-	[(2018 11 20)
+	[(2018 11 21)
 	 nil "Zones of text - like multiple regions" single
 	 ((:url . "https://elpa.gnu.org/packages/zones.html")
 	  (:keywords "narrow" "restriction" "widen" "region" "zone"))])
