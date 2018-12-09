@@ -1,3 +1,5 @@
+;; XXX
+
 (setq ns-use-titled-windows nil)
 
 ;;(add-to-list 'load-path "~/.emacs.d/")
@@ -66,13 +68,6 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 
 (helm-mode 1)
-
-;;;; Do we have X? This is false under Debian's emacs-nox package
-;;;; where many features are compiled out
-(defvar emacs-has-x
-  (fboundp 'tool-bar-mode))
-
-;;;; Emacs' interface
 
 (setq ns-pop-up-frames t)
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -1324,12 +1319,7 @@ given a prefix arg."
  '(racket-use-company-mode nil)
  '(safe-local-variable-values
    (quote
-    ((coq-prog-name . "/usr/local/Cellar/coq/8.7.1/bin/coqtop")
-     (prover-cmd . ". ~/.profile; racket mctop.rkt")
-     (prover-cmd . "/bin/cat")
-     (prover-cmd . ". ~/.profile; racket prover.rkt")
-     (prover-cmd . "pwd")
-     (prover-cmd . "racket prover.rkt")))))
+    ((coq-prog-name . "/usr/local/Cellar/coq/8.7.1/bin/coqtop")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1340,9 +1330,6 @@ given a prefix arg."
  '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
  '(racket-paren-face ((t (:foreground "#93a1a1"))))
  '(racket-selfeval-face ((t (:foreground "#859900")))))
-
-;;(add-to-list 'load-path "~/Dev//scm/github.jeapostrophe/prover-mode")
-;;(load "prover")
 
 (defun unfill-paragraph ()
   (interactive)
@@ -1364,13 +1351,6 @@ given a prefix arg."
 (setq table-cell-horizontal-chars "-")
 (setq table-cell-vertical-char ?|)
 (setq table-cell-intersection-char ?+)
-
-;; outlook
-(defun je/exchange-outlook-format ()
-  "Swap Exchange/Outlook formatting with Internet-style formatting"
-  (interactive)
-  (mark-whole-buffer)
-  (shell-command-on-region (point) (mark) "~/bin/outlook-quote.rb" (current-buffer) t))
 
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
