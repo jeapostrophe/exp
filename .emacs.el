@@ -68,7 +68,6 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 (helm-mode 1)
 
-
 ;;;; Do we have X? This is false under Debian's emacs-nox package
 ;;;; where many features are compiled out
 (defvar emacs-has-x
@@ -403,7 +402,8 @@ given a prefix arg."
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "S-s") 'save-buffer)
 (global-set-key (kbd "C-f") 'isearch-forward)
-(global-set-key (kbd "C-g") 'isearch-repeat-forward)
+(global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
+(global-set-key (kbd "C-g") 'top-level)
 
 (global-unset-key (kbd "s-j"))
 (global-unset-key (kbd "s-S"))
@@ -531,7 +531,6 @@ given a prefix arg."
 
 (global-set-key (kbd "<C-return>") 'run-current-file-ro)
 (global-set-key (kbd "<C-M-return>") 'run-current-file-wr)
-(global-set-key (kbd "<C-SPC>") 'calculator)
 
 ;; A few editing things
 (progn
@@ -1247,7 +1246,7 @@ given a prefix arg."
 ;; Eli Calc
 (autoload 'calculator "calculator"
   "Run the Emacs calculator." t)
-(global-set-key [(control return)] 'calculator)
+(global-set-key (kbd "<C-SPC>") 'calculator)
 
 ;; W3M
 ;;(require 'w3m-load)
