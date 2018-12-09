@@ -405,6 +405,9 @@ given a prefix arg."
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "C-g") 'isearch-repeat-forward)
 
+(global-unset-key (kbd "s-j"))
+(global-unset-key (kbd "s-S"))
+
 (global-set-key (kbd "C-'") 'next-buffer)
 (global-set-key (kbd "C-;") 'previous-buffer)
 
