@@ -1,4 +1,0 @@
-#lang racket/base
-
-(module+ main
-  (printf "test\n"))

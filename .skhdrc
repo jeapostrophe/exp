@@ -14,8 +14,8 @@ cmd - e : chunkc tiling::window --toggle float;\
 #cmd - l : chunkc tiling::window --focus east
 #cmd - j : chunkc tiling::window --focus south
 #cmd - k : chunkc tiling::window --focus north
-cmd - i : chunkc tiling::window --focus prev
-cmd - o : chunkc tiling::window --focus next
+#cmd - i : chunkc tiling::window --focus prev
+#cmd - o : chunkc tiling::window --focus next
 cmd - left : chunkc tiling::window --focus west
 cmd - right : chunkc tiling::window --focus east
 cmd - down : chunkc tiling::window --focus south
@@ -25,8 +25,8 @@ cmd - up : chunkc tiling::window --focus north
 #cmd + shift - l : chunkc tiling::window --warp east
 #cmd + shift - j : chunkc tiling::window --warp south
 #cmd + shift - k : chunkc tiling::window --warp north
-cmd + shift - i : chunkc tiling::window --warp prev
-cmd + shift - o : chunkc tiling::window --warp next
+#cmd + shift - i : chunkc tiling::window --warp prev
+#cmd + shift - o : chunkc tiling::window --warp next
 cmd + shift - left : chunkc tiling::window --warp west
 cmd + shift - right : chunkc tiling::window --warp east
 cmd + shift - down : chunkc tiling::window --warp south

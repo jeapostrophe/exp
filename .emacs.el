@@ -17,7 +17,7 @@
  ((eq window-system 'ns) (setq shell-command-switch "-lc")))
 
 ;; font & color
-(set-face-attribute 'default nil 
+(set-face-attribute 'default nil
                     :font "Triplicate T4c"
                     :height 120)
 
@@ -130,7 +130,7 @@
 
 ;; Show matching paren, even if off-screen
 (defadvice show-paren-function
-  (after show-matching-paren-offscreen activate)
+    (after show-matching-paren-offscreen activate)
   "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
@@ -554,7 +554,7 @@ given a prefix arg."
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
 
-(global-set-key (kbd "C-i") 'my-indent-buffer)
+(global-set-key (kbd "s-i") 'my-indent-buffer)
 
 (progn
   (global-set-key (kbd "C-h F") 'find-function-at-point))
@@ -763,7 +763,7 @@ given a prefix arg."
       '(("t" "Todo list" todo "TODO"
          ())))
 
-(defun je/org-finalize-agenda-hook ()  
+(defun je/org-finalize-agenda-hook ()
   (goto-char (point-min))
   (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
   ;; xxx strike through
@@ -903,7 +903,7 @@ given a prefix arg."
                        je/org-agenda/filter-ctxt))
 
                  ;; OR
-                 
+
                  ;; If any of its tags are what we want to ignore
                  (je/ormap
                   (lambda (f)
@@ -923,7 +923,7 @@ given a prefix arg."
   (cond
    (l
     (or (funcall f (car l))
-         (je/ormap f (cdr l))))
+        (je/ormap f (cdr l))))
    (t nil)))
 
 (defun member/eq (o l)
@@ -963,7 +963,7 @@ given a prefix arg."
 (defun je/org-agenda/filter-ctxt-toggle (n)
   (cond
    ((member n je/org-agenda/filter-ctxt)
-    (setq je/org-agenda/filter-ctxt 
+    (setq je/org-agenda/filter-ctxt
           (je/filter-out je/org-agenda/filter-ctxt n))
     (add-to-list 'je/org-agenda/filter-ctxt-not n))
    ((member n je/org-agenda/filter-ctxt-not)
@@ -980,7 +980,7 @@ given a prefix arg."
 
 (defun je/filter-out (l o)
   (cond
-   (l 
+   (l
     (cond
      ((equal (car l) o)
       (je/filter-out (cdr l) o))
@@ -1185,8 +1185,8 @@ given a prefix arg."
 ;;(add-to-list 'load-path "~/Dev/dist/capitaomorte/autopair")
 ;;(require 'autopair)
 
-(add-hook 'racket-mode-hook 
-          #'(lambda () 
+(add-hook 'racket-mode-hook
+          #'(lambda ()
               ;; (flymake-mode t)
               (autopair-mode t)))
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
@@ -1454,17 +1454,17 @@ given a prefix arg."
 
 ;; ocaml
 (require 'tuareg)
-(setq auto-mode-alist 
+(setq auto-mode-alist
       (append '(("\\.ml[ily]?$" . tuareg-mode))
-	      auto-mode-alist))
+              auto-mode-alist))
 
 (dolist
-   (var (car (read-from-string
-              (shell-command-to-string "opam config env --sexp"))))
- (setenv (car var) (cadr var)))
+    (var (car (read-from-string
+               (shell-command-to-string "opam config env --sexp"))))
+  (setenv (car var) (cadr var)))
 (setq exec-path (split-string (getenv "PATH") path-separator))
 (push (concat (getenv "OCAML_TOPLEVEL_PATH")
-	      "/../../share/emacs/site-lisp") load-path)
+              "/../../share/emacs/site-lisp") load-path)
 (autoload 'utop "utop" "Toplevel for OCaml" t)
 (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
 (add-hook 'tuareg-mode-hook 'utop-minor-mode)
