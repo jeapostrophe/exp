@@ -1,5 +1,3 @@
-;;;; Based a lot on https://github.com/avar/dotemacs/blob/726f0b6cd5badce641be6euf690ca82e9dbdcc605/.emacs
-
 (setq ns-use-titled-windows nil)
 
 ;;(add-to-list 'load-path "~/.emacs.d/")
