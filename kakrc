@@ -95,6 +95,7 @@ map global normal <end> gl
 map global insert <s-end> '<esc><s-end>'
 map global normal <home> gh
 map global insert <s-home> '<esc><s-home>'
+map global prompt <c-g> '<esc>'
 
 # XXX alt arrows and S-alt arrows (normal & insert)
 define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move %{
