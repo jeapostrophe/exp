@@ -128,15 +128,15 @@
 (defface je/near '((t (:foreground "#6c71c4"))) "Face for near items")
 (defface je/normal '((t (:foreground "#657b83"))) "Face for normal items")
 (defface je/distant '((t (:foreground "#93a1a1"))) "Face for distant items")
+(set-face-attribute 'mode-line nil
+                    :foreground "#657b83" :background "#eee8d5"
+                    :inverse-video nil)
 (defface mode-line-warn-face
   '((t (:inherit 'mode-line) (:foreground "#dc322f")))
   "Warning")
 (defface mode-line-filename-face
   '((t (:inherit 'mode-line-warn-face) (:weight 'bold)))
   "Filename")
-(set-face-attribute 'mode-line nil
-                    :foreground "#657b83" :background "#eee8d5"
-                    :inverse-video nil)
 
 (setq-default
  mode-line-format
@@ -374,6 +374,7 @@
 (put 'autopair-newline 'delete-selection t)
 
 ;;; Org-mode
+
 (setq org-M-RET-may-split-line '((default . t))
       org-hide-leading-stars t
       org-return-follows-link t
@@ -765,8 +766,9 @@
 (org-defkey org-mode-map (kbd "C-S-<left>")        nil)
 (org-defkey org-mode-map (kbd "C-S-<right>")       nil)
 (org-defkey org-mode-map (kbd "C-S-<up>")          nil)
-(org-defkey org-mode-map (kbd "C-[") 'org-metaleft)
-(org-defkey org-mode-map (kbd "C-]") 'org-metaright)
+
+(org-defkey org-mode-map (kbd "C-M-[") 'org-metaleft)
+(org-defkey org-mode-map (kbd "C-M-]") 'org-metaright)
 (org-defkey org-mode-map (kbd "C-{") 'org-shiftleft)
 (org-defkey org-mode-map (kbd "C-}") 'org-shiftright)
 (org-defkey org-mode-map (kbd "M-<left>") nil)
@@ -775,7 +777,6 @@
 (org-defkey org-mode-map (kbd "M-<tab>")  nil)
 (org-defkey org-mode-map (kbd "<M-S-left>")  nil)
 (org-defkey org-mode-map (kbd "<M-S-right") nil)
-(org-defkey org-mode-map (kbd "M-x") 'helm-M-x)
 (org-defkey org-mode-map (kbd "S-<down>")        nil)
 (org-defkey org-mode-map (kbd "S-<left>")        nil)
 (org-defkey org-mode-map (kbd "S-<right>")       nil)
@@ -862,7 +863,6 @@
 (transient-mark-mode t)
 (iswitchb-mode 1)
 (icomplete-mode 1)
-(desktop-save-mode 1)
 (delete-selection-mode 1)
 (epa-file-enable)
 (fringe-mode 0)
@@ -897,10 +897,9 @@
       org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/brain.org"
       org-agenda-files (list org-directory))
 
-;; Server
+;; Server & Desktop
 (setq server-use-tcp t
       server-host "localhost"
       server-name "lightning")
 (server-start)
-
-
+(desktop-save-mode 1)
