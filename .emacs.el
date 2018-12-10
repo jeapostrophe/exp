@@ -6,33 +6,51 @@
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
+;; Require
+(require 'cl)
+(require 'helm-config)
+(require 'ispell)
+(require 'flyspell)
+(require 'epa-file)
+(require 'uniquify)
+(require 'math-symbol-lists)
+(require 'ibuffer)
+(require 'org)
+(require 'org-faces)
+(require 'org-protocol)
+(require 'midnight)
+(require 'ansi-color)
+(autoload 'calculator "calculator" "Run the Emacs calculator." t)
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+
 ;; Connect to environment
 (setq exec-path (append '("/usr/local/bin") exec-path))
-(require 'cl)
 (cond
  ((eq window-system 'ns)
   (setq shell-command-switch "-lc")))
 
 ;; Editing environment
-(setq
- ;; Don't get weird properties when pasting
- yank-excluded-properties t
- make-backup-files nil
- auto-save-default nil
- require-final-newline t
- locale-coding-system 'utf-8
- file-name-coding-system 'utf-8
- indent-tabs-mode nil
- default-tab-width 4
- tab-width 4
- backward-delete-char-untabify nil)
+(setq yank-excluded-properties t ; Don't get weird properties when pasting
+      make-backup-files nil
+      auto-save-default nil
+      require-final-newline t
+      locale-coding-system 'utf-8
+      file-name-coding-system 'utf-8
+      indent-tabs-mode nil
+      default-tab-width 4
+      tab-width 4
+      backward-delete-char-untabify nil
+      shift-select-mode 1
+      cua-enable-cua-keys nil
+      dabbrev-case-fold-search nil
+      completion-ignore-case t)
 (setq-default indent-tabs-mode nil)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
-
+(normal-erase-is-backspace-mode 1)
 
 ;; Standard tools
 (setq ag-executable "/usr/local/bin/ag")
@@ -47,7 +65,12 @@
       initial-scratch-message nil
       use-dialog-box nil
       line-number-mode t
-      column-number-mode t)
+      column-number-mode t
+      vc-follow-symlinks t
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "open"
+      apropos-do-all t
+      Info-scroll-prefer-subnodes t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (put 'narrow-to-region 'disabled nil)
 (put 'not-modified 'disabled t)
@@ -63,10 +86,15 @@
 (set-face-attribute 'default nil
                     :font "Triplicate T4c"
                     :height 120)
+(setq frame-title-format '(:eval (if (buffer-file-name) (buffer-file-name) "%b")))
+
+(add-to-list 'default-frame-alist '(height . 27))
+(add-to-list 'default-frame-alist '(width . 90))
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 (progn
   ;; Color Theme
-  
+
   ;; Don't change the font for some headings and titles
   (setq solarized-use-variable-pitch nil)
   ;; Don't change size of org-mode headlines (but keep other size-changes)
@@ -84,7 +112,6 @@
 ;; Packages
 
 ;;; Helm
-(require 'helm-config)
 (setq
  ;; open helm buffer inside current window, not occupy whole other window
  helm-split-window-in-side-p           t
@@ -108,40 +135,160 @@
       show-paren-delay 0.0)
 (set-face-background 'show-paren-match-face "lavender")
 
-;; Aliases
-(defalias 'agp 'ag-project)
-(defalias 'mg 'magit-status)
-(defalias 'isb 'ispell-buffer)
-(defalias 'isw 'ispell-word)
-(defalias 'man 'woman)
+;;; ibuffer
+(define-ibuffer-column je/name ()
+  (cond
+   ((buffer-file-name buffer)
+    (buffer-file-name buffer))
+   (t
+    (buffer-name buffer))))
+(setq ibuffer-use-header-line nil
+      directory-abbrev-alist '()
+      ibuffer-formats
+      '((mark modified " "
+              (mode 12 12 :left :elide)
+              " "
+              je/name)))
 
-;; Keys
-(global-set-key (kbd "M-x") 'helm-M-x)
+;;; spelling
+(setq ispell-process-directory (expand-file-name "~/")
+      ispell-program-name "aspell"
+      ispell-list-command "list"
+      ispell-extra-args '("--sug-mode=ultra")
+      flyspell-issue-message-flag nil)
 
-;; Global Modes
-(helm-mode 1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tooltip-mode -1)
-(line-number-mode t)
-(column-number-mode t)
-(global-font-lock-mode t)
-(show-paren-mode t)
-(transient-mark-mode t)
-(iswitchb-mode 1)
-(icomplete-mode 1)
+;;; Auto pair
+(put 'autopair-insert-opening 'delete-selection t)
+(put 'autopair-skip-close-maybe 'delete-selection t)
+(put 'autopair-insert-or-skip-quote 'delete-selection t)
+(put 'autopair-extra-insert-opening 'delete-selection t)
+(put 'autopair-extra-skip-close-maybe 'delete-selection t)
+(put 'autopair-backspace 'delete-selection 'supersede)
+(put 'autopair-newline 'delete-selection t)
 
-;; Who am i?
-(setq user-full-name "Jay McCarthy"
-      user-mail-address "jay.mccarthy@gmail.com"
-      add-log-mailing-address user-mail-address)
+;;; Org mode
+(setq org-M-RET-may-split-line '((default . t))
+      org-hide-leading-stars t
+      org-return-follows-link t
+      org-completion-use-ido t
+      org-log-done t
+      org-clock-modeline-total 'current
+      org-support-shift-select t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-start-on-weekday nil
+      org-agenda-include-diary nil
+      org-agenda-remove-tags t
+      org-agenda-restore-windows-after-quit t
+      org-enforce-todo-dependencies t
+      org-agenda-dim-blocked-tasks t
+      org-agenda-repeating-timestamp-show-all t
+      org-agenda-show-all-dates t
+      org-timeline-show-empty-dates nil
+      org-ctrl-k-protect-subtree t
+      org-use-property-inheritance nil
+      org-agenda-todo-keyword-format ""
+      org-prefix-format-compiled nil
+      org-agenda-use-tag-inheritance nil
+      org-agenda-dim-blocked-tasks nil
+      org-agenda-ignore-drawer-properties '(effort appt category)
+      org-todo-keywords '((sequence "TODO" "DONE")))
+(setq org-agenda-prefix-format
+      '((agenda . " %i %-12:c%?-12t% s")
+        (timeline . "  % s")
+        (todo . "%-12:c")
+        (tags . " %i %-12:c")
+        (search . " %i %-12:c")))
+(setq org-time-clocksum-format
+      '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+;; This ensures that headings are not refile targets if they do not
+;; already have children.
+(defun je/has-children ()
+  (save-excursion
+    (let ((this-level (funcall outline-level)))
+      (outline-next-heading)
+      (let ((child-level (funcall outline-level)))
+        (> child-level this-level)))))
+(setq org-refile-target-verify-function 'je/has-children)
 
-;; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+;;; Custom functions
+(defun je/unfill-paragraph () "Unfill" (interactive)
+       (let ((fill-column (point-max)))
+         (fill-paragraph nil)))
+(defun je/unfill-region (start end) "Unfill" (interactive "r")
+       (let ((fill-column (point-max)))
+         (fill-region start end nil)))
+(defun je/indent-buffer () "Indent the buffer" (interactive)       
+       (save-excursion
+         (delete-trailing-whitespace)
+         (indent-region (point-min) (point-max) nil)
+         (untabify (point-min) (point-max))))
+(defun je/custom-cxcc () "Kill the buffer and the frame" (interactive)
+       (kill-buffer)
+       (delete-frame))
+(defun je/delete-window () "Remove window or frame" (interactive)
+       (save-current-buffer
+         (if (one-window-p 1) (delete-frame) (delete-window))))
+(defun je/org-archive-all () "Archive everything that is done" (interactive)
+  (org-map-entries 'org-archive-subtree "/DONE" 'file))
+(defun je/clear-state-changes () "Clear state changes" (interactive)
+       (let ((regexp "- State \"DONE\""))
+         (let ((buffer-file-name nil)) ;; HACK for `clone-buffer'
+           (with-current-buffer (clone-buffer nil nil)
+             (let ((inhibit-read-only t))
+               (keep-lines regexp)
+               (kill-region (line-beginning-position)
+                            (point-max)))
+             (kill-buffer)))
+         (unless (and buffer-read-only kill-read-only-ok)
+           ;; Delete lines or make the "Buffer is read-only" error.
+           (flush-lines regexp))))
+(defun je/insert-$ (cmd) "Insert result of shell command"
+       (interactive (list (read-shell-command "$ ")))
+       (shell-command cmd t))
+(defun je/save-all () "Save all buffers" (interactive)
+       (desktop-save-in-desktop-dir)
+       (save-some-buffers t))
+(defun je/ibuffer-previous-line () (interactive)
+       (previous-line)
+       (if (<= (line-number-at-pos) 3)
+           (goto-line (count-lines (point-min) (point-max)))))
+(defun je/ibuffer-next-line () (interactive)
+       (next-line)
+       (if (> (line-number-at-pos) (count-lines (point-min) (point-max)))
+           (goto-line 4)))
+(defun je/org-finalize-agenda-hook ()
+  (goto-char (point-min))
+  (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
+  ;; xxx strike through
+  (mapcar (lambda (n) (insert "!" n " ")) je/org-agenda/filter-ctxt-not)
+  (center-line)
+  (remove-text-properties
+   (point-min) (point-max) '(mouse-face t)))
+(defun je/org-meta-return () "org return" (interactive)
+       (newline)
+       (org-meta-return))
+(defun jecolorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (toggle-read-only))
 
-;; Show matching paren, even if off-screen
-(defadvice show-paren-function
-    (after show-matching-paren-offscreen activate)
+;; Advice
+(defadvice kill-ring-save (before slickcopy activate compile)
+  "When called interactively with no active region, copy
+ a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+(defadvice kill-region (before slickcut activate compile)
+  "When called interactively with no active region, kill
+ a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+(defadvice show-paren-function (after show-matching-paren-offscreen activate)
   "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
@@ -159,153 +306,61 @@
             (setq matching-text (blink-matching-open)))
         (if (not (null matching-text))
             (message matching-text)))))
+(defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+           "Open ibuffer with cursor pointed to most recent buffer name"
+           (let ((recent-buffer-name (buffer-name)))
+             ad-do-it
+             (ibuffer-jump-to-buffer recent-buffer-name)))
+(ad-activate 'ibuffer)
 
-;; Make C-h a act as C-u C-h a
-(setq apropos-do-all t)
-
-;; For C-u C-x v d. Probably a good idea for everything else too
-(setq completion-ignore-case t)
-
-;;;; Mode settings
-
-;;;;; compiling
-(setq compilation-scroll-output 'first-error)
-(setq comint-prompt-read-only t)
-
-;; ANSI colors in command interaction and compile:
-(require 'ansi-color)
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
-;; Found these in one place
-;; (setq ansi-color-names-vector
-;;      ["black" "#dc322f" "#859900" "#b58900"
-;;       "#268bd2" "#d33682" "#2aa198" "white"])
-;; (ansi-color-map-update 'ansi-color-names-vector ansi-color-names-vector)
-;; http://emacsworld.blogspot.com/2009/02/setting-term-mode-colours.html
-;; (setq ansi-term-color-vector
-;;      [unspecified "#000000" "#963F3C" "#859900" "#b58900"
-;;                   "#0082FF" "#FF2180" "#57DCDB" "#FFFFFF"])
-
-;;;;; conf-mode
-(add-to-list 'auto-mode-alist '("\\.gitconfig$" . conf-mode))
-
-;;;;; simple.el
-(defadvice kill-ring-save (before slickcopy activate compile)
-  "When called interactively with no active region, copy
- a single line instead."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (line-beginning-position)
-           (line-beginning-position 2)))))
-
-(defadvice kill-region (before slickcut activate compile)
-  "When called interactively with no active region, kill
- a single line instead."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (line-beginning-position)
-           (line-beginning-position 2)))))
-
-;;;;; Comint
-(setq comint-buffer-maximum-size (expt 2 16))
-
-;;;;; Dired
-(setq ls-lisp-format-time-list '("%Y.%m.$d %H:%M:%S" "%Y.%m.$d %H:%M:%S")
-      ls-lisp-use-localized-time-format t)
-(add-hook 'dired-mode-hook
-          '(lambda ()
-             ;; Only open one dired buffer at most
-             (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-             ;; Edit files in dired with "e", which previously did what "RET" did
-             (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
-(setq dired-listing-switches "-alho")
-(setq dired-use-ls-dired nil)
-;; xxx change dired-find-alternate-file
-
-;;;;; emacs-lisp-mode
-
+;; Hooks
+(add-hook 'compilation-filter-hook 'je/colorize-compilation-buffer)
+(add-hook 'racket-mode-hook #'(lambda () (autopair-mode t)))
+(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
+(add-hook 'term-mode-hook #'(lambda () (setq autopair-dont-activate t)))
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode t)
+(add-hook 'org-finalize-agenda-hook 'je/org-finalize-agenda-hook)
+(dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(c++-mode-hook elisp-mode-hook racket-mode-hook))
+  (add-hook hook (lambda () (flyspell-prog-mode 1))))
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode -1))))
 
-;;;;; Info-mode
+;; Aliases
+(defalias 'agp 'ag-project)
+(defalias 'mg 'magit-status)
+(defalias 'isb 'ispell-buffer)
+(defalias 'isw 'ispell-word)
+(defalias 'man 'woman)
 
-;; scroll to subnodes by default
-(setq Info-scroll-prefer-subnodes t)
+;; Local Keys
+(define-key ibuffer-mode-map (kbd "<up>") 'je/ibuffer-previous-line)
+(define-key ibuffer-mode-map (kbd "<down>") 'je/ibuffer-next-line)
 
-;;;;; progmodes
+(org-defkey org-mode-map [(meta return)]  'je/org-meta-return)
+(org-defkey org-mode-map [(meta left)]  nil)
+(org-defkey org-mode-map [(meta right)] nil)
+(org-defkey org-mode-map [(shift meta left)]  nil)
+(org-defkey org-mode-map [(shift meta right)] nil)
+(org-defkey org-mode-map [(shift up)]          nil)
+(org-defkey org-mode-map [(shift down)]        nil)
+(org-defkey org-mode-map [(shift left)]        nil)
+(org-defkey org-mode-map [(shift right)]       nil)
+(org-defkey org-mode-map [(control shift up)]          nil)
+(org-defkey org-mode-map [(control shift down)]        nil)
+(org-defkey org-mode-map [(control shift left)]        nil)
+(org-defkey org-mode-map [(control shift right)]       nil)
+(org-defkey org-mode-map (kbd "M-x") 'helm-M-x)
+(org-defkey org-mode-map [(meta tab)]  nil)
+(org-defkey org-mode-map (kbd "C-[") 'org-metaleft)
+(org-defkey org-mode-map (kbd "C-]") 'org-metaright)
+(org-defkey org-mode-map (kbd "C-{") 'org-shiftleft)
+(org-defkey org-mode-map (kbd "C-}") 'org-shiftright)
 
-;; Settings for progmodes (cperl, c-mode etc.)
-
-(dolist (mode '(c-mode
-                java-mode
-                html-mode-hook
-                css-mode-hook
-                emacs-lisp-mode))
-  (font-lock-add-keywords mode
-                          '(("\\(XXX\\|FIXME\\|TODO\\)"
-                             1 font-lock-warning-face prepend))))
-
-;;;;; vc
-
-;; This could be made portable but I'm not interested in that at the
-;; moment so it's git-only.
-
-(require 'vc)
-(setq vc-follow-symlinks t)
-
-;;;; Packages
-
-;;;;; start server for emacsclient
-(setq server-use-tcp t)
-(setq server-host "localhost")
-(setq server-name "lightning")
-
-;;(defadvice make-network-process (before force-tcp-server-ipv4 activate)
-;;  "Monkey patch the server to force the port"
-;;  (if (string= "lightning" (plist-get (ad-get-args 0) :name))
-;;      (ad-set-args 0 (plist-put (ad-get-args 0) :service 50000))))
-
-(server-start)
-
-;;(require 'edit-server)
-;;(edit-server-start)
-
-;;;;; line numbering
-;;(global-linum-mode 1)
-
-;;(setq linum-disabled-modes-list '(eshell-mode term-mode compilation-mode org-mode))
-;;(defun linum-on ()
-;;  (unless (or (minibufferp) (member major-mode linum-disabled-modes-list))
-;;    (linum-mode 1)))
-
-;;;;; auto-fill
-;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
-
-;;;; multi-term ()
-;; (require 'multi-term)
-;; (setq multi-term-program "/usr/bin/zsh")
-
-;;;;; racket-mode
-;;(require 'racket-mode)
-
-(add-to-list 'auto-mode-alist '("\\.dc$" . racket-mode))
-(add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
-(add-to-list 'auto-mode-alist '("\\.rktl$" . racket-mode))
-(add-to-list 'auto-mode-alist '("\\.scrbl$" . racket-mode))
-(add-to-list 'auto-mode-alist '("\\.rktd$" . racket-mode))
-(add-to-list 'auto-mode-alist '("\\.ss$" . racket-mode))
-(add-to-list 'auto-mode-alist '("\\.scm$" . racket-mode))
-
-;;;; Platform specific settings
-
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "open")
-
-;;;; global-set-key
-
+;; Global Keys
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "<C-SPC>") 'calculator)
 (global-set-key (kbd "C-S-t") 'eval-region)
 (global-set-key (kbd "C-a") 'mark-whole-buffer)
 ;;(global-set-key (kbd "C-q") 'kill-emacs)
@@ -318,81 +373,140 @@
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
 (global-set-key (kbd "C-g") 'top-level)
-
+(global-set-key (kbd "C-S") 'je/save-all)
 (global-unset-key (kbd "s-j"))
 (global-unset-key (kbd "s-S"))
 
 (global-set-key (kbd "C-'") 'next-buffer)
 (global-set-key (kbd "C-;") 'previous-buffer)
 
-(defun je/delete-window ()
-  "Remove window or frame"
-  (interactive)
-  (save-current-buffer
-    (if (one-window-p 1)
-        (delete-frame)
-      (delete-window))))
-(global-set-key (kbd "s-w") 'je/delete-window)
 (global-set-key (kbd "M-w") 'delete-other-windows)
 
 ;; Replace the standard way of looking through buffers
 (global-set-key (kbd "C-x C-b") 'helm-mini)
-(define-key global-map (kbd "C-`") 'helm-mini)
-(define-key global-map (kbd "C-b") 'helm-mini)
-(define-key global-map (kbd "M-`") 'iswitchb-buffer)
-(define-key global-map (kbd "M-<tab>") 'other-window)
+(global-set-key (kbd "C-`") 'helm-mini)
+(global-set-key (kbd "C-b") 'helm-mini)
+(global-set-key (kbd "M-`") 'iswitchb-buffer)
+(global-set-key (kbd "M-<tab>") 'other-window)
 
-;; ibuffer
-(require 'ibuffer)
-(setq ibuffer-use-header-line nil)
-(setq directory-abbrev-alist
-      '())
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
-(setq frame-title-format
-      '(:eval (if (buffer-file-name)
-                  (buffer-file-name)
-                "%b")))
+(global-set-key (kbd "C-c C-i") 'indent-region)
+(global-set-key (kbd "C-c C-c") 'comment-region)
+(global-set-key (kbd "C-c C-v") 'uncomment-region)
+(global-set-key (kbd "C-c q") 'query-replace)
+(global-set-key (kbd "C-c Q") 'query-replace-regexp)
+(global-set-key (kbd "C-c o") 'occur)
+(global-set-key (kbd "C-c d") 'cd)
+(global-set-key (kbd "C-c f") 'find-dired)
+(global-set-key (kbd "C-c g") 'grep)
 
-(define-ibuffer-column je/name ()
-  (cond
-   ((buffer-file-name buffer)
-    (buffer-file-name buffer))
-   (t
-    (buffer-name buffer))))
-(setq ibuffer-formats
-      '((mark modified " "
-              (mode 12 12 :left :elide)
-              " "
-              je/name)))
+(global-set-key (kbd "C-h F") 'find-function-at-point)
 
-(defun ibuffer-previous-line ()
-  (interactive) (previous-line)
-  (if (<= (line-number-at-pos) 3)
-      (goto-line (count-lines (point-min) (point-max)))))
-(defun ibuffer-next-line ()
-  (interactive) (next-line)
-  (if (> (line-number-at-pos) (count-lines (point-min) (point-max)))
-      (goto-line 4)))
-(define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
-(define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
+(global-set-key (kbd "C-r") 'revert-buffer)
+(global-set-key (kbd "M-r") 'replace-string)
 
-;; Switching to ibuffer puts the cursor on the most recent buffer
-(defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-           "Open ibuffer with cursor pointed to most recent buffer name"
-           (let ((recent-buffer-name (buffer-name)))
-             ad-do-it
-             (ibuffer-jump-to-buffer recent-buffer-name)))
-(ad-activate 'ibuffer)
+(global-set-key (kbd "<C-up>") 'beginning-of-buffer)
+(global-set-key (kbd "<C-down>") 'end-of-buffer)
+(global-set-key (kbd "<C-left>") 'move-beginning-of-line)
+(global-set-key (kbd "<C-right>") 'move-end-of-line)
 
-;; Setup some font size changers
-(define-key global-map (kbd "C-=") 'text-scale-increase)
-(define-key global-map (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "M-<left>") 'backward-sexp)
+(global-set-key (kbd "M-<right>") 'forward-sexp)
+
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "s-i") 'je/indent-buffer)
+(global-set-key (kbd "C-x C-c") 'je/custom-cxcc)
+(global-set-key (kbd "s-w") 'je/delete-window)
+(global-set-key (kbd "C-<return>") 'je/run-current-file)
+
+;; Global Modes
+(helm-mode 1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tooltip-mode -1)
+(line-number-mode t)
+(column-number-mode t)
+(global-font-lock-mode t)
+(show-paren-mode t)
+(transient-mark-mode t)
+(iswitchb-mode 1)
+(icomplete-mode 1)
+(desktop-save-mode 1)
+(delete-selection-mode 1)
+(epa-file-enable)
+(fringe-mode 0)
+
+;; Auto modes
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.ml[ily]?$" . tuareg-mode))
+(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.gitconfig$" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.dc$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.rkt$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.rktl$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.scrbl$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.rktd$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.ss$" . racket-mode))
+(add-to-list 'auto-mode-alist '("\\.scm$" . racket-mode))
+
+;; Who am i?
+(setq user-full-name "Jay McCarthy"
+      user-mail-address "jay.mccarthy@gmail.com"
+      add-log-mailing-address user-mail-address)
+
+;; Where are my files?
+(setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/"
+      org-bookmarks-file "~/Dev/scm/github.jeapostrophe/home/etc/bookmarks.org"
+      org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/brain.org"
+      org-agenda-files (list org-directory))
+
+;; Server
+(setq server-use-tcp t
+      server-host "localhost"
+      server-name "lightning")
+(server-start)
+
+;; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+;;;;; compiling
+(setq compilation-scroll-output 'first-error)
+(setq comint-prompt-read-only t)
+
+;;;;; Comint
+(setq comint-buffer-maximum-size (expt 2 16))
+
+;;;;; Dired
+(setq ls-lisp-format-time-list '("%Y.%m.$d %H:%M:%S" "%Y.%m.$d %H:%M:%S")
+      ls-lisp-use-localized-time-format t
+      dired-listing-switches "-alho"
+      dired-use-ls-dired nil)
+(add-hook 'dired-mode-hook
+          '(lambda ()
+             ;; Only open one dired buffer at most
+             (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+             ;; Edit files in dired with "e", which previously did what "RET" did
+             (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
+
+;;;;; progmodes
+
+(dolist (mode '(c-mode
+                java-mode
+                html-mode-hook
+                css-mode-hook
+                emacs-lisp-mode))
+  (font-lock-add-keywords mode
+                          '(("\\(XXX\\|FIXME\\|TODO\\)"
+                             1 font-lock-warning-face prepend))))
 
 ;; DrRacket-like compiler
 (defcustom je/racket-test-p t
   "Whether rkt or rk is run"
   :type 'boolean)
-(defun run-current-file (writep)
+;; XXX Move into normal shell script
+(defun je/run-current-file ()
   "Execute or compile the current file."
   (interactive)
   (let (suffixMap fname suffix progName cmdStr)
@@ -426,128 +540,14 @@
                (file-exists-p (concat default-directory "/Makefile")))
           (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
         (if progName
-            (progn
-              (if (not writep)
-                  (compile (concat "zsh " cmdStr))
-                (let ((multi-term-program-switches
-                       (list "-i" "-c" (concat progName " \"" fname "\""))))
-                  (multi-term-dedicated-open))))
-          (progn
-            (message "No recognized program file suffix for this file.")))))))
-(defun run-current-file-ro ()
-  "Execute or compile the current file."
-  (interactive)
-  (run-current-file nil))
-(defun run-current-file-wr ()
-  "Execute or compile the current file."
-  (interactive)
-  (run-current-file t))
-
-(global-set-key (kbd "<C-return>") 'run-current-file-ro)
-(global-set-key (kbd "<C-M-return>") 'run-current-file-wr)
-
-;; A few editing things
-(progn
-  (global-set-key (kbd "C-c C-i") 'indent-region)
-  (global-set-key (kbd "C-c C-c") 'comment-region)
-  (global-set-key (kbd "C-c C-v") 'uncomment-region)
-  (global-set-key (kbd "C-c q") 'query-replace)
-  (global-set-key (kbd "C-c Q") 'query-replace-regexp)
-  (global-set-key (kbd "C-c o") 'occur)
-  (global-set-key (kbd "C-c d") 'cd)
-  (global-set-key (kbd "C-c f") 'find-dired)
-  (global-set-key (kbd "C-c g") 'grep))
-
-(defun my-indent-buffer ()
-  "Indent the buffer"
-  (interactive)
-
-  (save-excursion
-    (delete-trailing-whitespace)
-    (indent-region (point-min) (point-max) nil)
-    (untabify (point-min) (point-max))))
-
-(global-set-key (kbd "s-i") 'my-indent-buffer)
-
-(progn
-  (global-set-key (kbd "C-h F") 'find-function-at-point))
-
-;; vc.el - add commands to push and pull with git
-(progn
-  (define-key vc-prefix-map "p" 'vc-push-or-pull))
-
-;; turn off the ability to kill
-(defun custom-cxcc ()
-  "Kill the buffer and the frame"
-  (interactive)
-
-  (progn
-    (kill-buffer)
-    (delete-frame)))
-
-(global-set-key (kbd "C-x C-c") 'custom-cxcc)
-
-(global-set-key (kbd "C-r") 'revert-buffer)
-(global-set-key (kbd "M-r") 'replace-string)
-
-(global-set-key (kbd "<C-up>") 'beginning-of-buffer)
-(global-set-key (kbd "<C-down>") 'end-of-buffer)
-(global-set-key (kbd "<C-left>") 'move-beginning-of-line)
-(global-set-key (kbd "<C-right>") 'move-end-of-line)
-
-(global-set-key (kbd "<M-left>") 'backward-sexp)
-(global-set-key (kbd "<M-right>") 'forward-sexp)
-
-(normal-erase-is-backspace-mode 1)
+            (compile (concat "zsh " cmdStr))
+          (message "No recognized program file suffix for this file."))))))
 
 ;; Auto saving
-(defun je/save-all ()
-  "Save all buffers"
-  (interactive)
-  (desktop-save-in-desktop-dir)
-  (save-some-buffers t))
 
 (defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
-(global-set-key (kbd "C-S") 'je/save-all)
 
 ;; Org Mode
-; (setq load-path (cons "~/Dev/local/org-mode/lisp" load-path))
-; (setq load-path (cons "~/Dev/local/org-mode/contrib/lisp" load-path))
-; (add-to-list 'Info-default-directory-list (expand-file-name "~/Dev/local/org-mode/doc"))
-
-(require 'org)
-(require 'org-faces)
-(require 'org-protocol)
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-
-(setq org-directory "~/Dev/scm/github.jeapostrophe/home/etc/")
-(setq org-bookmarks-file "~/Dev/scm/github.jeapostrophe/home/etc/bookmarks.org")
-(setq org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/brain.org")
-(setq org-agenda-files (list org-directory))
-
-(defun je/org-open-bookmarks ()
-  "Open bookmark file"
-  (interactive)
-  (find-file org-bookmarks-file))
-(defun je/org-archive-all ()
-  "Archive everything that is done"
-  (interactive)
-  (org-map-entries 'org-archive-subtree "/DONE" 'file))
-
-(defun je/clear-state-changes ()
-  "Clear state changes"
-  (interactive)
-  (let ((regexp "- State \"DONE\""))
-    (let ((buffer-file-name nil)) ;; HACK for `clone-buffer'
-      (with-current-buffer (clone-buffer nil nil)
-        (let ((inhibit-read-only t))
-          (keep-lines regexp)
-          (kill-region (line-beginning-position)
-                       (point-max)))
-        (kill-buffer)))
-    (unless (and buffer-read-only kill-read-only-ok)
-      ;; Delete lines or make the "Buffer is read-only" error.
-      (flush-lines regexp))))
 
 (global-set-key (kbd "C-t")
                 (lambda ()
@@ -561,101 +561,17 @@
                       ;; and hacky
                       (je/todo-list)))))
 
-(org-defkey org-mode-map [(meta tab)]  nil)
-
-(org-defkey org-mode-map (kbd "C-[") 'org-metaleft)
-(org-defkey org-mode-map (kbd "C-]") 'org-metaright)
-(org-defkey org-mode-map (kbd "C-{") 'org-shiftleft)
-(org-defkey org-mode-map (kbd "C-}") 'org-shiftright)
-
-(defun je/org-meta-return ()
-  (interactive)
-  (newline)
-  (org-meta-return))
-
-(org-defkey org-mode-map [(meta return)]  'je/org-meta-return)
-(setq org-M-RET-may-split-line '((default . t)))
-
-(org-defkey org-mode-map [(meta left)]  nil)
-(org-defkey org-mode-map [(meta right)] nil)
-(org-defkey org-mode-map [(shift meta left)]  nil)
-(org-defkey org-mode-map [(shift meta right)] nil)
-(org-defkey org-mode-map [(shift up)]          nil)
-(org-defkey org-mode-map [(shift down)]        nil)
-(org-defkey org-mode-map [(shift left)]        nil)
-(org-defkey org-mode-map [(shift right)]       nil)
-(org-defkey org-mode-map [(control shift up)]          nil)
-(org-defkey org-mode-map [(control shift down)]        nil)
-(org-defkey org-mode-map [(control shift left)]        nil)
-(org-defkey org-mode-map [(control shift right)]       nil)
-
-(org-defkey org-mode-map (kbd "M-x") 'helm-M-x)
-
-(setq org-hide-leading-stars t)
-(setq org-return-follows-link t)
-(setq org-completion-use-ido t)
-(setq org-log-done t)
-(setq org-clock-modeline-total 'current)
-(setq org-support-shift-select t)
-(setq org-agenda-skip-deadline-if-done t)
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-start-on-weekday nil)
-(setq org-agenda-include-diary nil)
-(setq org-agenda-remove-tags t)
-(setq org-agenda-restore-windows-after-quit t)
-(setq org-enforce-todo-dependencies t)
-(setq org-agenda-dim-blocked-tasks t)
-(setq org-agenda-repeating-timestamp-show-all t)
-(setq org-agenda-show-all-dates t)
-(setq org-timeline-show-empty-dates nil)
-(setq org-ctrl-k-protect-subtree t)
-(setq org-use-property-inheritance nil)
-(setq org-agenda-todo-keyword-format "")
-
-(setq org-agenda-prefix-format
-      '((agenda . " %i %-12:c%?-12t% s")
-        (timeline . "  % s")
-        (todo . "%-12:c")
-        (tags . " %i %-12:c")
-        (search . " %i %-12:c")))
-(setq org-prefix-format-compiled nil)
-
-(setq org-agenda-use-tag-inheritance nil)
-(setq org-agenda-dim-blocked-tasks nil)
-(setq org-agenda-ignore-drawer-properties '(effort appt category))
-
-(setq org-todo-keywords
-      '((sequence "TODO" "DONE")))
-
-(setq org-time-clocksum-format
-      '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-
 (setq org-refile-use-outline-path t)
 (setq org-outline-path-complete-in-steps t)
 (setq org-refile-targets `((nil . (:maxlevel . 20))))
-;; This ensures that headings are not refile targets if they do not
-;; already have children.
-(defun je/has-children ()
-  (save-excursion
-    (let ((this-level (funcall outline-level)))
-      (outline-next-heading)
-      (let ((child-level (funcall outline-level)))
-        (> child-level this-level)))))
-(setq org-refile-target-verify-function 'je/has-children)
+
+
 
 (setq org-agenda-todo-ignore-scheduled 'future)
-;; Doesn't have an effect in todo mode
-;;(setq org-agenda-ndays 365)
 
-;; XXX Make some more for getting %x, %a, and %i
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
-         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")
-        ("u" "URL" entry (file+headline org-default-notes-file "Tasks")
-         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n  %a\n %i")
-        ("b" "Bookmark" entry (file+headline org-bookmarks-file "To Parse")
-         "* %a\n  %i"
-         :immediate-finish t)))
+         "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")))
 
 (global-set-key
  (kbd "<C-f1>")
@@ -677,19 +593,6 @@
 (setq org-agenda-custom-commands
       '(("t" "Todo list" todo "TODO"
          ())))
-
-(defun je/org-finalize-agenda-hook ()
-  (goto-char (point-min))
-  (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
-  ;; xxx strike through
-  (mapcar (lambda (n) (insert "!" n " ")) je/org-agenda/filter-ctxt-not)
-  (center-line)
-
-  (remove-text-properties
-   (point-min) (point-max) '(mouse-face t)))
-
-(add-hook 'org-finalize-agenda-hook
-          'je/org-finalize-agenda-hook)
 
 ;;; These are the default colours from OmniFocus
 (defface je/due
@@ -947,15 +850,11 @@
  mode-line-format
  '((:propertize "%p" face mode-line-folder-face)
    " "
-   ;; Position, including warning for 80 columns
    (:propertize "%4l:" face mode-line-position-face)
    (:eval (propertize "%3c" 'face
                       (if (>= (current-column) 80)
                           'mode-line-80col-face
                         'mode-line-position-face)))
-   ;; emacsclient [default -- keep?]
-   ;;mode-line-client
-   ;; read-only or modified status
    " "
    (:eval
     (cond (buffer-read-only
@@ -964,38 +863,12 @@
            (propertize " ** " 'face 'mode-line-modified-face))
           (t "      ")))
    " "
-   ;; directory and buffer/file name
-   ;;(:propertize (:eval (shorten-directory default-directory 5))
-   ;;             face mode-line-folder-face)
-   (:propertize (:eval (buffer-name))
-                face mode-line-filename-face)
-   ;; narrow [default -- keep?]
-   ;;" %n "
-   ;; mode indicators: vc, recursive edit, major mode, minor modes, process, global
-   ;;(vc-mode vc-mode)
-   "  %["
-   (:propertize mode-name
-                face mode-line-mode-face)
-   "%] "
+   (:propertize (:eval (buffer-name)) face mode-line-filename-face)
+   "  %[" (:propertize mode-name face mode-line-mode-face) "%] "
    (:eval (propertize (format-mode-line minor-mode-alist)
                       'face 'mode-line-minor-mode-face))
-   (:propertize mode-line-process
-                face mode-line-process-face)
+   (:propertize mode-line-process face mode-line-process-face)
    (global-mode-string global-mode-string)))
-
-;; Helper function
-(defun shorten-directory (dir max-length)
-  "Show up to `max-length' characters of a directory name `dir'."
-  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
-        (output ""))
-    (when (and path (equal "" (car path)))
-      (setq path (cdr path)))
-    (while (and path (< (length output) (- max-length 4)))
-      (setq output (concat (car path) "/" output))
-      (setq path (cdr path)))
-    (when path
-      (setq output (concat ".../" output)))
-    output))
 
 ;; Extra mode line faces
 (make-face 'mode-line-read-only-face)
@@ -1083,95 +956,17 @@
                 tags-file-name
                 register-alist)))
 
-(desktop-save-mode 1)
-
-;;;;; shift select
-(setq shift-select-mode 1)
-(delete-selection-mode 1)
-
-;; CUA
-(setq cua-enable-cua-keys nil)
-;; (cua-mode t)                             ;; for rectangles, CUA is nice
-
-;; Auto pair
-(add-hook 'racket-mode-hook #'(lambda () (autopair-mode t)))
-(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
-(add-hook 'term-mode-hook #'(lambda () (setq autopair-dont-activate t)))
-
-(put 'autopair-insert-opening 'delete-selection t)
-(put 'autopair-skip-close-maybe 'delete-selection t)
-(put 'autopair-insert-or-skip-quote 'delete-selection t)
-(put 'autopair-extra-insert-opening 'delete-selection t)
-(put 'autopair-extra-skip-close-maybe 'delete-selection t)
-(put 'autopair-backspace 'delete-selection 'supersede)
-(put 'autopair-newline 'delete-selection t)
-
-;; Rainbow delimiters
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-
-;; dynamic abbreviations
-(setq dabbrev-case-fold-search nil)
-;; XXX make this play nicer with C++
-
 ;; Insert lambda
 (global-set-key (kbd "C-\\")
                 (lambda () (interactive nil) (insert "λ")))
 
-;; iBus
-(when nil
-  (require 'ibus)
-  (setq ibus-python-shell-command-name
-        "python2")
-  (add-hook 'after-init-hook 'ibus-mode-on)
-  (setq ibus-cursor-color
-        '("red" "blue" "limegreen"))
-  (add-hook 'after-make-frame-functions
-            (lambda (nf)
-              (select-frame nf)
-              (or ibus-mode (ibus-mode-on))))
-  (ibus-define-common-key ?\S-\s nil)
-  (global-set-key (kbd "M-s-;") 'ibus-toggle))
-
-;; Eli Calc
-(autoload 'calculator "calculator"
-  "Run the Emacs calculator." t)
-(global-set-key (kbd "<C-SPC>") 'calculator)
-
-;; mark down
-(autoload 'markdown-mode "markdown-mode.el"
-  "Major mode for editing Markdown files" t)
-(setq auto-mode-alist
-      (cons '("\\.md" . markdown-mode) auto-mode-alist))
-
 ;; clean buffer list
-(require 'midnight)
 (add-to-list 'clean-buffer-list-kill-never-buffer-names
              "/usr/share/dict/words")
 (add-to-list 'clean-buffer-list-kill-never-regexps
              "gpg$" "org$")
 
-;; spelling
-(require 'ispell)
-(setq ispell-process-directory (expand-file-name "~/"))
-(setq ispell-program-name "aspell")
-(setq ispell-list-command "list")
-(setq ispell-extra-args '("--sug-mode=ultra"))
-
-(require 'flyspell)
-(setq flyspell-issue-message-flag nil)
-(dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(c++-mode-hook elisp-mode-hook))
-  (add-hook hook (lambda () (flyspell-prog-mode 1))))
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode -1))))
-
-;; transparent encryption/decryption
-(require 'epa-file)
-(epa-file-enable)
-
 ;; buffer names
-(require 'uniquify)
 (setq uniquify-min-dir-content 90
       uniquify-buffer-name-style 'forward)
 
@@ -1179,7 +974,6 @@
 (load-file "~/.emacs.d/scheme-indent.el")
 
 ;; Set up input method
-(require 'math-symbol-lists)
 (quail-define-package "je/math" "UTF-8" "Ω" t)
 (quail-define-rules ; whatever extra rules you want to define...
  ("\\from"    #X2190)
@@ -1206,15 +1000,6 @@
       (function (lambda ()
                   (isearch-toggle-case-fold)
                   (isearch-toggle-case-fold))))
-
-(defun je/insert-$ (cmd)
-  (interactive (list (read-shell-command "$ ")))
-  (progn
-    (shell-command cmd t)))
-
-(add-to-list 'default-frame-alist '(height . 27))
-(add-to-list 'default-frame-alist '(width . 90))
-(add-to-list 'default-frame-alist '(undecorated . t))
 
 ;; customs
 (custom-set-variables
@@ -1247,61 +1032,6 @@
  '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
  '(racket-paren-face ((t (:foreground "#93a1a1"))))
  '(racket-selfeval-face ((t (:foreground "#859900")))))
-
-(defun unfill-paragraph ()
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
-
-(defun unfill-region (start end)
-  (interactive "r")
-  (let ((fill-column (point-max)))
-    (fill-region start end nil)))
-
-(fringe-mode 0)
-
-;; table stuff
-(setq table-cell-horizontal-chars "═")
-(setq table-cell-vertical-char ?║)
-(setq table-cell-intersection-char ?╬)
-
-(setq table-cell-horizontal-chars "-")
-(setq table-cell-vertical-char ?|)
-(setq table-cell-intersection-char ?+)
-
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-;; ocaml
-(require 'tuareg)
-(setq auto-mode-alist
-      (append '(("\\.ml[ily]?$" . tuareg-mode))
-              auto-mode-alist))
-
-(dolist
-    (var (car (read-from-string
-               (shell-command-to-string "opam config env --sexp"))))
-  (setenv (car var) (cadr var)))
-(setq exec-path (split-string (getenv "PATH") path-separator))
-(push (concat (getenv "OCAML_TOPLEVEL_PATH")
-              "/../../share/emacs/site-lisp") load-path)
-(autoload 'utop "utop" "Toplevel for OCaml" t)
-(autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
-(add-hook 'tuareg-mode-hook 'utop-minor-mode)
-
-(setq opam-share (substring (shell-command-to-string "opam config var share") 0 -1))
-(add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))
-(require 'merlin)
-
-(add-hook 'tuareg-mode-hook 'merlin-mode)
-
-(define-key merlin-mode-map
-  (kbd "C-c <up>") 'merlin-type-enclosing-go-up)
-(define-key merlin-mode-map
-  (kbd "C-c <down>") 'merlin-type-enclosing-go-down)
-(set-face-background 'merlin-type-face "#88FF44")
-
-(require 'auto-complete)
-(add-hook 'tuareg-mode-hook 'auto-complete-mode)
 
 ;; proof general
 (setq proof-assistants '(coq))
@@ -1343,8 +1073,8 @@
 (global-set-key (kbd "M-s-≥") 'je/proof-forward)
 (global-set-key (kbd "M-s-…") 'proof-prf)
 
-(setq proof-shell-process-connection-type nil)
+(setq proof-shell-process-connection-type nil
+      proof-three-window-mode-policy 'hybrid)
 
-(setq proof-three-window-mode-policy 'hybrid)
 (if nil
     (proof-display-three-b 'hybrid))
