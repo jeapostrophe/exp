@@ -1,125 +1,143 @@
-;; XXX
-
-(setq ns-use-titled-windows nil)
-
-;;(add-to-list 'load-path "~/.emacs.d/")
+;; Emacs internals
 (byte-recompile-directory "~/.emacs.d/")
-
-(setq exec-path (append '("/usr/local/bin") exec-path))
 
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
+;; Connect to environment
+(setq exec-path (append '("/usr/local/bin") exec-path))
 (require 'cl)
 (cond
- ((eq window-system 'ns) (setq shell-command-switch "-lc")))
+ ((eq window-system 'ns)
+  (setq shell-command-switch "-lc")))
 
-;; font & color
+;; Editing environment
+(setq
+ ;; Don't get weird properties when pasting
+ yank-excluded-properties t
+ make-backup-files nil
+ auto-save-default nil
+ require-final-newline t
+ locale-coding-system 'utf-8
+ file-name-coding-system 'utf-8
+ indent-tabs-mode nil
+ default-tab-width 4
+ tab-width 4
+ backward-delete-char-untabify nil)
+(setq-default indent-tabs-mode nil)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+
+
+;; Standard tools
+(setq ag-executable "/usr/local/bin/ag")
+(setq ag-highlight-search nil)
+
+;; UI
+(setq confirm-kill-emacs 'yes-or-no-p
+      initial-buffer-choice "~/.emacs.el"
+      ring-bell-function 'ignore
+      visible-bell t
+      inhibit-startup-message t
+      initial-scratch-message nil
+      use-dialog-box nil
+      line-number-mode t
+      column-number-mode t)
+(fset 'yes-or-no-p 'y-or-n-p)
+(put 'narrow-to-region 'disabled nil)
+(put 'not-modified 'disabled t)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'erase-buffer 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
+(defun display-startup-echo-area-message () (message ""))
+
+;; Style
+(setq ns-use-titled-windows nil
+      ns-pop-up-frames t)
 (set-face-attribute 'default nil
                     :font "Triplicate T4c"
                     :height 120)
 
-;; Theme
+(progn
+  ;; Color Theme
+  
+  ;; Don't change the font for some headings and titles
+  (setq solarized-use-variable-pitch nil)
+  ;; Don't change size of org-mode headlines (but keep other size-changes)
+  (setq solarized-scale-org-headlines nil)
 
-;; Don't change the font for some headings and titles
-(setq solarized-use-variable-pitch nil)
-;; Don't change size of org-mode headlines (but keep other size-changes)
-(setq solarized-scale-org-headlines nil)
+  ;; Avoid all font-size changes
+  (setq solarized-height-minus-1 1)
+  (setq solarized-height-plus-1 1)
+  (setq solarized-height-plus-2 1)
+  (setq solarized-height-plus-3 1)
+  (setq solarized-height-plus-4 1)
 
-;; Avoid all font-size changes
-(setq solarized-height-minus-1 1)
-(setq solarized-height-plus-1 1)
-(setq solarized-height-plus-2 1)
-(setq solarized-height-plus-3 1)
-(setq solarized-height-plus-4 1)
+  (load-theme 'solarized-light t))
 
-(load-theme 'solarized-light t)
+;; Packages
 
-;; ag
-(setq ag-executable "/usr/local/bin/ag")
-(setq ag-highlight-search nil)
+;;; Helm
+(require 'helm-config)
+(setq
+ ;; open helm buffer inside current window, not occupy whole other window
+ helm-split-window-in-side-p           t
+ ;; move to end or beginning of source when reaching top or bottom of source.
+ helm-move-to-line-cycle-in-source     t
+ ;; search for library in `require' and `declare-function' sexp.
+ helm-ff-search-library-in-sexp        t
+ ;; scroll 8 lines other window using M-<next>/M-<prior>
+ helm-scroll-amount                    8
+ helm-ff-file-name-history-use-recentf t
+ helm-echo-input-in-header-line t
+ helm-autoresize-max-height 0
+ helm-autoresize-min-height 50
+ helm-M-x-fuzzy-match t
+ helm-buffers-fuzzy-matching t
+ helm-recentf-fuzzy-match    t
+ helm-buffer-max-length nil)
 
+;;; Show parens
+(setq show-paren-style 'expression
+      show-paren-delay 0.0)
+(set-face-background 'show-paren-match-face "lavender")
+
+;; Aliases
 (defalias 'agp 'ag-project)
 (defalias 'mg 'magit-status)
 (defalias 'isb 'ispell-buffer)
 (defalias 'isw 'ispell-word)
+(defalias 'man 'woman)
 
-;; Helm
-(require 'helm-config)
-
-(when (executable-find "curl")
-  (setq helm-google-suggest-use-curl-p t))
-(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-      helm-ff-file-name-history-use-recentf t
-      helm-echo-input-in-header-line t)
-(setq helm-autoresize-max-height 0)
-(setq helm-autoresize-min-height 50)
-(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
-(setq helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match    t)
-(setq helm-buffer-max-length nil)
-;; (helm-autoresize-mode 1)
-
+;; Keys
 (global-set-key (kbd "M-x") 'helm-M-x)
 
+;; Global Modes
 (helm-mode 1)
-
-(setq ns-pop-up-frames t)
-(setq confirm-kill-emacs 'yes-or-no-p)
-
-(setq initial-buffer-choice "~/.emacs.el")
-
-;; Don't get weird properties when pasting
-(setq yank-excluded-properties t)
-
-;; Kill menu, tool and scrollbars with fire!
-(when t
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (when (fboundp 'scroll-bar-mode)
-    (scroll-bar-mode -1)))
-
-;; Bell
-(setq ring-bell-function 'ignore)
-(setq visible-bell t)
-
-;; Don't ever use graphic dialog boxes
-(setq use-dialog-box nil)
-
-;; Don't open new annoying windows under X, use the echo area
-(when (fboundp 'tooltip-mode)
-  (tooltip-mode -1))
-
-;; Don't display the 'Welcome to GNU Emacs' buffer on startup
-(setq inhibit-startup-message t)
-
-;; Display this instead of "For information about GNU Emacs and the
-;; GNU system, type C-h C-a.". This has been made intentionally hard
-;; to customize in GNU Emacs so I have to resort to hackery.
-(defun display-startup-echo-area-message ()
-  (message ""))
-
-;; Don't insert instructions in the *scratch* buffer
-(setq initial-scratch-message nil)
-
-;; Display the line and column number in the modeline
-(setq line-number-mode t)
-(setq column-number-mode t)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tooltip-mode -1)
 (line-number-mode t)
 (column-number-mode t)
-
-;; syntax highlight everywhere
 (global-font-lock-mode t)
-
-;; Show matching parens
 (show-paren-mode t)
-(setq show-paren-style 'expression)
-(setq show-paren-delay 0.0)
+(transient-mark-mode t)
+(iswitchb-mode 1)
+(icomplete-mode 1)
+
+;; Who am i?
+(setq user-full-name "Jay McCarthy"
+      user-mail-address "jay.mccarthy@gmail.com"
+      add-log-mailing-address user-mail-address)
+
+;; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 ;; Show matching paren, even if off-screen
 (defadvice show-paren-function
@@ -142,69 +160,11 @@
         (if (not (null matching-text))
             (message matching-text)))))
 
-(set-face-background 'show-paren-match-face "lavender")
-
-;; Highlight selection
-(transient-mark-mode t)
-
-;; make all "yes or no" prompts show "y or n" instead
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; Switching
-(iswitchb-mode 1)
-(icomplete-mode 1)
-
-;; Smash the training wheels
-(put 'narrow-to-region 'disabled nil)
-(put 'not-modified 'disabled t)
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'erase-buffer 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)
-
-;; I use version control, don't annoy me with backup files everywhere
-(setq make-backup-files nil)
-(setq auto-save-default nil)
-
 ;; Make C-h a act as C-u C-h a
 (setq apropos-do-all t)
 
 ;; For C-u C-x v d. Probably a good idea for everything else too
 (setq completion-ignore-case t)
-
-;; Ask me whether to add a final newline to files which don't have one
-(setq require-final-newline t)
-
-;;;; User info
-(setq user-full-name "Jay McCarthy")
-(setq user-mail-address "jay.mccarthy@gmail.com")
-
-;;; Used in ChangeLog entries
-(setq add-log-mailing-address user-mail-address)
-
-;;;; Encoding
-
-;; I use UTF-8 for everything on my systems, some of the below might
-;; be redundant.
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(setq file-name-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-
-;;;; Indenting
-
-;; Use spaces, not tabs
-(setq indent-tabs-mode nil)
-(setq-default indent-tabs-mode nil)
-
-;; Use 4 spaces
-(setq default-tab-width 4)
-(setq tab-width 4)
-
-(setq backward-delete-char-untabify nil)
 
 ;;;; Mode settings
 
@@ -270,16 +230,6 @@
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode t)
 
-;;;;; eshell-mode
-
-;; Don't display the "Welcome to the Emacs shell" banner
-(defun eshell-banner-message "")
-
-;;;;; gdb
-
-;; Turn off the new emacs 22 UI
-(setq gdb-many-windows nil)
-
 ;;;;; Info-mode
 
 ;; scroll to subnodes by default
@@ -298,46 +248,13 @@
                           '(("\\(XXX\\|FIXME\\|TODO\\)"
                              1 font-lock-warning-face prepend))))
 
-;;;;; shell-mode
-
-(add-hook
- 'shell-mode-hook
- 'ansi-color-for-comint-mode-on)
-
-;;;;; Tramp
-(require 'tramp)
-(setq tramp-default-method "ssh")
-
 ;;;;; vc
 
 ;; This could be made portable but I'm not interested in that at the
 ;; moment so it's git-only.
 
 (require 'vc)
-(defun vc-push-or-pull ()
-  "`vc-push' if given an argument, otherwise `vc-pull'"
-  (interactive)
-  (if current-prefix-arg
-      (vc-push)
-    (vc-pull)))
-
-(defun vc-push ()
-  "Run git-push on the current repository, does a dry-run unless
-given a prefix arg."
-  (interactive)
-  (shell-command "git push"))
-
-(defun vc-pull ()
-  "Run git-pull on the current repository."
-  (interactive)
-  (shell-command "git up"))
-
 (setq vc-follow-symlinks t)
-
-;;;;; woman
-
-;; Use woman instead of man
-(defalias 'man 'woman)
 
 ;;;; Packages
 

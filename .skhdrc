@@ -1,7 +1,7 @@
 # XXX Read https://github.com/koekeishiya/skhd/blob/master/examples/skhdrc
 
 alt - space : /Users/jay/.jwm/bin/new-termw
-cmd + ctrl - return : /Users/jay/.jwm/bin/new-termw
+cmd + ctrl - return : /Users/jay/.jwm/bin/new-termw ~/.jwm/bin/term
 
 # XXX Messes with Safari and closing tabs
 #cmd - w : chunkc tiling::window --close
