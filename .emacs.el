@@ -1,5 +1,5 @@
 ;; Emacs internals
-(byte-recompile-directory "~/.emacs.d/")
+;; (byte-recompile-directory "~/.emacs.d/")
 
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -19,9 +19,11 @@
 (require 'org-faces)
 (require 'org-protocol)
 (require 'midnight)
+(require 'paren)
 (require 'ansi-color)
 (autoload 'calculator "calculator" "Run the Emacs calculator." t)
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+;; XXX proof-general
 
 ;; Connect to environment
 (setq exec-path (append '("/usr/local/bin") exec-path))
@@ -89,9 +91,6 @@
                     :font "Triplicate T4c"
                     :height 120)
 (setq frame-title-format '(:eval (if (buffer-file-name) (buffer-file-name) "%b")))
-
-(add-to-list 'default-frame-alist '(height . 27))
-(add-to-list 'default-frame-alist '(width . 90))
 (add-to-list 'default-frame-alist '(undecorated . t))
 
 (progn
@@ -111,25 +110,209 @@
 
   (load-theme 'solarized-light t))
 
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(fringe ((((class color) (background "#fdf6e3")) nil)))
+ '(org-column ((t (:background "#fdf6e3" :foreground "#657b83"))))
+ '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
+ '(racket-paren-face ((t (:foreground "#93a1a1"))))
+ '(racket-selfeval-face ((t (:foreground "#859900")))))
+
 ;;; These are the default colours from OmniFocus
-(defface je/due (org-compatible-face 'default '((t (:foreground "#dc322f"))))
-  "Face for due items"
-  :group 'org-faces)
-(defface je/today (org-compatible-face 'default '((t (:foreground "#cb4b16"))))
-  "Face for today items"
-  :group 'org-faces)
-(defface je/soon (org-compatible-face 'default '((t (:foreground "#859900"))))
-  "Face for soon items"
-  :group 'org-faces)
-(defface je/near (org-compatible-face 'default '((t (:foreground "#6c71c4"))))
-  "Face for near items"
-  :group 'org-faces)
-(defface je/normal (org-compatible-face 'default '((t (:foreground "#657b83"))))
-  "Face for normal items"
-  :group 'org-faces)
-(defface je/distant (org-compatible-face 'default '((t (:foreground "#93a1a1"))))
-  "Face for distant items"
-  :group 'org-faces)
+(defface je/due '((t (:foreground "#dc322f"))) "Face for due items")
+(defface je/today '((t (:foreground "#cb4b16"))) "Face for today items")
+(defface je/soon '((t (:foreground "#859900"))) "Face for soon items")
+(defface je/near '((t (:foreground "#6c71c4"))) "Face for near items")
+(defface je/normal '((t (:foreground "#657b83"))) "Face for normal items")
+(defface je/distant '((t (:foreground "#93a1a1"))) "Face for distant items")
+(defface mode-line-warn-face
+  '((t (:inherit 'mode-line) (:foreground "#dc322f")))
+  "Warning")
+(defface mode-line-filename-face
+  '((t (:inherit 'mode-line-warn-face) (:weight 'bold)))
+  "Filename")
+(set-face-attribute 'mode-line nil
+                    :foreground "#657b83" :background "#eee8d5"
+                    :inverse-video nil)
+
+(setq-default
+ mode-line-format
+ '((:propertize "%p" face mode-line)
+   " "
+   (:propertize "%4l:" face mode-line)
+   (:eval (propertize "%3c" 'face
+                      (if (>= (current-column) 80)
+                          'mode-line-warn-face
+                        'mode-line)))
+   " "
+   (:eval
+    (cond (buffer-read-only
+           (propertize " RO " 'face 'mode-line-warn-face))
+          ((buffer-modified-p)
+           (propertize " ** " 'face 'mode-line-warn-face))
+          (t "      ")))
+   " "
+   (:propertize (:eval (buffer-name)) face mode-line-filename-face)
+   "  %[" (:propertize mode-name face mode-line) "%] "
+   (:eval (propertize (format-mode-line minor-mode-alist)
+                      'face 'mode-line))
+   (:propertize mode-line-process face mode-line-warn-face)
+   (global-mode-string global-mode-string)))
+
+;; Custom functions
+(defun je/andmap (f l)
+  (cond
+   (l
+    (and (funcall f (car l))
+         (je/andmap f (cdr l))))
+   (t t)))
+(defun je/ormap (f l)
+  (cond
+   (l
+    (or (funcall f (car l))
+        (je/ormap f (cdr l))))
+   (t nil)))
+(defun member/eq (o l)
+  (or (equal o l)
+      (member o l)))
+(defun je/filter-out (l o)
+  (cond
+   (l
+    (cond
+     ((equal (car l) o)
+      (je/filter-out (cdr l) o))
+     (t
+      (cons (car l) (je/filter-out (cdr l) o)))))
+   (t l)))
+(defun je/insert-lambda () (interactive nil) (insert "λ"))
+(defun je/org-capture () (interactive)
+       (org-capture nil "t"))
+(defun je/org-todo () (interactive)
+       (if (eq major-mode 'org-mode)
+           (org-todo)
+         (progn
+           (org-agenda-todo)
+           ;; XXX I added this because sometimes it would
+           ;; check the same one twice, but this feels slow
+           ;; and hacky
+           (je/todo-list))))
+(defun je/unfill-paragraph () "Unfill" (interactive)
+       (let ((fill-column (point-max)))
+         (fill-paragraph nil)))
+(defun je/unfill-region (start end) "Unfill" (interactive "r")
+       (let ((fill-column (point-max)))
+         (fill-region start end nil)))
+(defun je/indent-buffer () "Indent the buffer" (interactive)       
+       (save-excursion
+         (delete-trailing-whitespace)
+         (indent-region (point-min) (point-max) nil)
+         (untabify (point-min) (point-max))))
+(defun je/custom-cxcc () "Kill the buffer and the frame" (interactive)
+       (kill-buffer)
+       (delete-frame))
+(defun je/delete-window () "Remove window or frame" (interactive)
+       (save-current-buffer
+         (if (one-window-p 1) (delete-frame) (delete-window))))
+(defun je/org-archive-all () "Archive everything that is done" (interactive)
+  (org-map-entries 'org-archive-subtree "/DONE" 'file))
+(defun je/clear-state-changes () "Clear state changes" (interactive)
+       (let ((regexp "- State \"DONE\""))
+         (let ((buffer-file-name nil)) ;; HACK for `clone-buffer'
+           (with-current-buffer (clone-buffer nil nil)
+             (let ((inhibit-read-only t))
+               (keep-lines regexp)
+               (kill-region (line-beginning-position)
+                            (point-max)))
+             (kill-buffer)))
+         (unless (and buffer-read-only kill-read-only-ok)
+           ;; Delete lines or make the "Buffer is read-only" error.
+           (flush-lines regexp))))
+(defun je/insert-$ (cmd) "Insert result of shell command"
+       (interactive (list (read-shell-command "$ ")))
+       (shell-command cmd t))
+(defun je/save-all () "Save all buffers" (interactive)
+       (desktop-save-in-desktop-dir)
+       (save-some-buffers t))
+(defun je/ibuffer-previous-line () (interactive)
+       (previous-line)
+       (if (<= (line-number-at-pos) 3)
+           (goto-line (count-lines (point-min) (point-max)))))
+(defun je/ibuffer-next-line () (interactive)
+       (next-line)
+       (if (> (line-number-at-pos) (count-lines (point-min) (point-max)))
+           (goto-line 4)))
+(defun je/org-finalize-agenda-hook ()
+  (goto-char (point-min))
+  (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
+  ;; xxx strike through
+  (mapcar (lambda (n) (insert "!" n " ")) je/org-agenda/filter-ctxt-not)
+  (center-line)
+  (remove-text-properties
+   (point-min) (point-max) '(mouse-face t)))
+(defun je/org-meta-return () "org return" (interactive)
+       (newline)
+       (org-meta-return))
+(defun je/colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (toggle-read-only))
+(defun je/proof-back () (interactive)
+       (proof-undo-last-successful-command)
+       (je/proof-post))
+(defun je/proof-forward () (interactive)
+       (proof-assert-next-command-interactive)
+       (je/proof-post))
+(defun je/proof-here () (interactive)
+       (proof-goto-point))
+(defun je/proof-post () (interactive)
+       (proof-shell-wait)
+       (cond
+        ((pg-response-has-error-location)
+         (proof-next-error))
+        (t
+         (proof-prf))))
+
+(defcustom je/racket-test-p t "Whether rkt or rk is run" :type 'boolean)
+;; XXX Move into normal shell script
+(defun je/run-current-file ()
+  "Execute or compile the current file."
+  (interactive)
+  (let (suffixMap fname suffix progName cmdStr)
+    ;; a keyed list of file suffix to comand-line program path/name
+    (setq suffixMap
+          `(("java" . "javai")
+            ("ll" . "llvmi")
+            ("c" . "cci")
+            ("sh" . "zsh")
+            ("py" . "python")
+            ("cc" . "ccci")
+            ("glsl" . "glslangValidator")
+            ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
+            ("ss" . ,(if je/racket-test-p "rkt" "rk"))
+            ("dc" . ,(if je/racket-test-p "rkt" "rk"))
+            ("scrbl" . ,(if je/racket-test-p "rkt" "rk"))
+            ("txt" . "ctxt")
+            ("dot" . "dot -Tpdf -O")
+            ("tex" . "pdflatex")))
+
+    (save-buffer)
+
+    (setq fname (buffer-file-name))
+    (setq suffix (file-name-extension fname))
+    (setq progName (cdr (assoc suffix suffixMap)))
+    (setq cmdStr (concat "-i -c \'" progName " \""   fname "\"\'"))
+
+    (if (string-equal suffix "el") ; special case for emacs lisp
+        (load-file fname)
+      (if (and (not (string-equal suffix "ss"))
+               (file-exists-p (concat default-directory "/Makefile")))
+          (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
+        (if progName
+            (compile (concat "zsh " cmdStr))
+          (message "No recognized program file suffix for this file."))))))
 
 ;; Packages
 
@@ -155,7 +338,7 @@
 ;;; Show parens
 (setq show-paren-style 'expression
       show-paren-delay 0.0)
-(set-face-background 'show-paren-match-face "lavender")
+(set-face-background 'show-paren-match "lavender")
 
 ;;; ibuffer
 (define-ibuffer-column je/name ()
@@ -225,8 +408,7 @@
       org-agenda-overriding-header ""
       org-agenda-columns-show-summaries nil
       org-agenda-columns-compute-summary-properties nil
-      org-todo-keywords '((sequence "TODO" "DONE"))
-      org-agenda-before-sorting-filter-function nil)
+      org-todo-keywords '((sequence "TODO" "DONE")))
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
          "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")))
@@ -438,12 +620,24 @@
       dired-use-ls-dired nil)
 
 ;;; racket mode
+(load-file "~/.emacs.d/scheme-indent.el")
 (setq racket-mode-pretty-lambda t
       racket-mode-rackjure-indent nil
       racket-use-company-mode nil)
 
+;;; proof general
+(setq proof-shell-process-connection-type nil
+      proof-assistants '(coq)
+      proof-three-window-mode-policy 'hybrid)
+(if nil
+    (proof-display-three-b 'hybrid))
+
 ;;; Regularly save
 (defvar je/save-timer (run-with-idle-timer 30 t 'je/save-all))
+
+;;; midnight
+(add-to-list 'clean-buffer-list-kill-never-buffer-names "/usr/share/dict/words")
+(add-to-list 'clean-buffer-list-kill-never-regexps "gpg$" "org$")
 
 ;;; Desktop
 (setq desktop-save 'if-exists
@@ -467,142 +661,24 @@
 (setq uniquify-min-dir-content 90
       uniquify-buffer-name-style 'forward)
 
-;; Custom functions
-(defun je/andmap (f l)
-  (cond
-   (l
-    (and (funcall f (car l))
-         (je/andmap f (cdr l))))
-   (t t)))
-(defun je/ormap (f l)
-  (cond
-   (l
-    (or (funcall f (car l))
-        (je/ormap f (cdr l))))
-   (t nil)))
-(defun member/eq (o l)
-  (or (equal o l)
-      (member o l)))
-(defun je/filter-out (l o)
-  (cond
-   (l
-    (cond
-     ((equal (car l) o)
-      (je/filter-out (cdr l) o))
-     (t
-      (cons (car l) (je/filter-out (cdr l) o)))))
-   (t l)))
-(defun je/insert-lambda () (interactive nil) (insert "λ"))
-(defun je/org-capture () (interactive)
-       (org-capture nil "t"))
-(defun je/org-todo () (interactive)
-       (if (eq major-mode 'org-mode)
-           (org-todo)
-         (progn
-           (org-agenda-todo)
-           ;; XXX I added this because sometimes it would
-           ;; check the same one twice, but this feels slow
-           ;; and hacky
-           (je/todo-list))))
-(defun je/unfill-paragraph () "Unfill" (interactive)
-       (let ((fill-column (point-max)))
-         (fill-paragraph nil)))
-(defun je/unfill-region (start end) "Unfill" (interactive "r")
-       (let ((fill-column (point-max)))
-         (fill-region start end nil)))
-(defun je/indent-buffer () "Indent the buffer" (interactive)       
-       (save-excursion
-         (delete-trailing-whitespace)
-         (indent-region (point-min) (point-max) nil)
-         (untabify (point-min) (point-max))))
-(defun je/custom-cxcc () "Kill the buffer and the frame" (interactive)
-       (kill-buffer)
-       (delete-frame))
-(defun je/delete-window () "Remove window or frame" (interactive)
-       (save-current-buffer
-         (if (one-window-p 1) (delete-frame) (delete-window))))
-(defun je/org-archive-all () "Archive everything that is done" (interactive)
-  (org-map-entries 'org-archive-subtree "/DONE" 'file))
-(defun je/clear-state-changes () "Clear state changes" (interactive)
-       (let ((regexp "- State \"DONE\""))
-         (let ((buffer-file-name nil)) ;; HACK for `clone-buffer'
-           (with-current-buffer (clone-buffer nil nil)
-             (let ((inhibit-read-only t))
-               (keep-lines regexp)
-               (kill-region (line-beginning-position)
-                            (point-max)))
-             (kill-buffer)))
-         (unless (and buffer-read-only kill-read-only-ok)
-           ;; Delete lines or make the "Buffer is read-only" error.
-           (flush-lines regexp))))
-(defun je/insert-$ (cmd) "Insert result of shell command"
-       (interactive (list (read-shell-command "$ ")))
-       (shell-command cmd t))
-(defun je/save-all () "Save all buffers" (interactive)
-       (desktop-save-in-desktop-dir)
-       (save-some-buffers t))
-(defun je/ibuffer-previous-line () (interactive)
-       (previous-line)
-       (if (<= (line-number-at-pos) 3)
-           (goto-line (count-lines (point-min) (point-max)))))
-(defun je/ibuffer-next-line () (interactive)
-       (next-line)
-       (if (> (line-number-at-pos) (count-lines (point-min) (point-max)))
-           (goto-line 4)))
-(defun je/org-finalize-agenda-hook ()
-  (goto-char (point-min))
-  (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
-  ;; xxx strike through
-  (mapcar (lambda (n) (insert "!" n " ")) je/org-agenda/filter-ctxt-not)
-  (center-line)
-  (remove-text-properties
-   (point-min) (point-max) '(mouse-face t)))
-(defun je/org-meta-return () "org return" (interactive)
-       (newline)
-       (org-meta-return))
-(defun je/colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (toggle-read-only))
-
-(defcustom je/racket-test-p t "Whether rkt or rk is run" :type 'boolean)
-;; XXX Move into normal shell script
-(defun je/run-current-file ()
-  "Execute or compile the current file."
-  (interactive)
-  (let (suffixMap fname suffix progName cmdStr)
-    ;; a keyed list of file suffix to comand-line program path/name
-    (setq suffixMap
-          `(("java" . "javai")
-            ("ll" . "llvmi")
-            ("c" . "cci")
-            ("sh" . "zsh")
-            ("py" . "python")
-            ("cc" . "ccci")
-            ("glsl" . "glslangValidator")
-            ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
-            ("ss" . ,(if je/racket-test-p "rkt" "rk"))
-            ("dc" . ,(if je/racket-test-p "rkt" "rk"))
-            ("scrbl" . ,(if je/racket-test-p "rkt" "rk"))
-            ("txt" . "ctxt")
-            ("dot" . "dot -Tpdf -O")
-            ("tex" . "pdflatex")))
-
-    (save-buffer)
-
-    (setq fname (buffer-file-name))
-    (setq suffix (file-name-extension fname))
-    (setq progName (cdr (assoc suffix suffixMap)))
-    (setq cmdStr (concat "-i -c \'" progName " \""   fname "\"\'"))
-
-    (if (string-equal suffix "el") ; special case for emacs lisp
-        (load-file fname)
-      (if (and (not (string-equal suffix "ss"))
-               (file-exists-p (concat default-directory "/Makefile")))
-          (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
-        (if progName
-            (compile (concat "zsh " cmdStr))
-          (message "No recognized program file suffix for this file."))))))
+;;; Input method
+(quail-define-package "je/math" "UTF-8" "Ω" t)
+(quail-define-rules ; whatever extra rules you want to define...
+ ("\\from"    #X2190)
+ ("\\to"      #X2192)
+ ("\\lhd"     #X22B2)
+ ("\\rhd"     #X22B3)
+ ("\\unlhd"   #X22B4)
+ ("\\defs"    "≙")
+ ("\\skull"   "☠")
+ ("\\larr"   "←")
+ ("\\rarr"   "→")
+ ("\\unrhd"   #X22B5))
+(mapc (lambda (x)
+        (if (cddr x)
+            (quail-defrule (cadr x) (car (cddr x)))))
+      (append math-symbol-list-basic math-symbol-list-extended))
+(set-input-method "je/math")
 
 ;; Advice
 (defadvice kill-ring-save (before slickcopy activate compile)
@@ -666,6 +742,14 @@
              ;; Edit files in dired with "e", which previously did what "RET" did
              (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
 
+;; Custom variables
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right. 
+ )
+
 ;; Aliases
 (defalias 'agp 'ag-project)
 (defalias 'mg 'magit-status)
@@ -677,96 +761,93 @@
 (define-key ibuffer-mode-map (kbd "<up>") 'je/ibuffer-previous-line)
 (define-key ibuffer-mode-map (kbd "<down>") 'je/ibuffer-next-line)
 
-(org-defkey org-mode-map [(meta return)]  'je/org-meta-return)
-(org-defkey org-mode-map [(meta left)]  nil)
-(org-defkey org-mode-map [(meta right)] nil)
-(org-defkey org-mode-map [(shift meta left)]  nil)
-(org-defkey org-mode-map [(shift meta right)] nil)
-(org-defkey org-mode-map [(shift up)]          nil)
-(org-defkey org-mode-map [(shift down)]        nil)
-(org-defkey org-mode-map [(shift left)]        nil)
-(org-defkey org-mode-map [(shift right)]       nil)
-(org-defkey org-mode-map [(control shift up)]          nil)
-(org-defkey org-mode-map [(control shift down)]        nil)
-(org-defkey org-mode-map [(control shift left)]        nil)
-(org-defkey org-mode-map [(control shift right)]       nil)
-(org-defkey org-mode-map (kbd "M-x") 'helm-M-x)
-(org-defkey org-mode-map [(meta tab)]  nil)
+(org-defkey org-mode-map (kbd "C-S-<down>")        nil)
+(org-defkey org-mode-map (kbd "C-S-<left>")        nil)
+(org-defkey org-mode-map (kbd "C-S-<right>")       nil)
+(org-defkey org-mode-map (kbd "C-S-<up>")          nil)
 (org-defkey org-mode-map (kbd "C-[") 'org-metaleft)
 (org-defkey org-mode-map (kbd "C-]") 'org-metaright)
 (org-defkey org-mode-map (kbd "C-{") 'org-shiftleft)
 (org-defkey org-mode-map (kbd "C-}") 'org-shiftright)
+(org-defkey org-mode-map (kbd "M-<left>") nil)
+(org-defkey org-mode-map (kbd "M-<return>") 'je/org-meta-return)
+(org-defkey org-mode-map (kbd "M-<right>") nil)
+(org-defkey org-mode-map (kbd "M-<tab>")  nil)
+(org-defkey org-mode-map (kbd "<M-S-left>")  nil)
+(org-defkey org-mode-map (kbd "<M-S-right") nil)
+(org-defkey org-mode-map (kbd "M-x") 'helm-M-x)
+(org-defkey org-mode-map (kbd "S-<down>")        nil)
+(org-defkey org-mode-map (kbd "S-<left>")        nil)
+(org-defkey org-mode-map (kbd "S-<right>")       nil)
+(org-defkey org-mode-map (kbd "S-<up>")          nil)
 
 ;; Global Keys
-(global-set-key (kbd "C-\\") 'je/insert-lambda)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "<C-SPC>") 'calculator)
-(global-set-key (kbd "C-S-t") 'eval-region)
-(global-set-key (kbd "C-a") 'mark-whole-buffer)
-;;(global-set-key (kbd "C-q") 'kill-emacs)
-(global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
-(global-set-key (kbd "s-x") 'clipboard-kill-region)
-(global-set-key (kbd "s-v") 'clipboard-yank)
-(global-set-key (kbd "s-n") 'make-frame)
-(global-set-key (kbd "C-s") 'save-buffer)
-(global-set-key (kbd "S-s") 'save-buffer)
-(global-set-key (kbd "C-f") 'isearch-forward)
-(global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
-(global-set-key (kbd "C-g") 'top-level)
-(global-set-key (kbd "C-S") 'je/save-all)
-(global-unset-key (kbd "s-j"))
-(global-unset-key (kbd "s-S"))
-(global-set-key (kbd "C-o") 'je/todo-list/all)
-(global-set-key (kbd "C-S-o") 'je/todo-list/home)
-(global-set-key (kbd "C-M-o") 'je/todo-list)
-
+(global-set-key (kbd "<f1>") 'je/org-capture)
 (global-set-key (kbd "C-'") 'next-buffer)
-(global-set-key (kbd "C-;") 'previous-buffer)
-
-(global-set-key (kbd "M-w") 'delete-other-windows)
-
-;; Replace the standard way of looking through buffers
-(global-set-key (kbd "C-x C-b") 'helm-mini)
-(global-set-key (kbd "C-`") 'helm-mini)
-(global-set-key (kbd "C-b") 'helm-mini)
-(global-set-key (kbd "M-`") 'iswitchb-buffer)
-(global-set-key (kbd "M-<tab>") 'other-window)
-
-(global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
-
-(global-set-key (kbd "C-c C-i") 'indent-region)
+(global-set-key (kbd "C-;") 'previous-buffer)
+(global-set-key (kbd "C-<SPC>") 'calculator)
+(global-set-key (kbd "C-<XF86MonBrightnessDown>") 'je/org-capture)
+(global-set-key (kbd "C-<down>") 'end-of-buffer)
+(global-set-key (kbd "C-<f1>") 'je/org-capture)
+(global-set-key (kbd "C-<left>") 'move-beginning-of-line)
+(global-set-key (kbd "C-<return>") 'je/run-current-file)
+(global-set-key (kbd "C-<right>") 'move-end-of-line)
+(global-set-key (kbd "C-<up>") 'beginning-of-buffer)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C-M-o") 'je/todo-list)
+(global-set-key (kbd "C-S") 'je/save-all)
+(global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
+(global-set-key (kbd "C-S-o") 'je/todo-list/home)
+(global-set-key (kbd "C-S-t") 'eval-region)
+(global-set-key (kbd "C-\\") 'je/insert-lambda)
+(global-set-key (kbd "C-`") 'helm-mini)
+(global-set-key (kbd "C-a") 'mark-whole-buffer)
+(global-set-key (kbd "C-b") 'helm-mini)
 (global-set-key (kbd "C-c C-c") 'comment-region)
+(global-set-key (kbd "C-c C-i") 'indent-region)
 (global-set-key (kbd "C-c C-v") 'uncomment-region)
-(global-set-key (kbd "C-c q") 'query-replace)
 (global-set-key (kbd "C-c Q") 'query-replace-regexp)
-(global-set-key (kbd "C-c o") 'occur)
 (global-set-key (kbd "C-c d") 'cd)
 (global-set-key (kbd "C-c f") 'find-dired)
 (global-set-key (kbd "C-c g") 'grep)
-
+(global-set-key (kbd "C-c o") 'occur)
+(global-set-key (kbd "C-c q") 'query-replace)
+(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "C-g") 'top-level)
 (global-set-key (kbd "C-h F") 'find-function-at-point)
-
+(global-set-key (kbd "C-o") 'je/todo-list/all)
 (global-set-key (kbd "C-r") 'revert-buffer)
-(global-set-key (kbd "M-r") 'replace-string)
-
-(global-set-key (kbd "<C-up>") 'beginning-of-buffer)
-(global-set-key (kbd "<C-down>") 'end-of-buffer)
-(global-set-key (kbd "<C-left>") 'move-beginning-of-line)
-(global-set-key (kbd "<C-right>") 'move-end-of-line)
-
+(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-t") 'je/org-todo)
+(global-set-key (kbd "C-x C-b") 'helm-mini)
+(global-set-key (kbd "C-x C-c") 'je/custom-cxcc)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-<left>") 'backward-sexp)
 (global-set-key (kbd "M-<right>") 'forward-sexp)
-
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "M-<tab>") 'other-window)
+(global-set-key (kbd "M-`") 'iswitchb-buffer)
+(global-set-key (kbd "M-r") 'replace-string)
+(global-set-key (kbd "M-s-<down>") 'je/proof-forward)
+(global-set-key (kbd "M-s-<return>") 'je/proof-here)
+(global-set-key (kbd "M-s-<right>") 'je/proof-here)
+(global-set-key (kbd "M-s-<up>") 'je/proof-back)
+(global-set-key (kbd "M-s-÷") 'je/proof-here)
+(global-set-key (kbd "M-s-π") 'je/proof-here)
+(global-set-key (kbd "M-s-…") 'proof-prf)
+(global-set-key (kbd "M-s-≤") 'je/proof-back)
+(global-set-key (kbd "M-s-≥") 'je/proof-forward)
+(global-set-key (kbd "M-w") 'delete-other-windows)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "S-s") 'save-buffer)
+(global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
 (global-set-key (kbd "s-i") 'je/indent-buffer)
-(global-set-key (kbd "C-x C-c") 'je/custom-cxcc)
+(global-set-key (kbd "s-n") 'make-frame)
+(global-set-key (kbd "s-v") 'clipboard-yank)
 (global-set-key (kbd "s-w") 'je/delete-window)
-(global-set-key (kbd "C-<return>") 'je/run-current-file)
-(global-set-key (kbd "<C-f1>") 'je/org-capture)
-(global-set-key (kbd "<C-XF86MonBrightnessDown>") 'je/org-capture)
-(global-set-key (kbd "<f1>") 'je/org-capture)
-(global-set-key (kbd "C-t") 'je/org-todo)
+(global-set-key (kbd "s-x") 'clipboard-kill-region)
+(global-unset-key (kbd "s-S"))
+(global-unset-key (kbd "s-j"))
 
 ;; Global Modes
 (helm-mode 1)
@@ -808,9 +889,9 @@
 (setq desktop-path '("~/.emacs.d/")
       desktop-dirname "~/.emacs.d/"
       desktop-base-file-name "emacs-desktop"
-      racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket"
-      racket-racket-program "/Users/jay/Dev/scm/plt/racket/bin/racket"
-      racket-raco-program "/Users/jay/Dev/scm/plt/racket/bin/raco"
+      racket-program "~/Dev/scm/plt/racket/bin/racket"
+      racket-racket-program "~/Dev/scm/plt/racket/bin/racket"
+      racket-raco-program "~/Dev/scm/plt/racket/bin/raco"
       org-directory "~/Dev/scm/github.jeapostrophe/home/etc/"
       org-bookmarks-file "~/Dev/scm/github.jeapostrophe/home/etc/bookmarks.org"
       org-default-notes-file "~/Dev/scm/github.jeapostrophe/home/etc/brain.org"
@@ -822,170 +903,4 @@
       server-name "lightning")
 (server-start)
 
-;; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-;; Customized mode line
-(setq-default
- mode-line-format
- '((:propertize "%p" face mode-line-folder-face)
-   " "
-   (:propertize "%4l:" face mode-line-position-face)
-   (:eval (propertize "%3c" 'face
-                      (if (>= (current-column) 80)
-                          'mode-line-warn-face
-                        'mode-line-position-face)))
-   " "
-   (:eval
-    (cond (buffer-read-only
-           (propertize " RO " 'face 'mode-line-warn-face))
-          ((buffer-modified-p)
-           (propertize " ** " 'face 'mode-line-warn-face))
-          (t "      ")))
-   " "
-   (:propertize (:eval (buffer-name)) face mode-line-filename-face)
-   "  %[" (:propertize mode-name face mode-line-mode-face) "%] "
-   (:eval (propertize (format-mode-line minor-mode-alist)
-                      'face 'mode-line-minor-mode-face))
-   (:propertize mode-line-process face mode-line-process-face)
-   (global-mode-string global-mode-string)))
-
-;; Extra mode line faces
-(make-face 'mode-line-warn-face)
-(make-face 'mode-line-folder-face)
-(make-face 'mode-line-filename-face)
-(make-face 'mode-line-position-face)
-(make-face 'mode-line-mode-face)
-(make-face 'mode-line-minor-mode-face)
-(make-face 'mode-line-process-face)
-
-(defvar light-text "#657b83")
-(defvar background "#eee8d5")
-(defvar foreground-warning  "#dc322f")
-(defvar foreground-process "#dc322f")
-
-(set-face-attribute 'mode-line nil
-                    :foreground light-text :background background
-                    :inverse-video nil
-                    :box `(:line-width 6 :color ,background :style nil))
-(set-face-attribute 'mode-line-warn-face nil
-                    :inherit 'mode-line
-                    :foreground foreground-warning
-                    :background background
-                    :box `(:line-width 2 :color ,foreground-warning))
-(set-face-attribute 'mode-line-filename-face nil
-                    :inherit 'mode-line
-                    :foreground foreground-warning
-                    :weight 'bold)
-
-(set-face-attribute 'mode-line-folder-face nil
-                    :inherit 'mode-line
-                    :foreground light-text)
-(set-face-attribute 'mode-line-mode-face nil
-                    :inherit 'mode-line
-                    :foreground light-text)
-
-(set-face-attribute 'mode-line-minor-mode-face nil
-                    :inherit 'mode-line-mode-face
-                    :foreground background
-                    :height 110)
-(set-face-attribute 'mode-line-process-face nil
-                    :inherit 'mode-line
-                    :foreground foreground-process)
-
-;; clean buffer list
-(add-to-list 'clean-buffer-list-kill-never-buffer-names
-             "/usr/share/dict/words")
-(add-to-list 'clean-buffer-list-kill-never-regexps
-             "gpg$" "org$")
-
-;; racket
-(load-file "~/.emacs.d/scheme-indent.el")
-
-;; Set up input method
-(quail-define-package "je/math" "UTF-8" "Ω" t)
-(quail-define-rules ; whatever extra rules you want to define...
- ("\\from"    #X2190)
- ("\\to"      #X2192)
- ("\\lhd"     #X22B2)
- ("\\rhd"     #X22B3)
- ("\\unlhd"   #X22B4)
- ("\\defs"    "≙")
- ("\\skull"   "☠")
- ("\\larr"   "←")
- ("\\rarr"   "→")
- ("\\unrhd"   #X22B5))
-(mapc (lambda (x)
-        (if (cddr x)
-            (quail-defrule (cadr x) (car (cddr x)))))
-      (append math-symbol-list-basic math-symbol-list-extended))
-
-(set-input-method "je/math")
-
-;; customs
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
- '(safe-local-variable-values
-   (quote
-    ((coq-prog-name . "/usr/local/Cellar/coq/8.7.1/bin/coqtop")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(fringe ((((class color) (background "#fdf6e3")) nil)))
- '(org-column ((t (:background "#fdf6e3" :foreground "#657b83"))))
- '(racket-keyword-argument-face ((t (:foreground "#dc322f"))))
- '(racket-paren-face ((t (:foreground "#93a1a1"))))
- '(racket-selfeval-face ((t (:foreground "#859900")))))
-
-;; proof general
-(setq proof-assistants '(coq))
-(load-file "/usr/local/Cellar/proof-general/4.4_2/share/emacs/site-lisp/proof-general/site-start.d/pg-init.el")
-;; XXX make these local to the proof mode
-;; proof-display-three-b
-;; proof-shell-exit
-;; proof-process-buffer
-;; proof-activate-scripting
-
-(defun je/proof-back ()
-  (interactive)
-  (proof-undo-last-successful-command)
-  (je/proof-post))
-(defun je/proof-forward ()
-  (interactive)
-  (proof-assert-next-command-interactive)
-  (je/proof-post))
-(defun je/proof-here ()
-  (interactive)
-  (proof-goto-point))
-(defun je/proof-post ()
-  (interactive)
-  (proof-shell-wait)
-  (cond
-   ((pg-response-has-error-location)
-    (proof-next-error))
-   (t
-    (proof-prf))))
-
-(global-set-key (kbd "<M-s-right>") 'je/proof-here)
-(global-set-key (kbd "<M-s-return>") 'je/proof-here)
-(global-set-key (kbd "<M-s-up>") 'je/proof-back)
-(global-set-key (kbd "<M-s-down>") 'je/proof-forward)
-
-(global-set-key (kbd "M-s-÷") 'je/proof-here)
-(global-set-key (kbd "M-s-π") 'je/proof-here)
-(global-set-key (kbd "M-s-≤") 'je/proof-back)
-(global-set-key (kbd "M-s-≥") 'je/proof-forward)
-(global-set-key (kbd "M-s-…") 'proof-prf)
-
-(setq proof-shell-process-connection-type nil
-      proof-three-window-mode-policy 'hybrid)
-
-(if nil
-    (proof-display-three-b 'hybrid))
