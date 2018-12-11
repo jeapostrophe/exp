@@ -132,10 +132,10 @@
                     :foreground "#657b83" :background "#eee8d5"
                     :inverse-video nil)
 (defface mode-line-warn-face
-  '((t (:inherit 'mode-line) (:foreground "#dc322f")))
+  '((t (:inherit 'mode-line :foreground "#dc322f")))
   "Warning")
 (defface mode-line-filename-face
-  '((t (:inherit 'mode-line-warn-face) (:weight 'bold)))
+  '((t (:inherit 'mode-line-warn-face :weight 'bold)))
   "Filename")
 
 (setq-default
