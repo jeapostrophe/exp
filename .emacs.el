@@ -135,7 +135,7 @@
   '((t (:inherit 'mode-line :foreground "#dc322f")))
   "Warning")
 (defface mode-line-filename-face
-  '((t (:inherit 'mode-line-warn-face :weight 'bold)))
+  '((t (:inherit 'mode-line-warn-face :weight bold)))
   "Filename")
 
 (setq-default
