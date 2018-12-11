@@ -725,17 +725,14 @@
 (setq isearch-mode-hook ; XXX I don't know why this works
       (function (lambda () (isearch-toggle-case-fold) (isearch-toggle-case-fold))))
 (add-hook 'compilation-filter-hook 'je/colorize-compilation-buffer)
-(add-hook 'racket-mode-hook #'(lambda () (autopair-mode t)))
-(add-hook 'emacs-lisp-mode-hook #'(lambda () (autopair-mode t)))
-(add-hook 'term-mode-hook #'(lambda () (setq autopair-dont-activate t)))
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode t)
+(add-hook 'racket-mode-hook 'autopair-mode)
+(add-hook 'emacs-lisp-mode-hook 'autopair-mode)
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'org-finalize-agenda-hook 'je/org-finalize-agenda-hook)
 (dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
-  (add-hook hook #'(lambda () (flyspell-mode 1))))
+  (add-hook hook 'flyspell-mode))
 (dolist (hook '(c++-mode-hook elisp-mode-hook racket-mode-hook))
-  (add-hook hook #'(lambda () (flyspell-prog-mode 1))))
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook #'(lambda () (flyspell-mode -1))))
+  (add-hook hook 'flyspell-prog-mode))
 (add-hook 'dired-mode-hook
           #'(lambda ()
               ;; Only open one dired buffer at most
