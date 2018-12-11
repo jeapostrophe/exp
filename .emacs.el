@@ -731,17 +731,17 @@
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode t)
 (add-hook 'org-finalize-agenda-hook 'je/org-finalize-agenda-hook)
 (dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
+  (add-hook hook #'(lambda () (flyspell-mode 1))))
 (dolist (hook '(c++-mode-hook elisp-mode-hook racket-mode-hook))
-  (add-hook hook (lambda () (flyspell-prog-mode 1))))
+  (add-hook hook #'(lambda () (flyspell-prog-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode -1))))
+  (add-hook hook #'(lambda () (flyspell-mode -1))))
 (add-hook 'dired-mode-hook
-          '(lambda ()
-             ;; Only open one dired buffer at most
-             (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-             ;; Edit files in dired with "e", which previously did what "RET" did
-             (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
+          #'(lambda ()
+              ;; Only open one dired buffer at most
+              (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+              ;; Edit files in dired with "e", which previously did what "RET" did
+              (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)))
 
 ;; Custom variables
 (custom-set-variables
