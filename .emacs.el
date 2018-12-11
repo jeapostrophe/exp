@@ -776,7 +776,7 @@
 (org-defkey org-mode-map (kbd "M-<right>") nil)
 (org-defkey org-mode-map (kbd "M-<tab>")  nil)
 (org-defkey org-mode-map (kbd "<M-S-left>")  nil)
-(org-defkey org-mode-map (kbd "<M-S-right") nil)
+(org-defkey org-mode-map (kbd "<M-S-right>") nil)
 (org-defkey org-mode-map (kbd "S-<down>")        nil)
 (org-defkey org-mode-map (kbd "S-<left>")        nil)
 (org-defkey org-mode-map (kbd "S-<right>")       nil)
