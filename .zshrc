@@ -27,12 +27,11 @@ fi
 export PS1
 
 TPS1="%~ ${PROMPT_SYMB}"
-if [[ "$TMUX" != "" ]] ; then
-    precmd () {
-        print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\" }
-    preexec () {
-        print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\" }
-fi
+
+precmd () {
+    print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\" }
+preexec () {
+    print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\" }
 
 chpwd() {
     recent dir "$PWD"
