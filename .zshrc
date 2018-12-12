@@ -29,9 +29,13 @@ export PS1
 TPS1="%~ ${PROMPT_SYMB}"
 
 precmd () {
-    print -Pn "\e]0;$TPS1\a\033k$TPS1\033\\" }
+    print -Pn "\e]0;$TPS1\a"
+#    print -Pn "\033k$TPS1\033\\"
+}
 preexec () {
-    print -Pn "\e]0;$TPS1 $2\a\033k$TPS1 $2\033\\" }
+    print -Pn "\e]0;$TPS1 $2\a"
+#    print -Pn "\033k$TPS1 $2\033\\"
+}
 
 chpwd() {
     recent dir "$PWD"
