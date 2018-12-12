@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec racket -l memorize -- $HOME/Dev/scm/github.jeapostrophe/memorize/local/scripture-mastery.txt
