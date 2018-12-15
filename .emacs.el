@@ -722,6 +722,7 @@
 (ad-activate 'ibuffer)
 
 ;; Hooks
+
 (setq isearch-mode-hook ; XXX I don't know why this works
       (function (lambda () (isearch-toggle-case-fold) (isearch-toggle-case-fold))))
 (add-hook 'compilation-filter-hook 'je/colorize-compilation-buffer)
