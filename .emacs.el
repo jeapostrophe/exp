@@ -731,6 +731,7 @@
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'org-finalize-agenda-hook 'je/org-finalize-agenda-hook)
 (dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
+  (add-hook hook 'auto-fill-mode)
   (add-hook hook 'flyspell-mode))
 (dolist (hook '(c++-mode-hook elisp-mode-hook racket-mode-hook))
   (add-hook hook 'flyspell-prog-mode))
