@@ -1,24 +1,36 @@
-#!/bin/zsh
-source ~/.zshrc
+#!/bin/bash
 
-PROMPT_FILE=~j/prompts.txt
+GIVEN=$1
 
-FILE=$(date "+%Y%m%d.txt")
-cd ~j/d
+PROMPT=N
+if [ "$GIVEN" = "" ] ; then
+    PROMPT=Y
+    DATE=date
+else
+    DATE="date -j -f %Y/%m/%d $GIVEN"
+fi
+
+J=$HOME/.config/journal
+PROMPT_FILE=$J/prompts.txt
+
+FILE=$($DATE "+%Y%m%d.txt")
+cd $J/d
 if [ -f ${FILE} ] ; then
     oe ${FILE}
     git commit -m "Editted journal entry" ${FILE}
 else
-    LANG=en date "+%A, %B %e %Y%n%n" > ${FILE}
+    LANG=en $DATE "+%A, %B %e %Y%n%n" > ${FILE}
     echo >> ${FILE}
-    DAY_SINCE_EPOCH=$(($(date -u +%s)/86400))
-    echo $DAY_SINCE_EPOCH
-    PROMPTS=$(cat ${PROMPT_FILE} | wc -l)
-    echo $PROMPTS
-    TARGET=$((((${DAY_SINCE_EPOCH} - 1) % ${PROMPTS}) + 1))
-    echo $TARGET
-    sed "${TARGET}q;d" ${PROMPT_FILE} >> ${FILE}
-    echo >> ${FILE}
+    if [ "$PROMPT" == "Y" ] ; then
+        DAY_SINCE_EPOCH=$(($($DATE -u +%s)/86400))
+        echo $DAY_SINCE_EPOCH
+        PROMPTS=$(cat ${PROMPT_FILE} | wc -l)
+        echo $PROMPTS
+        TARGET=$((((${DAY_SINCE_EPOCH} - 1) % ${PROMPTS}) + 1))
+        echo $TARGET
+        sed "${TARGET}q;d" ${PROMPT_FILE} >> ${FILE}
+        echo >> ${FILE}
+    fi
     git add ${FILE}
     oe ${FILE}
     git commit -m "New journal entry" ${FILE}
