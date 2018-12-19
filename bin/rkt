@@ -1,2 +1,5 @@
 #!/bin/sh
-raco make $1 && raco test $1 && racket -t $*
+FILE=$1
+shift
+ARGS=$*
+raco make "$FILE" && raco test "$FILE" && racket -t $FILE -- $ARGS
