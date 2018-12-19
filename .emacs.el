@@ -195,9 +195,6 @@
            (org-todo)
          (progn
            (org-agenda-todo)
-           ;; XXX I added this because sometimes it would
-           ;; check the same one twice, but this feels slow
-           ;; and hacky
            (je/todo-list))))
 (defun je/unfill-paragraph () "Unfill" (interactive)
        (let ((fill-column (point-max)))
@@ -247,7 +244,6 @@
 (defun je/org-finalize-agenda-hook ()
   (goto-char (point-min))
   (mapcar (lambda (n) (insert n " ")) je/org-agenda/filter-ctxt)
-  ;; xxx strike through
   (mapcar (lambda (n) (insert "!" n " ")) je/org-agenda/filter-ctxt-not)
   (center-line)
   (remove-text-properties
@@ -276,7 +272,6 @@
          (proof-prf))))
 
 (defcustom je/racket-test-p t "Whether rkt or rk is run" :type 'boolean)
-;; XXX Move into normal shell script
 (defun je/run-current-file ()
   "Execute or compile the current file."
   (interactive)
