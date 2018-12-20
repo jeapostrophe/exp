@@ -11,7 +11,11 @@ cd $DIR
 if [ -f Makefile -o -f GNUmakefile ] ; then
     make $*
 elif [ -f make.rkt ] ; then
-    rkt make.rkt -- $*
+    ARGS=$*
+    if [ $FILE = make.rkt ] ; then
+        ARGS=
+    fi
+    rkt make.rkt -- $ARGS
 else
     case $EXT in
         java) exec javai $* ;;

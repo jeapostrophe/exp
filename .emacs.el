@@ -23,13 +23,12 @@
 (require 'ansi-color)
 (autoload 'calculator "calculator" "Run the Emacs calculator." t)
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
-;; XXX proof-general
 
 ;; Connect to environment
-(setq exec-path (append '("/usr/local/bin") exec-path))
-(cond
- ((eq window-system 'ns)
-  (setq shell-command-switch "-lc")))
+(when (memq window-system '(mac ns x))
+  (setq exec-path-from-shell-check-startup-files nil)
+  (setq shell-command-switch "-lc")
+  (exec-path-from-shell-initialize))
 
 ;; Editing environment
 (setq yank-excluded-properties t ; Don't get weird properties when pasting
@@ -74,7 +73,9 @@
       browse-url-generic-program "open"
       apropos-do-all t
       doc-view-continuous t
-      Info-scroll-prefer-subnodes t)
+      Info-scroll-prefer-subnodes t
+      split-height-threshold 0
+      compilation-window-height 10)
 (fset 'yes-or-no-p 'y-or-n-p)
 (put 'narrow-to-region 'disabled nil)
 (put 'not-modified 'disabled t)
@@ -279,7 +280,7 @@
       (save-buffer)
       (if (string-equal (file-name-extension fname) "el")
           (load-file fname)
-        (compile (concat "$HOME/bin/jrun " fname))))))
+        (compile (concat "jrun " fname))))))
 
 ;; Packages
 
@@ -714,8 +715,10 @@
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right. 
- )
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math))))
 
 ;; Aliases
 (defalias 'agp 'ag-project)
@@ -795,15 +798,6 @@
 (global-set-key (kbd "M-<tab>") 'other-window)
 (global-set-key (kbd "M-`") 'iswitchb-buffer)
 (global-set-key (kbd "M-r") 'replace-string)
-(global-set-key (kbd "M-s-<down>") 'je/proof-forward)
-(global-set-key (kbd "M-s-<return>") 'je/proof-here)
-(global-set-key (kbd "M-s-<right>") 'je/proof-here)
-(global-set-key (kbd "M-s-<up>") 'je/proof-back)
-(global-set-key (kbd "M-s-÷") 'je/proof-here)
-(global-set-key (kbd "M-s-π") 'je/proof-here)
-(global-set-key (kbd "M-s-…") 'proof-prf)
-(global-set-key (kbd "M-s-≤") 'je/proof-back)
-(global-set-key (kbd "M-s-≥") 'je/proof-forward)
 (global-set-key (kbd "M-w") 'delete-other-windows)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "S-s") 'save-buffer)
@@ -815,6 +809,16 @@
 (global-set-key (kbd "s-x") 'clipboard-kill-region)
 (global-unset-key (kbd "s-S"))
 (global-unset-key (kbd "s-j"))
+
+(global-set-key (kbd "M-s-<down>") 'je/proof-forward)
+(global-set-key (kbd "M-s-<return>") 'je/proof-here)
+(global-set-key (kbd "M-s-<right>") 'je/proof-here)
+(global-set-key (kbd "M-s-<up>") 'je/proof-back)
+(global-set-key (kbd "M-s-÷") 'je/proof-here)
+(global-set-key (kbd "M-s-π") 'je/proof-here)
+(global-set-key (kbd "M-s-…") 'proof-prf)
+(global-set-key (kbd "M-s-≤") 'je/proof-back)
+(global-set-key (kbd "M-s-≥") 'je/proof-forward)
 
 ;; Global Modes
 (helm-mode 1)
