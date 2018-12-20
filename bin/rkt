@@ -2,4 +2,13 @@
 FILE=$1
 shift
 ARGS=$*
-raco make "$FILE" && raco test "$FILE" && racket -t $FILE -- $ARGS
+raco make "$FILE" && \
+exec racket -i -- $ARGS <<EOF 
+(let ()
+ (define f (list (quote file) "$FILE"))
+ (dynamic-require f #f)
+ (for ([sm (in-list (quote (test main)))])
+  (define t (list 'submod f sm))
+  (when (module-declared? t #t)
+    (dynamic-require t #f))))
+EOF

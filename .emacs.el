@@ -271,43 +271,15 @@
         (t
          (proof-prf))))
 
-(defcustom je/racket-test-p t "Whether rkt or rk is run" :type 'boolean)
 (defun je/run-current-file ()
   "Execute or compile the current file."
   (interactive)
-  (let (suffixMap fname suffix progName cmdStr)
-    ;; a keyed list of file suffix to comand-line program path/name
-    (setq suffixMap
-          `(("java" . "javai")
-            ("ll" . "llvmi")
-            ("c" . "cci")
-            ("sh" . "zsh")
-            ("py" . "python")
-            ("cc" . "ccci")
-            ("glsl" . "glslangValidator")
-            ("rkt" . ,(if je/racket-test-p "rkt" "rk"))
-            ("ss" . ,(if je/racket-test-p "rkt" "rk"))
-            ("dc" . ,(if je/racket-test-p "rkt" "rk"))
-            ("scrbl" . ,(if je/racket-test-p "rkt" "rk"))
-            ("txt" . "ctxt")
-            ("dot" . "dot -Tpdf -O")
-            ("tex" . "pdflatex")))
-
-    (save-buffer)
-
-    (setq fname (buffer-file-name))
-    (setq suffix (file-name-extension fname))
-    (setq progName (cdr (assoc suffix suffixMap)))
-    (setq cmdStr (concat "-i -c \'" progName " \""   fname "\"\'"))
-
-    (if (string-equal suffix "el") ; special case for emacs lisp
-        (load-file fname)
-      (if (and (not (string-equal suffix "ss"))
-               (file-exists-p (concat default-directory "/Makefile")))
-          (compile (concat "zsh -i -c 'cd \"" default-directory "\" && make'"))
-        (if progName
-            (compile (concat "zsh " cmdStr))
-          (message "No recognized program file suffix for this file."))))))
+  (let ((fname (buffer-file-name)))
+    (when fname
+      (save-buffer)
+      (if (string-equal (file-name-extension fname) "el")
+          (load-file fname)
+        (compile (concat "$HOME/bin/jrun " fname))))))
 
 ;; Packages
 

@@ -1,0 +1,35 @@
+#!/bin/sh
+. ~/.profile
+
+FILE=$1
+DIR=$(dirname "$FILE")
+FILE=$(basename "$FILE")
+EXT=${FILE##*.}
+
+cd $DIR
+
+if [ -f Makefile -o -f GNUmakefile ] ; then
+    make $*
+elif [ -f make.rkt ] ; then
+    rkt make.rkt -- $*
+else
+    case $EXT in
+        java) exec javai $* ;;
+        ll) exec llvmi $* ;;
+        c) exec cci $* ;;
+        sh) exec sh $* ;;
+        py) exec python $* ;;
+        cc) exec ccci $* ;;
+        glsl) exec glslangValidator $* ;;
+        rkt) exec rkt $* ;;
+        ss) exec rkt $* ;;
+        scrbl) exec rkt $* ;;
+        txt) exec ctxt $* ;;
+        dot) exec dot -Tpdf -O $* ;;
+        tex) exec pdflatex $(basename "$FILE" .tex) ;;
+        *)
+            echo Unknown extension: $EXT >&2
+            break
+            ;;
+    esac
+fi
