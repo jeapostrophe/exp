@@ -17,6 +17,7 @@ export PYTHON_PATH=$HOME/Library/Python/2.7/site-packages:/Library/Python/2.7/si
 
 export CVS_RSH=ssh
 export EDITOR=kak
+export BROWSER=open
 
 export CLICOLOR=1
 
