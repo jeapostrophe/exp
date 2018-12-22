@@ -5,11 +5,12 @@ FILE=$1
 DIR=$(dirname "$FILE")
 FILE=$(basename "$FILE")
 EXT=${FILE##*.}
+FILENOEXT=$(basename "$FILE" ".$EXT")
 
 cd $DIR
 
 if [ -f Makefile -o -f GNUmakefile ] ; then
-    make $*
+    make $FILENOEXT
 elif [ -f make.rkt ] ; then
     ARGS=$*
     if [ $FILE = make.rkt ] ; then
@@ -30,7 +31,7 @@ else
         scrbl) exec rkt $* ;;
         txt) exec ctxt $* ;;
         dot) exec dot -Tpdf -O $* ;;
-        tex) exec pdflatex $(basename "$FILE" .tex) ;;
+        tex) exec pdflatex $FILENOEXT ;;
         *)
             echo Unknown extension: $EXT >&2
             break
