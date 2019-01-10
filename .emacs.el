@@ -514,9 +514,6 @@
     value)))
 (setq org-columns-modify-value-for-display-function 'je/column-display)
 
-(defvar je/org-agenda/filter-mode 0)
-(defvar je/org-agenda/filter-modes 4)
-
 (defvar je/org-agenda/filter-ctxt nil)
 (defvar je/org-agenda/filter-ctxt-not nil)
 (defun je/org-agenda/filter-ctxt-toggle (n)
@@ -536,37 +533,59 @@
   (interactive "sFilter: ")
   (progn (je/org-agenda/filter-ctxt-toggle n)
          (je/todo-list)))
-
 (defun je/todo-list ()
   "Open up the org-mode todo list"
   (interactive)
   (org-agenda "" "t"))
+
+(defvar je/org-agenda/filter-mode 0)
+(defvar je/org-agenda/filter-modes 5)
 (defun je/todo-list/all ()
   "Open up the org-mode todo list (all)"
   (interactive)
   (progn
-    (setq je/org-agenda/filter-mode 0
-          je/org-agenda/filter-ctxt nil
-          je/org-agenda/filter-ctxt-not nil)
-    (je/todo-list)))
-(defun je/todo-list/home ()
-  "Open up the org-mode todo list (home)"
+    (setq je/org-agenda/filter-mode 0)
+    (je/todo-list/check)))
+(defun je/todo-list/quiet ()
+  "Open up the org-mode todo list (all)"
+  (interactive)
+  (progn
+    (setq je/org-agenda/filter-mode 1)
+    (je/todo-list/check)))
+(defun je/todo-list/next ()
+  "Open up the org-mode todo list (next)"
   (interactive)
   (progn
     (setq je/org-agenda/filter-mode
-          (% (+ 1 je/org-agenda/filter-mode)
-             je/org-agenda/filter-modes))
+          (mod (+ 1 je/org-agenda/filter-mode)
+               je/org-agenda/filter-modes))
+    (je/todo-list/check)))
+(defun je/todo-list/prev ()
+  "Open up the org-mode todo list (prev)"
+  (interactive)
+  (progn
+    (setq je/org-agenda/filter-mode
+          (mod (+ -1 je/org-agenda/filter-mode)
+               je/org-agenda/filter-modes))
+    (je/todo-list/check)))
+(defun je/todo-list/check ()
+  "Open up the org-mode todo list (w/ filter)"
+  (interactive)
+  (progn
     (cond
      ((eq je/org-agenda/filter-mode 0)
       (setq je/org-agenda/filter-ctxt nil
             je/org-agenda/filter-ctxt-not nil))
      ((eq je/org-agenda/filter-mode 1)
       (setq je/org-agenda/filter-ctxt nil
-            je/org-agenda/filter-ctxt-not (list "Home" "Quiet")))
+            je/org-agenda/filter-ctxt-not (list "Quiet")))
      ((eq je/org-agenda/filter-mode 2)
+      (setq je/org-agenda/filter-ctxt nil
+            je/org-agenda/filter-ctxt-not (list "Home" "Quiet")))
+     ((eq je/org-agenda/filter-mode 3)
       (setq je/org-agenda/filter-ctxt (list "Home")
             je/org-agenda/filter-ctxt-not nil))
-     ((eq je/org-agenda/filter-mode 3)
+     ((eq je/org-agenda/filter-mode 4)
       (setq je/org-agenda/filter-ctxt nil
             je/org-agenda/filter-ctxt-not (list "Home"))))
     (je/todo-list)))
@@ -765,10 +784,13 @@
 (global-set-key (kbd "C-<right>") 'move-end-of-line)
 (global-set-key (kbd "C-<up>") 'beginning-of-buffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C-M-o") 'je/todo-list)
 (global-set-key (kbd "C-S") 'je/save-all)
 (global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
-(global-set-key (kbd "C-S-o") 'je/todo-list/home)
+(global-set-key (kbd "C-o") 'je/todo-list/all)
+(global-set-key (kbd "C-M-o") 'je/todo-list)
+(global-set-key (kbd "C-M-p") 'je/todo-list/quiet)
+(global-set-key (kbd "C-S-p") 'je/todo-list/next)
+(global-set-key (kbd "C-S-o") 'je/todo-list/prev)
 (global-set-key (kbd "C-S-t") 'eval-region)
 (global-set-key (kbd "s-\\") 'je/insert-lambda)
 (global-set-key (kbd "C-`") 'helm-mini)
@@ -786,7 +808,6 @@
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "C-g") 'top-level)
 (global-set-key (kbd "C-h F") 'find-function-at-point)
-(global-set-key (kbd "C-o") 'je/todo-list/all)
 (global-set-key (kbd "C-r") 'revert-buffer)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-t") 'je/org-todo)
