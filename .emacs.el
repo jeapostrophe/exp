@@ -94,6 +94,12 @@
 (setq frame-title-format '(:eval (if (buffer-file-name) (buffer-file-name) "%b")))
 (add-to-list 'default-frame-alist '(undecorated . t))
 
+(defun je/scale-update ()
+  (if (<= (frame-width) 90)
+      (text-scale-set 0)
+    (text-scale-set (* 1.2 3.25))))
+(add-hook 'window-configuration-change-hook 'je/scale-update)
+
 (progn
   ;; Color Theme
 
@@ -536,7 +542,8 @@
 (defun je/todo-list ()
   "Open up the org-mode todo list"
   (interactive)
-  (org-agenda "" "t"))
+  (org-agenda "" "t")
+  (je/scale-update))
 
 (defvar je/org-agenda/filter-mode 0)
 (defvar je/org-agenda/filter-modes 5)
@@ -786,8 +793,8 @@
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C-S") 'je/save-all)
 (global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
-(global-set-key (kbd "C-o") 'je/todo-list/all)
-(global-set-key (kbd "C-M-o") 'je/todo-list)
+(global-set-key (kbd "C-M-o") 'je/todo-list/all)
+(global-set-key (kbd "C-o") 'je/todo-list)
 (global-set-key (kbd "C-M-p") 'je/todo-list/quiet)
 (global-set-key (kbd "C-S-p") 'je/todo-list/next)
 (global-set-key (kbd "C-S-o") 'je/todo-list/prev)
