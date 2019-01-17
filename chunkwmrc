@@ -1,6 +1,6 @@
 #!/bin/sh
 
-chunkc core::log_file stdout
+chunkc core::log_file /usr/local/var/log/chunkwm/log
 chunkc core::log_level warn
 chunkc core::plugin_dir /usr/local/opt/chunkwm/share/chunkwm/plugins
 chunkc core::hotload 0
@@ -30,7 +30,6 @@ chunkc set bsp_split_ratio               0.5
 
 chunkc set monitor_focus_cycle           1
 chunkc set window_focus_cycle            monitor
-
 chunkc set mouse_follows_focus           intrinsic
 chunkc set window_float_next             0
 chunkc set window_region_locked          1
@@ -64,7 +63,8 @@ chunkc core::load tiling.so
 
 # tiling rules
 
-chunkc tiling::rule --owner Finder --name Copy --state float &
-chunkc tiling::rule --owner \"App Store\" --state float &
-chunkc tiling::rule --owner Safari --state float &
-chunkc tiling::rule --owner "Google Chrome" --state float &
+#chunkc tiling::rule --owner Finder --name Copy --state float &
+#chunkc tiling::rule --owner \"App Store\" --state float &
+#chunkc tiling::rule --owner Safari --state float &
+#chunkc tiling::rule --owner "Google Chrome" --state float &
+chunkc tiling::rule --owner Emacs --except "^$" --state tile &

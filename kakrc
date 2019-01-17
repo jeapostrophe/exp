@@ -97,7 +97,18 @@ map global normal <home> gh
 map global insert <s-home> '<esc><s-home>'
 map global prompt <c-g> '<esc>'
 
+# XXX Use terminal cursor when kak only has one cursor - https://github.com/mawww/kakoune/issues/2194
+
+# XXX use bracketed paste --- https://github.com/mawww/kakoune/pull/2465
+
 # XXX alt arrows and S-alt arrows (normal & insert)
+
+# XXX https://mail.google.com/mail/u/0/#search/!in%3Aspam+is%3Aunread+OR+is%3Astarred/FMfcgxvzLrKdpsVbVRJDjCvCVQlGHFMV
+
+# XXX https://github.com/mawww/kakoune/issues/2611
+
+# XXX https://discuss.kakoune.com/t/more-flexible-m/211
+
 define-command -params 2 -docstring "match_pair_move [01] [01]" match_pair_move %{
   execute-keys %sh{
     SHIFT=$1

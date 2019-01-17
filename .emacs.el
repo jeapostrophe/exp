@@ -87,12 +87,13 @@
 
 ;; Style
 (setq ns-use-titled-windows nil
-      ns-pop-up-frames t)
+      ns-pop-up-frames t
+      frame-resize-pixelwise t)
 (set-face-attribute 'default nil
                     :font "Triplicate T4c"
                     :height 120)
 (setq frame-title-format '(:eval (if (buffer-file-name) (buffer-file-name) "%b")))
-(add-to-list 'default-frame-alist '(undecorated . t))
+;; (add-to-list 'default-frame-alist '(undecorated . t))
 
 (defun je/scale-update ()
   (if (<= (frame-width) 90)
