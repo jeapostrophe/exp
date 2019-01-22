@@ -1,0 +1,2 @@
+#!/bin/sh
+exec racket -l game-db/view
