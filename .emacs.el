@@ -589,13 +589,13 @@
             je/org-agenda/filter-ctxt-not (list "Quiet")))
      ((eq je/org-agenda/filter-mode 2)
       (setq je/org-agenda/filter-ctxt nil
-            je/org-agenda/filter-ctxt-not (list "Home" "Quiet")))
+            je/org-agenda/filter-ctxt-not (list "Home")))
      ((eq je/org-agenda/filter-mode 3)
-      (setq je/org-agenda/filter-ctxt (list "Home")
-            je/org-agenda/filter-ctxt-not nil))
+      (setq je/org-agenda/filter-ctxt nil
+            je/org-agenda/filter-ctxt-not (list "Work")))
      ((eq je/org-agenda/filter-mode 4)
       (setq je/org-agenda/filter-ctxt nil
-            je/org-agenda/filter-ctxt-not (list "Home"))))
+            je/org-agenda/filter-ctxt-not (list "Home" "Quiet"))))
     (je/todo-list)))
 
 ;;; Compiling
