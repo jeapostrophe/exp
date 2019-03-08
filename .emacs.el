@@ -98,7 +98,7 @@
 (defun je/scale-update ()
   (if (<= (frame-width) 90)
       (text-scale-set 0)
-    (text-scale-set (* 1.2 3.25))))
+    (text-scale-set (* 1.2 3.0))))
 (add-hook 'window-configuration-change-hook 'je/scale-update)
 
 (progn
