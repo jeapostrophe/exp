@@ -2,6 +2,8 @@
 
 if [ -f Makefile -o -f GNUmakefile ] ; then
     make $*
+elif [ -f make.sh ] ; then
+    exec ./make.sh
 elif [ -f make.rkt ] ; then
     rkt make.rkt -- $*
 else
