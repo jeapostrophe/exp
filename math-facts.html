@@ -6,60 +6,90 @@
     <meta charset="utf-8" />
     <style>
 
-    div#problems {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;  }
+      div#problems {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;  }
 
-    div.problem {
-      font-size: 130%;
-      width: 2em;
-      text-align: right;
-      margin-right: 15px;
-      margin-bottom: 10px; }
-    div.problem span.top { }
-    div.problem span.top:after {
-      content: '\A';
-      white-space: pre; }
-    div.problem span.op {
-      float: left;
-      font-weight: bold; }
-    div.problem span.bot { }
-    div.problem hr.line {
-      border: none;
-      background-color: black;
-      margin: 0px;
-      padding: 0px;
-      height: 2px;
-      -webkit-print-color-adjust:exact;
-      width: 100%; }
+      div.problem {
+          font-size: 130%;
+          width: 2em;
+          text-align: right;
+          margin-right: 15px;
+          margin-bottom: 10px; }
+      div.problem span.top { }
+      div.problem span.top:after {
+          content: '\A';
+          white-space: pre; }
+      div.problem span.op {
+          float: left;
+          font-weight: bold; }
+      div.problem span.bot { }
+      div.problem hr.line {
+          border: none;
+          background-color: black;
+          margin: 0px;
+          padding: 0px;
+          height: 2px;
+          -webkit-print-color-adjust:exact;
+          width: 100%; }
     </style>
     <script type="text/javascript">
-function rand(lo, hi) {
-  return Math.floor(Math.random() * (hi-lo)) + lo; }
+      function rand(lo, hi) {
+          return Math.floor(Math.random() * (hi-lo)) + lo; }
 
-function fill() {
-    var ops = "+-";
-    var t = document.getElementById("problems");
-    t.innerHTML = "";
-    for ( var i = 0; i < 120; i++ ) {
-      var theop = ops[rand(0,2)];
-      var c = document.createElement('div');
-      c.className = 'problem';
-      var top = rand(2,19);
-      var bot;
-      if ( theop == '-' ) {
-        bot = rand(2, top); }
-      else if ( theop == '÷' ) {
-        bot = rand(2, top); }
-      else {
-        bot = rand(2,19); }
-      c.innerHTML = "<span class='top'>" + top + "</span><span class='op'>" + theop + "</span><span class='bot'>" + bot + "</span><hr class='line'>&nbsp;</hr>";
-      t.appendChild(c); } }
-</script>
+      var opsi = 0;
+      var opsa = [ "+-", "×", "×÷" ];
+      function swap() {
+          opsi = (opsi + 1) % opsa.length;
+          fill(); }
+      
+      function fill() {
+          var ops = opsa[opsi];
+          var t = document.getElementById("problems");
+          t.innerHTML = "";
+          for ( var i = 0; i < 120; i++ ) {
+              var theop = ops[rand(0,ops.length)];
+              var c = document.createElement('div');
+              c.className = 'problem';
+              var top;
+              var bot;
+              if ( theop == '-' || theop == '+' ) {
+                  var lhs = rand(2, 20);
+                  var rhs = rand(2, 20);
+                  if ( lhs <= rhs ) {
+                      top = rhs;
+                      bot = lhs; }
+                  else {
+                      top = lhs;
+                      bot = rhs; } }
+              else if ( theop == '×' ) {
+                  var lhs = rand(2, 12);
+                  var rhs = rand(2, 12);
+                  if ( lhs <= rhs ) {
+                      top = rhs;
+                      bot = lhs; }
+                  else {
+                      top = lhs;
+                      bot = rhs; } }
+              else if ( theop == '÷' ) {
+                  var lhs = rand(2, 12);
+                  var rhs = rand(2, 12);
+                  top = lhs * rhs;
+                  bot = rhs; }
+              else {
+                  top = "XXX";
+                  bot = "XXX"; }
+
+              c.innerHTML = "<span class='top'>" + top + "</span><span class='op'>" + theop + "</span><span class='bot'>" + bot + "</span><hr class='line'>&nbsp;</hr>";
+              t.appendChild(c); } }
+              </script>
   </head>
   <body onload="fill();">
     <div id="problems">
+    </div>
+    <div id="menu">
+      <button onclick="swap();">Swap</button>
     </div>
   </body>
 </html>
