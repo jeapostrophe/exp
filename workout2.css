@@ -1,0 +1,19 @@
+div.menu ul li button {
+    font-size: 10vw; }
+
+div.group {
+    font-size: 5vw; }
+
+ol li {
+    border-bottom: 1px solid black; }
+
+table td {
+    font-size: 5vw;
+    border: 1px solid black;
+    padding: 5px; }
+
+ul {
+    list-style: none; }
+
+div.help img {
+    width: 100%; }
