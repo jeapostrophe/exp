@@ -70,18 +70,15 @@
         (h1 ,label)
         ,@body))
 
-(define imgs
-  (build-path (find-system-path 'home-dir) "Downloads"
-              "Exercise" "StrongLifts" "imgs"))
 (define sorted-imgs
-  (sort (directory-list imgs) string<=? #:key path->string))
+  (sort (directory-list "imgs") string<=? #:key path->string))
 (define (help label key)
   (group
    label
    `(div ([class "help"])
          ,@(for/list ([p sorted-imgs]
                       #:when (regexp-match (regexp-quote key) p))
-             `(img ([src ,(format "workout2-imgs/~a" (file-name-from-path p))]) " ")))))
+             `(img ([src ,(format "imgs/~a" (file-name-from-path p))]) " ")))))
 
 (define (generate!)
   (define gs
@@ -119,7 +116,7 @@
   (write-xexpr
    `(html
      (head (title "Workout")
-           (link ([rel "stylesheet"] [href "workout2.css"]) "")
+           (link ([rel "stylesheet"] [href "style.css"]) "")
            (script
             ,(make-cdata
               #f #f
@@ -129,14 +126,11 @@ function swap(which) {
  var divsToHide = document.getElementsByClassName("group");
  for( var i = 0@";" i < divsToHide.length@";" i++) {
   divsToHide[i].style.display = "none"@";" }
- document.getElementById(which).style.display = "block"@";" } })))
+ var target = document.getElementById(which)@";"
+ target.style.display = "block"@";"
+ target.scrollIntoView()@";"} })))
      (body
       ,@gs))))
 
 (module+ main
-  ;; racket -t workout2.rkt && rsync -aL --progress workout2* uml:public_html/w/
-  (require racket/runtime-path)
-  (define-runtime-path dest "workout2.html")
-  (with-output-to-file dest
-    #:exists 'replace
-    generate!))
+  (generate!))

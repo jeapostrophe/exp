@@ -1,7 +1,8 @@
 div.menu ul li button {
-    font-size: 10vw; }
+    font-size: 7vw; }
 
 div.group {
+    margin-left: 1em;
     font-size: 5vw; }
 
 ol li {
@@ -10,7 +11,8 @@ ol li {
 table td {
     font-size: 5vw;
     border: 1px solid black;
-    padding: 5px; }
+    padding: 5px;
+    margin: 5px; }
 
 ul {
     list-style: none; }

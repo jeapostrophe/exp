@@ -5,6 +5,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <style>
+      @media print {
+          .no-print, .no-print * {
+              display: none !important; } }
+      
+      div#menu {
+          float: right; }
+
+      div#menu ul {
+          text-align: center;
+          list-style: none; }
+
+      div#menu ul li {
+          font-size: 3vw; }
+
+      a.opOn {
+          color: blue; }
+      a.opOff {
+          color: red; }
 
       div#problems {
           display: flex;
@@ -38,58 +56,66 @@
       function rand(lo, hi) {
           return Math.floor(Math.random() * (hi-lo)) + lo; }
 
-      var opsi = 0;
-      var opsa = [ "+-", "×", "×÷" ];
-      function swap() {
-          opsi = (opsi + 1) % opsa.length;
+      var ops_all = [ "+", "-", "×", "÷" ];
+      var ops_now = { '+': true, '-': true, '×': false, '÷': false };
+
+      var limit_v = 12;
+      function limit(adj) {
+          console.log("Clicked limit!");
+          limit_v += adj;
           fill(); }
-      
+
+      function swap(which) {
+          ops_now[which] = ! ops_now[which];
+          fill(); }
+
       function fill() {
-          var ops = opsa[opsi];
+          document.getElementById("limit").innerHTML = limit_v;
+          for ( var i = 0; i < ops_all.length; i++ ) {
+              document.getElementById("op" + ops_all[i]).className =
+                  ops_now[ops_all[i]] ? "opOn" : "opOff"; }
+
+          var ops_v = [];
+          for (var op in ops_now) {
+              if ( ops_now[op] ) {
+                  ops_v.push(op); } }
+          
           var t = document.getElementById("problems");
           t.innerHTML = "";
           for ( var i = 0; i < 120; i++ ) {
-              var theop = ops[rand(0,ops.length)];
+              var theop = ops_v[rand(0,ops_v.length)];
               var c = document.createElement('div');
               c.className = 'problem';
+              var lhs = rand(2, limit_v);
+              var rhs = rand(2, limit_v);
               var top;
               var bot;
-              if ( theop == '-' || theop == '+' ) {
-                  var lhs = rand(2, 20);
-                  var rhs = rand(2, 20);
-                  if ( lhs <= rhs ) {
-                      top = rhs;
-                      bot = lhs; }
-                  else {
-                      top = lhs;
-                      bot = rhs; } }
-              else if ( theop == '×' ) {
-                  var lhs = rand(2, 12);
-                  var rhs = rand(2, 12);
-                  if ( lhs <= rhs ) {
-                      top = rhs;
-                      bot = lhs; }
-                  else {
-                      top = lhs;
-                      bot = rhs; } }
-              else if ( theop == '÷' ) {
-                  var lhs = rand(2, 12);
-                  var rhs = rand(2, 12);
+              if ( lhs <= rhs ) {
+                  top = rhs;
+                  bot = lhs; }
+              else {
+                  top = lhs;
+                  bot = rhs; }
+              if ( theop == '÷' ) {
                   top = lhs * rhs;
                   bot = rhs; }
-              else {
-                  top = "XXX";
-                  bot = "XXX"; }
 
               c.innerHTML = "<span class='top'>" + top + "</span><span class='op'>" + theop + "</span><span class='bot'>" + bot + "</span><hr class='line'>&nbsp;</hr>";
               t.appendChild(c); } }
               </script>
   </head>
   <body onload="fill();">
-    <div id="problems">
+    <div id="menu" class="no-print">
+      <ul>
+        <li><a onclick="fill();">♻</a></li>
+        <li><a onclick="limit(-1);">-</a>&nbsp;<span id="limit">X</span>&nbsp;<a onclick="limit(+1);">+</a>
+        <li><a onclick="swap('+')" id="op+">+</a></li>
+        <li><a onclick="swap('-')" id="op-">-</a></li>
+        <li><a onclick="swap('×')" id="op×">×</a></li>
+        <li><a onclick="swap('÷')" id="op÷">÷</a></li>
+      </ul>
     </div>
-    <div id="menu">
-      <button onclick="swap();">Swap</button>
+    <div id="problems">
     </div>
   </body>
 </html>
