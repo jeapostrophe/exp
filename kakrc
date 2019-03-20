@@ -14,6 +14,8 @@ set-option global fzf_file_command 'fd'
 set-option global fzf_highlighter 'bat'
 # XXX Add Racket support to universal-ctags
 
+# https://bitbucket.org/KJ_Duncan/kakoune-racket.kak/src
+
 plug occivink/kakoune-sudo-write
 
 # XXX Use personal wiki instead of org?
