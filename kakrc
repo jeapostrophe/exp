@@ -15,6 +15,7 @@ set-option global fzf_highlighter 'bat'
 # XXX Add Racket support to universal-ctags
 
 # https://bitbucket.org/KJ_Duncan/kakoune-racket.kak/src
+# https://discuss.kakoune.com/t/kakoune-scribble-kak-scribble-language-support/397
 
 plug occivink/kakoune-sudo-write
 
