@@ -131,7 +131,7 @@
 	 ((:keywords "brief" "emulations" "crisp")
 	  (:url . "http://elpa.gnu.org/packages/brief.html"))])
  (buffer-expose .
-		[(0 4 1)
+		[(0 4 3)
 		 ((emacs
 		   (25))
 		  (cl-lib
@@ -207,7 +207,7 @@
 		      ((:url . "https://github.com/cpitclaudel/compact-docstrings")
 		       (:keywords "convenience" "faces" "lisp" "maint" "c"))])
  (company .
-	  [(0 9 9)
+	  [(0 9 10)
 	   ((emacs
 	     (24 3)))
 	   "Modular text completion framework" tar
@@ -283,7 +283,9 @@
 		 (:keywords "comm" "dbus" "convenience"))])
  (debbugs .
 	  [(0 17)
-	   ((soap-client
+	   ((emacs
+	     (25 1))
+	    (soap-client
 	     (3 1 5))
 	    (cl-lib
 	     (0 5)))
@@ -337,7 +339,7 @@
 		  ((:url . "https://github.com/clemera/dired-git-info")
 		   (:keywords "dired" "files"))])
  (disk-usage .
-	     [(1 3 1)
+	     [(1 3 3)
 	      ((emacs
 		(26 1)))
 	      "Sort and browse disk usage listings" single
@@ -374,7 +376,7 @@
 	     ((:keywords "killing" "convenience")
 	      (:url . "https://github.com/leoliu/easy-kill"))])
  (ebdb .
-       [(0 6 6)
+       [(0 6 7)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -407,6 +409,13 @@
 	     nil "Emacs Does Interactive Prolog" single
 	     ((:url . "http://elpa.gnu.org/packages/ediprolog.html")
 	      (:keywords "languages" "processes"))])
+ (eev .
+      [(20190410)
+       ((emacs
+	 (24 3)))
+       "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
+       ((:keywords "lisp" "e-scripts")
+	(:url . "http://angg.twu.net/#eev"))])
  (eglot .
 	[(1 4)
 	 ((emacs
@@ -419,7 +428,7 @@
 	 ((:keywords "convenience" "languages")
 	  (:url . "https://github.com/joaotavora/eglot"))])
  (el-search .
-	    [(1 11 4)
+	    [(1 12 5)
 	     ((emacs
 	       (25))
 	      (stream
@@ -525,7 +534,7 @@
 	      ((:url . "http://elpa.gnu.org/packages/frame-tabs.html")
 	       (:keywords "frames" "tabs"))])
  (frog-menu .
-	    [(0 2 1)
+	    [(0 2 6)
 	     ((emacs
 	       (26))
 	      (avy
@@ -581,6 +590,11 @@
 	 "Glue code between Gnus, Org, and BBDB" tar
 	 ((:keywords "mail" "org" "gnus" "bbdb" "todo" "task")
 	  (:url . "http://elpa.gnu.org/packages/gnorb.html"))])
+ (gnu-elpa-keyring-update .
+			  [(2019 3)
+			   nil "Update Emacs's GPG keyring for GNU ELPA" tar
+			   ((:keywords "maint" "tools")
+			    (:url . "http://elpa.gnu.org/packages/gnu-elpa-keyring-update.html"))])
  (gnugo .
 	[(3 1 0)
 	 ((ascii-art-to-unicode
@@ -593,7 +607,7 @@
 	 ((:keywords "games" "processes")
 	  (:url . "http://www.gnuvola.org/software/gnugo/"))])
  (gnus-mock .
-	    [(0 4 0)
+	    [(0 4 1)
 	     nil "Mock Gnus installation for testing" tar
 	     ((:url . "http://elpa.gnu.org/packages/gnus-mock.html"))])
  (gpastel .
@@ -616,7 +630,7 @@
 		    (0 5))
 		   (emacs
 		    (24))
-		   (advice
+		   (nadvice
 		    (0 1)))
 		  "Robust automatic language detection" single
 		  ((:url . "https://github.com/tmalsburg/guess-language.el")
@@ -927,20 +941,27 @@
 	 "Navigate and edit text objects." tar
 	 ((:keywords "convenience")
 	  (:url . "https://github.com/clemera/objed"))])
+ (olivetti .
+	   [(1 7 0)
+	    ((emacs
+	      (24 5)))
+	    "Minor mode for a nice writing environment" single
+	    ((:url . "http://elpa.gnu.org/packages/olivetti.html")
+	     (:keywords "wp" "text"))])
  (omn-mode .
 	   [(1 2)
 	    nil "Support for OWL Manchester Notation" single
 	    ((:url . "http://elpa.gnu.org/packages/omn-mode.html")
 	     (:keywords))])
  (on-screen .
-	    [(1 3 2)
+	    [(1 3 3)
 	     ((cl-lib
 	       (0)))
 	     "guide your eyes while scrolling" single
 	     ((:url . "https://github.com/michael-heerdegen/on-screen.el")
 	      (:keywords "convenience"))])
  (org .
-      [(9 2 2)
+      [(9 2 3)
        nil "Outline-based notes management and organizer" tar
        ((:keywords "outlines" "hypermedia" "calendar" "wp")
 	(:url . "http://elpa.gnu.org/packages/org.html"))])
@@ -1087,9 +1108,9 @@
 		 ((:url . "http://elpa.gnu.org/packages/register-list.html")
 		  (:keywords "register"))])
  (relint .
-	 [(1 5)
+	 [(1 7)
 	  ((xr
-	    (1 7)))
+	    (1 11)))
 	  "Elisp regexp mistake finder" single
 	  ((:url . "https://github.com/mattiase/relint")
 	   (:keywords "lisp" "maint" "regexps"))])
@@ -1133,6 +1154,11 @@
        nil "Sequence manipulation functions" tar
        ((:keywords "sequences")
 	(:url . "http://elpa.gnu.org/packages/seq.html"))])
+ (shelisp .
+	  [(0 9 1)
+	   nil "execute elisp in shell" single
+	   ((:url . "http://elpa.gnu.org/packages/shelisp.html")
+	    (:keywords "terminals" "lisp" "processes"))])
  (shen-mode .
 	    [(0 1)
 	     nil "A major mode for editing shen source code" tar
@@ -1143,6 +1169,10 @@
 	     nil "Major mode for SiSU markup text" single
 	     ((:url . "http://www.sisudoc.org/")
 	      (:keywords "text" "syntax" "processes" "tools"))])
+ (smalltalk-mode .
+		 [(3 2 92)
+		  nil "Major mode for the GNU Smalltalk programming language" tar
+		  ((:url . "http://elpa.gnu.org/packages/smalltalk-mode.html"))])
  (smart-yank .
 	     [(0 1 1)
 	      ((emacs
@@ -1195,10 +1225,10 @@
 	      ((:keywords "languages" "sql")
 	       (:url . "http://elpa.gnu.org/packages/sql-indent.html"))])
  (ssh-deploy .
-	     [(3 0)
+	     [(3 1)
 	      ((emacs
-		(24)))
-	      "Deployment via TRAMP, global or per directory." tar
+		(25)))
+	      "Deployment via Tramp, global or per directory." tar
 	      ((:keywords "tools" "convenience")
 	       (:url . "https://github.com/cjohansson/emacs-ssh-deploy"))])
  (stream .
@@ -1436,10 +1466,10 @@
        ((:keywords "multimedia" "xpm")
 	(:url . "http://www.gnuvola.org/software/xpm/"))])
  (xr .
-     [(1 9)
+     [(1 11)
       nil "Convert string regexp to rx notation" tar
       ((:keywords "lisp" "maint" "regexps")
-       (:url . "http://elpa.gnu.org/packages/xr.html"))])
+       (:url . "https://github.com/mattiase/xr"))])
  (yasnippet .
 	    [(0 13 0)
 	     ((cl-lib
@@ -1455,7 +1485,7 @@
 			      ((:keywords "snippets")
 			       (:url . "http://elpa.gnu.org/packages/yasnippet-classic-snippets.html"))])
  (zones .
-	[(2018 12 28)
+	[(2019 4 7)
 	 nil "Zones of text - like multiple regions" single
 	 ((:url . "https://elpa.gnu.org/packages/zones.html")
 	  (:keywords "narrow" "restriction" "widen" "region" "zone"))])

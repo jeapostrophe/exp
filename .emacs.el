@@ -629,6 +629,10 @@
       racket-mode-rackjure-indent nil
       racket-use-company-mode nil)
 
+;; agda mode
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
+
 ;;; proof general
 (setq proof-shell-process-connection-type nil
       proof-assistants '(coq)
@@ -725,7 +729,6 @@
 (ad-activate 'ibuffer)
 
 ;; Hooks
-
 (setq isearch-mode-hook ; XXX I don't know why this works
       (function (lambda () (isearch-toggle-case-fold) (isearch-toggle-case-fold))))
 (add-hook 'compilation-filter-hook 'je/colorize-compilation-buffer)
