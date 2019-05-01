@@ -534,7 +534,7 @@
 	      ((:url . "http://elpa.gnu.org/packages/frame-tabs.html")
 	       (:keywords "frames" "tabs"))])
  (frog-menu .
-	    [(0 2 6)
+	    [(0 2 7)
 	     ((emacs
 	       (26))
 	      (avy
@@ -1485,7 +1485,7 @@
 			      ((:keywords "snippets")
 			       (:url . "http://elpa.gnu.org/packages/yasnippet-classic-snippets.html"))])
  (zones .
-	[(2019 4 7)
+	[(2019 4 30)
 	 nil "Zones of text - like multiple regions" single
 	 ((:url . "https://elpa.gnu.org/packages/zones.html")
 	  (:keywords "narrow" "restriction" "widen" "region" "zone"))])
