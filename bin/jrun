@@ -32,6 +32,7 @@ else
         txt) exec ctxt $* ;;
         dot) exec dot -Tpdf -O $* ;;
         tex) exec pdflatex $FILENOEXT ;;
+        hs) exec stack test --fast ;;
         *)
             echo Unknown extension: $EXT >&2
             break

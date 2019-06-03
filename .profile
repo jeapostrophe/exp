@@ -12,6 +12,7 @@ export PATH=$HOME/Dev/scm/plt/racket/bin:$PATH
 export PATH=$HOME/.jwm/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/sbin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 export PYTHON_PATH=$HOME/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages
 
