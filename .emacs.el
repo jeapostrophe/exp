@@ -630,6 +630,7 @@
       racket-use-company-mode nil)
 
 ;; haskell mode
+(require 'haskell-mode)
 (add-hook 'haskell-mode-hook 'intero-mode)
 
 ;; agda mode
@@ -862,6 +863,8 @@
 (global-set-key (kbd "M-s-…") 'proof-prf)
 (global-set-key (kbd "M-s-≤") 'je/proof-back)
 (global-set-key (kbd "M-s-≥") 'je/proof-forward)
+
+(define-key haskell-mode-map (kbd "s-/") 'haskell-hoogle)
 
 ;; Global Modes
 (helm-mode 1)
