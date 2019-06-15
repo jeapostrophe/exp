@@ -364,6 +364,7 @@
       org-completion-use-ido t
       org-log-done t
       org-clock-modeline-total 'current
+      org-duration-format 'h:mm
       org-support-shift-select t
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
