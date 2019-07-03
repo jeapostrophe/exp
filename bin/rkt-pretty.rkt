@@ -1,9 +1,10 @@
 #!/usr/bin/env racket
 #lang racket/base
 (require racket/pretty
-         racket/cmdline
-         racket/file)
+         racket/file
+         racket/match)
 
-(command-line #:program "rkt-pretty"
-              #:args (p)
-              (pretty-print (file->value p)))
+(pretty-print
+ (match (current-command-line-arguments)
+   [(vector) (read)]
+   [(vector p) (file->value p)]))
