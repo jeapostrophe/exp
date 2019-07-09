@@ -99,7 +99,7 @@
   (if (or t (<= (frame-width) 90))
       (text-scale-set 0)
     (text-scale-set (* 1.2 3.0))))
-(add-hook 'window-configuration-change-hook 'je/scale-update)
+;; (add-hook 'window-configuration-change-hook 'je/scale-update)
 
 (progn
   ;; Color Theme
