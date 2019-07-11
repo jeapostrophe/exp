@@ -68,3 +68,4 @@ chunkc core::load tiling.so
 #chunkc tiling::rule --owner Safari --state float &
 #chunkc tiling::rule --owner "Google Chrome" --state float &
 chunkc tiling::rule --owner Emacs --except "^$" --state tile &
+chunkc tiling::rule --owner Rune --state tile &
