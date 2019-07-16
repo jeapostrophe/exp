@@ -35,7 +35,9 @@ Indirect:
 Arrows
 Numbers
 Page Up & Down
-Function keys
+Home & End
+F1
+Vol Up & Down
 
 ~-=[]\/
 
