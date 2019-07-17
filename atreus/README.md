@@ -42,3 +42,5 @@ Vol Up & Down
 ~-=[]\/
 
 XXX Programmer mode with easy ()s & -
+
+XXX Make reset less convenient.
