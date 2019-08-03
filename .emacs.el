@@ -363,7 +363,7 @@
       org-return-follows-link t
       org-completion-use-ido t
       org-log-done t
-      org-clock-modeline-total 'current
+      org-clock-mode-line-total 'current
       org-duration-format 'h:mm
       org-support-shift-select t
       org-agenda-skip-deadline-if-done t
