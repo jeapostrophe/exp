@@ -612,6 +612,9 @@
       comint-prompt-read-only t
       comint-buffer-maximum-size (expt 2 16))
 
+(add-to-list 'compilation-error-regexp-alist '("context...:" 0))
+(add-to-list 'compilation-error-regexp-alist '("Test failed" 0))
+
 ;;; Syntax highlighting
 (dolist (mode '(c-mode racket-mode java-mode emacs-lisp-mode))
   (font-lock-add-keywords
