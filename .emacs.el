@@ -637,7 +637,14 @@
 
 ;; haskell mode
 (require 'haskell-mode)
-(add-hook 'haskell-mode-hook 'intero-mode)
+;;(add-hook 'haskell-mode-hook 'intero-mode)
+(setq flycheck-check-syntax-automatically '(save mode-enable))
+
+;; javascript mode
+(setq js-indent-level 2)
+
+;; c mode
+(setq c-basic-offset 2)
 
 ;; agda mode
 ;; (load-file (let ((coding-system-for-read 'utf-8))
