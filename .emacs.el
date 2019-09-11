@@ -614,6 +614,7 @@
       comint-prompt-read-only t
       comint-buffer-maximum-size (expt 2 16))
 
+(add-to-list 'compilation-error-regexp-alist '("error:" 0))
 (add-to-list 'compilation-error-regexp-alist '("context...:" 0))
 (add-to-list 'compilation-error-regexp-alist '("Test failed" 0))
 
