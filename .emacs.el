@@ -912,8 +912,7 @@
 (add-to-list 'auto-mode-alist '("\\.ss$" . racket-mode))
 (add-to-list 'auto-mode-alist '("\\.scm$" . racket-mode))
 (add-to-list 'auto-mode-alist '("\\.mjs$" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.ala$" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.reach$" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.rsh$" . javascript-mode))
 
 ;; Who am i?
 (setq user-full-name "Jay McCarthy"
