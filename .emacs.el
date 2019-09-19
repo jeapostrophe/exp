@@ -614,6 +614,7 @@
       comint-prompt-read-only t
       comint-buffer-maximum-size (expt 2 16))
 
+(require 'compile)
 (add-to-list 'compilation-error-regexp-alist '("error:" 0))
 (add-to-list 'compilation-error-regexp-alist '("context...:" 0))
 (add-to-list 'compilation-error-regexp-alist '("Test failed" 0))
@@ -774,7 +775,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (hindent haskell-mode intero solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math))))
+    (js2-mode hindent haskell-mode intero solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math))))
 
 ;; Aliases
 (defalias 'agp 'ag-project)
