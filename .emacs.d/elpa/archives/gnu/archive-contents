@@ -395,7 +395,7 @@
 	     (:keywords "convenience")
 	     (:authors
 	      ("\"Francis J. Wright\"" . "F.J.Wright@qmul.ac.uk"))
-	     (:maintainer "\"Francis J. Wright\"" . "F.J.Wright@qmul.ac.uk"))])
+	     (:maintainer nil . "emacs-devel@gnu.org"))])
  (cycle-quotes .
 	       [(0 1)
 		nil "Cycle between quote styles" tar
@@ -1499,7 +1499,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 2)
+	    [(0 3 4)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1717,15 +1717,15 @@
 		   ("Bastien Guerry" . "bzg@gnu.org"))
 		  (:maintainer "Bastien Guerry" . "bzg@gnu.org"))])
  (relint .
-	 [(1 10)
+	 [(1 11)
 	  ((xr
 	    (1 13)))
-	  "Elisp regexp mistake finder" single
-	  ((:keywords "lisp" "maint" "regexps")
+	  "Elisp regexp mistake finder" tar
+	  ((:url . "https://github.com/mattiase/relint")
+	   (:maintainer "Mattias Engdegård" . "mattiase@acm.org")
 	   (:authors
 	    ("Mattias Engdegård" . "mattiase@acm.org"))
-	   (:maintainer "Mattias Engdegård" . "mattiase@acm.org")
-	   (:url . "https://github.com/mattiase/relint"))])
+	   (:keywords "lisp" "maint" "regexps"))])
  (rich-minority .
 		[(1 0 1)
 		 ((cl-lib
