@@ -1,0 +1,2 @@
+#!/bin/sh
+exec racket -l shakes/rhyme -- $*

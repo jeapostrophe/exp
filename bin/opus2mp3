@@ -1,0 +1,4 @@
+#!/bin/sh
+O=${1}
+M=$(basename "${O}" .opus).mp3
+exec ffmpeg -i "${O}" "${M}"
