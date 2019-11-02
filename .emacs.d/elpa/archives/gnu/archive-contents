@@ -119,7 +119,7 @@
 			 (:maintainer "Thien-Thi Nguyen" . "ttn@gnu.org")
 			 (:url . "http://www.gnuvola.org/software/aa2u/"))])
  (async .
-	[(1 9 2)
+	[(1 9 3)
 	 ((cl-lib
 	   (0 5))
 	  (nadvice
@@ -131,7 +131,7 @@
 	   ("John Wiegley" . "jwiegley@gmail.com"))
 	  (:keywords "async"))])
  (auctex .
-	 [(12 1 2)
+	 [(12 2 0)
 	  ((emacs
 	    (24 1))
 	   (cl-lib
@@ -385,7 +385,7 @@
 	   ("Gary D. Foster" . "Gary.Foster@Corp.Sun.COM"))
 	  (:maintainer "Luke Lee" . "luke.yx.lee@gmail.com"))])
  (csv-mode .
-	   [(1 9)
+	   [(1 10)
 	    ((emacs
 	      (24 1))
 	     (cl-lib
@@ -625,13 +625,13 @@
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
 	(:keywords "lisp" "e-scripts"))])
  (eglot .
-	[(1 4)
+	[(1 5)
 	 ((emacs
 	   (26 1))
 	  (jsonrpc
 	   (1 0 7))
 	  (flymake
-	   (1 0 2)))
+	   (1 0 5)))
 	 "Client for Language Server Protocol (LSP) servers" tar
 	 ((:url . "https://github.com/joaotavora/eglot")
 	  (:maintainer "João Távora" . "joaotavora@gmail.com")
@@ -851,7 +851,7 @@
 		  (:keywords "gnome" "c" "coding style")
 		  (:url . "http://elpa.gnu.org/packages/gnome-c-style.html"))])
  (gnorb .
-	[(1 6 3)
+	[(1 6 4)
 	 ((cl-lib
 	   (0 5)))
 	 "Glue code between Gnus, Org, and BBDB" tar
@@ -883,7 +883,7 @@
 	   ("Thien-Thi Nguyen" . "ttn@gnu.org"))
 	  (:keywords "games" "processes"))])
  (gnus-mock .
-	    [(0 4 2)
+	    [(0 4 4)
 	     nil "Mock Gnus installation for testing" tar
 	     ((:maintainer "Eric Abrahamsen" . "eric@ericabrahamsen.net")
 	      (:authors
@@ -968,7 +968,7 @@
 	   ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	  (:keywords "bindings"))])
  (hyperbole .
-	    [(7 0 3)
+	    [(7 0 6)
 	     ((emacs
 	       (24 4)))
 	     "GNU Hyperbole: The Everyday Hypertextual Information Manager" tar
@@ -995,9 +995,9 @@
 	       ("Michael Heerdegen" . "michael_heerdegen@web.de"))
 	      (:maintainer "Michael Heerdegen" . "michael_heerdegen@web.de"))])
  (ivy .
-      [(0 12 0)
+      [(0 13 0)
        ((emacs
-	 (24 1)))
+	 (24 5)))
        "Incremental Vertical completYon" tar
        ((:url . "https://github.com/abo-abo/swiper")
 	(:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com")
@@ -1145,9 +1145,9 @@
 		(:maintainer "Rocky Bernstein" . "rocky@gnu.org")
 		(:url . "http://github.com/rocky/emacs-loc-changes"))])
  (loccur .
-	 [(1 2 3)
-	  ((cl-lib
-	    (0)))
+	 [(1 2 4)
+	  ((emacs
+	    (24 3)))
 	  "Perform an occur-like folding in current buffer" single
 	  ((:keywords "matching")
 	   (:authors
@@ -1303,7 +1303,7 @@
 	   ("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	  (:keywords "extensions" "lisp"))])
  (nhexl-mode .
-	     [(1 3)
+	     [(1 4)
 	      ((emacs
 		(24 4))
 	       (cl-lib
@@ -1499,7 +1499,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 4)
+	    [(0 3 5)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1992,7 +1992,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 2 3)
+	[(2 4 2 4)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar
