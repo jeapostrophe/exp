@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>homebrew.mxcl.chunkwm</string>
+  <string>homebrew.mxcl.yabai</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/local/opt/chunkwm/bin/chunkwm</string>
+    <string>/usr/local/opt/yabai/bin/yabai</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
@@ -17,5 +17,9 @@
   <true/>
   <key>KeepAlive</key>
   <true/>
+  <key>StandardOutPath</key>
+  <string>/usr/local/var/log/yabai/yabai.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/usr/local/var/log/yabai/yabai.err.log</string>
 </dict>
 </plist>

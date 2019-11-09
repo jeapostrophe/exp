@@ -3,59 +3,41 @@
 alt - space : /Users/jay/.jwm/bin/new-termw
 cmd + ctrl - return : /Users/jay/.jwm/bin/new-termw ~/.jwm/bin/term
 
-# XXX Messes with Safari and closing tabs
-#cmd - w : chunkc tiling::window --close
+cmd - e : yabai -m window --toggle float; yabai -m window --grid-layout 4:4:1:1:2:2
 
-cmd - e : chunkc tiling::window --toggle float;\
-          chunkc tiling::window --grid-layout 4:4:1:1:2:2
+cmd - left : yabai -m window --focus west
+cmd - right : yabai -m window --focus east
+cmd - down : yabai -m window --focus south
+cmd - up : yabai -m window --focus north
 
-#cmd - h : chunkc tiling::window --focus west
-# XXX Messes with Safari and selecting location bar
-#cmd - l : chunkc tiling::window --focus east
-#cmd - j : chunkc tiling::window --focus south
-#cmd - k : chunkc tiling::window --focus north
-#cmd - i : chunkc tiling::window --focus prev
-#cmd - o : chunkc tiling::window --focus next
-cmd - left : chunkc tiling::window --focus west
-cmd - right : chunkc tiling::window --focus east
-cmd - down : chunkc tiling::window --focus south
-cmd - up : chunkc tiling::window --focus north
+cmd + shift - left : yabai -m window --warp west
+cmd + shift - right : yabai -m window --warp east
+cmd + shift - down : yabai -m window --warp south
+cmd + shift - up : yabai -m window --warp north
 
-#cmd + shift - h : chunkc tiling::window --warp west
-#cmd + shift - l : chunkc tiling::window --warp east
-#cmd + shift - j : chunkc tiling::window --warp south
-#cmd + shift - k : chunkc tiling::window --warp north
-#cmd + shift - i : chunkc tiling::window --warp prev
-#cmd + shift - o : chunkc tiling::window --warp next
-cmd + shift - left : chunkc tiling::window --warp west
-cmd + shift - right : chunkc tiling::window --warp east
-cmd + shift - down : chunkc tiling::window --warp south
-cmd + shift - up : chunkc tiling::window --warp north
+cmd + shift - 0 : yabai -m window --space 0
+cmd + shift - 1 : yabai -m window --space 1
+cmd + shift - 2 : yabai -m window --space 2
+cmd + shift - 3 : yabai -m window --space 3
+cmd + shift - 4 : yabai -m window --space 4
+cmd + shift - 5 : yabai -m window --space 5
+cmd + shift - 6 : yabai -m window --space 6
+cmd + shift - 7 : yabai -m window --space 7
+cmd + shift - 8 : yabai -m window --space 8
+cmd + shift - 9 : yabai -m window --space 9
 
-cmd + shift - 0 : chunkc tiling::window --send-to-desktop 0
-cmd + shift - 1 : chunkc tiling::window --send-to-desktop 1
-cmd + shift - 2 : chunkc tiling::window --send-to-desktop 2
-cmd + shift - 3 : chunkc tiling::window --send-to-desktop 3
-cmd + shift - 4 : chunkc tiling::window --send-to-desktop 4
-cmd + shift - 5 : chunkc tiling::window --send-to-desktop 5
-cmd + shift - 6 : chunkc tiling::window --send-to-desktop 6
-cmd + shift - 7 : chunkc tiling::window --send-to-desktop 7
-cmd + shift - 8 : chunkc tiling::window --send-to-desktop 8
-cmd + shift - 9 : chunkc tiling::window --send-to-desktop 9
-
-cmd + alt - j : chunkc tiling::desktop --layout bsp
-cmd + alt - k : chunkc tiling::desktop --layout monocle
-cmd + alt - l : chunkc tiling::desktop --layout float
+cmd + alt - j : yabai -m space --layout bsp
+cmd + alt - l : yabai -m space --layout float
 
 # Move around floats
-cmd + alt - left   : chunkc tiling::window --grid-layout 1:2:0:0:1:1
-cmd + alt - right  : chunkc tiling::window --grid-layout 1:2:1:0:1:1
-cmd + alt - up     : chunkc tiling::window --grid-layout 2:1:0:0:1:1
-cmd + alt - down   : chunkc tiling::window --grid-layout 2:1:0:1:1:1
+cmd + alt - left   : yabai -m window --grid 1:2:0:0:1:1
+cmd + alt - right  : yabai -m window --grid 1:2:1:0:1:1
+cmd + alt - up     : yabai -m window --grid 2:1:0:0:1:1
+cmd + alt - down   : yabai -m window --grid 2:1:0:1:1:1
 
-cmd + ctrl - left   : chunkc tiling::window --grid-layout 2:2:0:0:1:1
-cmd + ctrl - right  : chunkc tiling::window --grid-layout 2:2:1:0:1:1
-cmd + ctrl + shift - left   : chunkc tiling::window --grid-layout 2:2:0:1:1:1
-cmd + ctrl + shift - right  : chunkc tiling::window --grid-layout 2:2:1:1:1:1
+cmd + ctrl - left   : yabai -m window --grid 2:2:0:0:1:1
+cmd + ctrl - right  : yabai -m window --grid 2:2:1:0:1:1
+cmd + ctrl + shift - left   : yabai -m window --grid 2:2:0:1:1:1
+cmd + ctrl + shift - right  : yabai -m window --grid 2:2:1:1:1:1
 
-cmd + alt - f       : chunkc tiling:window --grid-layout 1:1:0:0:1:1
+cmd + alt - f       : yabai -m window --grid 1:1:0:0:1:1

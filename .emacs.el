@@ -30,6 +30,10 @@
   (setq shell-command-switch "-lc")
   (exec-path-from-shell-initialize))
 
+;; Emacs-mac options
+(setq mac-option-modifier 'meta)
+(setq mac-command-modifier 'super)
+
 ;; Editing environment
 (setq yank-excluded-properties t ; Don't get weird properties when pasting
       make-backup-files nil
@@ -846,6 +850,8 @@
 (global-set-key (kbd "C-c o") 'occur)
 (global-set-key (kbd "C-c q") 'query-replace)
 (global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "s-f") 'isearch-forward)
+(global-set-key (kbd "s-g") 'isearch-repeat-forward)
 (global-set-key (kbd "C-g") 'top-level)
 (global-set-key (kbd "C-h F") 'find-function-at-point)
 (global-set-key (kbd "C-r") 'revert-buffer)
@@ -861,7 +867,7 @@
 (global-set-key (kbd "M-r") 'replace-string)
 (global-set-key (kbd "M-w") 'delete-other-windows)
 (global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "S-s") 'save-buffer)
+(global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
 (global-set-key (kbd "s-i") 'je/indent-buffer)
 (global-set-key (kbd "s-n") 'make-frame)
@@ -886,7 +892,7 @@
 ;; Global Modes
 (helm-mode 1)
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+(menu-bar-mode t)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (line-number-mode t)
