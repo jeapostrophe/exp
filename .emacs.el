@@ -850,6 +850,7 @@
 (global-set-key (kbd "C-c o") 'occur)
 (global-set-key (kbd "C-c q") 'query-replace)
 (global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "s-a") 'mark-whole-buffer)
 (global-set-key (kbd "s-f") 'isearch-forward)
 (global-set-key (kbd "s-g") 'isearch-repeat-forward)
 (global-set-key (kbd "C-g") 'top-level)
