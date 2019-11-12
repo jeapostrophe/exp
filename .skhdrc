@@ -3,6 +3,8 @@
 alt - space : /Users/jay/.jwm/bin/new-termw
 cmd + ctrl - return : /Users/jay/.jwm/bin/new-termw ~/.jwm/bin/term
 
+cmd + alt - e : yabai -m window --toggle split
+
 cmd - e : yabai -m window --toggle float; yabai -m window --grid-layout 4:4:1:1:2:2
 
 cmd - left : yabai -m window --focus west
