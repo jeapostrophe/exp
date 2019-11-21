@@ -15,6 +15,9 @@ PROMPT_FILE=$J/prompts.txt
 
 FILE=$($DATE "+%Y%m%d.txt")
 cd $J/d
+
+RAND=$(ls $J/d/*$($DATE "+%m%d.txt") | shuf -n 1)
+
 if [ -f ${FILE} ] ; then
     oe ${FILE}
     git commit -m "Editted journal entry" ${FILE}
@@ -35,3 +38,5 @@ else
     oe ${FILE}
     git commit -m "New journal entry" ${FILE}
 fi
+
+cat ${RAND}
