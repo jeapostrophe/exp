@@ -29,6 +29,7 @@ else
         rkt) exec rkt $* ;;
         ss) exec rkt $* ;;
         scrbl) exec rkt $* ;;
+        poem) exec racket -l shakes -- $* ;;
         txt) exec ctxt $* ;;
         dot) exec dot -Tpdf -O $* ;;
         tex) exec pdflatex $FILENOEXT ;;
