@@ -1,4 +1,6 @@
 #!/bin/sh
-O=${1}
-M=$(basename "${O}" .opus).mp3
-exec ffmpeg -i "${O}" "${M}"
+
+for O in *.opus ; do
+    M=$(basename "${O}" .opus).mp3
+    ffmpeg -i "${O}" "${M}" && rm "${O}"
+done
