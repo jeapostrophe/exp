@@ -1,0 +1,12 @@
+#!/bin/sh
+T=$1
+
+while [ $PWD != "/" ] ; do
+    if [ -f "${T}" ] ; then
+        exit 0
+    else
+        cd ..
+    fi
+done
+
+exit 1

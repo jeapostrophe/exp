@@ -10,13 +10,18 @@ FILENOEXT=$(basename "$FILE" ".$EXT")
 cd $DIR
 
 if [ -f Makefile -o -f GNUmakefile ] ; then
-    make $FILENOEXT
-elif [ -f make.rkt ] ; then
+    make -q $FILENOEXT
+    if [ $? -ne 2 ] ; then
+        exec make $FILENOEXT
+    fi
+fi
+
+if [ -f make.rkt ] ; then
     ARGS=$*
     if [ $FILE = make.rkt ] ; then
         ARGS=
     fi
-    rkt make.rkt -- $ARGS
+    exec rkt make.rkt -- $ARGS
 else
     case $EXT in
         java) exec javai $* ;;
@@ -33,7 +38,13 @@ else
         txt) exec ctxt $* ;;
         dot) exec dot -Tpdf -O $* ;;
         tex) exec pdflatex $FILENOEXT ;;
-        hs) exec stack test --fast ;;
+        hs)
+            if parentf stack.yaml ; then
+                exec stack test --fast
+            else
+                exec stack $*
+            fi
+            ;;
         *)
             echo Unknown extension: $EXT >&2
             break
