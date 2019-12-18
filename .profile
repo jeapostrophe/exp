@@ -18,7 +18,7 @@ export PATH=$HOME/.local/bin:$PATH
 export PYTHON_PATH=$HOME/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages
 
 export CVS_RSH=ssh
-export EDITOR=kak
+export EDITOR=nvim
 export BROWSER=open
 
 export CLICOLOR=1

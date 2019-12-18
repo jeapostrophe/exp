@@ -1,11 +1,33 @@
+" Use "hybrid" (both absolute and relative) line numbers
+" set number relativenumber
+
+" Use the system clipboard
+set clipboard=unnamed
+
+" Use a color column on the 80-character mark
+set colorcolumn=80
+
+" Press <tab>, get two spaces
+set expandtab shiftwidth=2
+
+" Show `▸▸` for tabs: 	, `·` for tailing whitespace: 
+set list listchars=tab:▸▸,trail:·
+
+set nocompatible            " disable compatibility to old-time vi
+set showmatch               " show matching brackets.
+set ignorecase              " case insensitive matching
+set hlsearch                " highlight search results
+set autoindent              " indent a new line the same amount as the line just typed
+
 let g:python_host_prog  = '/usr/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
     
 call plug#begin()
-"Plug 'tpope/vim-sensible' " XXX Untested
+Plug 'iCyMind/NeoSolarized'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-"Plug 'junegunn/fzf.vim'
 "Plug 'junegunn/vim-easy-align' " XXX Untested
 "Plug 'benekastah/neomake'  " XXX Untested
 "Plug 'bling/vim-airline' " XXX Need to configure
@@ -20,18 +42,26 @@ call plug#begin()
 "Plug 'Shougo/echodoc.vim' " XXX Untested
 "Plug 'Shougo/context_filetype.vim' " XXX Untested
 " Plug 'Shougo/vimshell.vim' " not ported to neovim yet?
-"Plug 'altercation/vim-colors-solarized'
-"https://github.com/iCyMind/NeoSolarized
 " Plug 'let-def/vimbufsync'         " pathogen
 " Plug 'the-lambda-church/coquille' " pathogen
 call plug#end()
 
+" fzf.vim
+" :Files
+" :Buffers
+" :Ag
+" :[B]Lines
+" :Commands
+" --- Add ! to run in fullscreen
+" --- CTRL-[T: Tab][X: Split][V: Vert Split] to open
+
 " call pathogen#infect()
 
 " set esckeys
-set timeoutlen=0 ttimeoutlen=0
+set timeoutlen=300 ttimeoutlen=100
 
 " Simulate some Emacs keys
+" XXX Not working
 inoremap <M-x> :
 nnoremap <M-x> :
 cnoremap <C-g> <Esc>
@@ -52,11 +82,22 @@ inoremap <Esc>B <down>
 inoremap <Esc>C <right>
 inoremap <Esc>D <left>
 
+set termguicolors
 syntax on
-" XXX Doesn't seem to work in various ways... statusline is unreadable and
-" comments aren't enable (really seems like a problem in iTerm)
-" set background=light
-" colorscheme solarized
+set background=light
+colorscheme NeoSolarized
+
 filetype plugin indent on
 
-let g:deoplete#enable_at_startup = 1
+"let g:deoplete#enable_at_startup = 1
+
+let mapleader = ';'
+let g:mapleader = ';'
+inoremap ;; <Esc>
+nnoremap <leader>r :!jrun %<CR>
+
+function! s:word_sink(w)
+  call append(line('.'), a:w)
+endfunction
+
+command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapostrophe/shakes/apat/0', 'sink': function('s:word_sink')})
