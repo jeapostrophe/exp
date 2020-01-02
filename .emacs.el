@@ -14,7 +14,7 @@
 (require 'epa-file)
 (require 'uniquify)
 (require 'math-symbol-lists)
-(require 'ibuffer)
+(require 'ibuffer) 
 (require 'org)
 (require 'org-faces)
 (require 'org-protocol)
