@@ -206,16 +206,16 @@
 	      (:maintainer "Raffael Stocker" . "r.stocker@mnet-mail.de")
 	      (:url . "https://gitlab.com/rstocker/emacs-bluetooth"))])
  (bnf-mode .
-	   [(0 4 2)
+	   [(0 4 3)
 	    ((cl-lib
 	      (0 5))
 	     (emacs
 	      (24 3)))
 	    "Major mode for editing BNF grammars." tar
 	    ((:url . "https://github.com/sergeyklay/bnf-mode")
-	     (:maintainer "Serghei Iakovlev" . "sadhooklay@gmail.com")
+	     (:maintainer "Serghei Iakovlev" . "egrep@protonmail.ch")
 	     (:authors
-	      ("Serghei Iakovlev" . "sadhooklay@gmail.com"))
+	      ("Serghei Iakovlev" . "egrep@protonmail.ch"))
 	     (:keywords "languages"))])
  (brief .
 	[(5 87)
@@ -334,7 +334,7 @@
 		       (:maintainer "Clément Pit-Claudel" . "clement.pitclaudel@live.com")
 		       (:url . "https://github.com/cpitclaudel/compact-docstrings"))])
  (company .
-	  [(0 9 10)
+	  [(0 9 11)
 	   ((emacs
 	     (24 3)))
 	   "Modular text completion framework" tar
@@ -445,7 +445,7 @@
 		  ("Daiki Ueno" . "ueno@gnu.org"))
 		 (:maintainer nil . "emacs-devel@gnu.org"))])
  (debbugs .
-	  [(0 21)
+	  [(0 22)
 	   ((emacs
 	     (25 1))
 	    (soap-client
@@ -581,7 +581,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 6 11)
+       [(0 6 13)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -1321,7 +1321,7 @@
 	   ("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	  (:keywords "extensions" "lisp"))])
  (nhexl-mode .
-	     [(1 4)
+	     [(1 5)
 	      ((emacs
 		(24 4))
 	       (cl-lib
@@ -1411,10 +1411,10 @@
 	      (:maintainer "Michael Heerdegen" . "michael_heerdegen@web.de")
 	      (:url . "https://github.com/michael-heerdegen/on-screen.el"))])
  (org .
-      [(9 3 1)
+      [(9 3 2)
        nil "Outline-based notes management and organizer" tar
        ((:url . "https://orgmode.org")
-	(:maintainer "Carsten Dominik <carsten at orgmode dot org>")
+	(:maintainer "Bastien Guerry <bzg at gnu dot org>")
 	(:authors
 	 ("Carsten Dominik <carsten at orgmode dot org>"))
 	(:keywords "outlines" "hypermedia" "calendar" "wp"))])
@@ -1433,7 +1433,7 @@
 	      ("Ian Dunn" . "dunni@gnu.org"))
 	     (:keywords "convenience" "text" "org"))])
  (orgalist .
-	   [(1 10)
+	   [(1 11)
 	    ((emacs
 	      (24 4)))
 	    "Manage Org-like lists in non-Org buffers" single
@@ -1517,7 +1517,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 27)
+	    [(0 3 28)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1735,9 +1735,9 @@
 		   ("Bastien Guerry" . "bzg@gnu.org"))
 		  (:maintainer "Bastien Guerry" . "bzg@gnu.org"))])
  (relint .
-	 [(1 11)
+	 [(1 12)
 	  ((xr
-	    (1 13)))
+	    (1 14)))
 	  "Elisp regexp mistake finder" tar
 	  ((:url . "https://github.com/mattiase/relint")
 	   (:maintainer "Mattias Engdegård" . "mattiase@acm.org")
@@ -1944,9 +1944,9 @@
  (svg-clock .
 	    [(1 1)
 	     ((svg
-	       (0 1))
+	       (1 0))
 	      (emacs
-	       (25 0)))
+	       (27 0)))
 	     "Analog clock using Scalable Vector Graphics" single
 	     ((:url . "http://elpa.gnu.org/packages/svg-clock.html")
 	      (:keywords "demo" "svg" "clock")
@@ -2010,7 +2010,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 3)
+	[(2 4 3 1)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar
@@ -2050,7 +2050,7 @@
 	 (:maintainer "Toby Cubitt" . "toby-predictive@dr-qubit.org")
 	 (:url . "http://www.dr-qubit.org/emacs.php"))])
  (undo-tree .
-	    [(0 6 5)
+	    [(0 7 4)
 	     nil "Treat undo history as a tree" single
 	     ((:keywords "convenience" "files" "undo" "redo" "history" "tree")
 	      (:authors
@@ -2160,14 +2160,6 @@
        ((:url . "https://github.com/m00natic/vlfi")
 	(:maintainer "Andrey Kotlarski" . "m00naticus@gmail.com")
 	(:keywords "large files" "utilities"))])
- (w3 .
-     [(4 0 49)
-      nil "Fully customizable, largely undocumented web browser for Emacs" tar
-      ((:maintainer "William Perry and many more")
-       (:authors
-	("William Perry and many more"))
-       (:keywords "faces" "help" "comm" "news" "mail" "processes" "mouse" "hypermedia")
-       (:url . "http://elpa.gnu.org/packages/w3.html"))])
  (wcheck-mode .
 	      [(2019 6 17)
 	       nil "General interface for text checkers" single
@@ -2305,7 +2297,7 @@
 	 ("Thien-Thi Nguyen" . "ttn@gnu.org"))
 	(:keywords "multimedia" "xpm"))])
  (xr .
-     [(1 13)
+     [(1 14)
       nil "Convert string regexp to rx notation" tar
       ((:url . "https://github.com/mattiase/xr")
        (:maintainer "Mattias Engdegård" . "mattiase@acm.org")

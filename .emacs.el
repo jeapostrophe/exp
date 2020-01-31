@@ -840,6 +840,8 @@
 (global-set-key (kbd "C-`") 'helm-mini)
 (global-set-key (kbd "C-a") 'mark-whole-buffer)
 (global-set-key (kbd "C-b") 'helm-mini)
+(global-set-key (kbd "M-`") 'other-frame)
+(global-set-key (kbd "S-`") 'other-frame)
 (global-set-key (kbd "C-c C-c") 'comment-region)
 (global-set-key (kbd "C-c C-i") 'indent-region)
 (global-set-key (kbd "C-c C-v") 'uncomment-region)
@@ -875,6 +877,7 @@
 (global-set-key (kbd "s-v") 'clipboard-yank)
 (global-set-key (kbd "s-w") 'je/delete-window)
 (global-set-key (kbd "s-x") 'clipboard-kill-region)
+(global-set-key (kbd "s-z") 'undo)
 (global-unset-key (kbd "s-S"))
 (global-unset-key (kbd "s-j"))
 
