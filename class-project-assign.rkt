@@ -7,7 +7,7 @@
          raart)
 
 (define inventory
-  (for/hash ([i (in-range 1 10)])
+  (for/hash ([i (in-range 1 8)])
     (values (~a "P" i) 3)))
 (define MAX-POSSIBLE (hash-count inventory))
 
@@ -15,12 +15,12 @@
   (match-define (list* head fac)
     (csv->list (make-csv-reader (open-input-file p))))
   (define opts
-    (map (λ (x) (second (regexp-match #rx"\\[(.*?)\\]$" x)))
-         (list-tail head 2)))
+    (map (λ (x) x) #;(λ (x) (second (regexp-match #rx"\\[(.*?)\\]$" x)))
+         (list-tail head 3)))
   (define all '())
   (vector
    (for/hash ([f (in-list fac)])
-     (match-define (list* _ name prefs) f)
+     (match-define (list* _ _ name prefs) f)
      (set! all (cons name all))
      (define these
        (sort
