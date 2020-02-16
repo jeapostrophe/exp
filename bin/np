@@ -1,0 +1,15 @@
+#!/bin/bash
+
+P=${HOME}/.config/poems
+
+cd ${P}
+
+git ci -mup .
+
+last_pf=$(ls *.poem | sort -n | tail -1)
+last_pnf=$(basename ${last_pf} .poem)
+last_pn=$(echo ${last_pnf} | sed -E 's/^0+//')
+next_pn=$((${last_pn} + 1))
+next_pnf=$(printf "%05d.poem" ${next_pn})
+
+stoe ${next_pnf}
