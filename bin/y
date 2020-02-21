@@ -2,4 +2,4 @@
 
 # --netrc 
 cd $HOME/Downloads/YouTube
-exec youtube-dl --continue --ignore-errors --restrict-filenames --youtube-skip-dash-manifest --netrc --output "U%(uploader)s - %(title)s.%(ext)s" --mark-watched --no-playlist --download-archive .archive.yd $*
+exec youtube-dl --continue --ignore-errors --restrict-filenames --youtube-skip-dash-manifest --netrc --output "%(uploader)s - %(title)s.%(ext)s" --mark-watched --no-playlist --download-archive .archive.yd $*
