@@ -292,6 +292,12 @@
                             ("\x2018" . "'")
                             ("\x2019" . "'"))
                           nil beg end))
+(defun je/delete-carriage-returns ()
+  (interactive)
+  (save-excursion
+    (goto-char 0)
+    (while (search-forward "\r" nil :noerror)
+      (replace-match ""))))
 
 (defun je/run-current-file ()
   "Execute or compile the current file."
