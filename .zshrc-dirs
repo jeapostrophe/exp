@@ -30,3 +30,5 @@ hash -d 406=~courses/2019/spring/406
 hash -d bitb=~scm/bitbucket.jeapostrophe
 hash -d utrs=~bitb/consulting-utrs
 hash -d byron=~bitb/consulting-byron-davies
+
+hash -d reach=~bitb/reach/
