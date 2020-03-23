@@ -5,7 +5,7 @@
  'nil)
 (setq url-cookie-secure-storage
  '(("accounts.google.com"
-  [url-cookie "GAPS" "1:GvT7RAfjjNCYpgYbQnhOgl8L-mTijg:2SN09s2JpZtMn9hz" "Tue, 22-Mar-2022 13:51:19 GMT" "/" "accounts.google.com" t]))
+  [url-cookie "GAPS" "1:Y_3O7MGopNW54SYH6xiBE2oVVGo2Tw:ANdbbrPVtnyDMN8m" "Tue, 22-Mar-2022 17:24:09 GMT" "/" "accounts.google.com" t]))
 )
 
 ;; Local Variables:
