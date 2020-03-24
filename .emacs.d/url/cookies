@@ -1,14 +1,15 @@
-;; Emacs-W3 HTTP cookies file
-;; Automatically generated file!!! DO NOT EDIT!!!
 
-(setq url-cookie-storage
- 'nil)
-(setq url-cookie-secure-storage
- '(("accounts.google.com"
-  [url-cookie "GAPS" "1:Y_3O7MGopNW54SYH6xiBE2oVVGo2Tw:ANdbbrPVtnyDMN8m" "Tue, 22-Mar-2022 17:24:09 GMT" "/" "accounts.google.com" t]))
-)
-
-;; Local Variables:
-;; version-control: never
-;; no-byte-compile: t
-;; End:
+ Reach - Do something                                       2020-02-20 Thu 19:00 +1d  
+ Read articles Amanda sent                                  2020-03-21 Sat 15:22      
+ Write a sonnet                                             2020-03-22 Sun 18:00 +1d  
+ Workout                                                    2020-03-24 Tue 08:00 +1d  
+ Check email now (and only now)                             2020-03-24 Tue 12:30 +1d  
+ Music - Write a song or practice guitar                    2020-03-24 Tue 18:00 +1d  
+ 2020 RacketCon: 2020/10/17-18                              2020-05-01 Tue 17:00      
+ UML - Make syllabus/materials for online algorithms        2020-05-01 Sun 17:00      
+ Extra work time: 3077h
+ Shopping list
+ Computer Improvements
+ Project: Poetic Play about High School Play of Trojan War
+ Project: Tree Object Format & Editor
+ Project: Game Training
