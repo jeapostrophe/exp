@@ -581,7 +581,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 6 13)
+       [(0 6 16)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -610,7 +610,7 @@
 		 ((pyim
 		   (1 6 0))
 		  (ebdb
-		   (0 2)))
+		   (0 6 17)))
 		 "China-specific internationalization support for EBDB" single
 		 ((:url . "http://elpa.gnu.org/packages/ebdb-i18n-chn.html")
 		  (:authors
@@ -635,7 +635,7 @@
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
 	(:keywords "lisp" "e-scripts"))])
  (eglot .
-	[(1 5)
+	[(1 6)
 	 ((emacs
 	   (26 1))
 	  (jsonrpc
@@ -877,7 +877,7 @@
 		  (:keywords "gnome" "c" "coding style")
 		  (:url . "http://elpa.gnu.org/packages/gnome-c-style.html"))])
  (gnorb .
-	[(1 6 6)
+	[(1 6 7)
 	 ((cl-lib
 	   (0 5)))
 	 "Glue code between Gnus, Org, and BBDB" tar
@@ -886,6 +886,13 @@
 	   ("Eric Abrahamsen" . "eric@ericabrahamsen.net"))
 	  (:keywords "mail" "org" "gnus" "bbdb" "todo" "task")
 	  (:url . "http://elpa.gnu.org/packages/gnorb.html"))])
+ (gnu-elpa .
+	   [(1 0)
+	    nil "Advertize GNU ELPA packages" tar
+	    ((:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca")
+	     (:authors
+	      ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
+	     (:url . "http://elpa.gnu.org/packages/gnu-elpa.html"))])
  (gnu-elpa-keyring-update .
 			  [(2019 3)
 			   nil "Update Emacs's GPG keyring for GNU ELPA" tar
@@ -1274,7 +1281,7 @@
 	      ("Michael Abraham Shulman" . "viritrilbia@gmail.com"))
 	     (:keywords "convenience" "faces" "languages" "tools"))])
  (modus-operandi-theme .
-		       [(0 7 0)
+		       [(0 8 0)
 			((emacs
 			  (26 1)))
 			"Accessible light theme (WCAG AAA)" single
@@ -1284,7 +1291,7 @@
 			 (:maintainer "Protesilaos Stavrou" . "info@protesilaos.com")
 			 (:url . "https://gitlab.com/protesilaos/modus-themes"))])
  (modus-vivendi-theme .
-		      [(0 7 0)
+		      [(0 8 0)
 		       ((emacs
 			 (26 1)))
 		       "Accessible dark theme (WCAG AAA)" single
@@ -1465,7 +1472,7 @@
 	      ("Ian Dunn" . "dunni@gnu.org"))
 	     (:keywords "convenience" "text" "org"))])
  (orgalist .
-	   [(1 11)
+	   [(1 12)
 	    ((emacs
 	      (24 4)))
 	    "Manage Org-like lists in non-Org buffers" single
@@ -1549,7 +1556,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 38)
+	    [(0 3 44)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1812,6 +1819,18 @@
 	  (:authors
 	   ("Jan Moringen" . "scymtym@users.sourceforge.net"))
 	  (:keywords "rudel" "collaboration"))])
+ (scanner .
+	  [(0 1)
+	   ((emacs
+	     (25 1))
+	    (dash
+	     (2 12 0)))
+	   "Scan documents and images" tar
+	   ((:url . "https://gitlab.com/rstocker/scanner.git")
+	    (:maintainer "Raffael Stocker" . "r.stocker@mnet-mail.de")
+	    (:authors
+	     ("Raffael Stocker" . "r.stocker@mnet-mail.de"))
+	    (:keywords "hardware" "multimedia"))])
  (scroll-restore .
 		 [(1 0)
 		  nil "restore original position after scrolling" single
@@ -1859,10 +1878,17 @@
 	       ("Ralph Amissah & Ambrose Kofi Laing"))
 	      (:maintainer "Ralph Amissah" . "ralph.amissah@gmail.com")
 	      (:url . "http://www.sisudoc.org/"))])
+ (sm-c-mode .
+	    [(1 0)
+	     nil "C major mode based on SMIE" single
+	     ((:url . "http://elpa.gnu.org/packages/sm-c-mode.html")
+	      (:authors
+	       ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
+	      (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca"))])
  (smalltalk-mode .
 		 [(3 2 92)
 		  nil "Major mode for the GNU Smalltalk programming language" tar
-		  ((:maintainer "Derek Zhou" . "derek@shannon-data.com")
+		  ((:maintainer "Derek Zhou" . "derek@3qin.us")
 		   (:authors
 		    ("Steve Byrne"))
 		   (:url . "http://elpa.gnu.org/packages/smalltalk-mode.html"))])
@@ -2046,7 +2072,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 3 3)
+	[(2 4 3 4)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar
