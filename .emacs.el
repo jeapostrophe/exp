@@ -652,6 +652,12 @@
 ;;(add-hook 'haskell-mode-hook 'intero-mode)
 (setq flycheck-check-syntax-automatically '(save mode-enable))
 
+(use-package ormolu
+ :hook (haskell-mode . ormolu-format-on-save-mode)
+ :bind
+ (:map haskell-mode-map
+       ("C-c r" . ormolu-format-buffer)))
+
 ;; javascript mode
 (setq js-indent-level 2)
 
@@ -785,7 +791,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-pos-tip pos-tip go-mode docker-compose-mode dockerfile-mode js2-mode hindent haskell-mode intero solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math))))
+    (use-package ormolu flycheck-pos-tip pos-tip go-mode docker-compose-mode dockerfile-mode js2-mode hindent haskell-mode intero solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify llvm-mode ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math))))
 
 ;; Aliases
 (defalias 'agp 'ag-project)
