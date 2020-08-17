@@ -1,6 +1,6 @@
 source ~/.zshrc-dirs
 
-setopt inc_append_history share_history
+setopt inc_append_history no_share_history
 setopt printeightbit
 setopt autopushd pushdminus pushdsilent pushdtohome
 
