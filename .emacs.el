@@ -650,7 +650,7 @@
 ;; haskell mode
 (require 'haskell-mode)
 ;;(add-hook 'haskell-mode-hook 'intero-mode)
-(setq flycheck-check-syntax-automatically '(save mode-enable))
+;;(setq flycheck-check-syntax-automatically '(save mode-enable))
 
 (require 'use-package)
 (use-package ormolu
