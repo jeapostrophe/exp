@@ -629,8 +629,20 @@
 (add-to-list 'compilation-error-regexp-alist '("context...:" 0))
 (add-to-list 'compilation-error-regexp-alist '("Test failed" 0))
 
+;; haskell mode
+(require 'haskell-mode)
+;;(add-hook 'haskell-mode-hook 'intero-mode)
+;;(setq flycheck-check-syntax-automatically '(save mode-enable))
+
+;;(require 'use-package)
+;;(use-package ormolu
+;; ;; :hook (haskell-mode . ormolu-format-on-save-mode)
+;; :bind
+;; (:map haskell-mode-map
+;;       ("C-c r" . ormolu-format-buffer)))
+
 ;;; Syntax highlighting
-(dolist (mode '(c-mode racket-mode java-mode emacs-lisp-mode))
+(dolist (mode '(c-mode racket-mode java-mode emacs-lisp-mode haskell-mode))
   (font-lock-add-keywords
    mode
    '(("\\(XXX\\|FIXME\\|TODO\\)" 1 font-lock-warning-face prepend))))
@@ -646,18 +658,6 @@
 (setq racket-mode-pretty-lambda t
       racket-mode-rackjure-indent nil
       racket-use-company-mode nil)
-
-;; haskell mode
-(require 'haskell-mode)
-;;(add-hook 'haskell-mode-hook 'intero-mode)
-;;(setq flycheck-check-syntax-automatically '(save mode-enable))
-
-(require 'use-package)
-(use-package ormolu
- ;; :hook (haskell-mode . ormolu-format-on-save-mode)
- :bind
- (:map haskell-mode-map
-       ("C-c r" . ormolu-format-buffer)))
 
 ;; javascript mode
 (setq js-indent-level 2)
@@ -790,9 +790,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-columns-default-format "%25ITEM %TODO %3PRIORITY %TAGS")
  '(package-selected-packages
-   '(adaptive-wrap visual-fill-column use-package ormolu flycheck-pos-tip pos-tip go-mode docker-compose-mode dockerfile-mode js2-mode hindent haskell-mode intero solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math)))
+   '(adaptive-wrap visual-fill-column use-package ormolu flycheck-pos-tip pos-tip go-mode docker-compose-mode dockerfile-mode js2-mode hindent haskell-mode solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math)))
 
 ;; Aliases
 (defalias 'agp 'ag-project)
