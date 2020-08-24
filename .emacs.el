@@ -909,8 +909,7 @@
 ;; ospl
 (load-file "~/.emacs.d/ospl-mode/ospl-mode.el")
 (use-package ospl-mode
-  :hook (scribble-mode . ospl-mode)
-  :hook (text-mode . ospl-mode))
+  :hook (scribble-mode . ospl-mode))
 
 ;; Global Modes
 (helm-mode 1)
