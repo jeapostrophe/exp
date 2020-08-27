@@ -401,11 +401,14 @@
       org-agenda-todo-ignore-scheduled 'future
       org-agenda-ignore-drawer-properties '(effort appt category)
       org-agenda-sorting-strategy '(user-defined-up)
-      org-agenda-overriding-columns-format "%56ITEM %DEADLINE"
+      org-agenda-overriding-columns-format "%50ITEM %DEADLINE"
       org-agenda-overriding-header ""
       org-agenda-columns-show-summaries nil
       org-agenda-columns-compute-summary-properties nil
       org-todo-keywords '((sequence "TODO" "DONE")))
+(setq org-columns-default-format-for-agenda "%50ITEM %DEADLINE")
+(setq org-columns-default-format "%50ITEM %DEADLINE")
+(setq org-overriding-columns-format "%50ITEM %DEADLINE")
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
          "* TODO %?\n  SCHEDULED: %T\tDEADLINE: %T\n%a")))
