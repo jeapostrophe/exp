@@ -1,3 +1,5 @@
+" XXX Consider using neovim-lsp: https://jdhao.github.io/2019/11/20/neovim_builtin_lsp_hands_on/
+
 " Use "hybrid" (both absolute and relative) line numbers
 " set number relativenumber
 
@@ -21,11 +23,12 @@ set autoindent              " indent a new line the same amount as the line just
 
 let g:python_host_prog  = '/usr/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
-    
+
 call plug#begin()
 Plug 'iCyMind/NeoSolarized'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 "Plug 'junegunn/vim-easy-align' " XXX Untested
@@ -100,4 +103,9 @@ function! s:word_sink(w)
   call append(line('.'), a:w)
 endfunction
 
-command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapostrophe/shakes/apat/0', 'sink': function('s:word_sink')})
+command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapostrophe/shakes/apat/hard', 'sink': function('s:word_sink')})
+
+" Notes
+" v/V/C-V visual selection
+" G - end of file
+" :e - revert file

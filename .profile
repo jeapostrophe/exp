@@ -46,3 +46,5 @@ export TMPDIR=/tmp/
 
 export GPG_TTY=$(tty)
 
+export PASSWORD_STORE_ENABLE_EXTENSIONS=true
+
