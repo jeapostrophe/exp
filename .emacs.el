@@ -794,7 +794,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(adaptive-wrap visual-fill-column use-package ormolu flycheck-pos-tip pos-tip go-mode docker-compose-mode dockerfile-mode js2-mode hindent haskell-mode solidity-flycheck solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill tuareg syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode magit-gh-pulls magit-filenotify ledger-mode json-mode helm-unicode helm-google helm-github-stars helm-fuzzier helm-flyspell helm-bibtex helm-ag-r helm-ag graphviz-dot-mode gradle-mode gmail-message-mode glsl-mode gitignore-mode gitconfig-mode gist flyspell-correct-helm flycheck-ledger f3 evil eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math)))
+   '(adaptive-wrap visual-fill-column use-package ormolu flycheck-pos-tip pos-tip go-mode docker-compose-mode dockerfile-mode js2-mode hindent haskell-mode solidity-mode flycheck exec-path-from-shell proof-general yaml-mode unfill syslog-mode ssh-config-mode solarized-theme scribble-mode rainbow-delimiters racket-mode paredit nasm-mode ledger-mode json-mode helm-unicode helm-fuzzier graphviz-dot-mode glsl-mode gitignore-mode gitconfig-mode gist flycheck-ledger f3 eprime-mode edit-server csv-mode company-math color-theme-library bison-mode autopair auto-complete-c-headers auto-complete-auctex ag ac-math)))
 
 ;; Aliases
 (defalias 'agp 'ag-project)
@@ -915,7 +915,7 @@
   :hook (scribble-mode . ospl-mode))
 
 ;; Global Modes
-(helm-mode 1)
+;;; (helm-mode 1)
 (tool-bar-mode -1)
 (menu-bar-mode t)
 (scroll-bar-mode -1)

@@ -30,6 +30,7 @@ alias vim=$EDITOR
 alias vi=$EDITOR
 alias ed=$EDITOR
 alias cat=bat
+alias e=$EDITOR
 
 function rcd() {
     cd $(racket -l find-collection/run -- $@)
