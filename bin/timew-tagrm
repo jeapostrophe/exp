@@ -1,0 +1,7 @@
+#!/bin/sh
+oldtag=$1; shift
+
+idlist=$(timew summary 1970W01 - now "$oldtag" :ids |\
+             gsed -nr 's/.* (@[0-9]+) .*/\1/p')
+
+timew untag $idlist "$oldtag"

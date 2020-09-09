@@ -49,3 +49,4 @@ export GPG_TTY=$(tty)
 
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 
+export TZ="America/New_York"
