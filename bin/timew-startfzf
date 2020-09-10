@@ -1,0 +1,2 @@
+#!/bin/sh
+timew tags | awk -F' -' '{print $1}' | tail -n +4 | fzf | xargs timew start

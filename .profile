@@ -30,7 +30,10 @@ alias vim=$EDITOR
 alias vi=$EDITOR
 alias ed=$EDITOR
 alias cat=bat
+
 alias e=$EDITOR
+alias tw=timew
+alias tws=timew-startfzf
 
 function rcd() {
     cd $(racket -l find-collection/run -- $@)
