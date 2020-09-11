@@ -34,6 +34,7 @@ alias cat=bat
 alias e=$EDITOR
 alias tw=timew
 alias tws=timew-startfzf
+alias twt="timew stop"
 
 function rcd() {
     cd $(racket -l find-collection/run -- $@)

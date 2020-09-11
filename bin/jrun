@@ -31,6 +31,7 @@ else
         py) exec python $* ;;
         cc) exec ccci $* ;;
         glsl) exec glslangValidator $* ;;
+        mjs) exec node $* ;;
         rkt) exec rkt $* ;;
         ss) exec rkt $* ;;
         scrbl) exec rkt $* ;;
