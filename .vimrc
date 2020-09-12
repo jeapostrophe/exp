@@ -24,6 +24,8 @@ set autoindent              " indent a new line the same amount as the line just
 let g:python_host_prog  = '/usr/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
+set shellcmdflag=-ic
+
 call plug#begin()
 Plug 'iCyMind/NeoSolarized'
 Plug '/usr/local/opt/fzf'
