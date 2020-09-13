@@ -24,6 +24,7 @@ set autoindent              " indent a new line the same amount as the line just
 let g:python_host_prog  = '/usr/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
+" Supposedly this can be a problem, but I don't know why
 set shellcmdflag=-ic
 
 call plug#begin()
@@ -60,8 +61,6 @@ call plug#end()
 " --- Add ! to run in fullscreen
 " --- CTRL-[T: Tab][X: Split][V: Vert Split] to open
 
-" call pathogen#infect()
-
 " set esckeys
 set timeoutlen=300 ttimeoutlen=100
 
@@ -86,6 +85,9 @@ inoremap <Esc>A <up>
 inoremap <Esc>B <down>
 inoremap <Esc>C <right>
 inoremap <Esc>D <left>
+
+" enable select arrows
+set keymodel=startsel,stopsel
 
 set termguicolors
 syntax on
