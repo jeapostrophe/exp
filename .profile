@@ -35,9 +35,10 @@ alias e=$EDITOR
 alias tw=timew
 alias tws=timew-startfzf
 alias twt="timew stop"
+alias w="w3m ~/sbin/start-page/index.html"
 
-function rcd() {
-    cd $(racket -l find-collection/run -- $@)
+rcd() {
+  cd $(racket -l find-collection/run -- $@)
 }
 
 export EMACS_SERVER_PORT=50000
