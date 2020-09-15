@@ -21,14 +21,19 @@ set autoindent   " indent a new line the same amount as the line just typed
 set shellcmdflag=-ic " read .profile, but I read this might be bad
 
 let g:fzf_command_prefix = 'Fzf'
+let g:dispatch_no_maps = 1
 
 call plug#begin()
 Plug 'iCyMind/NeoSolarized'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
+" Plug 'neovim/nvim-lspconfig' " Works, but slow
+Plug 'wlangstroth/vim-racket'
+Plug 'sunaku/vim-dasht'
+Plug 'wellle/context.vim'
+"Plug 'tpope/vim-dispatch' " XXX hides successful output
 
-" XXX Consider using neovim-lsp: https://jdhao.github.io/2019/11/20/neovim_builtin_lsp_hands_on/
 "Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 "Plug 'junegunn/vim-easy-align' " XXX Untested
@@ -43,10 +48,18 @@ Plug 'itchyny/lightline.vim'
 "Plug 'Shougo/neopairs.vim' " XXX Untested
 "Plug 'Shougo/echodoc.vim' " XXX Untested
 "Plug 'Shougo/context_filetype.vim' " XXX Untested
+" Plug 'reedes/vim-pencil'
+" Plug 'junegunn/limelight.vim'
+" Plug 'reedes/vim-lexical'
+" Plug 'reedes/vim-litecorrect'
+" Plug 'reedes/vim-one'
 " Plug 'Shougo/vimshell.vim' " not ported to neovim yet?
 " Plug 'let-def/vimbufsync'         " pathogen
 " Plug 'the-lambda-church/coquille' " pathogen
 call plug#end()
+
+" racket
+let g:racket_hash_lang_regexp="^$" " don't guess filetype
 
 " Fzf
 command! -nargs=* -bang FzfRgLike call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -t".expand('%:e')." -- ".shellescape(<q-args>), 1, <bang>0)
@@ -70,6 +83,11 @@ function! LightlineReadonly()
   return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 set noshowmode " hide mode re: lightline
+
+" lsp
+" lua <<EOF
+" require'nvim_lsp'.hls.setup{}
+" EOF
 
 " set esckeys
 set timeoutlen=300 ttimeoutlen=100
@@ -115,24 +133,64 @@ nmap <C-w><C-w> :q!<CR>
 imap <C-d> <Esc>
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
-nnoremap  :!jrun %<CR>
+set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
+nnoremap  :w<CR>:make<CR>
+" XXX add a keybinding that does this in :sp term://
 nnoremap <C-g> :FzfRgLike!<CR>
 nnoremap <C-g><C-g> :FzfRg!<CR>
 nnoremap <C-f> :FzfBLines!<CR>
 nnoremap <C-b> :FzfFiles!<CR>
 nnoremap <C-b><C-b> :FzfBuffers!<CR>
 nnoremap <C-h> :FzfCommands!<CR>
+nnoremap K :call Dasht(dasht#cursor_search_terms())<Return>
+" XXX defer to external tool, maybe with https://github.com/Chiel92/vim-autoformat
+nnoremap <C-i> gg=G<C-o><C-o>
+
+nnoremap <C-left> <C-W><C-H>
+nnoremap <C-right> <C-W><C-L>
+nnoremap <C-up> <C-W><C-K>
+nnoremap <C-down> <C-W><C-J>
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap ∑ :only<CR> " M-w
+
+" Terminal stuff
+tnoremap <Esc> <C-\><C-n>
+au BufEnter term://* startinsert
+
+" nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+" nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+" nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+" nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+" nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+" XXX would be nice to push this into Fzf
+" nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+" nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+" nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
 
 " XXX I want to take an "excursion" into another file like above and open a
 " window to the side of the main one. (I want the main window to be in the
-" middle centered, with other windows around it to the side.)
+" middle centered, with other windows around it to the side --- like
+" junegunn/goyo.vim)
 
-" XXX
-" inoremap <M-Left> 
+" XXX softline wrap in scribble/text
+"
+
+" XXX shift doesn't work on these and they don't follow Sexprs
+nnoremap <M-Left> b
+inoremap <M-Left> <C-o>b
+nnoremap <M-Right> w
+inoremap <M-Right> <C-o>w
+
+" XXX how to comment out region
 
 " enable shift-select
 set keymodel=startsel,stopsel
 set sel=exclusive
+set selectmode=key
 
 " Colors
 set termguicolors
@@ -141,8 +199,27 @@ set background=light
 colorscheme NeoSolarized
 
 filetype plugin indent on
+au! BufRead,BufNewFile *.scrbl setfiletype scribble
 
-"let g:deoplete#enable_at_startup = 1
+" Auto load session; maybe use mhinz/vim-startify
+fu! SaveSess()
+    execute 'mksession! ' . getcwd() . '/.session.vim'
+endfunction
+
+fu! RestoreSess()
+if filereadable(getcwd() . '/.session.vim')
+    execute 'so ' . getcwd() . '/.session.vim'
+    if bufexists(1)
+        for l in range(1, bufnr('$'))
+            if bufwinnr(l) == -1
+                exec 'sbuffer ' . l
+            endif
+        endfor
+    endif
+endif
+endfunction
+autocmd VimLeave * call SaveSess()
+autocmd VimEnter * nested call RestoreSess()
 
 " let mapleader = ';'
 " let g:mapleader = ';'

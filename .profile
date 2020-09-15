@@ -55,3 +55,5 @@ export GPG_TTY=$(tty)
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 
 export TZ="America/New_York"
+
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
