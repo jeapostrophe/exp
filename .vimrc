@@ -62,27 +62,35 @@ call plug#end()
 let g:racket_hash_lang_regexp="^$" " don't guess filetype
 
 " Fzf
+let g:fzf_preview_window = 'right:60%'
+let g:fzf_layout = { 'window': {
+      \ 'width': 0.9,
+      \ 'height': 0.7,
+      \ 'highlight': 'Comment',
+      \ 'rounded': v:false } }
 command! -nargs=* -bang FzfRgLike call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -t".expand('%:e')." -- ".shellescape(<q-args>), 1, <bang>0)
 
 " lightline
 let g:lightline = {}
 let g:lightline.colorscheme = 'solarized'
 let g:lightline.active = {
-    \ 'left': [ [ 'mode', 'paste' ],
-    \           [ 'readonly', 'filename', 'modified' ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ] ] }
+      \ 'left': [ [ 'mode', 'paste' ],
+      \           [ 'readonly', 'filename', 'modified' ] ],
+      \ 'right': [ [ 'lineinfo' ],
+      \            [ 'percent' ],
+      \            [ 'filetype' ] ] }
 let g:lightline.inactive = {
-    \ 'left': [ [ 'filename' ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ] ] }
+      \ 'left': [ [ 'filename' ] ],
+      \ 'right': [ [ 'lineinfo' ],
+      \            [ 'percent' ] ] }
 let g:lightline.component_function = {
-    \ 'readonly': 'LightlineReadonly' }
+      \ 'readonly': 'LightlineReadonly' }
 function! LightlineReadonly()
   return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 set noshowmode " hide mode re: lightline
+" XXX set laststatus=0 ?
+" XXX show the result of tw
 
 " lsp
 " lua <<EOF
@@ -134,14 +142,16 @@ imap <C-d> <Esc>
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
-nnoremap  :w<CR>:make<CR>
-" XXX add a keybinding that does this in :sp term://
-nnoremap <C-g> :FzfRgLike!<CR>
-nnoremap <C-g><C-g> :FzfRg!<CR>
-nnoremap <C-f> :FzfBLines!<CR>
-nnoremap <C-b> :FzfFiles!<CR>
-nnoremap <C-b><C-b> :FzfBuffers!<CR>
-nnoremap <C-h> :FzfCommands!<CR>
+nnoremap <C-Space> :w<CR>:make<CR>
+" XXX ^ add a keybinding that does this in :sp term://
+
+nnoremap <C-g> :FzfRgLike<CR>
+nnoremap <C-g><C-g> :FzfRg<CR>
+nnoremap <C-f> :FzfBLines<CR>
+nnoremap <C-f><C-f> :FzfFiles %:h<CR>
+nnoremap <C-b> :FzfFiles<CR>
+nnoremap <C-b><C-b> :FzfBuffers<CR>
+nnoremap <C-h> :FzfCommands<CR>
 nnoremap K :call Dasht(dasht#cursor_search_terms())<Return>
 " XXX defer to external tool, maybe with https://github.com/Chiel92/vim-autoformat
 nnoremap <C-i> gg=G<C-o><C-o>
@@ -150,11 +160,16 @@ nnoremap <C-left> <C-W><C-H>
 nnoremap <C-right> <C-W><C-L>
 nnoremap <C-up> <C-W><C-K>
 nnoremap <C-down> <C-W><C-J>
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-nnoremap ∑ :only<CR> " M-w
+inoremap <C-left> <Esc><C-W><C-H>
+inoremap <C-right> <Esc><C-W><C-L>
+inoremap <C-up> <Esc><C-W><C-K>
+inoremap <C-down> <Esc><C-W><C-J>
+tnoremap <C-left> <Esc><C-W><C-H>
+tnoremap <C-right> <Esc><C-W><C-L>
+tnoremap <C-up> <Esc><C-W><C-K>
+tnoremap <C-down> <Esc><C-W><C-J>
+" M-w
+nnoremap ∑ :only<CR>
 
 " Terminal stuff
 tnoremap <Esc> <C-\><C-n>
@@ -200,26 +215,29 @@ colorscheme NeoSolarized
 
 filetype plugin indent on
 au! BufRead,BufNewFile *.scrbl setfiletype scribble
+au! BufRead,BufNewFile *.rsh setfiletype javascript
 
 " Auto load session; maybe use mhinz/vim-startify
 fu! SaveSess()
-    execute 'mksession! ' . getcwd() . '/.session.vim'
+  execute 'mksession! ' . getcwd() . '/.session.vim'
 endfunction
 
 fu! RestoreSess()
-if filereadable(getcwd() . '/.session.vim')
+  if filereadable(getcwd() . '/.session.vim')
     execute 'so ' . getcwd() . '/.session.vim'
     if bufexists(1)
-        for l in range(1, bufnr('$'))
-            if bufwinnr(l) == -1
-                exec 'sbuffer ' . l
-            endif
-        endfor
+      for l in range(1, bufnr('$'))
+        if bufwinnr(l) == -1
+          exec 'sbuffer ' . l
+        endif
+      endfor
     endif
-endif
+  endif
 endfunction
-autocmd VimLeave * call SaveSess()
-autocmd VimEnter * nested call RestoreSess()
+if argc() == 0
+ autocmd VimLeave * call SaveSess()
+ autocmd VimEnter * nested call RestoreSess()
+endif
 
 " let mapleader = ';'
 " let g:mapleader = ';'
