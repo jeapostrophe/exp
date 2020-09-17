@@ -1,0 +1,3 @@
+#!/bin/sh
+cd ~/.password-store
+fd -e gpg '' | sed 's/\.gpg$//' | fzf --query="$*" -1 -0 | xargs pass show

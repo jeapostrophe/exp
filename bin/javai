@@ -8,11 +8,11 @@ cecho () {
 }
 
 cd "$(dirname "$FILE")" && \
-cecho Compiling... && \
+echo Compiling... && \
 javac "$FILE" && \
-cecho New class files are: && \
+echo New class files are: && \
 ls -1 *.class && \
-cecho Running... && \
+echo Running... && \
 java C"$(basename "${FILE}" .java)" && \
-cecho Cleaning up... && \
+echo Cleaning up... && \
 rm *.class

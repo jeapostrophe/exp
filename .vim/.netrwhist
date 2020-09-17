@@ -1,4 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/home/jay/Dev/scm/github.jeapostrophe/home/.git/info'
-let g:netrw_dirhist_2='/home/jay/.gconf/apps/miro'
+let g:netrw_dirhistcnt =1
+let g:netrw_dirhist_1='/Users/jay/Dev/dist'

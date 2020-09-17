@@ -32,7 +32,10 @@ Plug 'itchyny/lightline.vim'
 Plug 'wlangstroth/vim-racket'
 Plug 'sunaku/vim-dasht'
 Plug 'wellle/context.vim'
-"Plug 'tpope/vim-dispatch' " XXX hides successful output
+Plug 'tpope/vim-dispatch' " XXX :Make hides successful output
+Plug 'lervag/wiki.vim'
+Plug 'lervag/wiki-ft.vim'
+Plug 'tpope/vim-commentary' " gcc
 
 "Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
@@ -97,6 +100,9 @@ set noshowmode " hide mode re: lightline
 " require'nvim_lsp'.hls.setup{}
 " EOF
 
+" wiki
+let g:wiki_root = '~/.wiki'
+
 " set esckeys
 set timeoutlen=300 ttimeoutlen=100
 
@@ -144,6 +150,7 @@ inoremap <S-Tab> <C-d>
 set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
 nnoremap <C-Space> :w<CR>:make<CR>
 " XXX ^ add a keybinding that does this in :sp term://
+" XXX Or a good keybinding for Kitty
 
 nnoremap <C-g> :FzfRgLike<CR>
 nnoremap <C-g><C-g> :FzfRg<CR>
@@ -170,6 +177,8 @@ tnoremap <C-up> <Esc><C-W><C-K>
 tnoremap <C-down> <Esc><C-W><C-J>
 " M-w
 nnoremap ∑ :only<CR>
+" M-/
+inoremap ÷ <C-n>
 
 " Terminal stuff
 tnoremap <Esc> <C-\><C-n>
