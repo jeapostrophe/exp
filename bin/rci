@@ -1,0 +1,6 @@
+#!/bin/sh
+rustc "${1}" -o tmp$$ || exit 1
+./tmp$$
+RES=$?
+rm -f tmp$$
+exit $RES

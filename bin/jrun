@@ -27,6 +27,13 @@ else
         java) exec javai $* ;;
         ll) exec llvmi $* ;;
         c) exec cci $* ;;
+        rs)
+            if parentf Cargo.toml ; then
+              exec cargo run
+            else
+              exec rci $*
+            fi
+            ;;
         sh) exec sh $* ;;
         py) exec python $* ;;
         cc) exec ccci $* ;;

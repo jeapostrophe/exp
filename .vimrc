@@ -148,7 +148,7 @@ imap <C-d> <Esc>
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
-nnoremap <C-Space> :w<CR>:make<CR>
+nnoremap <C-Space> :w<CR>:make!<CR>
 " XXX ^ add a keybinding that does this in :sp term://
 " XXX Or a good keybinding for Kitty
 
@@ -221,19 +221,21 @@ set termguicolors
 syntax on
 set background=light
 colorscheme NeoSolarized
+let g:neosolarized_visibility = "high"
+let g:neosolarized_contrast = "high"
 
 filetype plugin indent on
 au! BufRead,BufNewFile *.scrbl setfiletype scribble
 au! BufRead,BufNewFile *.rsh setfiletype javascript
 
 " Auto load session; maybe use mhinz/vim-startify
+let g:session_file = getcwd() . '/.session.vim'
 fu! SaveSess()
-  execute 'mksession! ' . getcwd() . '/.session.vim'
+  execute 'mksession! ' . g:session_file
 endfunction
-
 fu! RestoreSess()
-  if filereadable(getcwd() . '/.session.vim')
-    execute 'so ' . getcwd() . '/.session.vim'
+  if filereadable(g:session_file)
+    execute 'so ' . g:session_file
     if bufexists(1)
       for l in range(1, bufnr('$'))
         if bufwinnr(l) == -1
