@@ -36,6 +36,7 @@ Plug 'tpope/vim-dispatch' " XXX :Make hides successful output
 Plug 'lervag/wiki.vim'
 Plug 'lervag/wiki-ft.vim'
 Plug 'tpope/vim-commentary' " gcc
+Plug 'neovimhaskell/haskell-vim'
 
 "Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
