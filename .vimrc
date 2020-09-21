@@ -37,8 +37,10 @@ Plug 'lervag/wiki.vim'
 Plug 'lervag/wiki-ft.vim'
 Plug 'tpope/vim-commentary' " gcc
 Plug 'neovimhaskell/haskell-vim'
+Plug 'ledger/vim-ledger' " XXX Completion doesn't work
+Plug 'jiangmiao/auto-pairs'
+Plug 'Lenovsky/nuake'
 
-"Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 "Plug 'junegunn/vim-easy-align' " XXX Untested
 "Plug 'benekastah/neomake'  " XXX Untested
@@ -60,6 +62,7 @@ Plug 'neovimhaskell/haskell-vim'
 " Plug 'Shougo/vimshell.vim' " not ported to neovim yet?
 " Plug 'let-def/vimbufsync'         " pathogen
 " Plug 'the-lambda-church/coquille' " pathogen
+" tpope/vim-surround
 call plug#end()
 
 " racket
@@ -161,8 +164,10 @@ nnoremap <C-b> :FzfFiles<CR>
 nnoremap <C-b><C-b> :FzfBuffers<CR>
 nnoremap <C-h> :FzfCommands<CR>
 nnoremap K :call Dasht(dasht#cursor_search_terms())<Return>
-" XXX defer to external tool, maybe with https://github.com/Chiel92/vim-autoformat
+" ^ Ctrl-T to get a new tab
+
 nnoremap <C-i> gg=G<C-o><C-o>
+" ^ XXX defer to external tool, maybe with https://github.com/Chiel92/vim-autoformat
 
 nnoremap <C-left> <C-W><C-H>
 nnoremap <C-right> <C-W><C-L>
@@ -172,18 +177,25 @@ inoremap <C-left> <Esc><C-W><C-H>
 inoremap <C-right> <Esc><C-W><C-L>
 inoremap <C-up> <Esc><C-W><C-K>
 inoremap <C-down> <Esc><C-W><C-J>
-tnoremap <C-left> <Esc><C-W><C-H>
-tnoremap <C-right> <Esc><C-W><C-L>
-tnoremap <C-up> <Esc><C-W><C-K>
-tnoremap <C-down> <Esc><C-W><C-J>
+tnoremap <C-left> <C-\><C-n><C-W><C-H>
+tnoremap <C-right> <C-\><C-n><C-W><C-L>
+tnoremap <C-up> <C-\><C-n><C-W><C-K>
+tnoremap <C-down> <C-\><C-n><C-W><C-J>
 " M-w
 nnoremap ∑ :only<CR>
 " M-/
 inoremap ÷ <C-n>
+" ^ XXX the menu is really annoying. I want to fuzzy complete
 
 " Terminal stuff
 tnoremap <Esc> <C-\><C-n>
 au BufEnter term://* startinsert
+
+" Nuake
+" XXX make this a command that focuses on it if it is open
+nnoremap <C-x> :Nuake<CR>
+inoremap <C-x> <C-o>:Nuake<CR>
+tnoremap <C-x> <C-\><C-n>:Nuake<CR>
 
 " nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
 " nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
@@ -226,6 +238,7 @@ let g:neosolarized_visibility = "high"
 let g:neosolarized_contrast = "high"
 
 filetype plugin indent on
+au! BufRead,BufNewFile *.rktd setfiletype racket
 au! BufRead,BufNewFile *.scrbl setfiletype scribble
 au! BufRead,BufNewFile *.rsh setfiletype javascript
 
@@ -269,6 +282,7 @@ command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapost
 " / - search
 " % - move between delimiters
 " " n/N - fwd/bck search
+" gq - M-q
 
 " fzf.vim
 " --- CTRL-[T: Tab][X: Split][V: Vert Split] to open

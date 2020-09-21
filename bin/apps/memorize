@@ -1,3 +1,6 @@
 #!/bin/sh
 
-exec racket -l memorize -- $HOME/Dev/scm/github.jeapostrophe/memorize/local/scripture-mastery.txt 5
+# exec racket -l memorize -- $HOME/Dev/scm/github.jeapostrophe/memorize/local/scripture-mastery.txt 5
+
+cd $HOME/Dev/scm/github.jeapostrophe/memorize/local
+exec ../memorize.sh scripture-mastery.txt

@@ -19,7 +19,7 @@ cd $J/d
 RAND=$(ls $J/d/*$($DATE "+%m%d.txt") | shuf -n 1)
 
 if [ -f ${FILE} ] ; then
-    oe ${FILE}
+    ${EDITOR} ${FILE}
     git commit -m "Editted journal entry" ${FILE}
 else
     LANG=en $DATE "+%A, %B %e %Y%n%n" > ${FILE}
@@ -35,8 +35,8 @@ else
         echo >> ${FILE}
     fi
     git add ${FILE}
-    oe ${FILE}
+    ${EDITOR} ${FILE}
     git commit -m "New journal entry" ${FILE}
 fi
 
-cat ${RAND}
+${EDITOR} ${RAND}

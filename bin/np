@@ -12,4 +12,5 @@ last_pn=$(echo ${last_pnf} | sed -E 's/^0+//')
 next_pn=$((${last_pn} + 1))
 next_pnf=$(printf "%05d.poem" ${next_pn})
 
-stoe ${next_pnf}
+${EDITOR} ${next_pnf}
+git add ${next_pnf}

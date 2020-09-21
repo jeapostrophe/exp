@@ -633,7 +633,7 @@
 (add-to-list 'compilation-error-regexp-alist '("Test failed" 0))
 
 ;; haskell mode
-(require 'haskell-mode)
+;;(require 'haskell-mode)
 ;;(add-hook 'haskell-mode-hook 'intero-mode)
 ;;(setq flycheck-check-syntax-automatically '(save mode-enable))
 
@@ -770,10 +770,10 @@
 ;; Hooks
 (setq isearch-mode-hook ; XXX I don't know why this works
       (function (lambda () (isearch-toggle-case-fold) (isearch-toggle-case-fold))))
-(add-hook 'compilation-filter-hook 'je/colorize-compilation-buffer)
+;; (add-hook 'compilation-filter-hook 'je/colorize-compilation-buffer)
 (add-hook 'racket-mode-hook 'autopair-mode)
 (add-hook 'emacs-lisp-mode-hook 'autopair-mode)
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+;; (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'org-finalize-agenda-hook 'je/org-finalize-agenda-hook)
 (dolist (hook '(text-mode-hook latex-mode-hook org-mode-hook markdown-mode-hook))
   ;; (add-hook hook 'auto-fill-mode)
@@ -907,12 +907,12 @@
 (global-set-key (kbd "M-s-≤") 'je/proof-back)
 (global-set-key (kbd "M-s-≥") 'je/proof-forward)
 
-(define-key haskell-mode-map (kbd "s-/") 'haskell-hoogle)
+;; (define-key haskell-mode-map (kbd "s-/") 'haskell-hoogle)
 
 ;; ospl
-(load-file "~/.emacs.d/ospl-mode/ospl-mode.el")
-(use-package ospl-mode
-  :hook (scribble-mode . ospl-mode))
+;; (load-file "~/.emacs.d/ospl-mode/ospl-mode.el")
+;; (use-package ospl-mode
+;;   :hook (scribble-mode . ospl-mode))
 
 ;; Global Modes
 ;;; (helm-mode 1)
