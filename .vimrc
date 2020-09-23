@@ -97,7 +97,12 @@ function! LightlineReadonly()
 endfunction
 set noshowmode " hide mode re: lightline
 " XXX set laststatus=0 ?
-" XXX show the result of tw
+" XXX use short mode names
+" XXX only show filetype if none (as warning)
+" XXX don't care about % or line number
+
+" XXX soft wrap, especially in text
+" XXX make a scripture mastery mode
 
 " lsp
 " lua <<EOF
@@ -186,6 +191,7 @@ nnoremap ∑ :only<CR>
 " M-/
 inoremap ÷ <C-n>
 " ^ XXX the menu is really annoying. I want to fuzzy complete
+inoremap <C-n> <C-o>n
 
 " Terminal stuff
 tnoremap <Esc> <C-\><C-n>
