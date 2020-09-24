@@ -103,6 +103,7 @@ set noshowmode " hide mode re: lightline
 
 " XXX soft wrap, especially in text
 " XXX make a scripture mastery mode
+" XXX how to start in read-only mode?
 
 " lsp
 " lua <<EOF
