@@ -172,7 +172,7 @@ nnoremap <C-h> :FzfCommands<CR>
 nnoremap K :call Dasht(dasht#cursor_search_terms())<Return>
 " ^ Ctrl-T to get a new tab
 
-nnoremap <C-i> gg=G<C-o><C-o>
+" nnoremap <C-i> gg=G<C-o><C-o>
 " ^ XXX defer to external tool, maybe with https://github.com/Chiel92/vim-autoformat
 
 nnoremap <C-left> <C-W><C-H>
