@@ -39,4 +39,4 @@ else
     git commit -m "New journal entry" ${FILE}
 fi
 
-${EDITOR} ${RAND}
+${EDITOR} -R ${RAND}

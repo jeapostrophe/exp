@@ -5,6 +5,10 @@ set clipboard=unnamed " system keyboard
 set colorcolumn=80 " mark 80
 set expandtab shiftwidth=2 " Press <tab>, get two spaces
 
+set textwidth=80
+set wrap linebreak
+" ^ XXX It would be nice to have some indication that a line is wrapped
+
 " Show `▸▸` for tabs: 	, `·` for tailing whitespace: 
 set list listchars=tab:▸▸,trail:·
 " XXX try to get these to be highlighted
@@ -40,6 +44,7 @@ Plug 'neovimhaskell/haskell-vim'
 Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 Plug 'jiangmiao/auto-pairs'
 Plug 'Lenovsky/nuake'
+Plug 'junegunn/goyo.vim'
 
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 "Plug 'junegunn/vim-easy-align' " XXX Untested
@@ -83,27 +88,34 @@ let g:lightline.colorscheme = 'solarized'
 let g:lightline.active = {
       \ 'left': [ [ 'mode', 'paste' ],
       \           [ 'readonly', 'filename', 'modified' ] ],
-      \ 'right': [ [ 'lineinfo' ],
-      \            [ 'percent' ],
-      \            [ 'filetype' ] ] }
+      \ 'right': [ [ 'lineinfo' ], [ 'filetype' ] ] }
 let g:lightline.inactive = {
       \ 'left': [ [ 'filename' ] ],
-      \ 'right': [ [ 'lineinfo' ],
-      \            [ 'percent' ] ] }
+      \ 'right': [ [ 'lineinfo' ] ] }
 let g:lightline.component_function = {
       \ 'readonly': 'LightlineReadonly' }
+let g:lightline.mode_map = {
+      \ 'n' : 'N',
+      \ 'i' : 'I',
+      \ 'R' : 'R',
+      \ 'v' : 'v',
+      \ 'V' : 'V',
+      \ "\<C-v>": 'Cv',
+      \ 'c' : 'C',
+      \ 's' : 's',
+      \ 'S' : 'S',
+      \ "\<C-s>": 'Cs',
+      \ 't': 'T',
+      \ }
 function! LightlineReadonly()
   return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 set noshowmode " hide mode re: lightline
-" XXX set laststatus=0 ?
-" XXX use short mode names
 " XXX only show filetype if none (as warning)
-" XXX don't care about % or line number
 
-" XXX soft wrap, especially in text
 " XXX make a scripture mastery mode
-" XXX how to start in read-only mode?
+
+" XXX use ~/.jwm/bin/uni
 
 " lsp
 " lua <<EOF
@@ -132,10 +144,14 @@ inoremap ≈ <C-o>:
 cnoremap ≈ <C-o>:
 cnoremap <C-g> <C-c>
 onoremap <C-g> <C-c>
-nnoremap <Esc>A <up>
-inoremap <Esc>A <up>
-nnoremap <Esc>B <down>
-inoremap <Esc>B <down>
+nnoremap <Up> gk
+inoremap <Up> <C-o>gk
+nnoremap <Esc>A gk
+inoremap <Esc>A <C-o>gk
+nnoremap <Down> gj
+inoremap <Down> <C-o>gj
+nnoremap <Esc>B gj
+inoremap <Esc>B <C-o>gj
 nnoremap <Esc>C <right>
 inoremap <Esc>C <right>
 nnoremap <Esc>D <left>
@@ -220,9 +236,6 @@ tnoremap <C-x> <C-\><C-n>:Nuake<CR>
 " middle centered, with other windows around it to the side --- like
 " junegunn/goyo.vim)
 
-" XXX softline wrap in scribble/text
-"
-
 " XXX shift doesn't work on these and they don't follow Sexprs
 nnoremap <M-Left> b
 inoremap <M-Left> <C-o>b
@@ -243,6 +256,17 @@ set background=light
 colorscheme NeoSolarized
 let g:neosolarized_visibility = "high"
 let g:neosolarized_contrast = "high"
+
+" Highlight TODO, FIXME, NOTE, etc.
+if has('autocmd') && v:version > 701
+    augroup todo
+        autocmd!
+        autocmd Syntax * call matchadd(
+                    \ 'Debug',
+                    \ '\v\W\zs<(NOTE|TODO|FIXME|XXX)>'
+                    \ )
+    augroup END
+endif
 
 filetype plugin indent on
 au! BufRead,BufNewFile *.rktd setfiletype racket
@@ -282,6 +306,9 @@ endfunction
 
 command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapostrophe/shakes/apat/hard', 'sink': function('s:word_sink')})
 
+" Helper functions
+command! JeCopyFile %w !pbcopy
+
 " Notes
 " v/V/C-V visual selection
 " G - end of file
@@ -293,3 +320,5 @@ command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapost
 
 " fzf.vim
 " --- CTRL-[T: Tab][X: Split][V: Vert Split] to open
+"
+" :Goyo --- Focus
