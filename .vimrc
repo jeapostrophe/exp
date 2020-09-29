@@ -8,6 +8,7 @@ set expandtab shiftwidth=2 " Press <tab>, get two spaces
 set textwidth=80
 set wrap linebreak
 " ^ XXX It would be nice to have some indication that a line is wrapped
+set formatoptions-=t
 
 " Show `▸▸` for tabs: 	, `·` for tailing whitespace: 
 set list listchars=tab:▸▸,trail:·

@@ -5,4 +5,4 @@ docker container ls -a | awk '{print $1}' | xargs docker rm
 
 docker image ls | grep reach-app | awk '{print $1}' | xargs docker image rm
 
-docker image ls | grep -e 'reachsh.* <none>' | awk '{print $3}'  | xargs docker image r
+docker image ls | grep -e 'reachsh.* <none>' | awk '{print $3}'  | xargs docker image rm
