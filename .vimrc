@@ -36,7 +36,7 @@ Plug 'itchyny/lightline.vim'
 " Plug 'neovim/nvim-lspconfig' " Works, but slow
 Plug 'wlangstroth/vim-racket'
 Plug 'sunaku/vim-dasht'
-Plug 'wellle/context.vim'
+" Plug 'wellle/context.vim'
 Plug 'tpope/vim-dispatch' " XXX :Make hides successful output
 Plug 'lervag/wiki.vim'
 Plug 'lervag/wiki-ft.vim'
