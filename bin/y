@@ -7,4 +7,4 @@ fi
 
 # --netrc 
 cd $HOME/Downloads/YouTube
-exec youtube-dl --continue --ignore-errors --restrict-filenames --youtube-skip-dash-manifest --netrc --output "%(uploader)s - %(title)s.%(ext)s" --mark-watched --download-archive .archive.yd ${MAYBE_PLAY} $*
+exec youtube-dl -f 'bestvideo[height<=?1080]+bestaudio/best' --continue --ignore-errors --restrict-filenames --youtube-skip-dash-manifest --netrc --output "%(uploader)s - %(title)s.%(ext)s" --mark-watched --download-archive .archive.yd ${MAYBE_PLAY} $*
