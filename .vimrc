@@ -5,7 +5,7 @@ set clipboard=unnamed " system keyboard
 set colorcolumn=80 " mark 80
 set expandtab shiftwidth=2 " Press <tab>, get two spaces
 
-set textwidth=80
+set textwidth=79
 set wrap linebreak
 " ^ XXX It would be nice to have some indication that a line is wrapped
 set formatoptions-=t
