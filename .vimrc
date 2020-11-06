@@ -43,7 +43,7 @@ Plug 'lervag/wiki-ft.vim'
 Plug 'tpope/vim-commentary' " gcc
 Plug 'neovimhaskell/haskell-vim'
 Plug 'ledger/vim-ledger' " XXX Completion doesn't work
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs' " XXX annoying
 Plug 'Lenovsky/nuake'
 Plug 'junegunn/goyo.vim'
 
