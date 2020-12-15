@@ -50,7 +50,7 @@ rcd() {
 export EMACS_SERVER_PORT=50000
 export EMACS_SERVER_FILE=$HOME/.emacs.d/server/lightning
 
-export FZF_DEFAULT_COMMAND='fd --follow --type file --color=always'
+export FZF_DEFAULT_COMMAND='fd --follow --type file --color=never'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--ansi --cycle --algo=v1 --color=light --layout=reverse-list --prompt='⫸ '"
 

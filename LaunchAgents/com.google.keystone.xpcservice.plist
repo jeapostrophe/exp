@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.google.keystone.user.xpcservice</string>
+	<key>LimitLoadToSessionType</key>
+	<string>Aqua</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/jay/Library/Google/GoogleSoftwareUpdate/GoogleSoftwareUpdate.bundle/Contents/Resources/GoogleSoftwareUpdateAgent.app/Contents/MacOS/GoogleSoftwareUpdateAgent</string>
+		<string>-runMode</string>
+		<string>xpchost</string>
+    
+	</array>
+	<key>MachServices</key>
+	<dict>
+		<key>com.google.Keystone.user.AgentService</key>
+		<true/>
+	</dict>
+	<key>Umask</key>
+	<string>0022</string>
+	<key>AbandonProcessGroup</key>
+	<true/>
+  <key>StandardErrorPath</key>
+  <string>/dev/null</string>
+  <key>StandardOutPath</key>
+  <string>/dev/null</string>
+</dict>
+</plist>
