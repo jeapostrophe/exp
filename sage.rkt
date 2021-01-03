@@ -13,7 +13,8 @@
 
 ;; Compile-time
 (begin-for-syntax
-  (define-struct modifier (f)))
+  (define-struct modifier (f)
+    #:property prop:procedure (struct-field-index f)))
 
 (define-simple-macro (define-modifier (m . args) body)
   (begin
