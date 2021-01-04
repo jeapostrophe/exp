@@ -14,7 +14,11 @@
 ;; Compile-time
 (begin-for-syntax
   (define-struct modifier (f)
-    #:property prop:procedure (struct-field-index f)))
+    #:property prop:procedure
+    (λ (m stx)
+      (syntax-parse stx
+        [(_ . args)
+         #`(#,(modifier-f m) args)]))))
 
 (define-simple-macro (define-modifier (m . args) body)
   (begin
@@ -39,6 +43,8 @@
 (define-syntax-parser program
   [(_) #'mt]
   [(_ x . more) #'((term x) (program . more))])
+
+(the-c-is "s")
 
 ;; Example
 (program
