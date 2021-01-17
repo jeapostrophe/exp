@@ -42,6 +42,7 @@ alias tw=timew
 alias tws=timew-startfzf
 alias twt="timew stop"
 alias w="w3m ~/sbin/start-page/index.html"
+alias now="date +%s"
 
 rcd() {
   cd $(racket -l find-collection/run -- $@)
