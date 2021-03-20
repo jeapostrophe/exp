@@ -1,0 +1,2 @@
+#!/bin/sh
+exec sed 's/.\{2\}/& /g'
