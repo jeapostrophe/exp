@@ -1,0 +1,13 @@
+#!/bin/bash
+CONT="${1}_algorand-devnet_1"
+if [ "x${2}" = "x" ] ; then
+  docker container exec "${CONT}" ls -1 /dbg | sort -t - -k1,1n -k2,2n
+else
+  TMP=/tmp/algodbg.json
+  docker container cp "${CONT}":/dbg/"${2}".json "${TMP}"
+  line=$(jq .line "${TMP}")
+  ((line = line + 1))
+  # cat "${TMP}" | jq .txngroup
+  jq -r .disasm "${TMP}" | bat -n --highlight-line "${line}"
+  cat "${TMP}" | jq .stack
+fi
