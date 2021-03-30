@@ -3,6 +3,7 @@ source ~/.zshrc-dirs
 setopt inc_append_history no_share_history
 setopt printeightbit
 setopt autopushd pushdminus pushdsilent pushdtohome
+unsetopt beep
 
 bindkey -e # emacs key bindings
 
