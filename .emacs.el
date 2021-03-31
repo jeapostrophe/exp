@@ -59,7 +59,7 @@
 (normal-erase-is-backspace-mode 1)
 
 ;; Standard tools
-(setq ag-executable "/usr/local/bin/ag")
+(setq ag-executable "/usr/bin/ag")
 (setq ag-highlight-search nil)
 
 ;; UI
@@ -74,7 +74,7 @@
       column-number-mode t
       vc-follow-symlinks t
       browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "open"
+      browse-url-generic-program "wslview"
       apropos-do-all t
       doc-view-continuous t
       Info-scroll-prefer-subnodes t
@@ -917,7 +917,7 @@
 ;; Global Modes
 ;;; (helm-mode 1)
 (tool-bar-mode -1)
-(menu-bar-mode t)
+(menu-bar-mode nil)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (line-number-mode t)

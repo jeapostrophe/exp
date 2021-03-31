@@ -30,7 +30,7 @@ let g:dispatch_no_maps = 1
 
 call plug#begin()
 Plug 'iCyMind/NeoSolarized'
-Plug '/usr/local/opt/fzf'
+Plug '/usr/share/doc/fzf/examples'
 Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
 " Plug 'neovim/nvim-lspconfig' " Works, but slow

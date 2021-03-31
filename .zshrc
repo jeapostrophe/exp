@@ -38,7 +38,7 @@ preexec () {
 #    print -Pn "\033k$TPS1 $2\033\\"
 }
 
-chpwd() {
-    recent dir "$PWD"
-}
+# chpwd() {
+#    recent dir "$PWD"
+# }
 
