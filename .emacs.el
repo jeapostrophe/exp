@@ -31,8 +31,8 @@
   (exec-path-from-shell-initialize))
 
 ;; Emacs-mac options
-(setq mac-option-modifier 'meta)
-(setq mac-command-modifier 'super)
+;; (setq mac-option-modifier 'meta)
+;; (setq mac-command-modifier 'super)
 
 ;; Editing environment
 (setq yank-excluded-properties t ; Don't get weird properties when pasting
@@ -868,8 +868,8 @@
 (global-set-key (kbd "C-c q") 'query-replace)
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "s-a") 'mark-whole-buffer)
-(global-set-key (kbd "s-f") 'isearch-forward)
-(global-set-key (kbd "s-g") 'isearch-repeat-forward)
+(global-set-key (kbd "C-S-f") 'isearch-forward)
+(global-set-key (kbd "C-S-g") 'isearch-repeat-forward)
 (global-set-key (kbd "C-g") 'top-level)
 (global-set-key (kbd "C-q") 'unfill-paragraph)
 (global-set-key (kbd "C-h F") 'find-function-at-point)
