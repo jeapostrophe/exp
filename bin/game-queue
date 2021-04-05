@@ -1,0 +1,7 @@
+#!/bin/sh
+cd ~/.config/game-db
+sys=$1
+rg -l -0 -e 'Status: (Queue|Active)' | \
+  xargs -0 rg -l -e "System: ${sys}" | \
+  sort | \
+  sed 's/\.md$//'

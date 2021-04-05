@@ -1,0 +1,9 @@
+#!/bin/sh
+cd ~/.config/game-db
+for i in *.md ; do
+  name=$(basename -s .md -- "$i")
+  rel=$(grep -e "^Release: " -- "$i" | head -1 | cut -d ':' -f 2)
+  sys=$(grep -e "^System: " -- "$i" | head -1 | cut -d ':' -f 2)
+  stat=$(grep -e "^Status: " -- "$i" | head -1 | cut -d ':' -f 2)
+  echo "${rel}\t${sys}\t${stat}\t${name}"
+done

@@ -1,6 +1,3 @@
-" Use "hybrid" (both absolute and relative) line numbers
-" set number relativenumber
-
 set clipboard=unnamed " system keyboard
 set colorcolumn=80 " mark 80
 set expandtab shiftwidth=2 " Press <tab>, get two spaces
@@ -10,9 +7,7 @@ set wrap linebreak
 " ^ XXX It would be nice to have some indication that a line is wrapped
 set formatoptions-=t
 
-" Show `▸▸` for tabs: 	, `·` for tailing whitespace: 
 set list listchars=tab:▸▸,trail:·
-" XXX try to get these to be highlighted
 
 set nocompatible " disable compatibility to old-time vi
 set showmatch    " show matching brackets.
@@ -20,10 +15,7 @@ set ignorecase   " case insensitive matching
 set hlsearch     " highlight search results
 set autoindent   " indent a new line the same amount as the line just typed
 
-" let g:python_host_prog  = '/usr/bin/python'
-" let g:python3_host_prog = '/usr/local/bin/python3'
-
-set shellcmdflag=-ic " read .profile, but I read this might be bad
+set shellcmdflag=-ic
 
 let g:fzf_command_prefix = 'Fzf'
 let g:dispatch_no_maps = 1
@@ -35,17 +27,17 @@ Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
 " Plug 'neovim/nvim-lspconfig' " Works, but slow
 Plug 'wlangstroth/vim-racket'
-Plug 'sunaku/vim-dasht'
+" Plug 'sunaku/vim-dasht'
 " Plug 'wellle/context.vim'
-Plug 'tpope/vim-dispatch' " XXX :Make hides successful output
-Plug 'lervag/wiki.vim'
-Plug 'lervag/wiki-ft.vim'
+" Plug 'tpope/vim-dispatch' " XXX :Make hides successful output
+" Plug 'lervag/wiki.vim'
+" Plug 'lervag/wiki-ft.vim'
 Plug 'tpope/vim-commentary' " gcc
 Plug 'neovimhaskell/haskell-vim'
 Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 " Plug 'jiangmiao/auto-pairs' " XXX annoying
 Plug 'Lenovsky/nuake'
-Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/goyo.vim'
 
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 "Plug 'junegunn/vim-easy-align' " XXX Untested
@@ -112,28 +104,15 @@ function! LightlineReadonly()
   return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 set noshowmode " hide mode re: lightline
-" XXX only show filetype if none (as warning)
-
-" XXX make a scripture mastery mode
 
 " XXX use ~/.jwm/bin/uni
 
-" lsp
-" lua <<EOF
-" require'nvim_lsp'.hls.setup{}
-" EOF
-
-" wiki
-let g:wiki_root = '~/.wiki'
-
-" set esckeys
 set timeoutlen=300 ttimeoutlen=100
 
 set backupskip=/tmp/*,/private/tmp/*
 set backspace=indent,eol,start
 set whichwrap+=<,>,h,l,[,] " left goes to prev line
 
-" Turn on mouse
 set mouse=a
 
 " Emacs keys
@@ -176,8 +155,6 @@ nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
 nnoremap <C-Space> :w<CR>:make!<CR>
-" XXX ^ add a keybinding that does this in :sp term://
-" XXX Or a good keybinding for Kitty
 
 nnoremap <C-g> :FzfRgLike<CR>
 nnoremap <C-g><C-g> :FzfRg<CR>
@@ -186,10 +163,10 @@ nnoremap <C-f><C-f> :FzfFiles %:h<CR>
 nnoremap <C-b> :FzfFiles<CR>
 nnoremap <C-b><C-b> :FzfBuffers<CR>
 nnoremap <C-h> :FzfCommands<CR>
-nnoremap K :call Dasht(dasht#cursor_search_terms())<Return>
+" nnoremap K :call Dasht(dasht#cursor_search_terms())<Return>
 " ^ Ctrl-T to get a new tab
 
-" nnoremap <C-i> gg=G<C-o><C-o>
+nnoremap <C-i> gg=G<C-o><C-o>
 " ^ XXX defer to external tool, maybe with https://github.com/Chiel92/vim-autoformat
 
 nnoremap <C-left> <C-W><C-H>
@@ -207,6 +184,7 @@ tnoremap <C-down> <C-\><C-n><C-W><C-J>
 " M-w
 nnoremap ∑ :only<CR>
 " M-/
+inoremap <M-/> <C-n>
 inoremap ÷ <C-n>
 " ^ XXX the menu is really annoying. I want to fuzzy complete
 inoremap <C-n> <C-o>n
@@ -220,22 +198,6 @@ au BufEnter term://* startinsert
 nnoremap <C-x> :Nuake<CR>
 inoremap <C-x> <C-o>:Nuake<CR>
 tnoremap <C-x> <C-\><C-n>:Nuake<CR>
-
-" nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-" nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-" nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-" nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-" nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-" nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-" XXX would be nice to push this into Fzf
-" nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-" nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-" nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
-
-" XXX I want to take an "excursion" into another file like above and open a
-" window to the side of the main one. (I want the main window to be in the
-" middle centered, with other windows around it to the side --- like
-" junegunn/goyo.vim)
 
 " XXX shift doesn't work on these and they don't follow Sexprs
 nnoremap <M-Left> b
@@ -295,17 +257,6 @@ if argc() == 0
  autocmd VimLeave * call SaveSess()
  autocmd VimEnter * nested call RestoreSess()
 endif
-
-" let mapleader = ';'
-" let g:mapleader = ';'
-" inoremap ;; <Esc>
-" nnoremap <leader>r :!jrun %<CR>
-
-function! s:word_sink(w)
-  call append(line('.'), a:w)
-endfunction
-
-command! -bang PU call fzf#run({'source': 'cat /Users/jay/Dev/scm/github.jeapostrophe/shakes/apat/hard', 'sink': function('s:word_sink')})
 
 " Helper functions
 command! JeCopyFile %w !pbcopy

@@ -37,6 +37,7 @@ alias vi=$EDITOR
 alias ed=$EDITOR
 alias cat=bat
 
+alias t=todo.sh
 alias e=$EDITOR
 alias tw=timew
 alias tws=timew-startfzf
@@ -68,3 +69,4 @@ export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export TZ="America/New_York"
 
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+
