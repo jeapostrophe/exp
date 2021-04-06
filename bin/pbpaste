@@ -1,0 +1,2 @@
+#!/bin/sh
+powershell.exe -command 'Get-Clipboard' | tr -d '\r' | head -n -1

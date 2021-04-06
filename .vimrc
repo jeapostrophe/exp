@@ -1,4 +1,17 @@
-set clipboard=unnamed " system keyboard
+set clipboard=unnamedplus " system keyboard
+let g:clipboard = {
+          \   'name': 'wsl',
+          \   'copy': {
+          \      '+': 'pbcopy',
+          \      '*': 'pbcopy',
+          \    },
+          \   'paste': {
+          \      '+': 'pbpaste',
+          \      '*': 'pbpaste',
+          \   },
+          \   'cache_enabled': 0,
+          \ }
+
 set colorcolumn=80 " mark 80
 set expandtab shiftwidth=2 " Press <tab>, get two spaces
 
@@ -67,7 +80,7 @@ call plug#end()
 let g:racket_hash_lang_regexp="^$" " don't guess filetype
 
 " Fzf
-let g:fzf_preview_window = 'right:60%'
+let g:fzf_preview_window = ['right:50%:hidden', 'ctrl-/']
 let g:fzf_layout = { 'window': {
       \ 'width': 0.9,
       \ 'height': 0.7,
@@ -155,6 +168,7 @@ nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
 nnoremap <C-Space> :w<CR>:make!<CR>
+nnoremap <C-m> :w<CR>:make!<CR>
 
 nnoremap <C-g> :FzfRgLike<CR>
 nnoremap <C-g><C-g> :FzfRg<CR>

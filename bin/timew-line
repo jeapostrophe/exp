@@ -1,0 +1,2 @@
+#!/bin/sh
+timew | sed -n -e 1p -e 3p | sed '1{N;s/\n//;}' | tail -1 | sed -e 's/Tracking //' -e 's/ *Current */ /'
