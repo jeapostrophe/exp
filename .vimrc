@@ -1,16 +1,16 @@
-set clipboard=unnamedplus " system keyboard
-let g:clipboard = {
-          \   'name': 'wsl',
-          \   'copy': {
-          \      '+': 'pbcopy',
-          \      '*': 'pbcopy',
-          \    },
-          \   'paste': {
-          \      '+': 'pbpaste',
-          \      '*': 'pbpaste',
-          \   },
-          \   'cache_enabled': 0,
-          \ }
+" set clipboard=unnamedplus " system keyboard
+" let g:clipboard = {
+"          \   'name': 'wsl',
+"          \   'copy': {
+"          \      '+': 'pbcopy',
+"          \      '*': 'pbcopy',
+"          \    },
+"          \   'paste': {
+"          \      '+': 'pbpaste',
+"          \      '*': 'pbpaste',
+"          \   },
+"          \   'cache_enabled': 0,
+"          \ }
 
 set colorcolumn=80 " mark 80
 set expandtab shiftwidth=2 " Press <tab>, get two spaces
