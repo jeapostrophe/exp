@@ -1,2 +1,2 @@
 #!/bin/sh
-timew | sed -n -e 1p -e 4p | sed '1{N;s/\n//;}' | tail -1 | sed -e 's/Tracking //' -e 's/ *Total */ /'
+timew | sed -n -e 1p -e 4p | sed '1{N;s/\n//;}' | tail -1 | sed -e 's/Tracking //' -e 's/ *Total */ /' | toilet -f smblock
