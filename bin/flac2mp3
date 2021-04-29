@@ -1,0 +1,4 @@
+#!/bin/sh
+for i in *.flac ; do
+    ffmpeg -i "$i" -acodec libmp3lame "$i".mp3
+done
