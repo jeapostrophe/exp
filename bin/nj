@@ -7,7 +7,7 @@ if [ "$GIVEN" = "" ] ; then
     PROMPT=Y
     DATE=date
 else
-    DATE="date -j -f %Y/%m/%d $GIVEN"
+    DATE="date -d $GIVEN"
 fi
 
 J=$HOME/.config/journal
