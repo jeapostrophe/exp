@@ -1,4 +1,11 @@
 #!/bin/sh
-for i in *.flac ; do
-    ffmpeg -i "$i" -acodec libmp3lame "$i".mp3
-done
+find . -name '*.flac' |
+  while IFS=$'\n' read f ; do
+    m="${f}.mp3"
+    if ! [ -f "${m}" ] ; then
+      if ! (ffmpeg -i "${f}" -acodec libmp3lame "${m}" &> /dev/null) ; then
+        rm -f "${m}"
+        echo FAILED: "${f}"
+      fi
+    fi
+  done
