@@ -164,6 +164,7 @@ imap <C-s> <C-o>:w<CR>
 nmap <C-w> :q<CR>
 nmap <C-w><C-w> :q!<CR>
 imap <C-d> <Esc>
+nmap <Tab> <Esc>
 nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 set makeprg=jrun\ %:p " XXX change to autocmd on filetype?
