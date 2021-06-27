@@ -51,6 +51,7 @@ Plug 'ledger/vim-ledger' " XXX Completion doesn't work
 " Plug 'jiangmiao/auto-pairs' " XXX annoying
 Plug 'Lenovsky/nuake'
 " Plug 'junegunn/goyo.vim'
+Plug 'tomlion/vim-solidity'
 
 "Plug 'chrisbra/unicode.vim' " XXX Need to understand better
 "Plug 'junegunn/vim-easy-align' " XXX Untested
