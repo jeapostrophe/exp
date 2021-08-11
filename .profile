@@ -70,3 +70,5 @@ export TZ="America/New_York"
 
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
