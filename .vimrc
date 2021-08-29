@@ -12,7 +12,7 @@
 "          \   'cache_enabled': 0,
 "          \ }
 
-set colorcolumn=80 " mark 80
+set colorcolumn=81 " mark 81
 set expandtab shiftwidth=2 " Press <tab>, get two spaces
 
 set textwidth=79
